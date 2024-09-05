@@ -1,0 +1,21 @@
+package io.sakurasou.controller
+
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+
+/**
+ * @author ShiinaKin
+ * 2024/9/5 15:35
+ */
+
+fun Route.userRoute() {
+    route("user") {
+        get {
+            call.respond("hello user")
+        }
+    }
+}
+
+object UserController {
+}
