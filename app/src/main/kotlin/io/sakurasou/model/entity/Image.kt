@@ -1,5 +1,6 @@
 package io.sakurasou.model.entity
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,11 +9,21 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Image(
-    val id: Int,
+    val id: Long,
+    val userId: Long,
+    val groupId: Long,
+    val albumId: Long,
     val name: String,
-    val url: String,
-    val size: Int,
-    val type: String,
-    val createTime: Long,
-    val updateTime: Long
+    val description: String? = null,
+    val path: String,
+    val strategyId: Long,
+    val originName: String,
+    val mimeType: String,
+    val extension: String,
+    val size: Double,
+    val width: Int,
+    val height: Int,
+    val md5: String,
+    val sha1: String,
+    val createTime: LocalDateTime
 )
