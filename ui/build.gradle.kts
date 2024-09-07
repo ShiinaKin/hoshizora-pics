@@ -16,7 +16,6 @@ dependencies {
 frontend {
     nodeVersion.set("20.17.0")
     assembleScript.set("run build")
-    cleanScript.set("run clean")
     checkScript.set("run lint")
     verboseModeEnabled.set(true)
 }
@@ -40,4 +39,16 @@ tasks.named<InstallFrontendTask>("installFrontend") {
     }
     inputs.files(retainedMetadataFileNames).withPropertyName("metadataFiles")
     outputs.dir("${projectDir}\\node_modules").withPropertyName("nodeModulesDirectory")
+}
+
+tasks.register<Delete>("cleanDist") {
+    delete("${projectDir}\\dist")
+}
+
+tasks.register<Delete>("cleanNodeModules") {
+    delete("${projectDir}\\node_modules")
+}
+
+tasks.named("clean") {
+    dependsOn("cleanDist")
 }

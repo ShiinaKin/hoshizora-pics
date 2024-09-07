@@ -76,3 +76,12 @@ tasks.register<Copy>("copyFrontendBuildResults") {
 tasks.named("processResources") {
     dependsOn("copyFrontendBuildResults")
 }
+
+tasks.register<Delete>("cleanStaticResources") {
+    val backendStaticResourceDir = "$projectDir\\src\\main\\resources\\static"
+    delete(backendStaticResourceDir)
+}
+
+tasks.named("clean") {
+    dependsOn("cleanStaticResources")
+}
