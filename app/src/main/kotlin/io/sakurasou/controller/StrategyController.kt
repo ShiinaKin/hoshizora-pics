@@ -1,57 +1,55 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.*
+import io.github.smiley4.ktorswaggerui.dsl.routing.delete
+import io.github.smiley4.ktorswaggerui.dsl.routing.get
+import io.github.smiley4.ktorswaggerui.dsl.routing.patch
+import io.github.smiley4.ktorswaggerui.dsl.routing.post
+import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import io.sakurasou.controller.request.UserInsertRequest
-import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.controller.request.UserPatchRequest
+import io.sakurasou.controller.request.StrategyInsertRequest
+import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.request.pageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
-import io.sakurasou.controller.vo.UserPageVO
-import io.sakurasou.controller.vo.UserVO
+import io.sakurasou.controller.vo.StrategyPageVO
+import io.sakurasou.controller.vo.StrategyVO
 
 /**
- * @author ShiinaKin
- * 2024/9/5 15:35
+ * @author Shiina Kin
+ * 2024/9/9 08:59
  */
-
-fun Route.userRoute() {
-    route("user", {
-        protected = true
-    }) {
-        post("login", {
-            protected = false
+fun Route.strategyRoute() {
+    route("strategy") {
+        post({
+            protected = true
             request {
-                body<UserInsertRequest> {
+                body<StrategyInsertRequest> {
+                    description = "strategy request"
                     required = true
                 }
             }
-        }) {
-            TODO()
-        }
-        post("signup", {
-            protected = false
-            request {
-                body<UserLoginRequest> {
-                    required = true
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
                 }
             }
         }) {
             TODO()
         }
         route("{id}", {
+            protected = true
             request {
                 pathParameter<Long>("id") {
-                    description = "user id"
+                    description = "strategy id"
                     required = true
                 }
             }
             response {
                 HttpStatusCode.NotFound to {
-                    description = "user not found"
+                    description = "strategy not found"
                     body<CommonResponse<Unit>> { }
                 }
             }
@@ -68,7 +66,7 @@ fun Route.userRoute() {
             }
             patch({
                 request {
-                    body<UserPatchRequest> {
+                    body<StrategyPatchRequest> {
                         required = true
                     }
                 }
@@ -85,7 +83,7 @@ fun Route.userRoute() {
                 response {
                     HttpStatusCode.OK to {
                         description = "success"
-                        body<CommonResponse<UserVO>> { }
+                        body<CommonResponse<StrategyVO>> { }
                     }
                 }
             }) {
@@ -97,7 +95,7 @@ fun Route.userRoute() {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<UserPageVO>> {
+                    body<PageResult<StrategyPageVO>> {
                         description = "page result"
                     }
                 }
@@ -110,40 +108,8 @@ fun Route.userRoute() {
 
             TODO()
         }
-        patch("ban/{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
-            TODO()
-        }
-        patch("unban/{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
-            TODO()
-        }
     }
 }
 
-object UserController {
+class StrategyController {
 }

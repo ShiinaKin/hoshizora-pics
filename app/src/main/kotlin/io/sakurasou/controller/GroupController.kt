@@ -4,39 +4,36 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import io.sakurasou.controller.request.UserInsertRequest
-import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.controller.request.UserPatchRequest
+import io.sakurasou.controller.request.GroupInsertRequest
+import io.sakurasou.controller.request.GroupPatchRequest
 import io.sakurasou.controller.request.pageRequest
 import io.sakurasou.controller.vo.CommonResponse
+import io.sakurasou.controller.vo.GroupPageVO
+import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
-import io.sakurasou.controller.vo.UserPageVO
-import io.sakurasou.controller.vo.UserVO
 
 /**
- * @author ShiinaKin
- * 2024/9/5 15:35
+ * @author Shiina Kin
+ * 2024/9/9 08:58
  */
-
-fun Route.userRoute() {
-    route("user", {
+fun Route.groupRoute() {
+    route("group", {
         protected = true
     }) {
-        post("login", {
-            protected = false
+        post({
             request {
-                body<UserInsertRequest> {
+                body<GroupInsertRequest> {
                     required = true
                 }
             }
-        }) {
-            TODO()
-        }
-        post("signup", {
-            protected = false
-            request {
-                body<UserLoginRequest> {
-                    required = true
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+                HttpStatusCode.Conflict to {
+                    description = "group name conflict"
+                    body<CommonResponse<Unit>> { }
                 }
             }
         }) {
@@ -45,13 +42,13 @@ fun Route.userRoute() {
         route("{id}", {
             request {
                 pathParameter<Long>("id") {
-                    description = "user id"
+                    description = "group id"
                     required = true
                 }
             }
             response {
                 HttpStatusCode.NotFound to {
-                    description = "user not found"
+                    description = "group not found"
                     body<CommonResponse<Unit>> { }
                 }
             }
@@ -68,7 +65,7 @@ fun Route.userRoute() {
             }
             patch({
                 request {
-                    body<UserPatchRequest> {
+                    body<GroupPatchRequest> {
                         required = true
                     }
                 }
@@ -85,7 +82,7 @@ fun Route.userRoute() {
                 response {
                     HttpStatusCode.OK to {
                         description = "success"
-                        body<CommonResponse<UserVO>> { }
+                        body<CommonResponse<GroupVO>> { }
                     }
                 }
             }) {
@@ -97,7 +94,7 @@ fun Route.userRoute() {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<UserPageVO>> {
+                    body<PageResult<GroupPageVO>> {
                         description = "page result"
                     }
                 }
@@ -110,40 +107,8 @@ fun Route.userRoute() {
 
             TODO()
         }
-        patch("ban/{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
-            TODO()
-        }
-        patch("unban/{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
-            TODO()
-        }
     }
 }
 
-object UserController {
+class GroupController {
 }
