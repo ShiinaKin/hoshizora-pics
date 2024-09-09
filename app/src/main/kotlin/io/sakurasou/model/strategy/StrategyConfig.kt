@@ -8,3 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 sealed class StrategyConfig
+
+enum class StrategyType {
+    LOCAL,
+    S3
+}
