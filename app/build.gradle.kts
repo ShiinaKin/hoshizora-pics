@@ -2,6 +2,7 @@ val kotlinVersion: String by project
 val logbackVersion: String by project
 val exposedVersion: String by project
 val ktorSimpleCacheVersion: String by project
+val hikariVersion: String by project
 val postgresVersion: String by project
 val mySQLVersion: String by project
 val version: String by project
@@ -57,6 +58,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("com.mysql:mysql-connector-j:$mySQLVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml")

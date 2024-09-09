@@ -1,5 +1,7 @@
 package io.sakurasou.model
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
@@ -23,12 +25,19 @@ import org.jetbrains.exposed.sql.transactions.transaction
  */
 object DatabaseSingleton {
     fun init(jdbcURL: String, driverClassName: String, username: String, password: String) {
-        val database = Database.connect(
-            url = jdbcURL,
-            driver = driverClassName,
-            user = username,
-            password = password
-        )
+        val hikariConfig = HikariConfig().apply {
+            jdbcUrl = jdbcURL
+            this.driverClassName = driverClassName
+            this.username = username
+            this.password = password
+            maximumPoolSize = 5
+            isReadOnly = false
+            transactionIsolation = "TRANSACTION_SERIALIZABLE"
+        }
+        val dataSource = HikariDataSource(hikariConfig)
+
+        val database = Database.connect(dataSource)
+
         transaction(database) {
             SchemaUtils.create(Images)
             SchemaUtils.create(Albums)
