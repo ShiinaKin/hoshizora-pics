@@ -1,8 +1,8 @@
 package io.sakurasou.model.entity
 
+import io.sakurasou.model.setting.SettingConfig
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 /**
  * @author ShiinaKin
@@ -12,21 +12,7 @@ import kotlinx.serialization.json.JsonObject
 data class Setting(
     val id: Long,
     val name: String,
-    val config: JsonObject,
+    val config: SettingConfig,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
-)
-
-@Serializable
-data class StrategySetting(
-    val allowedImageTypes: List<String>
-)
-
-@Serializable
-data class SiteSetting(
-    val siteTitle: String,
-    val siteSubtitle: String,
-    val siteKeyword: String,
-    val siteDescription: String,
-    val homePageRandomPicDisplay: Boolean
 )

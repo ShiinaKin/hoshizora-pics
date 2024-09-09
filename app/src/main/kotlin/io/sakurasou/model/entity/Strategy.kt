@@ -1,5 +1,6 @@
 package io.sakurasou.model.entity
 
+import io.sakurasou.model.strategy.StrategyConfig
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -12,22 +13,7 @@ import kotlinx.serialization.json.JsonElement
 data class Strategy(
     val id: Long,
     val name: String,
-    val type: String = "local", // 默认值为 "local"
-    val config: JsonElement,
+    val config: StrategyConfig,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
-)
-
-@Serializable
-data class LocalConfig(
-    val uploadFolder: String = "/uploads"
-)
-
-@Serializable
-data class S3Config(
-    val endpoint: String,
-    val bucket: String,
-    val region: String,
-    val accessKey: String,
-    val secretKey: String
 )
