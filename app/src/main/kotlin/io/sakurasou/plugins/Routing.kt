@@ -12,15 +12,11 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.webjars.*
 import io.sakurasou.controller.*
 import io.sakurasou.exception.FileSizeException
 import io.sakurasou.exception.WrongParameterException
 
 fun Application.configureRouting() {
-    install(Webjars) {
-        path = "/webjars" // defaults to /webjars
-    }
     install(Resources)
     install(StatusPages) {
         exception<Throwable> { call, cause ->
@@ -67,9 +63,6 @@ fun Application.configureRouting() {
             }
             route("swagger") {
                 swaggerUI("/api/openapi.json")
-            }
-            get("webjars") {
-                call.respondText("<script src='/webjars/jquery/jquery.js'></script>", ContentType.Text.Html)
             }
         }
         staticResources("", "static")
