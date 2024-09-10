@@ -38,8 +38,8 @@ fun Application.configureRouting() {
             description = "API for testing and demonstration purposes."
         }
         server {
-            url = "http://localhost:8080"
-            description = "Development Server"
+            url = "/"
+            description = "Local Server"
         }
     }
     routing {
