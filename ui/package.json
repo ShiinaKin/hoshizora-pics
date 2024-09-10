@@ -5,16 +5,22 @@
   "author": "ShiinaKin",
   "type": "module",
   "packageManager": "pnpm@9.10.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
+    "build-package": "pnpm --filter \"./packages/**\" build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "api-generate": "pnpm --filter \"./packages/api-client\" generate"
   },
   "dependencies": {
+    "api-client": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.438.0",

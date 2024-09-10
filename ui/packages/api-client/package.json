@@ -1,0 +1,37 @@
+{
+  "name": "api-client",
+  "private": true,
+  "author": "ShiinaKin",
+  "description": "",
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "generate": "openapi-generator-cli generate -i http://127.0.0.1:8080/api/openapi.json -g typescript-fetch -c ./.openapi_config.yaml -o ./src --skip-validate-spec"
+  },
+  "keywords": [],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.5",
+    "unbuild": "^2.0.0"
+  }
+}
