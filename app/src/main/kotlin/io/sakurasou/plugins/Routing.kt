@@ -1,8 +1,5 @@
 package io.sakurasou.plugins
 
-import io.github.smiley4.ktorswaggerui.SwaggerUI
-import io.github.smiley4.ktorswaggerui.routing.openApiSpec
-import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -31,22 +28,8 @@ fun Application.configureRouting() {
     }
     install(AutoHeadResponse)
     install(DoubleReceive)
-    install(SwaggerUI) {
-        info {
-            title = "HoshizoraPics API"
-            version = "latest"
-            description = "API for testing and demonstration purposes."
-        }
-        server {
-            url = "/"
-            description = "Local Server"
-        }
-    }
     routing {
         route("api") {
-            get {
-                call.respondText("Hello World!")
-            }
             // authenticate {
             //
             // }
@@ -58,12 +41,16 @@ fun Application.configureRouting() {
             userRoute()
             groupRoute()
             roleRoute()
-            route("openapi.json") {
-                openApiSpec()
-            }
-            route("swagger") {
-                swaggerUI("/api/openapi.json")
-            }
+            // cacheOutput(2.seconds) {
+            //     get("/short") {
+            //         call.respond(Random.nextInt().toString())
+            //     }
+            // }
+            // cacheOutput {
+            //     get("/default") {
+            //         call.respond(Random.nextInt().toString())
+            //     }
+            // }
         }
         staticResources("", "static")
         // post("/double-receive") {

@@ -9,6 +9,9 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+
+    val baseUrl = environment.config.property("ktor.application.base-url").getString()
+
     DatabaseSingleton.init(
         jdbcURL = environment.config.property("ktor.application.database.url").getString(),
         driverClassName = environment.config.property("ktor.application.database.driver").getString(),
@@ -24,5 +27,6 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureRouting()
+    configureSwagger(baseUrl)
     configureCache(redisHost, redisPort)
 }
