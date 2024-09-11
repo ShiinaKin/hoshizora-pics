@@ -1,0 +1,63 @@
+services:
+  hoshizora-pics:
+    container_name: hoshizora-pics
+    image: ghcr.io/shiinakin/hoshizora-pics:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      hoshizora-pics-postgres:
+        condition: service_healthy
+      hoshizora-pics-redis:
+        condition: service_healthy
+    environment:
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_URL: jdbc:postgresql://hoshizora-pics-postgres:5432/hoshizora
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: passwd
+      REDIS_HOST: hoshizora-pics-redis
+      REDIS_PORT: 6379
+    volumes:
+      - hoshizora-pics-uploads:/hoshizora/uploads
+    networks:
+      - hoshizora-pics-net
+
+  hoshizora-pics-postgres:
+    container_name: hoshizora-pics-postgres
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_DB: hoshizora
+    volumes:
+      - hoshizora-pics-data:/var/lib/postgresql/data
+    networks:
+      - hoshizora-pics-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hoshizora-pics-redis:
+    container_name: hoshizora-pics-redis
+    image: redis:7.2.4-alpine
+    networks:
+      - hoshizora-pics-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  hoshizora-pics-net:
+    name: hoshizora-pics-net
+    driver: bridge
+
+volumes:
+  hoshizora-pics-uploads:
+    name: hoshizora-pics-uploads
+  hoshizora-pics-data:
+    name: hoshizora-pics-data
