@@ -22,6 +22,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+ktor {
+    fatJar {
+        archiveFileName = "hoshizora-pics-$version.jar"
+    }
+}
+
 repositories {
     mavenCentral()
 }
