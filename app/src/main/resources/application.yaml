@@ -7,6 +7,10 @@ ktor:
       url: $DATABASE_URL
       username: $DATABASE_USERNAME
       password: $DATABASE_PASSWORD
+    cache:
+      redis:
+        host: $REDIS_HOST
+        port: $REDIS_PORT
   deployment:
     port: 8080
     watch:
