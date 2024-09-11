@@ -16,9 +16,13 @@ fun Application.module() {
         password = environment.config.property("ktor.application.database.password").getString()
     )
 
+    val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()
+    val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
+
     configureSecurity()
     configureHTTP()
     configureMonitoring()
     configureSerialization()
     configureRouting()
+    configureCache(redisHost, redisPort)
 }
