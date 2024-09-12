@@ -17,6 +17,7 @@ fun Application.module() {
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
     configureDatabase()
+    configureCache(redisHost, redisPort)
     configureJwt()
     configureSecurity()
     configureHTTP()
@@ -24,5 +25,4 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
     configureSwagger(baseUrl)
-    configureCache(redisHost, redisPort)
 }
