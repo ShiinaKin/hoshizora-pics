@@ -3,7 +3,6 @@ package io.sakurasou.model.entity
 import io.sakurasou.model.strategy.StrategyConfig
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 
 /**
  * @author ShiinaKin
