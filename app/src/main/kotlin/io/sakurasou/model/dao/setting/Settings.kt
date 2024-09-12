@@ -11,11 +11,10 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
  * 2024/9/7 13:47
  */
 object Settings : Table("settings") {
-    val id = long("id").autoIncrement()
     val name = varchar("name", 255)
     val config = json<SettingConfig>("config", jsonFormat)
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
 
-    override val primaryKey = PrimaryKey(id)
+    override val primaryKey = PrimaryKey(name)
 }

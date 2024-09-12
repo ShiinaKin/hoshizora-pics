@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Setting(
-    val id: Long,
     val name: String,
     val config: SettingConfig,
     val createTime: LocalDateTime,
