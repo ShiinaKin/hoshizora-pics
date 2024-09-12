@@ -2,6 +2,7 @@ package io.sakurasou
 
 import io.ktor.server.application.*
 import io.sakurasou.config.configureDatabase
+import io.sakurasou.config.configureJwt
 import io.sakurasou.plugins.*
 
 fun main(args: Array<String>) {
@@ -16,6 +17,7 @@ fun Application.module() {
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
     configureDatabase()
+    configureJwt()
     configureSecurity()
     configureHTTP()
     configureMonitoring()
