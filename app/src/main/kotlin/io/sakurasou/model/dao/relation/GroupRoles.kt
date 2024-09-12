@@ -10,12 +10,12 @@ import org.jetbrains.exposed.sql.Table
  */
 object GroupRoles : Table("group_roles") {
     val groupId = long("group_id")
-    val roleId = long("role_id")
+    val roleName = varchar("role_name", 255)
 
-    override val primaryKey = PrimaryKey(groupId, roleId)
+    override val primaryKey = PrimaryKey(groupId, roleName)
 
     init {
         foreignKey(groupId to Groups.id)
-        foreignKey(roleId to Roles.id)
+        foreignKey(roleName to Roles.name)
     }
 }

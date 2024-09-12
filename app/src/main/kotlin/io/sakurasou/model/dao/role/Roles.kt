@@ -7,9 +7,8 @@ import org.jetbrains.exposed.sql.Table
  * 2024/9/7 13:49
  */
 object Roles : Table("roles") {
-    val id = long("id").autoIncrement()
-    val name = varchar("name", 255).uniqueIndex()
+    val name = varchar("name", 255)
     val description = varchar("description", 255).nullable()
 
-    override val primaryKey = PrimaryKey(id)
+    override val primaryKey = PrimaryKey(name)
 }
