@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserInsertRequest(
     val username: String,
-    val groupName: String,
+    val groupId: Long,
     val email: String,
     val password: String
 )
@@ -18,6 +18,12 @@ data class UserInsertRequest(
 data class UserLoginRequest(
     val username: String,
     val password: String
+)
+
+@Serializable
+data class UserSelfPatchRequest(
+    val email: String? = null,
+    val password: String? = null
 )
 
 @Serializable

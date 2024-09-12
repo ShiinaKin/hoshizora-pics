@@ -1,9 +1,10 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.ktor.http.*
 import io.ktor.server.routing.*
+import io.sakurasou.constant.ROLE_READ_ALL
 import io.sakurasou.controller.vo.RoleVO
+import io.sakurasou.extension.get
 
 /**
  * @author Shiina Kin
@@ -22,7 +23,7 @@ fun Route.roleRoute() {
                     }
                 }
             }
-        }) {
+        }, ROLE_READ_ALL) {
             TODO()
         }
     }

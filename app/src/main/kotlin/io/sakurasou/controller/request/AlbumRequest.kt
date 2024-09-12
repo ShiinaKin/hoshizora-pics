@@ -13,7 +13,14 @@ data class AlbumInsertRequest(
 )
 
 @Serializable
+data class AlbumSelfPatchRequest(
+    val name: String? = null,
+    val description: String? = null
+)
+
+@Serializable
 data class AlbumPatchRequest(
+    val userId: Long,
     val name: String? = null,
     val description: String? = null
 )

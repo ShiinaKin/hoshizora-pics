@@ -1,20 +1,20 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import io.sakurasou.constant.STRATEGY_DELETE
+import io.sakurasou.constant.STRATEGY_READ_ALL
+import io.sakurasou.constant.STRATEGY_READ_SINGLE
+import io.sakurasou.constant.STRATEGY_WRITE
 import io.sakurasou.controller.request.StrategyInsertRequest
 import io.sakurasou.controller.request.StrategyPatchRequest
-import io.sakurasou.controller.request.pageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
+import io.sakurasou.extension.*
 
 /**
  * @author Shiina Kin
@@ -36,7 +36,7 @@ fun Route.strategyRoute() {
                     body<CommonResponse<Unit>> { }
                 }
             }
-        }) {
+        }, STRATEGY_WRITE) {
             TODO()
         }
         route("{id}", {
@@ -61,7 +61,7 @@ fun Route.strategyRoute() {
                         body<CommonResponse<Unit>> { }
                     }
                 }
-            }) {
+            }, STRATEGY_DELETE) {
                 TODO()
             }
             patch({
@@ -76,7 +76,7 @@ fun Route.strategyRoute() {
                         body<CommonResponse<Unit>> { }
                     }
                 }
-            }) {
+            }, STRATEGY_WRITE) {
                 TODO()
             }
             get({
@@ -86,7 +86,7 @@ fun Route.strategyRoute() {
                         body<CommonResponse<StrategyVO>> { }
                     }
                 }
-            }) {
+            }, STRATEGY_READ_SINGLE) {
                 TODO()
             }
         }
@@ -103,7 +103,7 @@ fun Route.strategyRoute() {
                     description = "page or pageSize wrong"
                 }
             }
-        }) {
+        }, STRATEGY_READ_ALL) {
             val pageVO = call.pageRequest()
 
             TODO()

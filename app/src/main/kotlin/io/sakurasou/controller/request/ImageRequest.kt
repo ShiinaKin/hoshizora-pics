@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ImagePatchRequest(
+    val albumId: Long? = null,
     val originName: String? = null,
     val description: String? = null
 )

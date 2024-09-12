@@ -8,6 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PageResult<T>(
+    val page: Int,
+    val pageSize: Int,
     val total: Int,
     val list: List<T>
 )

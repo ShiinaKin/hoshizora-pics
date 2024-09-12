@@ -5,4 +5,5 @@ package io.sakurasou.service.user
  * 2024/9/5 15:30
  */
 interface UserService {
+
 }
