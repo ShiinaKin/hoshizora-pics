@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserInsertRequest(
     val username: String,
-    val groupId: Long,
     val email: String,
     val password: String
 )

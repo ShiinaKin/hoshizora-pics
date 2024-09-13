@@ -20,28 +20,36 @@ fun Route.authRoute(authService: AuthService, userService: UserService) {
     route("user", {
         protected = false
     }) {
-        post("login", {
-            request {
-                body<UserLoginRequest> {
-                    required = true
-                }
+        login(authController)
+        signup(authController)
+    }
+}
+
+private fun Route.login(authController: AuthController) {
+    post("login", {
+        request {
+            body<UserLoginRequest> {
+                required = true
             }
-        }) {
-            val loginRequest = call.receive<UserLoginRequest>()
-            val token = authController.handleLogin(loginRequest)
-            call.respond(mapOf("token" to token))
         }
-        post("signup", {
-            protected = false
-            request {
-                body<UserInsertRequest> {
-                    required = true
-                }
+    }) {
+        val loginRequest = call.receive<UserLoginRequest>()
+        val token = authController.handleLogin(loginRequest)
+        call.respond(mapOf("token" to token))
+    }
+}
+
+private fun Route.signup(authController: AuthController) {
+    post("signup", {
+        protected = false
+        request {
+            body<UserInsertRequest> {
+                required = true
             }
-        }) {
-            val userInsertRequest = call.receive<UserInsertRequest>()
-            authController.handleSignup(userInsertRequest)
         }
+    }) {
+        val userInsertRequest = call.receive<UserInsertRequest>()
+        authController.handleSignup(userInsertRequest)
     }
 }
 
