@@ -54,6 +54,6 @@ class AuthController(
     }
 
     suspend fun handleSignup(userInsertRequest: UserInsertRequest) {
-        authService.saveUser(userInsertRequest)
+        userService.saveUser(userInsertRequest)
     }
 }

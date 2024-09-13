@@ -6,18 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.sakurasou.config.JwtConfig.audience
 import io.sakurasou.config.JwtConfig.issuer
 import io.sakurasou.config.JwtConfig.jwkProvider
-import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.controller.request.UserLoginRequest
 import io.sakurasou.exception.UnauthorizedAccessException
 import io.sakurasou.exception.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.user.UserDao
-import io.sakurasou.model.dto.UserInsertDTO
 import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toLocalDateTime
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -55,23 +51,5 @@ class AuthServiceImpl(
             .withExpiresAt(Clock.System.now().plus(Duration.parse("3d")).toJavaInstant())
             .sign(Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
         return token
-    }
-
-    override suspend fun saveUser(userInsertRequest: UserInsertRequest) {
-        val rowPassword = userInsertRequest.password
-        val encodePassword = BCrypt.withDefaults().hashToString(12, rowPassword.toCharArray())
-
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val userInsertDTO = UserInsertDTO(
-            userInsertRequest.groupId,
-            userInsertRequest.username,
-            encodePassword,
-            userInsertRequest.email,
-            now,
-            now
-        )
-        dbQuery {
-            userDao.saveUser(userInsertDTO)
-        }
     }
 }

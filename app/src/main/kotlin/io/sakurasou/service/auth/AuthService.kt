@@ -1,6 +1,5 @@
 package io.sakurasou.service.auth
 
-import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.controller.request.UserLoginRequest
 
 /**
@@ -9,5 +8,4 @@ import io.sakurasou.controller.request.UserLoginRequest
  */
 interface AuthService {
     suspend fun login(loginRequest: UserLoginRequest): String
-    suspend fun saveUser(userInsertRequest: UserInsertRequest)
 }
