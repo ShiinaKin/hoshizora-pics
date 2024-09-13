@@ -1,0 +1,8 @@
+ktor:
+  just:
+    need:
+      this:
+        file:
+          to:
+            not:
+              loading: modules
