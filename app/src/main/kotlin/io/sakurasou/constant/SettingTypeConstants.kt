@@ -8,3 +8,4 @@ package io.sakurasou.constant
 const val SETTING_SITE = "site"
 const val SETTING_STRATEGY = "strategy"
 const val SETTING_SYSTEM = "system"
+const val SETTING_STATUS = "status"

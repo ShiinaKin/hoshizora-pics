@@ -6,6 +6,7 @@ import io.sakurasou.controller.request.SystemSettingPatchRequest
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.StrategySetting
 import io.sakurasou.model.setting.SystemSetting
+import io.sakurasou.model.setting.SystemStatus
 
 /**
  * @author Shiina Kin
@@ -13,9 +14,12 @@ import io.sakurasou.model.setting.SystemSetting
  */
 interface SettingService {
     suspend fun updateSystemSetting(systemSetting: SystemSettingPatchRequest)
-    suspend fun updateSiteSetting(siteSetting: SiteSettingPatchRequest)
+    suspend fun updateSiteSetting(siteSetting: SiteSetting)
+    suspend fun updateSiteSetting(siteSettingPatch: SiteSettingPatchRequest)
     suspend fun updateStrategySetting(strategySetting: StrategySettingPatchRequest)
+    suspend fun updateSystemStatus(systemStatus: SystemStatus)
     suspend fun getSystemSetting(): SystemSetting
     suspend fun getSiteSetting(): SiteSetting
     suspend fun getStrategySetting(): StrategySetting
+    suspend fun getSystemStatus(): SystemStatus
 }

@@ -16,6 +16,7 @@ import io.sakurasou.model.dto.*
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.StrategySetting
 import io.sakurasou.model.setting.SystemSetting
+import io.sakurasou.model.setting.SystemStatus
 import io.sakurasou.model.strategy.LocalStrategy
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -112,7 +113,6 @@ private val albumOpsPermissions = listOf(
     ALBUM_DELETE_SELF,
     ALBUM_DELETE_ALL
 )
-
 
 private fun initPermission() {
     val allPermissions = listOf(
@@ -217,23 +217,21 @@ private fun initSetting() {
         defaultGroupId = 1,
         allowSignup = false
     )
+    val systemStatus = SystemStatus(
+        isInit = false
+    )
 
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
     val siteSettingInsertDTO = SettingInsertDTO(SETTING_SITE, siteSettingConfig, now, now)
     val strategySettingInsertDTO = SettingInsertDTO(SETTING_STRATEGY, strategySettingConfig, now, now)
     val systemSettingInsertDTO = SettingInsertDTO(SETTING_SYSTEM, systemSettingConfig, now, now)
+    val systemStatusInsertDTO = SettingInsertDTO(SETTING_STATUS, systemStatus, now, now)
 
     InstanceCenter.settingDao.saveSetting(siteSettingInsertDTO)
     InstanceCenter.settingDao.saveSetting(strategySettingInsertDTO)
     InstanceCenter.settingDao.saveSetting(systemSettingInsertDTO)
+    InstanceCenter.settingDao.saveSetting(systemStatusInsertDTO)
 
     exposedLogger.info("setting init success")
-}
-
-// TODO move it into save user logic
-private fun initAlbum() {
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    val uncategorizedAlbum = AlbumInsertDTO(1, "Uncategorized", null, 0, now)
-    InstanceCenter.albumDao.saveAlbum(uncategorizedAlbum)
 }

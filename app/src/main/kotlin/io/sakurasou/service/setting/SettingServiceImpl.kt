@@ -1,6 +1,7 @@
 package io.sakurasou.service.setting
 
 import io.sakurasou.constant.SETTING_SITE
+import io.sakurasou.constant.SETTING_STATUS
 import io.sakurasou.constant.SETTING_STRATEGY
 import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.controller.request.SiteSettingPatchRequest
@@ -14,6 +15,7 @@ import io.sakurasou.model.dto.SettingUpdateDTO
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.StrategySetting
 import io.sakurasou.model.setting.SystemSetting
+import io.sakurasou.model.setting.SystemStatus
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -41,13 +43,25 @@ class SettingServiceImpl(
         }
     }
 
-    override suspend fun updateSiteSetting(siteSetting: SiteSettingPatchRequest) {
+    override suspend fun updateSiteSetting(siteSetting: SiteSetting) {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val settingUpdateDTO = SettingUpdateDTO(
+            name = SETTING_SITE,
+            config = siteSetting,
+            updateTime = now
+        )
+        dbQuery {
+            settingDao.updateSettingByName(settingUpdateDTO)
+        }
+    }
+
+    override suspend fun updateSiteSetting(siteSettingPatch: SiteSettingPatchRequest) {
         val siteSettingConfig = SiteSetting(
-            siteTitle = siteSetting.siteTitle,
-            siteSubtitle = siteSetting.siteSubtitle,
-            siteDescription = siteSetting.siteDescription,
-            siteKeyword = siteSetting.siteKeyword,
-            homePageRandomPicDisplay = siteSetting.homePageRandomPicDisplay
+            siteTitle = siteSettingPatch.siteTitle,
+            siteSubtitle = siteSettingPatch.siteSubtitle,
+            siteDescription = siteSettingPatch.siteDescription,
+            siteKeyword = siteSettingPatch.siteKeyword,
+            homePageRandomPicDisplay = siteSettingPatch.homePageRandomPicDisplay
         )
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val settingUpdateDTO = SettingUpdateDTO(
@@ -68,6 +82,18 @@ class SettingServiceImpl(
         val settingUpdateDTO = SettingUpdateDTO(
             name = SETTING_STRATEGY,
             config = strategySettingConfig,
+            updateTime = now
+        )
+        dbQuery {
+            settingDao.updateSettingByName(settingUpdateDTO)
+        }
+    }
+
+    override suspend fun updateSystemStatus(systemStatus: SystemStatus) {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val settingUpdateDTO = SettingUpdateDTO(
+            name = SETTING_STATUS,
+            config = systemStatus,
             updateTime = now
         )
         dbQuery {
@@ -98,6 +124,15 @@ class SettingServiceImpl(
             settingDao.getSettingByName(SETTING_STRATEGY)
         }?.let {
             if (it.config !is StrategySetting) throw ConfigTypeNotMatchException()
+            it.config
+        } ?: run { throw MissingNecessaryColumnException() }
+    }
+
+    override suspend fun getSystemStatus(): SystemStatus {
+        return dbQuery {
+            settingDao.getSettingByName(SETTING_STATUS)
+        }?.let {
+            if (it.config !is SystemStatus) throw ConfigTypeNotMatchException()
             it.config
         } ?: run { throw MissingNecessaryColumnException() }
     }
