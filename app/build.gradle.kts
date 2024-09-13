@@ -6,6 +6,7 @@ val hikariVersion: String by project
 val postgresVersion: String by project
 val mySQLVersion: String by project
 val sqliteVersion: String by project
+val mockkVersion: String by project
 val version: String by project
 
 plugins {
@@ -73,7 +74,10 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml")
+
+    testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
+    testImplementation("io.ktor:ktor-client-content-negotiation")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 }
 
