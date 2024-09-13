@@ -2,6 +2,7 @@ package io.sakurasou.plugins
 
 import com.ucasoft.ktor.simpleCache.SimpleCache
 import com.ucasoft.ktor.simpleMemoryCache.memoryCache
+import com.ucasoft.ktor.simpleRedisCache.redisCache
 import io.ktor.server.application.*
 import kotlin.time.Duration.Companion.seconds
 
@@ -11,15 +12,16 @@ import kotlin.time.Duration.Companion.seconds
  */
 fun Application.configureCache(host: String, port: String) {
     install(SimpleCache) {
-        memoryCache {
-            invalidateAt = 10.seconds
+        if (host != "disabled") {
+            redisCache {
+                invalidateAt = 10.seconds
+                this.host = host
+                this.port = port.toInt()
+            }
+        } else {
+            memoryCache {
+                invalidateAt = 10.seconds
+            }
         }
     }
-    // install(SimpleCache) {
-    //     redisCache {
-    //         invalidateAt = 10.seconds
-    //         host = "localhost"
-    //         port = 6379
-    //     }
-    // }
 }

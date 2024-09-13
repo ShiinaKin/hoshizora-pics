@@ -10,8 +10,8 @@ ktor:
       password: $DATABASE_PASSWORD
     cache:
       redis:
-        host: $REDIS_HOST
-        port: $REDIS_PORT
+        host: "$REDIS_HOST:disable"
+        port: "$REDIS_PORT:6379"
   deployment:
     port: 8080
     watch:
