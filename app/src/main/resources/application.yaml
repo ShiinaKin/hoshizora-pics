@@ -1,7 +1,7 @@
 ktor:
   application:
     modules:
-      - io.sakurasou.ApplicationKt.module
+      - io.sakurasou.ApplicationKt.mainModule
     base-url: "$BASE_URL:/"
     database:
       driver: $DATABASE_DRIVER

@@ -29,7 +29,6 @@ import org.jetbrains.exposed.sql.exposedLogger
  * 2024/9/12 16:22
  */
 fun init() {
-    InstanceCenter.initDao()
     if (isFirstRunning()) return
     SchemaUtils.create(Images)
     SchemaUtils.create(Albums)

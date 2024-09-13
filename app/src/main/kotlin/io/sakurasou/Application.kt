@@ -10,15 +10,15 @@ fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
-fun Application.module() {
+fun Application.mainModule() {
 
     val baseUrl = environment.config.property("ktor.application.base-url").getString()
-
     val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
-    configureDatabase()
+    InstanceCenter.initDao()
     InstanceCenter.initService()
+    configureDatabase()
     configureCache(redisHost, redisPort)
     configureJwt()
     configureSecurity()
