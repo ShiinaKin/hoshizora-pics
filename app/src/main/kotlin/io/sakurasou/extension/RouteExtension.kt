@@ -3,9 +3,12 @@ package io.sakurasou.extension
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.github.smiley4.ktorswaggerui.dsl.routing.documentation
 import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.CommonResponse
+import io.sakurasou.exception.ServiceThrowable
 import io.sakurasou.exception.UnauthorizedAccessException
 import io.sakurasou.exception.WrongParameterException
 import org.jetbrains.exposed.sql.exposedLogger
@@ -45,6 +48,18 @@ fun OpenApiRoute.pageRequest() {
             required = false
         }
     }
+}
+
+suspend fun ApplicationCall.success() {
+    respond(CommonResponse.success(Unit))
+}
+
+suspend fun <T> ApplicationCall.success(data: T) {
+    respond(CommonResponse.success(data))
+}
+
+suspend fun ApplicationCall.failure(exception: ServiceThrowable) {
+    respond(CommonResponse.error<Unit>(exception.code, exception.message))
 }
 
 fun Route.post(
