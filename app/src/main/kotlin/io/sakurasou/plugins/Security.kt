@@ -12,7 +12,7 @@ import io.sakurasou.config.JwtConfig.jwkProvider
 
 fun Application.configureSecurity() {
     authentication {
-        jwt {
+        jwt("auth-jwt") {
             realm = JwtConfig.realm
             verifier(jwkProvider, issuer) {
                 acceptLeeway(3)
@@ -22,15 +22,6 @@ fun Application.configureSecurity() {
             }
             challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
-            }
-        }
-    }
-    authentication {
-        form("auth-jwt") {
-            userParamName = "user"
-            passwordParamName = "password"
-            challenge {
-                /**/
             }
         }
     }
