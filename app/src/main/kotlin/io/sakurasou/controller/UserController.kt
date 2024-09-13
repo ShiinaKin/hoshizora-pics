@@ -24,8 +24,7 @@ import io.sakurasou.service.user.UserServiceImpl
  * 2024/9/5 15:35
  */
 
-fun Route.userRoute(userDao: UserDao) {
-    val userService = UserServiceImpl(userDao)
+fun Route.userRoute(userService: UserService) {
     val userController = UserController(userService)
     route("user", {
         protected = true

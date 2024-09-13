@@ -6,12 +6,14 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.sakurasou.controller.request.SiteInitRequest
+import io.sakurasou.service.common.CommonService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 09:03
  */
-fun Route.commonRoute() {
+fun Route.commonRoute(commonService: CommonService) {
+    val commonController = CommonController(commonService)
     route("site") {
         post("init", {
             request {
@@ -62,5 +64,7 @@ fun Route.commonRoute() {
     }
 }
 
-class CommonController {
+class CommonController(
+    private val commonService: CommonService
+) {
 }

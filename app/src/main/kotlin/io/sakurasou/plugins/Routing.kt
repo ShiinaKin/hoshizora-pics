@@ -13,8 +13,11 @@ import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import io.sakurasou.config.InstanceCenter.authService
+import io.sakurasou.config.InstanceCenter.commonService
 import io.sakurasou.config.InstanceCenter.relationDao
 import io.sakurasou.config.InstanceCenter.userDao
+import io.sakurasou.config.InstanceCenter.userService
 import io.sakurasou.controller.*
 import io.sakurasou.exception.FileSizeException
 import io.sakurasou.exception.UnauthorizedAccessException
@@ -45,8 +48,8 @@ fun Application.configureRouting() {
     install(DoubleReceive)
     routing {
         route("api") {
-            authRoute(userDao, relationDao)
-            cacheOutput { commonRoute() }
+            authRoute(authService, userService)
+            cacheOutput { commonRoute(commonService) }
             authenticate("auth-jwt") {
                 intercept(ApplicationCallPipeline.Call) {
                     val principal = call.principal<JWTPrincipal>()
@@ -62,7 +65,7 @@ fun Application.configureRouting() {
                 albumRoute()
                 strategyRoute()
                 settingRoute()
-                userRoute(userDao)
+                userRoute(userService)
                 groupRoute()
                 roleRoute()
             }

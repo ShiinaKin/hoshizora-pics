@@ -21,4 +21,5 @@ data class SiteInitRequest(
     val email: String,
     val siteTitle: String,
     val siteSubtitle: String,
+    val siteDescription: String
 )

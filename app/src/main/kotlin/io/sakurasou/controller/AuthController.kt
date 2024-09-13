@@ -8,18 +8,15 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.model.dao.relation.RelationDao
-import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.service.auth.AuthService
-import io.sakurasou.service.auth.AuthServiceImpl
+import io.sakurasou.service.user.UserService
 
 /**
  * @author Shiina Kin
  * 2024/9/12 10:14
  */
-fun Route.authRoute(userDao: UserDao, relationDao: RelationDao) {
-    val authService = AuthServiceImpl(userDao, relationDao)
-    val authController = AuthController(authService)
+fun Route.authRoute(authService: AuthService, userService: UserService) {
+    val authController = AuthController(authService, userService)
     route("user", {
         protected = false
     }) {
@@ -49,7 +46,8 @@ fun Route.authRoute(userDao: UserDao, relationDao: RelationDao) {
 }
 
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val userService: UserService
 ) {
     suspend fun handleLogin(loginRequest: UserLoginRequest): String {
         return authService.login(loginRequest)
