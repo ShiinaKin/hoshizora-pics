@@ -8,13 +8,20 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SiteSettingPatchRequest(
-    val siteTitle: String? = null,
-    val siteSubtitle: String? = null,
-    val siteKeyword: String? = null,
-    val siteDescription: String? = null,
-    val homePageRandomPicDisplay: Boolean? = null
+    val siteTitle: String,
+    val siteSubtitle: String,
+    val siteKeyword: String,
+    val siteDescription: String,
+    val homePageRandomPicDisplay: Boolean
 )
 
+@Serializable
 data class StrategySettingPatchRequest(
     val allowedImageTypes: List<String>
+)
+
+@Serializable
+data class SystemSettingPatchRequest(
+    val defaultGroupId: Long,
+    val allowSignup: Boolean
 )
