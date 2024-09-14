@@ -15,8 +15,6 @@ import io.ktor.server.routing.*
 import io.ktor.util.*
 import io.sakurasou.config.InstanceCenter.authService
 import io.sakurasou.config.InstanceCenter.commonService
-import io.sakurasou.config.InstanceCenter.relationDao
-import io.sakurasou.config.InstanceCenter.userDao
 import io.sakurasou.config.InstanceCenter.userService
 import io.sakurasou.controller.*
 import io.sakurasou.exception.FileSizeException
@@ -43,6 +41,7 @@ fun Application.configureRouting() {
         exception<UserNotFoundException> { call: ApplicationCall, cause ->
             call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
         }
+        // TODO handle all custom exceptions
     }
     install(AutoHeadResponse)
     install(DoubleReceive)
