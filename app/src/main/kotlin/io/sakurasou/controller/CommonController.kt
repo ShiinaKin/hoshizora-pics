@@ -1,5 +1,6 @@
 package io.sakurasou.controller
 
+import com.ucasoft.ktor.simpleCache.cacheOutput
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
@@ -7,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import io.sakurasou.config.InstanceCenter.commonService
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.extension.success
 import io.sakurasou.service.common.CommonService
@@ -17,19 +19,19 @@ import io.sakurasou.service.common.CommonService
  */
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
-    route("site") {
-        siteInit(commonController)
-    }
-    route("fetch") {
-        randomFetchImage(commonController)
-    }
-    route("s") {
-        anonymousGetImage(commonController)
+    cacheOutput {
+        route("fetch") {
+            randomFetchImage(commonController)
+        }
+        route("s") {
+            anonymousGetImage(commonController)
+        }
     }
 }
 
-private fun Route.siteInit(commonController: CommonController) {
-    post("init", {
+fun Route.siteInitRoute() {
+    val commonController = CommonController(commonService)
+    post("site/init", {
         request {
             body<SiteInitRequest> {
                 required = true

@@ -68,10 +68,8 @@ fun isSiteNotInitialized() = !InstanceCenter.systemStatus.isInit
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.post(
@@ -80,7 +78,6 @@ fun Route.post(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -91,10 +88,8 @@ fun Route.post(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.delete(
@@ -103,7 +98,6 @@ fun Route.delete(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -114,10 +108,8 @@ fun Route.delete(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.patch(
@@ -126,7 +118,6 @@ fun Route.patch(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -137,10 +128,8 @@ fun Route.patch(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.get(
@@ -149,7 +138,6 @@ fun Route.get(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -160,10 +148,8 @@ fun Route.get(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.post(
@@ -173,7 +159,6 @@ fun Route.post(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -184,10 +169,8 @@ fun Route.post(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.delete(
@@ -197,7 +180,6 @@ fun Route.delete(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -208,10 +190,8 @@ fun Route.delete(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.patch(
@@ -221,7 +201,6 @@ fun Route.patch(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }
@@ -232,10 +211,8 @@ fun Route.patch(
 
 /**
  * Behavior:
- * 1. Check if the site is initialized, if not throw an SiteNotInitializationException
- * 2. Check if the user has the required permission, if not throw an UnauthorizedAccessException
+ * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
  *
- * @throws SiteNotInitializationException
  * @throws UnauthorizedAccessException
  */
 fun Route.get(
@@ -245,7 +222,6 @@ fun Route.get(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
         if (lackPermission(call.attributes, permission)) {
             throw UnauthorizedAccessException()
         }

@@ -1,6 +1,6 @@
 package io.sakurasou.plugins
 
-import com.ucasoft.ktor.simpleCache.cacheOutput
+import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,11 +17,11 @@ import io.sakurasou.config.InstanceCenter.authService
 import io.sakurasou.config.InstanceCenter.commonService
 import io.sakurasou.config.InstanceCenter.userService
 import io.sakurasou.controller.*
-import io.sakurasou.exception.FileSizeException
-import io.sakurasou.exception.UnauthorizedAccessException
-import io.sakurasou.exception.UserNotFoundException
-import io.sakurasou.exception.WrongParameterException
+import io.sakurasou.exception.ServiceThrowable
+import io.sakurasou.exception.SiteNotInitializationException
+import io.sakurasou.extension.failure
 import io.sakurasou.extension.getPrincipal
+import io.sakurasou.extension.isSiteNotInitialized
 
 fun Application.configureRouting() {
     install(Resources)
@@ -29,17 +29,8 @@ fun Application.configureRouting() {
         exception<Throwable> { call, cause ->
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
-        exception<WrongParameterException> { call: ApplicationCall, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-        exception<FileSizeException> { call: ApplicationCall, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-        exception<UnauthorizedAccessException> { call: ApplicationCall, cause ->
-            call.respondText(text = "401: $cause", status = HttpStatusCode.Unauthorized)
-        }
-        exception<UserNotFoundException> { call: ApplicationCall, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+        exception<ServiceThrowable> { call: ApplicationCall, cause ->
+            call.failure(cause)
         }
         // TODO handle all custom exceptions
     }
@@ -47,26 +38,33 @@ fun Application.configureRouting() {
     install(DoubleReceive)
     routing {
         route("api") {
-            authRoute(authService, userService)
-            cacheOutput { commonRoute(commonService) }
-            authenticate("auth-jwt") {
-                intercept(ApplicationCallPipeline.Call) {
-                    val principal = call.principal<JWTPrincipal>()
-                    val username = principal!!.payload.getClaim("username").asString()
-                    val role: List<String> = principal.payload.getClaim("role").asList(String::class.java)
-                    call.attributes.put(AttributeKey("username"), username)
-                    call.attributes.put(AttributeKey("role"), role)
+            siteInitRoute()
+
+            route {
+                intercept(ApplicationCallPipeline.Setup) {
+                    if (isSiteNotInitialized()) throw SiteNotInitializationException()
                 }
-                get("helloworld") {
-                    call.respond(call.attributes.getPrincipal())
+                authRoute(authService, userService)
+                commonRoute(commonService)
+                authenticate("auth-jwt") {
+                    intercept(ApplicationCallPipeline.Call) {
+                        val principal = call.principal<JWTPrincipal>()
+                        val username = principal!!.payload.getClaim("username").asString()
+                        val role: List<String> = principal.payload.getClaim("role").asList(String::class.java)
+                        call.attributes.put(AttributeKey("username"), username)
+                        call.attributes.put(AttributeKey("role"), role)
+                    }
+                    get("helloworld") {
+                        call.respond(call.attributes.getPrincipal())
+                    }
+                    imageRoute()
+                    albumRoute()
+                    strategyRoute()
+                    settingRoute()
+                    userRoute(userService)
+                    groupRoute()
+                    roleRoute()
                 }
-                imageRoute()
-                albumRoute()
-                strategyRoute()
-                settingRoute()
-                userRoute(userService)
-                groupRoute()
-                roleRoute()
             }
         }
         staticResources("", "static")
