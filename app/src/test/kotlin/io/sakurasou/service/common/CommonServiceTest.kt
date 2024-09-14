@@ -41,6 +41,12 @@ class CommonServiceTest {
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
         }
+        coEvery { DatabaseSingleton.dbQueryInner<Unit>(any()) } coAnswers {
+            this.arg<suspend () -> Unit>(0).invoke()
+        }
+        coEvery { DatabaseSingleton.dbQueryInner<Long>(any()) } coAnswers {
+            this.arg<suspend () -> Long>(0).invoke()
+        }
     }
 
     @Test

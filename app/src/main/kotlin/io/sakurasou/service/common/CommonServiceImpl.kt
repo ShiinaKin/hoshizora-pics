@@ -5,6 +5,7 @@ import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
+import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SiteSetting
@@ -55,10 +56,10 @@ class CommonServiceImpl(
         )
 
         dbQuery {
-            val userId = userDao.saveUser(userInsertDTO)
-            albumService.initAlbumForUser(userId)
-            settingService.updateSiteSetting(siteSettingConfig)
-            settingService.updateSystemStatus(systemStatus)
+            val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
+            dbQueryInner { albumService.initAlbumForUser(userId) }
+            dbQueryInner { settingService.updateSiteSetting(siteSettingConfig) }
+            dbQueryInner { settingService.updateSystemStatus(systemStatus) }
         }
         InstanceCenter.systemStatus = systemStatus
     }

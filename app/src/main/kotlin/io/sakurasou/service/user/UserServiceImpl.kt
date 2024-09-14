@@ -4,6 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.exception.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
+import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.service.album.AlbumService
@@ -39,8 +40,8 @@ class UserServiceImpl(
             updateTime = now
         )
         dbQuery {
-            val userId = userDao.saveUser(userInsertDTO)
-            albumService.initAlbumForUser(userId)
+            val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
+            dbQueryInner { albumService.initAlbumForUser(userId) }
         }
     }
 
