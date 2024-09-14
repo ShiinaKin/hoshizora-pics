@@ -1,8 +1,107 @@
 package io.sakurasou.service.user
 
+import at.favre.lib.crypto.bcrypt.BCrypt
+import io.ktor.server.testing.*
+import io.mockk.*
+import io.sakurasou.controller.request.UserInsertRequest
+import io.sakurasou.exception.SignupNotAllowedException
+import io.sakurasou.model.DatabaseSingleton
+import io.sakurasou.model.dao.user.UserDao
+import io.sakurasou.model.dto.UserInsertDTO
+import io.sakurasou.model.setting.SystemSetting
+import io.sakurasou.service.album.AlbumService
+import io.sakurasou.service.setting.SettingService
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
+
 /**
  * @author Shiina Kin
  * 2024/9/12 13:38
  */
 class UserServiceTest {
+    private lateinit var userDao: UserDao
+    private lateinit var albumService: AlbumService
+    private lateinit var settingService: SettingService
+    private lateinit var userService: UserServiceImpl
+
+    @BeforeTest
+    fun setUp() {
+        mockkObject(DatabaseSingleton)
+        mockkStatic(BCrypt::class)
+        mockkObject(Clock.System)
+        userDao = mockk()
+        albumService = mockk()
+        settingService = mockk()
+        userService = UserServiceImpl(userDao, albumService, settingService)
+        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
+            this.arg<suspend () -> Unit>(0).invoke()
+        }
+    }
+
+    @Test
+    fun `signup should throw SignupNotAllowedException if system not allowed signup`() = testApplication {
+        // Arrange
+        val userInsertRequest = UserInsertRequest(
+            username = "testUser",
+            password = "testPassword",
+            email = "test@example.com",
+        )
+        val systemSetting = SystemSetting(
+            defaultGroupId = 2,
+            allowSignup = false
+        )
+
+        coEvery { settingService.getSystemSetting() } returns systemSetting
+
+        // Act & Assert
+        assertFailsWith<SignupNotAllowedException> {
+            userService.saveUser(userInsertRequest)
+        }
+    }
+
+    @Test
+    fun `test saveUser`() = testApplication {
+        // Arrange
+        val userInsertRequest = UserInsertRequest(
+            username = "testUser",
+            password = "testPassword",
+            email = "test@example.com",
+        )
+        val systemSetting = SystemSetting(
+            defaultGroupId = 2,
+            allowSignup = true
+        )
+
+        val instant = Clock.System.now()
+        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val encodedPassword = "encodedPassword"
+        val userInsertDTO = UserInsertDTO(
+            groupId = 2,
+            username = "testUser",
+            password = encodedPassword,
+            email = "test@example.com",
+            createTime = now,
+            updateTime = now
+        )
+
+        every { Clock.System.now() } returns instant
+        coEvery { settingService.getSystemSetting() } returns systemSetting
+        every {
+            BCrypt.withDefaults().hashToString(12, userInsertRequest.password.toCharArray())
+        } returns encodedPassword
+        coEvery { userDao.saveUser(userInsertDTO) } returns 1
+        coEvery { albumService.initAlbumForUser(1L) } just Runs
+
+        // Act
+        userService.saveUser(userInsertRequest)
+
+        // Assert
+        coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
+        coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
+        coVerify(exactly = 1) { albumService.initAlbumForUser(1L) }
+    }
 }
