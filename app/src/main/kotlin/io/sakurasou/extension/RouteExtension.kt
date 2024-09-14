@@ -10,10 +10,8 @@ import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.exception.ServiceThrowable
-import io.sakurasou.exception.SiteNotInitializationException
 import io.sakurasou.exception.UnauthorizedAccessException
 import io.sakurasou.exception.WrongParameterException
-import org.jetbrains.exposed.sql.exposedLogger
 
 /**
  * @author Shiina Kin
@@ -78,10 +76,7 @@ fun Route.post(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { post(body) }
 }
@@ -98,10 +93,7 @@ fun Route.delete(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { delete(body) }
 }
@@ -118,10 +110,7 @@ fun Route.patch(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { patch(body) }
 }
@@ -138,10 +127,7 @@ fun Route.get(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { get(body) }
 }
@@ -159,10 +145,7 @@ fun Route.post(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { post(path, body) }
 }
@@ -180,10 +163,7 @@ fun Route.delete(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { delete(path, body) }
 }
@@ -201,10 +181,7 @@ fun Route.patch(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { patch(path, body) }
 }
@@ -222,10 +199,7 @@ fun Route.get(
     body: PipelineInterceptor<Unit, ApplicationCall>
 ): Route {
     intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) {
-            throw UnauthorizedAccessException()
-        }
-        exposedLogger.debug("====== access permission check ======")
+        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
     }
     return documentation(builder) { get(path, body) }
 }

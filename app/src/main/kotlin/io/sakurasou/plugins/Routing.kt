@@ -1,5 +1,6 @@
 package io.sakurasou.plugins
 
+import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -57,9 +58,6 @@ fun Application.configureRouting() {
                         call.attributes.put(AttributeKey("groupId"), groupId)
                         call.attributes.put(AttributeKey("username"), username)
                         call.attributes.put(AttributeKey("roles"), roles)
-                    }
-                    get("helloworld") {
-                        call.respond(call.attributes.getPrincipal())
                     }
                     imageRoute()
                     albumRoute()

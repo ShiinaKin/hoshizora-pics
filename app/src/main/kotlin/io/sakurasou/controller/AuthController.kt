@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.controller.request.UserLoginRequest
+import io.sakurasou.extension.success
 import io.sakurasou.service.auth.AuthService
 import io.sakurasou.service.user.UserService
 
@@ -50,6 +51,7 @@ private fun Route.signup(authController: AuthController) {
     }) {
         val userInsertRequest = call.receive<UserInsertRequest>()
         authController.handleSignup(userInsertRequest)
+        call.success()
     }
 }
 
