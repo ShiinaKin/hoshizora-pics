@@ -2,6 +2,7 @@ package io.sakurasou.service.user
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserInsertRequest
+import io.sakurasou.exception.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
@@ -21,10 +22,12 @@ class UserServiceImpl(
     private val settingService: SettingService
 ) : UserService {
     override suspend fun saveUser(userInsertRequest: UserInsertRequest) {
+        val systemSetting = settingService.getSystemSetting()
+        if (!systemSetting.allowSignup) throw SignupNotAllowedException()
+
         val rawPassword = userInsertRequest.password
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
-        val systemSetting = settingService.getSystemSetting()
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val userInsertDTO = UserInsertDTO(
