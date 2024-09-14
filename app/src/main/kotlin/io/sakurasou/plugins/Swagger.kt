@@ -1,6 +1,8 @@
 package io.sakurasou.plugins
 
 import io.github.smiley4.ktorswaggerui.SwaggerUI
+import io.github.smiley4.ktorswaggerui.data.AuthScheme
+import io.github.smiley4.ktorswaggerui.data.AuthType
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.ktor.server.application.*
@@ -20,6 +22,14 @@ fun Application.configureSwagger(baseUrl: String) {
         server {
             url = baseUrl
             description = "Server"
+        }
+        security {
+            defaultSecuritySchemeNames("JWT")
+            securityScheme("JWT") {
+                type = AuthType.HTTP
+                scheme = AuthScheme.BEARER
+                bearerFormat = "Bearer"
+            }
         }
     }
     routing {
