@@ -12,6 +12,8 @@ import io.sakurasou.exception.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.user.UserDao
+import io.sakurasou.model.entity.User
+import io.sakurasou.util.JwtUtils
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import java.security.KeyFactory
@@ -36,20 +38,10 @@ class AuthServiceImpl(
         val isCorrectPassword = BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password)
         if (!isCorrectPassword.verified) throw UnauthorizedAccessException()
 
-        val role: List<String> = relationDao.listRoleByGroupId(user.groupId)
+        val roles: List<String> = dbQuery {
+            relationDao.listRoleByGroupId(user.groupId)
+        }
 
-        val publicKey = jwkProvider.get("6f8856ed-9189-488f-9011-0ff4b6c08edc").publicKey
-        val keySpecPKCS8 = PKCS8EncodedKeySpec(publicKey.encoded)
-        val privateKey = KeyFactory.getInstance("RSA").generatePrivate(keySpecPKCS8)
-        val token = JWT.create()
-            .withAudience(audience)
-            .withIssuer(issuer)
-            .withClaim("id", user.id)
-            .withClaim("username", user.name)
-            .withClaim("groupId", user.groupId)
-            .withClaim("role", role)
-            .withExpiresAt(Clock.System.now().plus(Duration.parse("3d")).toJavaInstant())
-            .sign(Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
-        return token
+        return JwtUtils.generateJwtToken(user, roles)
     }
 }
