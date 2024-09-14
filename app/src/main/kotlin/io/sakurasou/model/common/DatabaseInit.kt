@@ -213,7 +213,7 @@ private fun initSetting() {
         allowedImageTypes = listOf("jpg", "jpeg", "png", "gif"),
     )
     val systemSettingConfig = SystemSetting(
-        defaultGroupId = 1,
+        defaultGroupId = 2,
         allowSignup = false
     )
     val systemStatus = SystemStatus(
