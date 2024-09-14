@@ -1,7 +1,6 @@
 package io.sakurasou.service.user
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import io.ktor.server.testing.*
 import io.mockk.*
 import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.exception.SignupNotAllowedException
@@ -11,6 +10,7 @@ import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.setting.SettingService
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -43,8 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `signup should throw SignupNotAllowedException if system not allowed signup`() = testApplication {
-        // Arrange
+    fun `signup should throw SignupNotAllowedException if system not allowed signup`(): Unit = runBlocking {
         val userInsertRequest = UserInsertRequest(
             username = "testUser",
             password = "testPassword",
@@ -57,15 +56,13 @@ class UserServiceTest {
 
         coEvery { settingService.getSystemSetting() } returns systemSetting
 
-        // Act & Assert
         assertFailsWith<SignupNotAllowedException> {
             userService.saveUser(userInsertRequest)
         }
     }
 
     @Test
-    fun `test saveUser`() = testApplication {
-        // Arrange
+    fun `signup should be successful`() = runBlocking {
         val userInsertRequest = UserInsertRequest(
             username = "testUser",
             password = "testPassword",
@@ -96,10 +93,8 @@ class UserServiceTest {
         coEvery { userDao.saveUser(userInsertDTO) } returns 1
         coEvery { albumService.initAlbumForUser(1L) } just Runs
 
-        // Act
         userService.saveUser(userInsertRequest)
 
-        // Assert
         coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
         coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
         coVerify(exactly = 1) { albumService.initAlbumForUser(1L) }

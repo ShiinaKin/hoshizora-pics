@@ -1,7 +1,6 @@
 package io.sakurasou.service.common
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import io.ktor.server.testing.*
 import io.mockk.*
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.SiteRepeatedInitializationException
@@ -12,11 +11,12 @@ import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemStatus
 import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.setting.SettingService
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlin.test.Test
 import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 /**
@@ -44,8 +44,7 @@ class CommonServiceTest {
     }
 
     @Test
-    fun `initSite should throw SiteRepeatedInitializationException if already initialized`() = testApplication {
-        // Arrange
+    fun `initSite should throw SiteRepeatedInitializationException if already initialized`(): Unit = runBlocking {
         val siteInitRequest = SiteInitRequest(
             username = "testUser",
             password = "testPassword",
@@ -56,15 +55,13 @@ class CommonServiceTest {
         )
         coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = true)
 
-        // Act & Assert
         assertFailsWith<SiteRepeatedInitializationException> {
             commonService.initSite(siteInitRequest)
         }
     }
 
     @Test
-    fun `initSite should initialize site correctly`() = testApplication {
-        // Arrange
+    fun `initSite should initialize site correctly`() = runBlocking {
         val siteInitRequest = SiteInitRequest(
             username = "testUser",
             password = "testPassword",
@@ -109,10 +106,8 @@ class CommonServiceTest {
         coEvery { settingService.updateSiteSetting(siteSettingConfig) } just Runs
         coEvery { settingService.updateSystemStatus(systemStatus) } just Runs
 
-        // Act
         commonService.initSite(siteInitRequest)
 
-        // Assert
         coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
         coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
         coVerify(exactly = 1) { albumService.initAlbumForUser(1) }
