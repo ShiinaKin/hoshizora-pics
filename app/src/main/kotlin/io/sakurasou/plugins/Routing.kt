@@ -48,11 +48,15 @@ fun Application.configureRouting() {
                 commonRoute(commonService)
                 authenticate("auth-jwt") {
                     intercept(ApplicationCallPipeline.Call) {
-                        val principal = call.principal<JWTPrincipal>()
-                        val username = principal!!.payload.getClaim("username").asString()
-                        val role: List<String> = principal.payload.getClaim("role").asList(String::class.java)
+                        val principal = call.principal<JWTPrincipal>()!!
+                        val id = principal.payload.getClaim("id").asLong()
+                        val groupId = principal.payload.getClaim("groupId").asLong()
+                        val username = principal.payload.getClaim("username").asString()
+                        val roles: List<String> = principal.payload.getClaim("roles").asList(String::class.java)
+                        call.attributes.put(AttributeKey("id"), id)
+                        call.attributes.put(AttributeKey("groupId"), groupId)
                         call.attributes.put(AttributeKey("username"), username)
-                        call.attributes.put(AttributeKey("role"), role)
+                        call.attributes.put(AttributeKey("roles"), roles)
                     }
                     get("helloworld") {
                         call.respond(call.attributes.getPrincipal())
