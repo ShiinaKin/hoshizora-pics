@@ -18,6 +18,7 @@ import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dao.strategy.StrategyDaoImpl
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dao.user.UserDaoImpl
+import io.sakurasou.model.setting.SystemStatus
 import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.album.AlbumServiceImpl
 import io.sakurasou.service.auth.AuthService
@@ -29,6 +30,7 @@ import io.sakurasou.service.setting.SettingService
 import io.sakurasou.service.setting.SettingServiceImpl
 import io.sakurasou.service.user.UserService
 import io.sakurasou.service.user.UserServiceImpl
+import kotlinx.coroutines.runBlocking
 
 /**
  * @author Shiina Kin
@@ -49,6 +51,7 @@ object InstanceCenter {
     lateinit var userService: UserService
     lateinit var imageService: ImageService
     lateinit var albumService: AlbumService
+
     // lateinit var strategyService: UserService
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
@@ -56,6 +59,7 @@ object InstanceCenter {
     // lateinit var permissionService: UserService
     // lateinit var relationService: UserService
 
+    lateinit var systemStatus: SystemStatus
 
     fun initDao() {
         userDao = UserDaoImpl()
@@ -76,5 +80,11 @@ object InstanceCenter {
 
         userService = UserServiceImpl(userDao, albumService, settingService)
         commonService = CommonServiceImpl(userDao, albumService, settingService)
+    }
+
+    fun initSystemStatus() {
+        systemStatus = runBlocking {
+            settingService.getSystemStatus()
+        }
     }
 }

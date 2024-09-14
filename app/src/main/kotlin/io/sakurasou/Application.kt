@@ -19,6 +19,7 @@ fun Application.mainModule() {
     InstanceCenter.initDao()
     InstanceCenter.initService()
     configureDatabase()
+    InstanceCenter.initSystemStatus()
     configureCache(redisHost, redisPort)
     configureJwt()
     configureSecurity()

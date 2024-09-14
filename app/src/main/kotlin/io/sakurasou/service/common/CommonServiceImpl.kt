@@ -1,6 +1,7 @@
 package io.sakurasou.service.common
 
 import at.favre.lib.crypto.bcrypt.BCrypt
+import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
@@ -59,5 +60,6 @@ class CommonServiceImpl(
             settingService.updateSiteSetting(siteSettingConfig)
             settingService.updateSystemStatus(systemStatus)
         }
+        InstanceCenter.systemStatus = systemStatus
     }
 }
