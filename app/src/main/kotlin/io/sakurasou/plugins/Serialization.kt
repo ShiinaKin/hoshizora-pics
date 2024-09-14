@@ -12,7 +12,7 @@ fun Application.configureSerialization() {
 }
 
 val jsonFormat = Json {
-    prettyPrint = true
-    // isLenient = true
-    // ignoreUnknownKeys = true
+    prettyPrint = false
+    isLenient = false
+    ignoreUnknownKeys = false
 }
