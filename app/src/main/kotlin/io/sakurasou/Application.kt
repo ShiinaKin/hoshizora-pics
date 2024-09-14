@@ -10,9 +10,13 @@ fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
+fun Application.swaggerModule() {
+    val baseUrl = environment.config.property("ktor.application.base-url").getString()
+    configureSwagger(baseUrl)
+}
+
 fun Application.mainModule() {
 
-    val baseUrl = environment.config.property("ktor.application.base-url").getString()
     val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
@@ -27,5 +31,6 @@ fun Application.mainModule() {
     configureMonitoring()
     configureSerialization()
     configureRouting()
-    configureSwagger(baseUrl)
+
+    if (environment.developmentMode) { swaggerModule() }
 }

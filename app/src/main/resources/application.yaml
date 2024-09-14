@@ -14,8 +14,9 @@ ktor:
         port: "$REDIS_PORT:6379"
   deployment:
     port: 8080
-    watch:
-      - classes
+io:
+  ktor:
+    development: "$DEVELOPMENT:false"
 jwt:
   secret: $JWT_SECRET
   issuer: $JWT_ISSUER
