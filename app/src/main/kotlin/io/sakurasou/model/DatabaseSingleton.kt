@@ -32,5 +32,7 @@ object DatabaseSingleton {
         }
     }
 
+    suspend fun <T> dbQueryInner(block: suspend () -> T): T = newSuspendedTransaction { block() }
+
     suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
 }
