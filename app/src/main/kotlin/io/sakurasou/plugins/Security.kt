@@ -7,16 +7,13 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.sakurasou.config.JwtConfig
 import io.sakurasou.config.JwtConfig.audience
-import io.sakurasou.config.JwtConfig.issuer
-import io.sakurasou.config.JwtConfig.jwkProvider
+import io.sakurasou.util.JwtUtils
 
 fun Application.configureSecurity() {
     authentication {
         jwt("auth-jwt") {
             realm = JwtConfig.realm
-            verifier(jwkProvider, issuer) {
-                acceptLeeway(3)
-            }
+            verifier(JwtUtils.verifier())
             validate { credential ->
                 if (credential.payload.audience.contains(audience)) JWTPrincipal(credential.payload) else null
             }
