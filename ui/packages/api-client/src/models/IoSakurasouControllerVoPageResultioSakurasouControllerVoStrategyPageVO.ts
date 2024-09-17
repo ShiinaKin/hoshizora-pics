@@ -37,6 +37,18 @@ export interface IoSakurasouControllerVoPageResultioSakurasouControllerVoStrateg
      * @type {number}
      * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO
      */
+    page: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO
+     */
+    pageSize: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO
+     */
     total: number;
 }
 
@@ -45,6 +57,8 @@ export interface IoSakurasouControllerVoPageResultioSakurasouControllerVoStrateg
  */
 export function instanceOfIoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO(value: object): value is IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO {
     if (!('list' in value) || value['list'] === undefined) return false;
+    if (!('page' in value) || value['page'] === undefined) return false;
+    if (!('pageSize' in value) || value['pageSize'] === undefined) return false;
     if (!('total' in value) || value['total'] === undefined) return false;
     return true;
 }
@@ -60,6 +74,8 @@ export function IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategy
     return {
         
         'list': ((json['list'] as Array<any>).map(IoSakurasouControllerVoStrategyPageVOFromJSON)),
+        'page': json['page'],
+        'pageSize': json['pageSize'],
         'total': json['total'],
     };
 }
@@ -71,6 +87,8 @@ export function IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategy
     return {
         
         'list': ((value['list'] as Array<any>).map(IoSakurasouControllerVoStrategyPageVOToJSON)),
+        'page': value['page'],
+        'pageSize': value['pageSize'],
         'total': value['total'],
     };
 }

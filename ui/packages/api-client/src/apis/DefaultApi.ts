@@ -15,8 +15,10 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestAlbumInsertRequest,
-  IoSakurasouControllerRequestAlbumPatchRequest,
+  IoSakurasouControllerRequestAlbumManageInsertRequest,
+  IoSakurasouControllerRequestAlbumManagePatchRequest,
+  IoSakurasouControllerRequestAlbumSelfInsertRequest,
+  IoSakurasouControllerRequestAlbumSelfPatchRequest,
   IoSakurasouControllerRequestGroupInsertRequest,
   IoSakurasouControllerRequestGroupPatchRequest,
   IoSakurasouControllerRequestImagePatchRequest,
@@ -27,12 +29,15 @@ import type {
   IoSakurasouControllerRequestStrategySettingPatchRequest,
   IoSakurasouControllerRequestUserInsertRequest,
   IoSakurasouControllerRequestUserLoginRequest,
-  IoSakurasouControllerRequestUserPatchRequest,
+  IoSakurasouControllerRequestUserManageInsertRequest,
+  IoSakurasouControllerRequestUserManagePatchRequest,
+  IoSakurasouControllerRequestUserSelfPatchRequest,
   IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO,
   IoSakurasouControllerVoCommonResponseioSakurasouControllerVoGroupVO,
   IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO,
   IoSakurasouControllerVoCommonResponseioSakurasouControllerVoStrategyVO,
   IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO,
+  IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVO,
   IoSakurasouControllerVoCommonResponsekotlinUnit,
   IoSakurasouControllerVoPageResultioSakurasouControllerVoAlbumPageVO,
   IoSakurasouControllerVoPageResultioSakurasouControllerVoGroupPageVO,
@@ -42,10 +47,14 @@ import type {
   IoSakurasouControllerVoRoleVO,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestAlbumInsertRequestFromJSON,
-    IoSakurasouControllerRequestAlbumInsertRequestToJSON,
-    IoSakurasouControllerRequestAlbumPatchRequestFromJSON,
-    IoSakurasouControllerRequestAlbumPatchRequestToJSON,
+    IoSakurasouControllerRequestAlbumManageInsertRequestFromJSON,
+    IoSakurasouControllerRequestAlbumManageInsertRequestToJSON,
+    IoSakurasouControllerRequestAlbumManagePatchRequestFromJSON,
+    IoSakurasouControllerRequestAlbumManagePatchRequestToJSON,
+    IoSakurasouControllerRequestAlbumSelfInsertRequestFromJSON,
+    IoSakurasouControllerRequestAlbumSelfInsertRequestToJSON,
+    IoSakurasouControllerRequestAlbumSelfPatchRequestFromJSON,
+    IoSakurasouControllerRequestAlbumSelfPatchRequestToJSON,
     IoSakurasouControllerRequestGroupInsertRequestFromJSON,
     IoSakurasouControllerRequestGroupInsertRequestToJSON,
     IoSakurasouControllerRequestGroupPatchRequestFromJSON,
@@ -66,8 +75,12 @@ import {
     IoSakurasouControllerRequestUserInsertRequestToJSON,
     IoSakurasouControllerRequestUserLoginRequestFromJSON,
     IoSakurasouControllerRequestUserLoginRequestToJSON,
-    IoSakurasouControllerRequestUserPatchRequestFromJSON,
-    IoSakurasouControllerRequestUserPatchRequestToJSON,
+    IoSakurasouControllerRequestUserManageInsertRequestFromJSON,
+    IoSakurasouControllerRequestUserManageInsertRequestToJSON,
+    IoSakurasouControllerRequestUserManagePatchRequestFromJSON,
+    IoSakurasouControllerRequestUserManagePatchRequestToJSON,
+    IoSakurasouControllerRequestUserSelfPatchRequestFromJSON,
+    IoSakurasouControllerRequestUserSelfPatchRequestToJSON,
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVOFromJSON,
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVOToJSON,
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoGroupVOFromJSON,
@@ -78,6 +91,8 @@ import {
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoStrategyVOToJSON,
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVOFromJSON,
     IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVOToJSON,
+    IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVOFromJSON,
+    IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVOToJSON,
     IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON,
     IoSakurasouControllerVoCommonResponsekotlinUnitToJSON,
     IoSakurasouControllerVoPageResultioSakurasouControllerVoAlbumPageVOFromJSON,
@@ -94,17 +109,46 @@ import {
     IoSakurasouControllerVoRoleVOToJSON,
 } from '../models/index';
 
-export interface ApiAlbumIdDeleteRequest {
-    id: number;
+export interface ApiAlbumAlbumIdDeleteRequest {
+    albumId: number;
 }
 
-export interface ApiAlbumIdGetRequest {
-    id: number;
+export interface ApiAlbumAlbumIdGetRequest {
+    albumId: number;
 }
 
-export interface ApiAlbumIdPatchRequest {
-    id: number;
-    ioSakurasouControllerRequestAlbumPatchRequest: IoSakurasouControllerRequestAlbumPatchRequest;
+export interface ApiAlbumAlbumIdPatchRequest {
+    albumId: number;
+    ioSakurasouControllerRequestAlbumSelfPatchRequest: IoSakurasouControllerRequestAlbumSelfPatchRequest;
+}
+
+export interface ApiAlbumManageAlbumIdDeleteRequest {
+    albumId: number;
+    userId: number;
+}
+
+export interface ApiAlbumManageAlbumIdGetRequest {
+    albumId: number;
+    userId: number;
+}
+
+export interface ApiAlbumManageAlbumIdPatchRequest {
+    albumId: number;
+    userId: number;
+    ioSakurasouControllerRequestAlbumManagePatchRequest: IoSakurasouControllerRequestAlbumManagePatchRequest;
+}
+
+export interface ApiAlbumManagePageGetRequest {
+    page: number;
+    pageSize: number;
+    userId: number;
+    order?: string;
+    orderBy?: string;
+}
+
+export interface ApiAlbumManagePostRequest {
+    userId: number;
+    ioSakurasouControllerRequestAlbumManageInsertRequest: IoSakurasouControllerRequestAlbumManageInsertRequest;
 }
 
 export interface ApiAlbumPageGetRequest {
@@ -115,7 +159,11 @@ export interface ApiAlbumPageGetRequest {
 }
 
 export interface ApiAlbumPostRequest {
-    ioSakurasouControllerRequestAlbumInsertRequest: IoSakurasouControllerRequestAlbumInsertRequest;
+    ioSakurasouControllerRequestAlbumSelfInsertRequest: IoSakurasouControllerRequestAlbumSelfInsertRequest;
+}
+
+export interface ApiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGetRequest {
+    imageId: string;
 }
 
 export interface ApiGroupIdDeleteRequest {
@@ -142,28 +190,51 @@ export interface ApiGroupPostRequest {
     ioSakurasouControllerRequestGroupInsertRequest: IoSakurasouControllerRequestGroupInsertRequest;
 }
 
-export interface ApiImageIdDeleteRequest {
-    id: number;
+export interface ApiImageImageIdDeleteRequest {
+    imageId: number;
 }
 
-export interface ApiImageIdGetRequest {
-    id: number;
+export interface ApiImageImageIdGetRequest {
+    imageId: number;
 }
 
-export interface ApiImageIdPatchRequest {
-    id: number;
-    ioSakurasouControllerRequestImagePatchRequest: IoSakurasouControllerRequestImagePatchRequest;
-}
-
-export interface ApiImagePageGetRequest {
+export interface ApiImageImageIdPageGetRequest {
     page: number;
     pageSize: number;
+    imageId: number;
     order?: string;
     orderBy?: string;
 }
 
-export interface ApiSImageIdGetRequest {
-    imageId: string;
+export interface ApiImageImageIdPatchRequest {
+    imageId: number;
+    ioSakurasouControllerRequestImagePatchRequest: IoSakurasouControllerRequestImagePatchRequest;
+}
+
+export interface ApiImageManageImageIdDeleteRequest {
+    imageId: number;
+    id: number;
+}
+
+export interface ApiImageManageImageIdGetRequest {
+    imageId: number;
+    imageId2: number;
+    id: number;
+}
+
+export interface ApiImageManageImageIdPageGetRequest {
+    page: number;
+    pageSize: number;
+    imageId: number;
+    id: number;
+    order?: string;
+    orderBy?: string;
+}
+
+export interface ApiImageManageImageIdPatchRequest {
+    imageId: number;
+    id: number;
+    ioSakurasouControllerRequestImagePatchRequest: IoSakurasouControllerRequestImagePatchRequest;
 }
 
 export interface ApiSettingSitePatchRequest {
@@ -171,6 +242,10 @@ export interface ApiSettingSitePatchRequest {
 }
 
 export interface ApiSettingStrategyPatchRequest {
+    ioSakurasouControllerRequestStrategySettingPatchRequest: IoSakurasouControllerRequestStrategySettingPatchRequest;
+}
+
+export interface ApiSettingSystemPatchRequest {
     ioSakurasouControllerRequestStrategySettingPatchRequest: IoSakurasouControllerRequestStrategySettingPatchRequest;
 }
 
@@ -206,32 +281,40 @@ export interface ApiUserBanIdPatchRequest {
     id: number;
 }
 
-export interface ApiUserIdDeleteRequest {
-    id: number;
-}
-
-export interface ApiUserIdGetRequest {
-    id: number;
-}
-
-export interface ApiUserIdPatchRequest {
-    id: number;
-    ioSakurasouControllerRequestUserPatchRequest: IoSakurasouControllerRequestUserPatchRequest;
-}
-
 export interface ApiUserLoginPostRequest {
-    ioSakurasouControllerRequestUserInsertRequest: IoSakurasouControllerRequestUserInsertRequest;
+    ioSakurasouControllerRequestUserLoginRequest: IoSakurasouControllerRequestUserLoginRequest;
 }
 
-export interface ApiUserPageGetRequest {
+export interface ApiUserManageIdDeleteRequest {
+    id: number;
+}
+
+export interface ApiUserManageIdGetRequest {
+    id: number;
+}
+
+export interface ApiUserManageIdPatchRequest {
+    id: number;
+    ioSakurasouControllerRequestUserManagePatchRequest: IoSakurasouControllerRequestUserManagePatchRequest;
+}
+
+export interface ApiUserManagePageGetRequest {
     page: number;
     pageSize: number;
     order?: string;
     orderBy?: string;
 }
 
+export interface ApiUserManagePostRequest {
+    ioSakurasouControllerRequestUserManageInsertRequest: IoSakurasouControllerRequestUserManageInsertRequest;
+}
+
+export interface ApiUserSelfPatchRequest {
+    ioSakurasouControllerRequestUserSelfPatchRequest: IoSakurasouControllerRequestUserSelfPatchRequest;
+}
+
 export interface ApiUserSignupPostRequest {
-    ioSakurasouControllerRequestUserLoginRequest: IoSakurasouControllerRequestUserLoginRequest;
+    ioSakurasouControllerRequestUserInsertRequest: IoSakurasouControllerRequestUserInsertRequest;
 }
 
 export interface ApiUserUnbanIdPatchRequest {
@@ -245,11 +328,11 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAlbumIdDeleteRaw(requestParameters: ApiAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
+    async apiAlbumAlbumIdDeleteRaw(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiAlbumIdDelete().'
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumAlbumIdDelete().'
             );
         }
 
@@ -257,8 +340,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/album/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/album/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -269,18 +360,18 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAlbumIdDelete(requestParameters: ApiAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiAlbumIdDeleteRaw(requestParameters, initOverrides);
+    async apiAlbumAlbumIdDelete(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiAlbumAlbumIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumIdGetRaw(requestParameters: ApiAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO>> {
-        if (requestParameters['id'] == null) {
+    async apiAlbumAlbumIdGetRaw(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO>> {
+        if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiAlbumIdGet().'
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumAlbumIdGet().'
             );
         }
 
@@ -288,8 +379,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/album/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/album/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -300,25 +399,25 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAlbumIdGet(requestParameters: ApiAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO> {
-        const response = await this.apiAlbumIdGetRaw(requestParameters, initOverrides);
+    async apiAlbumAlbumIdGet(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO> {
+        const response = await this.apiAlbumAlbumIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumIdPatchRaw(requestParameters: ApiAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
+    async apiAlbumAlbumIdPatchRaw(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiAlbumIdPatch().'
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumAlbumIdPatch().'
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestAlbumPatchRequest'] == null) {
+        if (requestParameters['ioSakurasouControllerRequestAlbumSelfPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumPatchRequest" was null or undefined when calling apiAlbumIdPatch().'
+                'ioSakurasouControllerRequestAlbumSelfPatchRequest',
+                'Required parameter "ioSakurasouControllerRequestAlbumSelfPatchRequest" was null or undefined when calling apiAlbumAlbumIdPatch().'
             );
         }
 
@@ -328,12 +427,20 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/album/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/album/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumPatchRequest']),
+            body: IoSakurasouControllerRequestAlbumSelfPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumSelfPatchRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
@@ -341,8 +448,274 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAlbumIdPatch(requestParameters: ApiAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiAlbumIdPatchRaw(requestParameters, initOverrides);
+    async apiAlbumAlbumIdPatch(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiAlbumAlbumIdPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdDeleteRaw(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['albumId'] == null) {
+            throw new runtime.RequiredError(
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumManageAlbumIdDelete().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling apiAlbumManageAlbumIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/album/manage/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdDelete(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiAlbumManageAlbumIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdGetRaw(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO>> {
+        if (requestParameters['albumId'] == null) {
+            throw new runtime.RequiredError(
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumManageAlbumIdGet().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling apiAlbumManageAlbumIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/album/manage/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdGet(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO> {
+        const response = await this.apiAlbumManageAlbumIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdPatchRaw(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['albumId'] == null) {
+            throw new runtime.RequiredError(
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling apiAlbumManageAlbumIdPatch().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling apiAlbumManageAlbumIdPatch().'
+            );
+        }
+
+        if (requestParameters['ioSakurasouControllerRequestAlbumManagePatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestAlbumManagePatchRequest',
+                'Required parameter "ioSakurasouControllerRequestAlbumManagePatchRequest" was null or undefined when calling apiAlbumManageAlbumIdPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/album/manage/{albumId}`.replace(`{${"album id"}}`, encodeURIComponent(String(requestParameters['albumId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestAlbumManagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumManagePatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAlbumManageAlbumIdPatch(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiAlbumManageAlbumIdPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAlbumManagePageGetRaw(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoAlbumPageVO>> {
+        if (requestParameters['page'] == null) {
+            throw new runtime.RequiredError(
+                'page',
+                'Required parameter "page" was null or undefined when calling apiAlbumManagePageGet().'
+            );
+        }
+
+        if (requestParameters['pageSize'] == null) {
+            throw new runtime.RequiredError(
+                'pageSize',
+                'Required parameter "pageSize" was null or undefined when calling apiAlbumManagePageGet().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling apiAlbumManagePageGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['order'] != null) {
+            queryParameters['order'] = requestParameters['order'];
+        }
+
+        if (requestParameters['orderBy'] != null) {
+            queryParameters['orderBy'] = requestParameters['orderBy'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/album/manage/page`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultioSakurasouControllerVoAlbumPageVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAlbumManagePageGet(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoAlbumPageVO> {
+        const response = await this.apiAlbumManagePageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAlbumManagePostRaw(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling apiAlbumManagePost().'
+            );
+        }
+
+        if (requestParameters['ioSakurasouControllerRequestAlbumManageInsertRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestAlbumManageInsertRequest',
+                'Required parameter "ioSakurasouControllerRequestAlbumManageInsertRequest" was null or undefined when calling apiAlbumManagePost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/album/manage`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestAlbumManageInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumManageInsertRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAlbumManagePost(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiAlbumManagePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -383,6 +756,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/album/page`,
             method: 'GET',
@@ -403,10 +784,10 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      */
     async apiAlbumPostRaw(requestParameters: ApiAlbumPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestAlbumInsertRequest'] == null) {
+        if (requestParameters['ioSakurasouControllerRequestAlbumSelfInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumInsertRequest" was null or undefined when calling apiAlbumPost().'
+                'ioSakurasouControllerRequestAlbumSelfInsertRequest',
+                'Required parameter "ioSakurasouControllerRequestAlbumSelfInsertRequest" was null or undefined when calling apiAlbumPost().'
             );
         }
 
@@ -416,12 +797,20 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/album`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumInsertRequest']),
+            body: IoSakurasouControllerRequestAlbumSelfInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumSelfInsertRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
@@ -437,13 +826,13 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * return random image if setting allow
      */
-    async apiFetchRandomGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdFetchRandomGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/fetch/random`,
+            path: `/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@74834afd/fetch/random`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -455,19 +844,26 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * return random image if setting allow
      */
-    async apiFetchRandomGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiFetchRandomGetRaw(initOverrides);
+    async apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdFetchRandomGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdFetchRandomGetRaw(initOverrides);
     }
 
     /**
      */
-    async apiGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGetRaw(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGet().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api`,
+            path: `/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@74834afd/s/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -478,8 +874,8 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiGetRaw(initOverrides);
+    async apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGet(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiComUcasoftKtorSimpleCacheCacheOutputSelector74834afdSImageIdGetRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -496,6 +892,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/group/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
@@ -527,6 +931,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/group/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
@@ -567,6 +979,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/group/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
@@ -622,6 +1042,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/group/page`,
             method: 'GET',
@@ -655,6 +1083,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/group`,
             method: 'POST',
@@ -675,11 +1111,11 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageIdDeleteRaw(requestParameters: ApiImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
+    async apiImageImageIdDeleteRaw(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiImageIdDelete().'
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageImageIdDelete().'
             );
         }
 
@@ -687,8 +1123,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/image/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/image/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -699,18 +1143,18 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageIdDelete(requestParameters: ApiImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiImageIdDeleteRaw(requestParameters, initOverrides);
+    async apiImageImageIdDelete(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiImageImageIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageIdGetRaw(requestParameters: ApiImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO>> {
-        if (requestParameters['id'] == null) {
+    async apiImageImageIdGetRaw(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO>> {
+        if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiImageIdGet().'
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageImageIdGet().'
             );
         }
 
@@ -718,8 +1162,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/image/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/image/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -730,66 +1182,32 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageIdGet(requestParameters: ApiImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO> {
-        const response = await this.apiImageIdGetRaw(requestParameters, initOverrides);
+    async apiImageImageIdGet(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO> {
+        const response = await this.apiImageImageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageIdPatchRaw(requestParameters: ApiImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiImageIdPatch().'
-            );
-        }
-
-        if (requestParameters['ioSakurasouControllerRequestImagePatchRequest'] == null) {
-            throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestImagePatchRequest',
-                'Required parameter "ioSakurasouControllerRequestImagePatchRequest" was null or undefined when calling apiImageIdPatch().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/image/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IoSakurasouControllerRequestImagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestImagePatchRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiImageIdPatch(requestParameters: ApiImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiImageIdPatchRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiImagePageGetRaw(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO>> {
+    async apiImageImageIdPageGetRaw(requestParameters: ApiImageImageIdPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
-                'Required parameter "page" was null or undefined when calling apiImagePageGet().'
+                'Required parameter "page" was null or undefined when calling apiImageImageIdPageGet().'
             );
         }
 
         if (requestParameters['pageSize'] == null) {
             throw new runtime.RequiredError(
                 'pageSize',
-                'Required parameter "pageSize" was null or undefined when calling apiImagePageGet().'
+                'Required parameter "pageSize" was null or undefined when calling apiImageImageIdPageGet().'
+            );
+        }
+
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageImageIdPageGet().'
             );
         }
 
@@ -813,8 +1231,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/image/page`,
+            path: `/api/image/{imageId}/page`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -825,8 +1251,288 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImagePageGet(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO> {
-        const response = await this.apiImagePageGetRaw(requestParameters, initOverrides);
+    async apiImageImageIdPageGet(requestParameters: ApiImageImageIdPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO> {
+        const response = await this.apiImageImageIdPageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiImageImageIdPatchRaw(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageImageIdPatch().'
+            );
+        }
+
+        if (requestParameters['ioSakurasouControllerRequestImagePatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestImagePatchRequest',
+                'Required parameter "ioSakurasouControllerRequestImagePatchRequest" was null or undefined when calling apiImageImageIdPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/image/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestImagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestImagePatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiImageImageIdPatch(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiImageImageIdPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiImageManageImageIdDeleteRaw(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageManageImageIdDelete().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiImageManageImageIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/image/manage/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiImageManageImageIdDelete(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiImageManageImageIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiImageManageImageIdGetRaw(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO>> {
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageManageImageIdGet().'
+            );
+        }
+
+        if (requestParameters['imageId2'] == null) {
+            throw new runtime.RequiredError(
+                'imageId2',
+                'Required parameter "imageId2" was null or undefined when calling apiImageManageImageIdGet().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiImageManageImageIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/image/manage/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))).replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId2']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiImageManageImageIdGet(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO> {
+        const response = await this.apiImageManageImageIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiImageManageImageIdPageGetRaw(requestParameters: ApiImageManageImageIdPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO>> {
+        if (requestParameters['page'] == null) {
+            throw new runtime.RequiredError(
+                'page',
+                'Required parameter "page" was null or undefined when calling apiImageManageImageIdPageGet().'
+            );
+        }
+
+        if (requestParameters['pageSize'] == null) {
+            throw new runtime.RequiredError(
+                'pageSize',
+                'Required parameter "pageSize" was null or undefined when calling apiImageManageImageIdPageGet().'
+            );
+        }
+
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageManageImageIdPageGet().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiImageManageImageIdPageGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['order'] != null) {
+            queryParameters['order'] = requestParameters['order'];
+        }
+
+        if (requestParameters['orderBy'] != null) {
+            queryParameters['orderBy'] = requestParameters['orderBy'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/image/manage/{imageId}/page`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiImageManageImageIdPageGet(requestParameters: ApiImageManageImageIdPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO> {
+        const response = await this.apiImageManageImageIdPageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiImageManageImageIdPatchRaw(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['imageId'] == null) {
+            throw new runtime.RequiredError(
+                'imageId',
+                'Required parameter "imageId" was null or undefined when calling apiImageManageImageIdPatch().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiImageManageImageIdPatch().'
+            );
+        }
+
+        if (requestParameters['ioSakurasouControllerRequestImagePatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestImagePatchRequest',
+                'Required parameter "ioSakurasouControllerRequestImagePatchRequest" was null or undefined when calling apiImageManageImageIdPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/image/manage/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestImagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestImagePatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiImageManageImageIdPatch(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiImageManageImageIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -837,6 +1543,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/image`,
             method: 'POST',
@@ -861,6 +1575,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/role/all`,
             method: 'GET',
@@ -879,33 +1601,37 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get all settings
      */
-    async apiSImageIdGetRaw(requestParameters: ApiSImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['imageId'] == null) {
-            throw new runtime.RequiredError(
-                'imageId',
-                'Required parameter "imageId" was null or undefined when calling apiSImageIdGet().'
-            );
-        }
-
+    async apiSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVO>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/s/{imageId}`.replace(`{${"imageId"}}`, encodeURIComponent(String(requestParameters['imageId']))),
+            path: `/api/setting`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVOFromJSON(jsonValue));
     }
 
     /**
+     * get all settings
      */
-    async apiSImageIdGet(requestParameters: ApiSImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiSImageIdGetRaw(requestParameters, initOverrides);
+    async apiSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVO> {
+        const response = await this.apiSettingGetRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -925,6 +1651,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/setting/site`,
             method: 'PATCH',
@@ -961,6 +1695,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/setting/strategy`,
             method: 'PATCH',
@@ -977,6 +1719,50 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async apiSettingStrategyPatch(requestParameters: ApiSettingStrategyPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
         const response = await this.apiSettingStrategyPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * system setting
+     */
+    async apiSettingSystemPatchRaw(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['ioSakurasouControllerRequestStrategySettingPatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestStrategySettingPatchRequest',
+                'Required parameter "ioSakurasouControllerRequestStrategySettingPatchRequest" was null or undefined when calling apiSettingSystemPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/setting/system`,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestStrategySettingPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestStrategySettingPatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     * system setting
+     */
+    async apiSettingSystemPatch(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiSettingSystemPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1027,6 +1813,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/strategy/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
@@ -1058,6 +1852,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/strategy/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
@@ -1098,6 +1900,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/strategy/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
@@ -1153,6 +1963,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/strategy/page`,
             method: 'GET',
@@ -1186,6 +2004,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/strategy`,
             method: 'POST',
@@ -1218,6 +2044,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/user/ban/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
@@ -1237,114 +2071,11 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserIdDeleteRaw(requestParameters: ApiUserIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUserIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/user/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiUserIdDelete(requestParameters: ApiUserIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiUserIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiUserIdGetRaw(requestParameters: ApiUserIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUserIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/user/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVOFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiUserIdGet(requestParameters: ApiUserIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO> {
-        const response = await this.apiUserIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiUserIdPatchRaw(requestParameters: ApiUserIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUserIdPatch().'
-            );
-        }
-
-        if (requestParameters['ioSakurasouControllerRequestUserPatchRequest'] == null) {
-            throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestUserPatchRequest" was null or undefined when calling apiUserIdPatch().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/user/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IoSakurasouControllerRequestUserPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestUserPatchRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiUserIdPatch(requestParameters: ApiUserIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
-        const response = await this.apiUserIdPatchRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
     async apiUserLoginPostRaw(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['ioSakurasouControllerRequestUserInsertRequest'] == null) {
+        if (requestParameters['ioSakurasouControllerRequestUserLoginRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestUserInsertRequest" was null or undefined when calling apiUserLoginPost().'
+                'ioSakurasouControllerRequestUserLoginRequest',
+                'Required parameter "ioSakurasouControllerRequestUserLoginRequest" was null or undefined when calling apiUserLoginPost().'
             );
         }
 
@@ -1359,7 +2090,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestUserInsertRequest']),
+            body: IoSakurasouControllerRequestUserLoginRequestToJSON(requestParameters['ioSakurasouControllerRequestUserLoginRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -1373,18 +2104,147 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserPageGetRaw(requestParameters: ApiUserPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoUserPageVO>> {
+    async apiUserManageIdDeleteRaw(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiUserManageIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/manage/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUserManageIdDelete(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiUserManageIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiUserManageIdGetRaw(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiUserManageIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/manage/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUserManageIdGet(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO> {
+        const response = await this.apiUserManageIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * modify any user
+     */
+    async apiUserManageIdPatchRaw(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiUserManageIdPatch().'
+            );
+        }
+
+        if (requestParameters['ioSakurasouControllerRequestUserManagePatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestUserManagePatchRequest',
+                'Required parameter "ioSakurasouControllerRequestUserManagePatchRequest" was null or undefined when calling apiUserManageIdPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/manage/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestUserManagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestUserManagePatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     * modify any user
+     */
+    async apiUserManageIdPatch(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiUserManageIdPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiUserManagePageGetRaw(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultioSakurasouControllerVoUserPageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
-                'Required parameter "page" was null or undefined when calling apiUserPageGet().'
+                'Required parameter "page" was null or undefined when calling apiUserManagePageGet().'
             );
         }
 
         if (requestParameters['pageSize'] == null) {
             throw new runtime.RequiredError(
                 'pageSize',
-                'Required parameter "pageSize" was null or undefined when calling apiUserPageGet().'
+                'Required parameter "pageSize" was null or undefined when calling apiUserManagePageGet().'
             );
         }
 
@@ -1408,8 +2268,16 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
-            path: `/api/user/page`,
+            path: `/api/user/manage/page`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1420,18 +2288,138 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserPageGet(requestParameters: ApiUserPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoUserPageVO> {
-        const response = await this.apiUserPageGetRaw(requestParameters, initOverrides);
+    async apiUserManagePageGet(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultioSakurasouControllerVoUserPageVO> {
+        const response = await this.apiUserManagePageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * admin manual add user
+     */
+    async apiUserManagePostRaw(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['ioSakurasouControllerRequestUserManageInsertRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestUserManageInsertRequest',
+                'Required parameter "ioSakurasouControllerRequestUserManageInsertRequest" was null or undefined when calling apiUserManagePost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/manage`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestUserManageInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestUserManageInsertRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     * admin manual add user
+     */
+    async apiUserManagePost(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiUserManagePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiUserSelfGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/self`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUserSelfGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO> {
+        const response = await this.apiUserSelfGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * modify self
+     */
+    async apiUserSelfPatchRaw(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponsekotlinUnit>> {
+        if (requestParameters['ioSakurasouControllerRequestUserSelfPatchRequest'] == null) {
+            throw new runtime.RequiredError(
+                'ioSakurasouControllerRequestUserSelfPatchRequest',
+                'Required parameter "ioSakurasouControllerRequestUserSelfPatchRequest" was null or undefined when calling apiUserSelfPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/self`,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IoSakurasouControllerRequestUserSelfPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestUserSelfPatchRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(jsonValue));
+    }
+
+    /**
+     * modify self
+     */
+    async apiUserSelfPatch(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
+        const response = await this.apiUserSelfPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
     async apiUserSignupPostRaw(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['ioSakurasouControllerRequestUserLoginRequest'] == null) {
+        if (requestParameters['ioSakurasouControllerRequestUserInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserLoginRequest',
-                'Required parameter "ioSakurasouControllerRequestUserLoginRequest" was null or undefined when calling apiUserSignupPost().'
+                'ioSakurasouControllerRequestUserInsertRequest',
+                'Required parameter "ioSakurasouControllerRequestUserInsertRequest" was null or undefined when calling apiUserSignupPost().'
             );
         }
 
@@ -1446,7 +2434,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserLoginRequestToJSON(requestParameters['ioSakurasouControllerRequestUserLoginRequest']),
+            body: IoSakurasouControllerRequestUserInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestUserInsertRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -1472,6 +2460,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/user/unban/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
@@ -1487,98 +2483,6 @@ export class DefaultApi extends runtime.BaseAPI {
     async apiUserUnbanIdPatch(requestParameters: ApiUserUnbanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponsekotlinUnit> {
         const response = await this.apiUserUnbanIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector3b5c665cShortGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/com.ucasoft.ktor.simpleCache.CacheOutputSelector@3b5c665c/short`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector3b5c665cShortGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.comUcasoftKtorSimpleCacheCacheOutputSelector3b5c665cShortGetRaw(initOverrides);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector41dc0598DefaultGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/com.ucasoft.ktor.simpleCache.CacheOutputSelector@41dc0598/default`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector41dc0598DefaultGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.comUcasoftKtorSimpleCacheCacheOutputSelector41dc0598DefaultGetRaw(initOverrides);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector625a4ffShortGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/com.ucasoft.ktor.simpleCache.CacheOutputSelector@625a4ff/short`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector625a4ffShortGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.comUcasoftKtorSimpleCacheCacheOutputSelector625a4ffShortGetRaw(initOverrides);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector78e17a99DefaultGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/com.ucasoft.ktor.simpleCache.CacheOutputSelector@78e17a99/default`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async comUcasoftKtorSimpleCacheCacheOutputSelector78e17a99DefaultGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.comUcasoftKtorSimpleCacheCacheOutputSelector78e17a99DefaultGetRaw(initOverrides);
     }
 
     /**
@@ -1602,52 +2506,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async get(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getRaw(initOverrides);
-    }
-
-    /**
-     */
-    async protectedRouteBasicGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/protected/route/basic`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async protectedRouteBasicGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.protectedRouteBasicGetRaw(initOverrides);
-    }
-
-    /**
-     */
-    async protectedRouteFormGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/protected/route/form`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async protectedRouteFormGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.protectedRouteFormGetRaw(initOverrides);
     }
 
 }

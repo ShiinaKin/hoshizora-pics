@@ -16,45 +16,45 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface IoSakurasouControllerRequestSiteSettingPatchRequest
+ * @interface IoSakurasouModelSettingSiteSetting
  */
-export interface IoSakurasouControllerRequestSiteSettingPatchRequest {
+export interface IoSakurasouModelSettingSiteSetting {
     /**
      * 
      * @type {boolean}
-     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     * @memberof IoSakurasouModelSettingSiteSetting
      */
     homePageRandomPicDisplay: boolean;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     * @memberof IoSakurasouModelSettingSiteSetting
      */
     siteDescription: string;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     * @memberof IoSakurasouModelSettingSiteSetting
      */
     siteKeyword: string;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     * @memberof IoSakurasouModelSettingSiteSetting
      */
     siteSubtitle: string;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     * @memberof IoSakurasouModelSettingSiteSetting
      */
     siteTitle: string;
 }
 
 /**
- * Check if a given object implements the IoSakurasouControllerRequestSiteSettingPatchRequest interface.
+ * Check if a given object implements the IoSakurasouModelSettingSiteSetting interface.
  */
-export function instanceOfIoSakurasouControllerRequestSiteSettingPatchRequest(value: object): value is IoSakurasouControllerRequestSiteSettingPatchRequest {
+export function instanceOfIoSakurasouModelSettingSiteSetting(value: object): value is IoSakurasouModelSettingSiteSetting {
     if (!('homePageRandomPicDisplay' in value) || value['homePageRandomPicDisplay'] === undefined) return false;
     if (!('siteDescription' in value) || value['siteDescription'] === undefined) return false;
     if (!('siteKeyword' in value) || value['siteKeyword'] === undefined) return false;
@@ -63,11 +63,11 @@ export function instanceOfIoSakurasouControllerRequestSiteSettingPatchRequest(va
     return true;
 }
 
-export function IoSakurasouControllerRequestSiteSettingPatchRequestFromJSON(json: any): IoSakurasouControllerRequestSiteSettingPatchRequest {
-    return IoSakurasouControllerRequestSiteSettingPatchRequestFromJSONTyped(json, false);
+export function IoSakurasouModelSettingSiteSettingFromJSON(json: any): IoSakurasouModelSettingSiteSetting {
+    return IoSakurasouModelSettingSiteSettingFromJSONTyped(json, false);
 }
 
-export function IoSakurasouControllerRequestSiteSettingPatchRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerRequestSiteSettingPatchRequest {
+export function IoSakurasouModelSettingSiteSettingFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouModelSettingSiteSetting {
     if (json == null) {
         return json;
     }
@@ -81,7 +81,7 @@ export function IoSakurasouControllerRequestSiteSettingPatchRequestFromJSONTyped
     };
 }
 
-export function IoSakurasouControllerRequestSiteSettingPatchRequestToJSON(value?: IoSakurasouControllerRequestSiteSettingPatchRequest | null): any {
+export function IoSakurasouModelSettingSiteSettingToJSON(value?: IoSakurasouModelSettingSiteSetting | null): any {
     if (value == null) {
         return value;
     }

@@ -27,12 +27,6 @@ export interface IoSakurasouModelEntityPermission {
     description?: string;
     /**
      * 
-     * @type {number}
-     * @memberof IoSakurasouModelEntityPermission
-     */
-    id: number;
-    /**
-     * 
      * @type {string}
      * @memberof IoSakurasouModelEntityPermission
      */
@@ -43,7 +37,6 @@ export interface IoSakurasouModelEntityPermission {
  * Check if a given object implements the IoSakurasouModelEntityPermission interface.
  */
 export function instanceOfIoSakurasouModelEntityPermission(value: object): value is IoSakurasouModelEntityPermission {
-    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
@@ -59,7 +52,6 @@ export function IoSakurasouModelEntityPermissionFromJSONTyped(json: any, ignoreD
     return {
         
         'description': json['description'] == null ? undefined : json['description'],
-        'id': json['id'],
         'name': json['name'],
     };
 }
@@ -71,7 +63,6 @@ export function IoSakurasouModelEntityPermissionToJSON(value?: IoSakurasouModelE
     return {
         
         'description': value['description'],
-        'id': value['id'],
         'name': value['name'],
     };
 }

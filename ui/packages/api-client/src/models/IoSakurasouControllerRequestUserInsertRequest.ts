@@ -30,12 +30,6 @@ export interface IoSakurasouControllerRequestUserInsertRequest {
      * @type {string}
      * @memberof IoSakurasouControllerRequestUserInsertRequest
      */
-    groupName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IoSakurasouControllerRequestUserInsertRequest
-     */
     password: string;
     /**
      * 
@@ -50,7 +44,6 @@ export interface IoSakurasouControllerRequestUserInsertRequest {
  */
 export function instanceOfIoSakurasouControllerRequestUserInsertRequest(value: object): value is IoSakurasouControllerRequestUserInsertRequest {
     if (!('email' in value) || value['email'] === undefined) return false;
-    if (!('groupName' in value) || value['groupName'] === undefined) return false;
     if (!('password' in value) || value['password'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
     return true;
@@ -67,7 +60,6 @@ export function IoSakurasouControllerRequestUserInsertRequestFromJSONTyped(json:
     return {
         
         'email': json['email'],
-        'groupName': json['groupName'],
         'password': json['password'],
         'username': json['username'],
     };
@@ -80,7 +72,6 @@ export function IoSakurasouControllerRequestUserInsertRequestToJSON(value?: IoSa
     return {
         
         'email': value['email'],
-        'groupName': value['groupName'],
         'password': value['password'],
         'username': value['username'],
     };

@@ -1,7 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './IoSakurasouControllerRequestAlbumInsertRequest';
-export * from './IoSakurasouControllerRequestAlbumPatchRequest';
+export * from './IoSakurasouControllerRequestAlbumManageInsertRequest';
+export * from './IoSakurasouControllerRequestAlbumManagePatchRequest';
+export * from './IoSakurasouControllerRequestAlbumSelfInsertRequest';
+export * from './IoSakurasouControllerRequestAlbumSelfPatchRequest';
 export * from './IoSakurasouControllerRequestGroupInsertRequest';
 export * from './IoSakurasouControllerRequestGroupPatchRequest';
 export * from './IoSakurasouControllerRequestImagePatchRequest';
@@ -12,7 +14,9 @@ export * from './IoSakurasouControllerRequestStrategyPatchRequest';
 export * from './IoSakurasouControllerRequestStrategySettingPatchRequest';
 export * from './IoSakurasouControllerRequestUserInsertRequest';
 export * from './IoSakurasouControllerRequestUserLoginRequest';
-export * from './IoSakurasouControllerRequestUserPatchRequest';
+export * from './IoSakurasouControllerRequestUserManageInsertRequest';
+export * from './IoSakurasouControllerRequestUserManagePatchRequest';
+export * from './IoSakurasouControllerRequestUserSelfPatchRequest';
 export * from './IoSakurasouControllerVoAlbumPageVO';
 export * from './IoSakurasouControllerVoAlbumVO';
 export * from './IoSakurasouControllerVoCommonResponseioSakurasouControllerVoAlbumVO';
@@ -20,6 +24,7 @@ export * from './IoSakurasouControllerVoCommonResponseioSakurasouControllerVoGro
 export * from './IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO';
 export * from './IoSakurasouControllerVoCommonResponseioSakurasouControllerVoStrategyVO';
 export * from './IoSakurasouControllerVoCommonResponseioSakurasouControllerVoUserVO';
+export * from './IoSakurasouControllerVoCommonResponsekotlinCollectionsListioSakurasouControllerVoSettingVO';
 export * from './IoSakurasouControllerVoCommonResponsekotlinUnit';
 export * from './IoSakurasouControllerVoGroupPageVO';
 export * from './IoSakurasouControllerVoGroupVO';
@@ -31,11 +36,17 @@ export * from './IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePa
 export * from './IoSakurasouControllerVoPageResultioSakurasouControllerVoStrategyPageVO';
 export * from './IoSakurasouControllerVoPageResultioSakurasouControllerVoUserPageVO';
 export * from './IoSakurasouControllerVoRoleVO';
+export * from './IoSakurasouControllerVoSettingVO';
 export * from './IoSakurasouControllerVoStrategyPageVO';
 export * from './IoSakurasouControllerVoStrategyVO';
 export * from './IoSakurasouControllerVoUserPageVO';
 export * from './IoSakurasouControllerVoUserVO';
 export * from './IoSakurasouModelEntityPermission';
+export * from './IoSakurasouModelSettingSettingConfig';
+export * from './IoSakurasouModelSettingSiteSetting';
+export * from './IoSakurasouModelSettingStrategySetting';
+export * from './IoSakurasouModelSettingSystemSetting';
+export * from './IoSakurasouModelSettingSystemStatus';
 export * from './IoSakurasouModelStrategyLocalStrategy';
 export * from './IoSakurasouModelStrategyS3Strategy';
 export * from './IoSakurasouModelStrategyStrategyConfig';

@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestImagePatchRequest {
     /**
      * 
+     * @type {number}
+     * @memberof IoSakurasouControllerRequestImagePatchRequest
+     */
+    albumId?: number;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerRequestImagePatchRequest
      */
@@ -50,6 +56,7 @@ export function IoSakurasouControllerRequestImagePatchRequestFromJSONTyped(json:
     }
     return {
         
+        'albumId': json['albumId'] == null ? undefined : json['albumId'],
         'description': json['description'] == null ? undefined : json['description'],
         'originName': json['originName'] == null ? undefined : json['originName'],
     };
@@ -61,6 +68,7 @@ export function IoSakurasouControllerRequestImagePatchRequestToJSON(value?: IoSa
     }
     return {
         
+        'albumId': value['albumId'],
         'description': value['description'],
         'originName': value['originName'],
     };
