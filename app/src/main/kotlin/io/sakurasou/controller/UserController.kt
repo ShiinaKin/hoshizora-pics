@@ -34,13 +34,7 @@ fun Route.userRoute(userService: UserService) {
 }
 
 private fun Route.userSelfRoute(userController: UserController) {
-    route("{userId}", {
-        request {
-            pathParameter<Long>("userId") {
-                description = "user id"
-                required = true
-            }
-        }
+    route("self", {
         response {
             HttpStatusCode.NotFound to {
                 description = "user not found"
