@@ -24,6 +24,7 @@ fun Application.mainModule() {
     InstanceCenter.initService()
     configureDatabase()
     InstanceCenter.initSystemStatus()
+    InstanceCenter.initRolePermissions()
     configureCache(redisHost, redisPort)
     configureJwt()
     configureSecurity()

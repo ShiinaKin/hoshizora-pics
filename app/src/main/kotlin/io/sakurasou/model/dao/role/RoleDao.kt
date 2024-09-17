@@ -8,4 +8,5 @@ import io.sakurasou.model.dto.RoleInsertDTO
  */
 interface RoleDao {
     fun saveRole(roleInsertDTO: RoleInsertDTO)
+    fun listRole(): List<String>
 }

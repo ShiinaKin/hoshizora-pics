@@ -14,4 +14,9 @@ class RoleDaoImpl : RoleDao {
             it[description] = roleInsertDTO.description
         }
     }
+
+    override fun listRole(): List<String> {
+        return Roles.select(Roles.name)
+            .map { it[Roles.name] }
+    }
 }

@@ -1,5 +1,7 @@
 package io.sakurasou.config
 
+import io.sakurasou.model.DatabaseSingleton.dbQuery
+import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.album.AlbumDaoImpl
 import io.sakurasou.model.dao.group.GroupDao
@@ -60,6 +62,7 @@ object InstanceCenter {
     // lateinit var relationService: UserService
 
     lateinit var systemStatus: SystemStatus
+    lateinit var rolePermissions: Map<String, Set<String>>
 
     fun initDao() {
         userDao = UserDaoImpl()
@@ -85,6 +88,17 @@ object InstanceCenter {
     fun initSystemStatus() {
         systemStatus = runBlocking {
             settingService.getSystemStatus()
+        }
+    }
+
+    fun initRolePermissions() {
+        rolePermissions = runBlocking {
+            dbQuery {
+                val roles = dbQueryInner { roleDao.listRole() }
+                roles.associateWith {
+                    dbQueryInner { relationDao.listPermissionByRole(it).toSet() }
+                }
+            }
         }
     }
 }
