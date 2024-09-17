@@ -22,12 +22,26 @@ data class UserLoginRequest(
 @Serializable
 data class UserSelfPatchRequest(
     val email: String? = null,
-    val password: String? = null
+    val password: String? = null,
+    val isDefaultImagePrivate: Boolean? = null,
+    val defaultAlbumId: Long? = null
 )
 
 @Serializable
-data class UserPatchRequest(
-    val groupName: String? = null,
+data class UserManagePatchRequest(
+    val groupId: Long? = null,
     val email: String? = null,
-    val password: String? = null
+    val password: String? = null,
+    val isDefaultImagePrivate: Boolean? = null,
+    val defaultAlbumId: Long? = null
+)
+
+@Serializable
+data class UserManageInsertRequest(
+    val groupId: Long,
+    val username: String,
+    val password: String,
+    val email: String,
+    val isDefaultImagePrivate: Boolean,
+    val defaultAlbumId: Long
 )

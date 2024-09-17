@@ -1,5 +1,9 @@
 package io.sakurasou.controller
 
+import io.github.smiley4.ktorswaggerui.dsl.routing.delete
+import io.github.smiley4.ktorswaggerui.dsl.routing.get
+import io.github.smiley4.ktorswaggerui.dsl.routing.patch
+import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -14,7 +18,8 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
-import io.sakurasou.extension.*
+import io.sakurasou.extension.pageRequest
+import io.sakurasou.plugins.AuthorizationPlugin
 
 /**
  * @author Shiina Kin
@@ -22,23 +27,7 @@ import io.sakurasou.extension.*
  */
 fun Route.strategyRoute() {
     route("strategy") {
-        post({
-            protected = true
-            request {
-                body<StrategyInsertRequest> {
-                    description = "strategy request"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }, STRATEGY_WRITE) {
-            TODO()
-        }
+        insertStrategy()
         route("{id}", {
             protected = true
             request {
@@ -54,41 +43,102 @@ fun Route.strategyRoute() {
                 }
             }
         }) {
-            delete({
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<Unit>> { }
-                    }
+            deleteStrategy()
+            updateStrategy()
+            fetchStrategy()
+        }
+        pageStrategies()
+    }
+}
+
+private fun Route.insertStrategy() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = STRATEGY_WRITE
+        }
+        post({
+            protected = true
+            request {
+                body<StrategyInsertRequest> {
+                    description = "strategy request"
+                    required = true
                 }
-            }, STRATEGY_DELETE) {
-                TODO()
             }
-            patch({
-                request {
-                    body<StrategyPatchRequest> {
-                        required = true
-                    }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
                 }
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<Unit>> { }
-                    }
-                }
-            }, STRATEGY_WRITE) {
-                TODO()
             }
-            get({
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<StrategyVO>> { }
-                    }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.deleteStrategy() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = STRATEGY_DELETE
+        }
+        delete({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
                 }
-            }, STRATEGY_READ_SINGLE) {
-                TODO()
             }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.updateStrategy() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = STRATEGY_WRITE
+        }
+        patch({
+            request {
+                body<StrategyPatchRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.fetchStrategy() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = STRATEGY_READ_SINGLE
+        }
+        get({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<StrategyVO>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.pageStrategies() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = STRATEGY_READ_ALL
         }
         get("page", {
             pageRequest()
@@ -103,7 +153,7 @@ fun Route.strategyRoute() {
                     description = "page or pageSize wrong"
                 }
             }
-        }, STRATEGY_READ_ALL) {
+        }) {
             val pageVO = call.pageRequest()
 
             TODO()

@@ -1,16 +1,12 @@
 package io.sakurasou.extension
 
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
-import io.github.smiley4.ktorswaggerui.dsl.routing.documentation
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.util.pipeline.*
 import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.exception.ServiceThrowable
-import io.sakurasou.exception.UnauthorizedAccessException
 import io.sakurasou.exception.WrongParameterException
 
 /**
@@ -63,143 +59,3 @@ suspend fun ApplicationCall.failure(exception: ServiceThrowable) {
 }
 
 fun isSiteNotInitialized() = !InstanceCenter.systemStatus.isInit
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.post(
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { post(body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.delete(
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { delete(body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.patch(
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { patch(body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.get(
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { get(body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.post(
-    path: String,
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { post(path, body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.delete(
-    path: String,
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { delete(path, body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.patch(
-    path: String,
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { patch(path, body) }
-}
-
-/**
- * Behavior:
- * 1. Check if the user has the required permission, if not throw an UnauthorizedAccessException
- *
- * @throws UnauthorizedAccessException
- */
-fun Route.get(
-    path: String,
-    builder: OpenApiRoute.() -> Unit = { },
-    permission: String,
-    body: PipelineInterceptor<Unit, ApplicationCall>
-): Route {
-    intercept(ApplicationCallPipeline.Call) {
-        if (lackPermission(call.attributes, permission)) throw UnauthorizedAccessException()
-    }
-    return documentation(builder) { get(path, body) }
-}

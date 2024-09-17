@@ -1,7 +1,10 @@
 package io.sakurasou.controller
 
+import io.github.smiley4.ktorswaggerui.dsl.routing.get
+import io.github.smiley4.ktorswaggerui.dsl.routing.patch
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
+import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.SETTING_READ
 import io.sakurasou.constant.SETTING_WRITE
@@ -9,8 +12,7 @@ import io.sakurasou.controller.request.SiteSettingPatchRequest
 import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.SettingVO
-import io.sakurasou.extension.get
-import io.sakurasou.extension.patch
+import io.sakurasou.plugins.AuthorizationPlugin
 
 /**
  * @author Shiina Kin
@@ -26,6 +28,18 @@ fun Route.settingRoute() {
             }
         }
     }) {
+        fetchAllSetting()
+        updateSiteSetting()
+        updateStrategySetting()
+        updateSystemSetting()
+    }
+}
+
+private fun Route.fetchAllSetting() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = SETTING_READ
+        }
         get({
             description = "get all settings"
             response {
@@ -34,8 +48,16 @@ fun Route.settingRoute() {
                     body<CommonResponse<List<SettingVO>>> { }
                 }
             }
-        }, SETTING_READ) {
+        }) {
             TODO()
+        }
+    }
+}
+
+private fun Route.updateSiteSetting() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = SETTING_WRITE
         }
         patch("site", {
             description = "site setting"
@@ -44,8 +66,16 @@ fun Route.settingRoute() {
                     required = true
                 }
             }
-        }, SETTING_WRITE) {
+        }) {
             TODO()
+        }
+    }
+}
+
+private fun Route.updateStrategySetting() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = SETTING_WRITE
         }
         patch("strategy", {
             description = "strategy setting"
@@ -54,7 +84,25 @@ fun Route.settingRoute() {
                     required = true
                 }
             }
-        }, SETTING_WRITE) {
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.updateSystemSetting() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = SETTING_WRITE
+        }
+        patch("system", {
+            description = "system setting"
+            request {
+                body<StrategySettingPatchRequest> {
+                    required = true
+                }
+            }
+        }) {
             TODO()
         }
     }

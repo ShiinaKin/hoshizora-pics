@@ -13,7 +13,8 @@ import io.sakurasou.controller.vo.ImagePageVO
 import io.sakurasou.controller.vo.ImageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.FileSizeException
-import io.sakurasou.extension.*
+import io.sakurasou.extension.pageRequest
+import io.sakurasou.plugins.AuthorizationPlugin
 import java.io.ByteArrayOutputStream
 
 /**
@@ -22,6 +23,34 @@ import java.io.ByteArrayOutputStream
  */
 fun Route.imageRoute() {
     route("image") {
+        imageSelfRoute()
+        imageManageRoute()
+    }
+}
+
+private fun Route.imageSelfRoute() {
+    imageSelfUpload()
+    route("{imageId}", {
+        protected = true
+        request {
+            pathParameter<Long>("imageId") {
+                description = "image id"
+                required = true
+            }
+        }
+    }) {
+        imageSelfDelete()
+        imageSelfUpdate()
+        imageSelfFetch()
+        imageSelfPage()
+    }
+}
+
+private fun Route.imageSelfUpload() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_WRITE_SELF
+        }
         post({
             request {
                 multipartBody {
@@ -35,7 +64,7 @@ fun Route.imageRoute() {
                     body<CommonResponse<Unit>> { }
                 }
             }
-        }, IMAGE_WRITE_SELF)
+        })
         {
             val contentLength = call.request.header(HttpHeaders.ContentLength)?.toIntOrNull() ?: 0
 
@@ -68,51 +97,72 @@ fun Route.imageRoute() {
             TODO()
 
         }
-        route("{imageId}", {
-            protected = true
-            request {
-                pathParameter<Long>("imageId") {
-                    description = "image id"
-                    required = true
+    }
+}
+
+private fun Route.imageSelfDelete() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_DELETE_SELF
+        }
+        delete({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
                 }
             }
         }) {
-            delete({
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<Unit>> { }
-                    }
-                }
-            }, IMAGE_DELETE_SELF) {
-                TODO()
-            }
-            patch({
-                request {
-                    body<ImagePatchRequest> {
-                        required = true
-                    }
-                }
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<Unit>> { }
-                    }
-                }
-            }, IMAGE_WRITE_SELF) {
-                TODO()
-            }
-            get({
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<CommonResponse<ImageVO>> { }
-                    }
-                }
-            }, IMAGE_READ_SELF_SINGLE) {
-                TODO()
-            }
+            TODO()
+        }
+    }
+}
 
+private fun Route.imageSelfUpdate() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_WRITE_SELF
+        }
+        patch({
+            request {
+                body<ImagePatchRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.imageSelfFetch() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_READ_SELF_SINGLE
+        }
+        get({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<ImageVO>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.imageSelfPage() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_READ_SELF_ALL
         }
         get("page", {
             pageRequest()
@@ -127,91 +177,129 @@ fun Route.imageRoute() {
                     description = "page or pageSize wrong"
                 }
             }
-        }, IMAGE_READ_SELF_ALL) {
+        }) {
             TODO()
         }
-        route("all", {
-            protected = true
+    }
+}
+
+private fun Route.imageManageRoute() {
+    route("manage", {
+        protected = true
+        request {
+            pathParameter<Long>("id") {
+                description = "image id"
+                required = true
+            }
+        }
+        response {
+            HttpStatusCode.NotFound to {
+                description = "image not found"
+                body<CommonResponse<Unit>> { }
+            }
+        }
+    }) {
+        route("{imageId}", {
             request {
-                pathParameter<Long>("id") {
+                pathParameter<Long>("imageId") {
+                    description = "image id"
+                    required = true
+                }
+            }
+        }) {
+            imageManageDelete()
+            imageManageUpdate()
+            imageManageFetch()
+            imageManagePage()
+        }
+    }
+}
+
+private fun Route.imageManageDelete() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_DELETE_ALL
+        }
+        delete({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.imageManageUpdate() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_WRITE_ALL
+        }
+        patch({
+            request {
+                body<ImagePatchRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.imageManageFetch() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_READ_ALL_SINGLE
+        }
+        get({
+            request {
+                pathParameter<Long>("imageId") {
                     description = "image id"
                     required = true
                 }
             }
             response {
-                HttpStatusCode.NotFound to {
-                    description = "image not found"
-                    body<CommonResponse<Unit>> { }
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<ImageVO>> { }
                 }
             }
         }) {
-            route("{imageId}", {
-                request {
-                    pathParameter<Long>("imageId") {
-                        description = "image id"
-                        required = true
-                    }
-                }
-            }) {
-                delete({
-                    response {
-                        HttpStatusCode.OK to {
-                            description = "success"
-                            body<CommonResponse<Unit>> { }
-                        }
-                    }
-                }, IMAGE_DELETE_ALL) {
-                    TODO()
-                }
-                patch({
-                    request {
-                        body<ImagePatchRequest> {
-                            required = true
-                        }
-                    }
-                    response {
-                        HttpStatusCode.OK to {
-                            description = "success"
-                            body<CommonResponse<Unit>> { }
-                        }
-                    }
-                }, IMAGE_WRITE_ALL) {
-                    TODO()
-                }
-                get({
-                    request {
-                        pathParameter<Long>("imageId") {
-                            description = "image id"
-                            required = true
-                        }
-                    }
-                    response {
-                        HttpStatusCode.OK to {
-                            description = "success"
-                            body<CommonResponse<ImageVO>> { }
-                        }
-                    }
-                }, IMAGE_READ_ALL_SINGLE) {
-                    TODO()
-                }
+            TODO()
+        }
+    }
+}
 
-            }
-            get("page", {
-                pageRequest()
-                response {
-                    HttpStatusCode.OK to {
-                        description = "success"
-                        body<PageResult<ImagePageVO>> {
-                            description = "page result"
-                        }
-                    }
-                    HttpStatusCode.BadRequest to {
-                        description = "page or pageSize wrong"
+private fun Route.imageManagePage() {
+    route {
+        install(AuthorizationPlugin) {
+            permission = IMAGE_READ_ALL_ALL
+        }
+        get("page", {
+            pageRequest()
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<PageResult<ImagePageVO>> {
+                        description = "page result"
                     }
                 }
-            }, IMAGE_READ_ALL_ALL) {
-                TODO()
+                HttpStatusCode.BadRequest to {
+                    description = "page or pageSize wrong"
+                }
             }
+        }) {
+            TODO()
         }
     }
 }

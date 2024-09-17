@@ -7,7 +7,14 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 12:53
  */
 @Serializable
-data class AlbumInsertRequest(
+data class AlbumSelfInsertRequest(
+    val name: String,
+    val description: String
+)
+
+@Serializable
+data class AlbumManageInsertRequest(
+    val userId: Long,
     val name: String,
     val description: String
 )
@@ -19,7 +26,7 @@ data class AlbumSelfPatchRequest(
 )
 
 @Serializable
-data class AlbumPatchRequest(
+data class AlbumManagePatchRequest(
     val userId: Long,
     val name: String? = null,
     val description: String? = null

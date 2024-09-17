@@ -65,24 +65,24 @@ private fun Route.randomFetchImage(commonController: CommonController) {
 }
 
 private fun Route.anonymousGetImage(commonController: CommonController) {
-        get("{imageId}", {
-            request {
-                pathParameter<String>("imageId") {
-                    required = true
-                }
+    get("{imageId}", {
+        request {
+            pathParameter<String>("imageId") {
+                required = true
             }
-            response {
-                HttpStatusCode.OK to {
-                    description = "strategy local: direct, S3: redirect"
-                }
-                HttpStatusCode.NotFound to {
-                    description = "image not found"
-                }
-            }
-        }) {
-            commonController.handleGetImage()
-
         }
+        response {
+            HttpStatusCode.OK to {
+                description = "strategy local: direct, S3: redirect"
+            }
+            HttpStatusCode.NotFound to {
+                description = "image not found"
+            }
+        }
+    }) {
+        commonController.handleGetImage()
+
+    }
 }
 
 class CommonController(

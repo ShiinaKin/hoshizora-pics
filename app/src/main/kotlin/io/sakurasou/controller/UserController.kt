@@ -1,20 +1,21 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
-import io.sakurasou.controller.request.UserPatchRequest
+import io.sakurasou.controller.request.UserManageInsertRequest
+import io.sakurasou.controller.request.UserManagePatchRequest
 import io.sakurasou.controller.request.UserSelfPatchRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
 import io.sakurasou.controller.vo.UserVO
-import io.sakurasou.extension.delete
-import io.sakurasou.extension.get
+import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.pageRequest
-import io.sakurasou.extension.patch
+import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.user.UserService
 
 /**
@@ -48,42 +49,53 @@ private fun Route.userSelfRoute(userController: UserController) {
 }
 
 private fun Route.updateSelf(userController: UserController) {
-    patch({
-        description = "modify self"
-        request {
-            body<UserSelfPatchRequest> {
-                required = true
-            }
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_WRITE_SELF
         }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<Unit>> { }
+        patch({
+            description = "modify self"
+            request {
+                body<UserSelfPatchRequest> {
+                    required = true
+                }
             }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
         }
-    }, USER_WRITE_SELF) {
-        TODO()
     }
-
 }
 
 private fun Route.fetchSelf(userController: UserController) {
-    get({
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<UserVO>> { }
-            }
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_READ_SELF
         }
-    }, USER_READ_SELF) {
-        TODO()
+        get({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<UserVO>> { }
+                }
+            }
+        }) {
+            val principal = call.getPrincipal()
+            call.respond(principal)
+        }
     }
 }
 
 private fun Route.userManageRoute(userController: UserController) {
-    route("all", {
+    route("manage", {
         protected = true
     }) {
+        insertUser(userController)
         route("{id}", {
             request {
                 pathParameter<Long>("id") {
@@ -106,104 +118,153 @@ private fun Route.userManageRoute(userController: UserController) {
     }
 }
 
-private fun Route.deleteUser(userController: UserController) {
-    delete({
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<Unit>> { }
-            }
+private fun Route.insertUser(userController: UserController) {
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_WRITE_ALL
         }
-    }, USER_DELETE) {
-        TODO()
+        post({
+            description = "admin manual add user"
+            request {
+                body<UserManageInsertRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
+    }
+}
+
+private fun Route.deleteUser(userController: UserController) {
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_DELETE
+        }
+        delete({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
     }
 }
 
 private fun Route.updateUser(userController: UserController) {
-    patch({
-        description = "modify any user"
-        request {
-            body<UserPatchRequest> {
-                required = true
-            }
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_WRITE_ALL
         }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<Unit>> { }
+        patch({
+            description = "modify any user"
+            request {
+                body<UserManagePatchRequest> {
+                    required = true
+                }
             }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
         }
-    }, USER_WRITE_ALL) {
-        TODO()
     }
 }
 
 private fun Route.fetchUser(userController: UserController) {
-    get({
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<UserVO>> { }
-            }
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_READ_ALL_SINGLE
         }
-    }, USER_READ_ALL_SINGLE) {
-        TODO()
+        get({
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<UserVO>> { }
+                }
+            }
+        }) {
+            TODO()
+        }
     }
 }
 
 private fun Route.pageUser(userController: UserController) {
-    get("page", {
-        pageRequest()
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<PageResult<UserPageVO>> {
-                    description = "page result"
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_READ_ALL_ALL
+        }
+        get("page", {
+            pageRequest()
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<PageResult<UserPageVO>> {
+                        description = "page result"
+                    }
+                }
+                HttpStatusCode.BadRequest to {
+                    description = "page or pageSize wrong"
                 }
             }
-            HttpStatusCode.BadRequest to {
-                description = "page or pageSize wrong"
-            }
-        }
-    }, USER_READ_ALL_ALL) {
-        val pageVO = call.pageRequest()
+        }) {
+            val pageVO = call.pageRequest()
 
-        TODO()
+            TODO()
+        }
     }
 }
 
 private fun Route.banAndUnban(userController: UserController) {
-    patch("ban/{id}", {
-        request {
-            pathParameter<Long>("id") {
-                description = "user id"
-                required = true
-            }
+    route {
+        install(AuthorizationPlugin) {
+            permission = USER_BAN
         }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<Unit>> { }
+        patch("ban/{id}", {
+            request {
+                pathParameter<Long>("id") {
+                    description = "user id"
+                    required = true
+                }
             }
-        }
-    }, USER_BAN) {
-        TODO()
-    }
-    patch("unban/{id}", {
-        request {
-            pathParameter<Long>("id") {
-                description = "user id"
-                required = true
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
             }
+        }) {
+            TODO()
         }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<CommonResponse<Unit>> { }
+        patch("unban/{id}", {
+            request {
+                pathParameter<Long>("id") {
+                    description = "user id"
+                    required = true
+                }
             }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            TODO()
         }
-    }, USER_BAN) {
-        TODO()
     }
 }
 
