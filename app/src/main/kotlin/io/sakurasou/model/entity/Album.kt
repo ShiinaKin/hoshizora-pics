@@ -14,5 +14,6 @@ data class Album(
     val name: String,
     val description: String? = null,
     val imageCount: Int,
+    val isUncategorized: Boolean,
     val createTime: LocalDateTime
 )

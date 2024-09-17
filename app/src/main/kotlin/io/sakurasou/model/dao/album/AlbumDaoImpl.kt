@@ -20,6 +20,7 @@ class AlbumDaoImpl : AlbumDao {
                     it[Albums.name],
                     it[Albums.description],
                     it[Albums.imageCount],
+                    it[Albums.isUncategorized],
                     it[Albums.createTime],
                 )
             }
@@ -35,6 +36,7 @@ class AlbumDaoImpl : AlbumDao {
                     it[Albums.name],
                     it[Albums.description],
                     it[Albums.imageCount],
+                    it[Albums.isUncategorized],
                     it[Albums.createTime],
                 )
             }
@@ -47,6 +49,7 @@ class AlbumDaoImpl : AlbumDao {
             it[name] = insertDTO.name
             it[description] = insertDTO.description
             it[imageCount] = insertDTO.imageCount
+            it[isUncategorized] = insertDTO.isUncategorized
             it[createTime] = insertDTO.createTime
         }
         return entityID.value

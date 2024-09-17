@@ -13,6 +13,7 @@ object Albums : LongIdTable("ablums") {
     val name = varchar("name", 255)
     val description = varchar("description", 255).nullable()
     val imageCount = integer("image_count").check { it greaterEq 0 }
+    val isUncategorized = bool("is_uncategorized")
     val createTime = datetime("create_time")
 
     init {

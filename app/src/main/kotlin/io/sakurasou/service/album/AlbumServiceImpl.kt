@@ -16,7 +16,14 @@ class AlbumServiceImpl(
 ) : AlbumService {
     override suspend fun initAlbumForUser(userId: Long): Long {
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val uncategorizedAlbum = AlbumInsertDTO(userId, "uncategorized", "default, cannot delete", 0, now)
+        val uncategorizedAlbum = AlbumInsertDTO(
+            userId = userId,
+            name = "uncategorized",
+            description = "default, cannot delete",
+            imageCount = 0,
+            isUncategorized = true,
+            createTime = now
+        )
         return dbQuery {
             albumDao.saveAlbum(uncategorizedAlbum)
         }
