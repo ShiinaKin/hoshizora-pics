@@ -14,15 +14,15 @@ import kotlinx.datetime.toLocalDateTime
 class AlbumServiceImpl(
     private val albumDao: AlbumDao
 ) : AlbumService {
-    override suspend fun initAlbumForUser(userId: Long) {
+    override suspend fun initAlbumForUser(userId: Long): Long {
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val uncategorizedAlbum = AlbumInsertDTO(userId, "uncategorized", "default, cannot delete", 0, now)
-        dbQuery {
+        return dbQuery {
             albumDao.saveAlbum(uncategorizedAlbum)
         }
     }
 
-    override suspend fun saveAlbum() {
+    override suspend fun saveAlbum(): Long {
         TODO("Not yet implemented")
     }
 }

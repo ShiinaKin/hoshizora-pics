@@ -39,6 +39,7 @@ class CommonServiceImpl(
             password = encodePassword,
             email = siteInitRequest.email,
             isDefaultImagePrivate = true,
+            defaultAlbumId = null,
             createTime = now,
             updateTime = now
         )
@@ -58,7 +59,8 @@ class CommonServiceImpl(
 
         dbQuery {
             val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
-            dbQueryInner { albumService.initAlbumForUser(userId) }
+            val defaultAlbumId = dbQueryInner { albumService.initAlbumForUser(userId) }
+            dbQueryInner { userDao.updateUserDefaultAlbumId(userId, defaultAlbumId) }
             dbQueryInner { settingService.updateSiteSetting(siteSettingConfig) }
             dbQueryInner { settingService.updateSystemStatus(systemStatus) }
         }

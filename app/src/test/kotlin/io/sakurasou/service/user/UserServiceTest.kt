@@ -88,6 +88,7 @@ class UserServiceTest {
             password = encodedPassword,
             email = "test@example.com",
             isDefaultImagePrivate = true,
+            defaultAlbumId = null,
             createTime = now,
             updateTime = now
         )
@@ -98,12 +99,14 @@ class UserServiceTest {
             BCrypt.withDefaults().hashToString(12, userInsertRequest.password.toCharArray())
         } returns encodedPassword
         coEvery { userDao.saveUser(userInsertDTO) } returns 1
-        coEvery { albumService.initAlbumForUser(1L) } just Runs
+        coEvery { albumService.initAlbumForUser(1L) } returns 1
+        coEvery { userDao.updateUserDefaultAlbumId(1L, 1L) } just Runs
 
         userService.saveUser(userInsertRequest)
 
         coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
         coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
         coVerify(exactly = 1) { albumService.initAlbumForUser(1L) }
+        coVerify(exactly = 1) { userDao.updateUserDefaultAlbumId(1L, 1L) }
     }
 }

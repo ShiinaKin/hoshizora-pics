@@ -37,12 +37,14 @@ class UserServiceImpl(
             password = encodePassword,
             email = userInsertRequest.email,
             isDefaultImagePrivate = true,
+            defaultAlbumId = null,
             createTime = now,
             updateTime = now
         )
         dbQuery {
             val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
-            dbQueryInner { albumService.initAlbumForUser(userId) }
+            val defaultAlbumId = dbQueryInner { albumService.initAlbumForUser(userId) }
+            dbQueryInner { userDao.updateUserDefaultAlbumId(userId, defaultAlbumId) }
         }
     }
 

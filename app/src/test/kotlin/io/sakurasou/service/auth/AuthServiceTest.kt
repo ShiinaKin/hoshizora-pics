@@ -71,6 +71,7 @@ class AuthServiceTest {
             password = hashedPassword,
             email = email,
             isDefaultImagePrivate = true,
+            defaultAlbumId = 1,
             createTime = now,
             updateTime = now
         )
@@ -100,6 +101,7 @@ class AuthServiceTest {
             password = hashedPassword,
             email = email,
             isDefaultImagePrivate = true,
+            defaultAlbumId = 1,
             createTime = now,
             updateTime = now
         )

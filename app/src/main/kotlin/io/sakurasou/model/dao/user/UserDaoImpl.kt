@@ -4,6 +4,7 @@ import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.entity.User
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 
 /**
  * @author ShiinaKin
@@ -21,6 +22,7 @@ class UserDaoImpl : UserDao {
                     row[Users.password],
                     row[Users.email],
                     row[Users.isDefaultImagePrivate],
+                    row[Users.defaultAlbumId]!!,
                     row[Users.createTime],
                     row[Users.updateTime]
                 )
@@ -38,6 +40,7 @@ class UserDaoImpl : UserDao {
                     row[Users.password],
                     row[Users.email],
                     row[Users.isDefaultImagePrivate],
+                    row[Users.defaultAlbumId]!!,
                     row[Users.createTime],
                     row[Users.updateTime]
                 )
@@ -51,10 +54,17 @@ class UserDaoImpl : UserDao {
             it[password] = user.password
             it[email] = user.email
             it[isDefaultImagePrivate] = user.isDefaultImagePrivate
+            it[defaultAlbumId] = user.defaultAlbumId
             it[createTime] = user.createTime
             it[updateTime] = user.updateTime
         }
         return entityID.value
+    }
+
+    override fun updateUserDefaultAlbumId(userId: Long, defaultAlbumId: Long) {
+        Users.update({ Users.id eq userId }) {
+            it[Users.defaultAlbumId] = defaultAlbumId
+        }
     }
 
 

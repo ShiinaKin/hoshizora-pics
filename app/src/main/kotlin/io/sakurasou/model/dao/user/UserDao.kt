@@ -11,4 +11,5 @@ interface UserDao {
     fun findUserById(id: Long): User?
     fun findUserByName(name: String): User?
     fun saveUser(user: UserInsertDTO): Long
+    fun updateUserDefaultAlbumId(userId: Long, defaultAlbumId: Long)
 }

@@ -1,5 +1,6 @@
 package io.sakurasou.model.dao.user
 
+import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
@@ -14,10 +15,12 @@ object Users : LongIdTable("users") {
     val password = char("password", 60)
     val email = varchar("email", 255).nullable()
     val isDefaultImagePrivate = bool("is_default_image_private")
+    val defaultAlbumId = long("default_album_id").nullable()
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
 
     init {
         foreignKey(groupId to Groups.id)
+        foreignKey(defaultAlbumId to Albums.id)
     }
 }

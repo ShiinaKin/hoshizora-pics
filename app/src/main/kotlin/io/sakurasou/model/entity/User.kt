@@ -15,6 +15,7 @@ data class User(
     val password: String,
     val email: String?,
     val isDefaultImagePrivate: Boolean,
+    val defaultAlbumId: Long,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
 )
