@@ -36,6 +36,7 @@ class UserServiceImpl(
             username = userInsertRequest.username,
             password = encodePassword,
             email = userInsertRequest.email,
+            isDefaultImagePrivate = true,
             createTime = now,
             updateTime = now
         )

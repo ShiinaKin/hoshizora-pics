@@ -70,6 +70,7 @@ class AuthServiceTest {
             name = username,
             password = hashedPassword,
             email = email,
+            isDefaultImagePrivate = true,
             createTime = now,
             updateTime = now
         )
@@ -98,6 +99,7 @@ class AuthServiceTest {
             name = username,
             password = hashedPassword,
             email = email,
+            isDefaultImagePrivate = true,
             createTime = now,
             updateTime = now
         )

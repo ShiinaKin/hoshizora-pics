@@ -13,6 +13,7 @@ object Users : LongIdTable("users") {
     val name = varchar("name", 50).uniqueIndex()
     val password = char("password", 60)
     val email = varchar("email", 255).nullable()
+    val isDefaultImagePrivate = bool("is_default_image_private")
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
 

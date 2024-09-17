@@ -84,6 +84,7 @@ class CommonServiceTest {
             username = "testUser",
             password = encodedPassword,
             email = "test@example.com",
+            isDefaultImagePrivate = true,
             createTime = now,
             updateTime = now
         )

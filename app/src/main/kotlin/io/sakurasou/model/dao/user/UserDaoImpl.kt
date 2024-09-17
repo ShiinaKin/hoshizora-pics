@@ -20,6 +20,7 @@ class UserDaoImpl : UserDao {
                     row[Users.name],
                     row[Users.password],
                     row[Users.email],
+                    row[Users.isDefaultImagePrivate],
                     row[Users.createTime],
                     row[Users.updateTime]
                 )
@@ -36,6 +37,7 @@ class UserDaoImpl : UserDao {
                     row[Users.name],
                     row[Users.password],
                     row[Users.email],
+                    row[Users.isDefaultImagePrivate],
                     row[Users.createTime],
                     row[Users.updateTime]
                 )
@@ -48,6 +50,7 @@ class UserDaoImpl : UserDao {
             it[name] = user.username
             it[password] = user.password
             it[email] = user.email
+            it[isDefaultImagePrivate] = user.isDefaultImagePrivate
             it[createTime] = user.createTime
             it[updateTime] = user.updateTime
         }

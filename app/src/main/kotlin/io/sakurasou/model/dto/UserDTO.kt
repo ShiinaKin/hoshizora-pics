@@ -11,6 +11,7 @@ data class UserInsertDTO(
     val username: String,
     val password: String,
     val email: String?,
+    val isDefaultImagePrivate: Boolean,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
 )

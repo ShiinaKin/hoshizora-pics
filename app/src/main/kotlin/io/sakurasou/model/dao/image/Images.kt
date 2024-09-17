@@ -27,6 +27,7 @@ object Images : LongIdTable() {
     val height = integer("height").check { it greater 0 }
     val md5 = char("md5", 32)
     val sha1 = char("sha1", 40)
+    val isPrivate = bool("is_private")
     val createTime = datetime("create_time")
 
     init {

@@ -38,6 +38,7 @@ class CommonServiceImpl(
             username = siteInitRequest.username,
             password = encodePassword,
             email = siteInitRequest.email,
+            isDefaultImagePrivate = true,
             createTime = now,
             updateTime = now
         )

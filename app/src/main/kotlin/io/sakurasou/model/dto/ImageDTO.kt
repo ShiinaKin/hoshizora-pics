@@ -22,5 +22,6 @@ data class ImageInsertDTO(
     val height: Int,
     val md5: String,
     val sha1: String,
+    val isPrivate: Boolean,
     val createTime: LocalDateTime
 )
