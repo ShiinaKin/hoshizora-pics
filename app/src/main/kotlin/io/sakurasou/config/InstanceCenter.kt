@@ -28,6 +28,8 @@ import io.sakurasou.service.auth.AuthServiceImpl
 import io.sakurasou.service.common.CommonService
 import io.sakurasou.service.common.CommonServiceImpl
 import io.sakurasou.service.image.ImageService
+import io.sakurasou.service.role.RoleService
+import io.sakurasou.service.role.RoleServiceImpl
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.service.setting.SettingServiceImpl
 import io.sakurasou.service.user.UserService
@@ -57,7 +59,7 @@ object InstanceCenter {
     // lateinit var strategyService: UserService
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
-    // lateinit var roleService: UserService
+    lateinit var roleService: RoleService
     // lateinit var permissionService: UserService
     // lateinit var relationService: UserService
 
@@ -81,6 +83,7 @@ object InstanceCenter {
         settingService = SettingServiceImpl(settingDao)
         authService = AuthServiceImpl(userDao, relationDao)
 
+        roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
         userService = UserServiceImpl(userDao, albumService, settingService)
         commonService = CommonServiceImpl(userDao, albumService, settingService)
     }
@@ -94,9 +97,9 @@ object InstanceCenter {
     fun initRolePermissions() {
         rolePermissions = runBlocking {
             dbQuery {
-                val roles = dbQueryInner { roleDao.listRole() }
-                roles.associateWith {
-                    dbQueryInner { relationDao.listPermissionByRole(it).toSet() }
+                val roles = dbQueryInner { roleDao.listRoles() }
+                roles.associate {
+                    it.name to dbQueryInner { relationDao.listPermissionByRole(it.name).toSet() }
                 }
             }
         }

@@ -1,6 +1,7 @@
 package io.sakurasou.model.dao.permission
 
 import io.sakurasou.model.dto.PermissionInsertDTO
+import io.sakurasou.model.entity.Permission
 
 /**
  * @author ShiinaKin
@@ -8,4 +9,5 @@ import io.sakurasou.model.dto.PermissionInsertDTO
  */
 interface PermissionDao {
     fun batchSavePermission(permissions: List<PermissionInsertDTO>)
+    fun findPermissionByName(name: String): Permission?
 }

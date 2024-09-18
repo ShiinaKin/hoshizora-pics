@@ -1,7 +1,9 @@
 package io.sakurasou.model.dao.role
 
 import io.sakurasou.model.dto.RoleInsertDTO
+import io.sakurasou.model.entity.Role
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 
 /**
  * @author ShiinaKin
@@ -15,8 +17,25 @@ class RoleDaoImpl : RoleDao {
         }
     }
 
-    override fun listRole(): List<String> {
-        return Roles.select(Roles.name)
-            .map { it[Roles.name] }
+    override fun findRoleByName(roleName: String): Role? {
+        return Roles.selectAll()
+            .where { Roles.name eq roleName }
+            .map {
+                Role(
+                    it[Roles.name],
+                    it[Roles.description]
+                )
+            }
+            .firstOrNull()
+    }
+
+    override fun listRoles(): List<Role> {
+        return Roles.selectAll()
+            .map {
+                Role(
+                    it[Roles.name],
+                    it[Roles.description]
+                )
+            }
     }
 }

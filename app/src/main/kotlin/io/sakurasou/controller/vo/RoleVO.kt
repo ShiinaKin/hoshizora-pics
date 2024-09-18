@@ -1,14 +1,14 @@
 package io.sakurasou.controller.vo
 
-import io.sakurasou.model.entity.Permission
+import kotlinx.serialization.Serializable
 
 /**
  * @author Shiina Kin
  * 2024/9/9 10:45
  */
+@Serializable
 data class RoleVO(
-    val id: Long,
     val name: String,
     val description: String? = null,
-    val permissions: List<Permission>
+    val permissions: List<PermissionVO>
 )

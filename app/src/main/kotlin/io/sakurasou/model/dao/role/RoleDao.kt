@@ -1,6 +1,7 @@
 package io.sakurasou.model.dao.role
 
 import io.sakurasou.model.dto.RoleInsertDTO
+import io.sakurasou.model.entity.Role
 
 /**
  * @author ShiinaKin
@@ -8,5 +9,6 @@ import io.sakurasou.model.dto.RoleInsertDTO
  */
 interface RoleDao {
     fun saveRole(roleInsertDTO: RoleInsertDTO)
-    fun listRole(): List<String>
+    fun findRoleByName(roleName: String): Role?
+    fun listRoles(): List<Role>
 }
