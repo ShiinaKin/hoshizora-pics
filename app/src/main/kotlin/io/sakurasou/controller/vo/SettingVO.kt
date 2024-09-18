@@ -9,6 +9,5 @@ import kotlinx.datetime.LocalDateTime
  */
 data class SettingVO(
     val name: String,
-    val config: SettingConfig,
-    val lastUpdateTime: LocalDateTime
+    val config: SettingConfig
 )

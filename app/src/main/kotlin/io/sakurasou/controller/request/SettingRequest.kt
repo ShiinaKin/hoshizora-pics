@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SiteSettingPatchRequest(
-    val siteTitle: String,
-    val siteSubtitle: String,
-    val siteKeyword: String,
-    val siteDescription: String,
-    val homePageRandomPicDisplay: Boolean
+    val siteTitle: String? = null,
+    val siteSubtitle: String? = null,
+    val siteKeyword: String? = null,
+    val siteDescription: String? = null,
+    val homePageRandomPicDisplay: Boolean? = null
 )
 
 @Serializable
@@ -22,6 +22,6 @@ data class StrategySettingPatchRequest(
 
 @Serializable
 data class SystemSettingPatchRequest(
-    val defaultGroupId: Long,
-    val allowSignup: Boolean
+    val defaultGroupId: Long? = null,
+    val allowSignup: Boolean? = null
 )
