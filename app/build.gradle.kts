@@ -47,7 +47,7 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers-jvm")
     implementation("io.ktor:ktor-server-forwarded-header-jvm")
 
-    implementation("io.github.smiley4:ktor-swagger-ui:3.3.1")
+    implementation("io.github.smiley4:ktor-swagger-ui:3.4.0")
 
     implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-memory-cache-jvm:$ktorSimpleCacheVersion")
