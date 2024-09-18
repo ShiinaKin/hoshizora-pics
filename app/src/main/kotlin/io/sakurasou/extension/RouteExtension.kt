@@ -50,7 +50,7 @@ suspend fun ApplicationCall.success() {
     respond(CommonResponse.success(Unit))
 }
 
-suspend fun <T> ApplicationCall.success(data: T) {
+suspend inline fun <reified T> ApplicationCall.success(data: T) {
     respond(CommonResponse.success(data))
 }
 

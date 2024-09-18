@@ -35,6 +35,7 @@ const val GROUP_READ_ALL = "$GROUP:$READ:$ALL"
 const val GROUP_WRITE = "$GROUP:$WRITE"
 const val GROUP_DELETE = "$GROUP:$DELETE"
 
+const val ROLE_READ_SELF = "$ROLE:$READ:$SELF"
 const val ROLE_READ_ALL = "$ROLE:$READ:$ALL"
 
 const val PERMISSION_READ = "$PERMISSION:$READ"

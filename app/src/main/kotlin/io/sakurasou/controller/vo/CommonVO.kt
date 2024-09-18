@@ -24,7 +24,7 @@ data class CommonResponse<T>(
     constructor(code: Int, message: String) : this(code, message, null)
 
     companion object {
-        fun <T> success(data: T): CommonResponse<T> {
+        inline fun <reified T> success(data: T): CommonResponse<T> {
             return CommonResponse(0, "success", data)
         }
 

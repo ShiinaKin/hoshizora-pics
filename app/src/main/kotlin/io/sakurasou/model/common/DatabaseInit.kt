@@ -70,6 +70,7 @@ private val groupOpsPermissions = listOf(
 )
 
 private val roleOpsPermissions = listOf(
+    ROLE_READ_SELF,
     ROLE_READ_ALL
 )
 
@@ -170,6 +171,7 @@ private fun initRelation() {
         userOpsPermissions,
         groupOpsPermissions,
         settingOpsPermissions,
+        roleOpsPermissions,
         strategyOpsPermissions,
         imageOpsPermissions,
         albumOpsPermissions
@@ -177,6 +179,7 @@ private fun initRelation() {
     val userPermissions = listOf(
         USER_READ_SELF,
         USER_WRITE_SELF,
+        ROLE_READ_SELF,
         IMAGE_READ_SELF_SINGLE,
         IMAGE_READ_SELF_ALL,
         IMAGE_WRITE_SELF,
