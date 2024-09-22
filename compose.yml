@@ -19,6 +19,10 @@ services:
       DATABASE_PASSWORD: passwd
       REDIS_HOST: hoshizora-pics-redis
       REDIS_PORT: 6379
+      JWT_SECRET: your-secret
+      JWT_ISSUER: https://some.issuer/
+      JWT_AUDIENCE: https://some.audience/
+      JWT_REALM: hoshizora-pics
     volumes:
       - hoshizora-pics-uploads:/hoshizora/uploads
     networks:
