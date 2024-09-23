@@ -7,27 +7,33 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.STRATEGY_DELETE
 import io.sakurasou.constant.STRATEGY_READ_ALL
 import io.sakurasou.constant.STRATEGY_READ_SINGLE
 import io.sakurasou.constant.STRATEGY_WRITE
+import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.request.StrategyInsertRequest
 import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
+import io.sakurasou.exception.WrongParameterException
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
+import io.sakurasou.service.strategy.StrategyService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:59
  */
-fun Route.strategyRoute() {
+fun Route.strategyRoute(strategyService: StrategyService) {
+    val controller = StrategyController(strategyService)
     route("strategy") {
-        insertStrategy()
+        insertStrategy(controller)
         route("{id}", {
             protected = true
             request {
@@ -43,15 +49,15 @@ fun Route.strategyRoute() {
                 }
             }
         }) {
-            deleteStrategy()
-            updateStrategy()
-            fetchStrategy()
+            deleteStrategy(controller)
+            patchStrategy(controller)
+            fetchStrategy(controller)
         }
-        pageStrategies()
+        pageStrategies(controller)
     }
 }
 
-private fun Route.insertStrategy() {
+private fun Route.insertStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_WRITE
@@ -71,12 +77,14 @@ private fun Route.insertStrategy() {
                 }
             }
         }) {
-            TODO()
+            val insertRequest = call.receive<StrategyInsertRequest>()
+            controller.handleInsertStrategy(insertRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.deleteStrategy() {
+private fun Route.deleteStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_DELETE
@@ -89,12 +97,14 @@ private fun Route.deleteStrategy() {
                 }
             }
         }) {
-            TODO()
+            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            controller.handleDeleteStrategy(id)
+            call.success()
         }
     }
 }
 
-private fun Route.updateStrategy() {
+private fun Route.patchStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_WRITE
@@ -112,12 +122,15 @@ private fun Route.updateStrategy() {
                 }
             }
         }) {
-            TODO()
+            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            val patchRequest = call.receive<StrategyPatchRequest>()
+            controller.handlePatchStrategy(id, patchRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.fetchStrategy() {
+private fun Route.fetchStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_READ_SINGLE
@@ -130,12 +143,14 @@ private fun Route.fetchStrategy() {
                 }
             }
         }) {
-            TODO()
+            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            val strategyVO = controller.handleFetchStrategy(id)
+            call.success(strategyVO)
         }
     }
 }
 
-private fun Route.pageStrategies() {
+private fun Route.pageStrategies(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_READ_ALL
@@ -154,12 +169,35 @@ private fun Route.pageStrategies() {
                 }
             }
         }) {
-            val pageVO = call.pageRequest()
-
-            TODO()
+            val pageRequest = call.pageRequest()
+            val pageResult = controller.handlePageStrategies(pageRequest)
+            call.success(pageResult)
         }
     }
 }
 
-class StrategyController {
+class StrategyController(
+    private val strategyService: StrategyService
+) {
+    suspend fun handleInsertStrategy(request: StrategyInsertRequest) {
+        strategyService.saveStrategy(request)
+    }
+
+    suspend fun handleDeleteStrategy(id: Long) {
+        strategyService.deleteStrategy(id)
+    }
+
+    suspend fun handlePatchStrategy(id: Long, request: StrategyPatchRequest) {
+        strategyService.updateStrategy(id, request)
+    }
+
+    suspend fun handleFetchStrategy(id: Long): StrategyVO {
+        val strategy = strategyService.fetchStrategy(id)
+        return strategy
+    }
+
+    suspend fun handlePageStrategies(pageRequest: PageRequest): PageResult<StrategyPageVO> {
+        val pageResult = strategyService.pageStrategies(pageRequest)
+        return pageResult
+    }
 }

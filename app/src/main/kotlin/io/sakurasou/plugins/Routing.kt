@@ -11,21 +11,25 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.logging.*
 import io.sakurasou.config.InstanceCenter.authService
 import io.sakurasou.config.InstanceCenter.commonService
 import io.sakurasou.config.InstanceCenter.roleService
 import io.sakurasou.config.InstanceCenter.settingService
+import io.sakurasou.config.InstanceCenter.strategyService
 import io.sakurasou.config.InstanceCenter.userService
 import io.sakurasou.controller.*
 import io.sakurasou.exception.ServiceThrowable
 import io.sakurasou.exception.SiteNotInitializationException
 import io.sakurasou.extension.failure
 import io.sakurasou.extension.isSiteNotInitialized
+import org.jetbrains.exposed.sql.exposedLogger
 
 fun Application.configureRouting() {
     install(Resources)
     install(StatusPages) {
         exception<Throwable> { call, cause ->
+            exposedLogger.error(cause)
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
         exception<ServiceThrowable> { call: ApplicationCall, cause ->
@@ -47,7 +51,7 @@ fun Application.configureRouting() {
                 authenticate("auth-jwt") {
                     imageRoute()
                     albumRoute()
-                    strategyRoute()
+                    strategyRoute(strategyService)
                     settingRoute(settingService)
                     userRoute(userService)
                     groupRoute()
