@@ -15,4 +15,10 @@ object Strategies : LongIdTable("strategies") {
     val config = json<StrategyConfig>("config", jsonFormat)
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
+
+    val columnMap = mapOf(
+        "name" to name,
+        "createTime" to createTime,
+        "updateTime" to updateTime
+    )
 }
