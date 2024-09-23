@@ -7,7 +7,9 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 12:32
  */
 @Serializable
-sealed class StrategyConfig
+sealed class StrategyConfig(
+    val type: StrategyType
+)
 
 enum class StrategyType {
     LOCAL,

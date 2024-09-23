@@ -9,4 +9,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LocalStrategy(
     val uploadFolder: String
-) : StrategyConfig()
+) : StrategyConfig(StrategyType.LOCAL)

@@ -13,4 +13,4 @@ data class S3Strategy(
     val region: String,
     val accessKey: String,
     val secretKey: String
-) : StrategyConfig()
+) : StrategyConfig(StrategyType.S3)
