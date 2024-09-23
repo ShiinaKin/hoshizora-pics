@@ -13,3 +13,10 @@ data class StrategyInsertDTO(
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
 )
+
+data class StrategyUpdateDTO(
+    val id: Long,
+    val name: String,
+    val config: StrategyConfig,
+    val updateTime: LocalDateTime
+)
