@@ -143,7 +143,7 @@ private fun initRole() {
 }
 
 private fun initStrategy() {
-    val localStrategyConfig = LocalStrategy("/")
+    val localStrategyConfig = LocalStrategy("/uploads")
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     val strategyInsertDTO = StrategyInsertDTO(
         name = "local",
