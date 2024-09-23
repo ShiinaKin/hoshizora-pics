@@ -11,7 +11,9 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
  * 2024/9/7 14:03
  */
 object Strategies : LongIdTable("strategies") {
-    val name = varchar("name", 255)
+    // Although this will cause an index rebuild when this field is updated,
+    // this table won't have a lot of data, so it's fine.
+    val name = varchar("name", 255).uniqueIndex()
     val config = json<StrategyConfig>("config", jsonFormat)
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
