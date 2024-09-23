@@ -32,6 +32,8 @@ import io.sakurasou.service.role.RoleService
 import io.sakurasou.service.role.RoleServiceImpl
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.service.setting.SettingServiceImpl
+import io.sakurasou.service.strategy.StrategyService
+import io.sakurasou.service.strategy.StrategyServiceImpl
 import io.sakurasou.service.user.UserService
 import io.sakurasou.service.user.UserServiceImpl
 import kotlinx.coroutines.runBlocking
@@ -56,7 +58,7 @@ object InstanceCenter {
     lateinit var imageService: ImageService
     lateinit var albumService: AlbumService
 
-    // lateinit var strategyService: UserService
+    lateinit var strategyService: StrategyService
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
     lateinit var roleService: RoleService
@@ -81,6 +83,7 @@ object InstanceCenter {
     fun initService() {
         albumService = AlbumServiceImpl(albumDao)
         settingService = SettingServiceImpl(settingDao)
+        strategyService = StrategyServiceImpl(strategyDao)
         authService = AuthServiceImpl(userDao, relationDao)
 
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
