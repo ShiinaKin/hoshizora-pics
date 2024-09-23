@@ -3,12 +3,13 @@ package io.sakurasou.controller.vo
 import io.sakurasou.model.strategy.StrategyConfig
 import io.sakurasou.model.strategy.StrategyType
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.Serializable
 
 /**
  * @author Shiina Kin
  * 2024/9/9 12:31
  */
+@Serializable
 data class StrategyVO(
     val id: Long,
     val name: String,
@@ -17,6 +18,7 @@ data class StrategyVO(
     val createTime: LocalDateTime
 )
 
+@Serializable
 data class StrategyPageVO(
     val id: Long,
     val name: String,
