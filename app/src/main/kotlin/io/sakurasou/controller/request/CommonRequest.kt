@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PageRequest(
-    val page: Int,
+    val page: Long,
     val pageSize: Int,
     val order: String? = null,
     val orderBy: String? = null

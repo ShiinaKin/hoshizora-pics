@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PageResult<T>(
-    val page: Int,
+    val page: Long,
     val pageSize: Int,
-    val total: Int,
+    val total: Long,
     val list: List<T>
 )
 

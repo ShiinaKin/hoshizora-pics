@@ -14,7 +14,7 @@ import io.sakurasou.exception.WrongParameterException
  * 2024/9/12 10:39
  */
 fun ApplicationCall.pageRequest(): PageRequest {
-    val page = parameters["page"]?.toInt()
+    val page = parameters["page"]?.toLong()
     val pageSize = parameters["pageSize"]?.toInt()
     val order = parameters["order"]
     val orderBy = parameters["orderBy"]
