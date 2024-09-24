@@ -5,6 +5,5 @@ package io.sakurasou.service.album
  * 2024/9/13 14:48
  */
 interface AlbumService {
-    suspend fun initAlbumForUser(userId: Long): Long
     suspend fun saveAlbum(): Long
 }

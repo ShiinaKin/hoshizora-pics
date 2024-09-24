@@ -2,6 +2,9 @@ package io.sakurasou.model.dao.album
 
 import io.sakurasou.model.dto.AlbumInsertDTO
 import io.sakurasou.model.entity.Album
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
 
@@ -53,5 +56,18 @@ class AlbumDaoImpl : AlbumDao {
             it[createTime] = insertDTO.createTime
         }
         return entityID.value
+    }
+
+    override fun initAlbumForUser(userId: Long): Long {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val uncategorizedAlbum = AlbumInsertDTO(
+            userId = userId,
+            name = "uncategorized",
+            description = "default, cannot delete",
+            imageCount = 0,
+            isUncategorized = true,
+            createTime = now
+        )
+        return saveAlbum(uncategorizedAlbum)
     }
 }
