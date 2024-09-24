@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
  * @author ShiinaKin
  * 2024/9/7 13:45
  */
-object Albums : LongIdTable("ablums") {
+object Albums : LongIdTable("albums") {
     val userId = long("user_id")
     val name = varchar("name", 255)
     val description = varchar("description", 255).nullable()
