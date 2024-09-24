@@ -3,6 +3,7 @@ package io.sakurasou.controller
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.GROUP_DELETE
 import io.sakurasou.constant.GROUP_READ_ALL
@@ -10,11 +11,14 @@ import io.sakurasou.constant.GROUP_READ_SINGLE
 import io.sakurasou.constant.GROUP_WRITE
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
+import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.group.GroupService
 
@@ -23,10 +27,11 @@ import io.sakurasou.service.group.GroupService
  * 2024/9/9 08:58
  */
 fun Route.groupRoute(groupService: GroupService) {
+    val controller = GroupController(groupService)
     route("group", {
         protected = true
     }) {
-        groupInsert()
+        groupInsert(controller)
         route("{id}", {
             request {
                 pathParameter<Long>("id") {
@@ -41,15 +46,15 @@ fun Route.groupRoute(groupService: GroupService) {
                 }
             }
         }) {
-            groupDelete()
-            groupUpdate()
-            groupFetch()
+            groupDelete(controller)
+            groupUpdate(controller)
+            groupFetch(controller)
         }
-        groupPage()
+        groupPage(controller)
     }
 }
 
-private fun Route.groupInsert() {
+private fun Route.groupInsert(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
@@ -71,12 +76,14 @@ private fun Route.groupInsert() {
                 }
             }
         }) {
-            TODO()
+            val insertRequest = call.receive<GroupInsertRequest>()
+            controller.handleInsertGroup(insertRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.groupDelete() {
+private fun Route.groupDelete(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_DELETE
@@ -89,12 +96,14 @@ private fun Route.groupDelete() {
                 }
             }
         }) {
-            TODO()
+            val id = call.id()
+            controller.handleDeleteGroup(id)
+            call.success()
         }
     }
 }
 
-private fun Route.groupUpdate() {
+private fun Route.groupUpdate(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
@@ -112,12 +121,15 @@ private fun Route.groupUpdate() {
                 }
             }
         }) {
-            TODO()
+            val id = call.id()
+            val patchRequest = call.receive<GroupPatchRequest>()
+            controller.handlePatchGroup(id, patchRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.groupFetch() {
+private fun Route.groupFetch(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_READ_SINGLE
@@ -130,12 +142,14 @@ private fun Route.groupFetch() {
                 }
             }
         }) {
-            TODO()
+            val id = call.id()
+            val groupVO = controller.handleFetchGroup(id)
+            call.success(groupVO)
         }
     }
 }
 
-private fun Route.groupPage() {
+private fun Route.groupPage(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_READ_ALL
@@ -145,7 +159,7 @@ private fun Route.groupPage() {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<GroupPageVO>> {
+                    body<CommonResponse<PageResult<GroupPageVO>>> {
                         description = "page result"
                     }
                 }
@@ -154,12 +168,33 @@ private fun Route.groupPage() {
                 }
             }
         }) {
-            val pageVO = call.pageRequest()
-
-            TODO()
+            val pageRequest = call.pageRequest()
+            val pageResult = controller.handlePageGroups(pageRequest)
+            call.success(pageResult)
         }
     }
 }
 
-class GroupController {
+class GroupController(
+    private val groupService: GroupService
+) {
+    suspend fun handleInsertGroup(insertRequest: GroupInsertRequest) {
+        groupService.saveGroup(insertRequest)
+    }
+
+    suspend fun handleDeleteGroup(id: Long) {
+        groupService.deleteGroup(id)
+    }
+
+    suspend fun handlePatchGroup(id: Long, patchRequest: GroupPatchRequest) {
+        groupService.updateGroup(id, patchRequest)
+    }
+
+    suspend fun handleFetchGroup(id: Long): GroupVO {
+        return groupService.fetchGroup(id)
+    }
+
+    suspend fun handlePageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {
+        return groupService.pageGroups(pageRequest)
+    }
 }
