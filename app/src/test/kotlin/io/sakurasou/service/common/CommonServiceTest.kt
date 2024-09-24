@@ -3,7 +3,7 @@ package io.sakurasou.service.common
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.mockk.*
 import io.sakurasou.controller.request.SiteInitRequest
-import io.sakurasou.exception.SiteRepeatedInitializationException
+import io.sakurasou.exception.controller.status.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao

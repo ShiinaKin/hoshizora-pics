@@ -21,7 +21,7 @@ import io.sakurasou.config.InstanceCenter.strategyService
 import io.sakurasou.config.InstanceCenter.userService
 import io.sakurasou.controller.*
 import io.sakurasou.exception.ServiceThrowable
-import io.sakurasou.exception.SiteNotInitializationException
+import io.sakurasou.exception.controller.status.SiteNotInitializationException
 import io.sakurasou.extension.failure
 import io.sakurasou.extension.isSiteNotInitialized
 import org.jetbrains.exposed.sql.exposedLogger

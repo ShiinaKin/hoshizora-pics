@@ -2,7 +2,7 @@ package io.sakurasou.service.user
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserInsertRequest
-import io.sakurasou.exception.SignupNotAllowedException
+import io.sakurasou.exception.controller.access.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao
@@ -27,7 +27,6 @@ class UserServiceImpl(
 
         val rawPassword = userInsertRequest.password
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
-
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val userInsertDTO = UserInsertDTO(

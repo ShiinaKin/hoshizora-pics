@@ -1,4 +1,6 @@
-package io.sakurasou.exception
+package io.sakurasou.exception.service.user
+
+import io.sakurasou.exception.ServiceThrowable
 
 /**
  * @author Shiina Kin
@@ -8,5 +10,5 @@ class UserNotFoundException : ServiceThrowable() {
     override val code: Int
         get() = 404
     override val message: String
-        get() = "User not found"
+        get() = "User Not Found"
 }

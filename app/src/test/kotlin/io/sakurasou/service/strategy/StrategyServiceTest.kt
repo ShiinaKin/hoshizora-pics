@@ -4,7 +4,7 @@ import io.mockk.*
 import io.sakurasou.controller.request.StrategyInsertRequest
 import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.vo.StrategyVO
-import io.sakurasou.exception.StrategyNotExistException
+import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
@@ -147,7 +147,7 @@ class StrategyServiceTest {
         }
         every { strategyDao.findStrategyById(2L) } returns null
 
-        assertFailsWith(StrategyNotExistException::class) {
+        assertFailsWith(StrategyNotFoundException::class) {
             strategyService.fetchStrategy(2L)
         }
     }

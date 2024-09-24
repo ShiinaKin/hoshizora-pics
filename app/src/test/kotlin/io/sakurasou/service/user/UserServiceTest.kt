@@ -3,7 +3,7 @@ package io.sakurasou.service.user
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.mockk.*
 import io.sakurasou.controller.request.UserInsertRequest
-import io.sakurasou.exception.SignupNotAllowedException
+import io.sakurasou.exception.controller.access.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao

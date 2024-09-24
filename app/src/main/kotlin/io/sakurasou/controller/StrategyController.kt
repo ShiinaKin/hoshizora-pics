@@ -20,7 +20,6 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
-import io.sakurasou.exception.WrongParameterException
 import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.extension.success

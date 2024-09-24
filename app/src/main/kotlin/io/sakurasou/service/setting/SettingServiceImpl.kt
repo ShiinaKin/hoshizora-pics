@@ -7,8 +7,8 @@ import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.controller.request.SiteSettingPatchRequest
 import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.controller.request.SystemSettingPatchRequest
-import io.sakurasou.exception.ConfigTypeNotMatchException
-import io.sakurasou.exception.MissingNecessaryColumnException
+import io.sakurasou.exception.service.setting.ConfigTypeNotMatchException
+import io.sakurasou.exception.dao.MissingNecessaryColumnException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.setting.SettingDao
 import io.sakurasou.model.dto.SettingUpdateDTO
@@ -110,7 +110,7 @@ class SettingServiceImpl(
         }?.let {
             if (it.config !is SystemSetting) throw ConfigTypeNotMatchException()
             it.config
-        } ?: run { throw MissingNecessaryColumnException() }
+        } ?: throw MissingNecessaryColumnException()
     }
 
     override suspend fun getSiteSetting(): SiteSetting {
@@ -119,7 +119,7 @@ class SettingServiceImpl(
         }?.let {
             if (it.config !is SiteSetting) throw ConfigTypeNotMatchException()
             it.config
-        } ?: run { throw MissingNecessaryColumnException() }
+        } ?: throw MissingNecessaryColumnException()
     }
 
     override suspend fun getStrategySetting(): StrategySetting {
@@ -128,7 +128,7 @@ class SettingServiceImpl(
         }?.let {
             if (it.config !is StrategySetting) throw ConfigTypeNotMatchException()
             it.config
-        } ?: run { throw MissingNecessaryColumnException() }
+        } ?: throw MissingNecessaryColumnException()
     }
 
     override suspend fun getSystemStatus(): SystemStatus {
@@ -137,6 +137,6 @@ class SettingServiceImpl(
         }?.let {
             if (it.config !is SystemStatus) throw ConfigTypeNotMatchException()
             it.config
-        } ?: run { throw MissingNecessaryColumnException() }
+        } ?: throw MissingNecessaryColumnException()
     }
 }

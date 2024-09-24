@@ -6,8 +6,8 @@ import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
-import io.sakurasou.exception.GroupNotExistException
-import io.sakurasou.exception.RoleNotExistException
+import io.sakurasou.exception.service.group.GroupNotFoundException
+import io.sakurasou.exception.service.role.RoleNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
@@ -36,7 +36,7 @@ class GroupServiceImpl(
             runCatching {
                 relationDao.batchInsertGroupToRoles(groupId, groupRoles)
             }.onFailure {
-                throw RoleNotExistException()
+                throw RoleNotFoundException()
             }
         }
     }
@@ -60,7 +60,7 @@ class GroupServiceImpl(
     }
 
     override suspend fun fetchGroup(id: Long): GroupVO {
-        val group = dbQuery { groupDao.findGroupById(id) } ?: throw GroupNotExistException()
+        val group = dbQuery { groupDao.findGroupById(id) } ?: throw GroupNotFoundException()
         val roles = dbQuery { relationDao.listRoleByGroupId(group.id) }
         return GroupVO(
             id = group.id,

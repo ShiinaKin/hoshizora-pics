@@ -1,4 +1,6 @@
-package io.sakurasou.exception
+package io.sakurasou.exception.dao
+
+import io.sakurasou.exception.ServiceThrowable
 
 /**
  * @author Shiina Kin

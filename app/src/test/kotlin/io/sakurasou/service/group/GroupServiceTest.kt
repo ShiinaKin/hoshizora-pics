@@ -4,7 +4,7 @@ import io.mockk.*
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
 import io.sakurasou.controller.vo.GroupVO
-import io.sakurasou.exception.GroupNotExistException
+import io.sakurasou.exception.service.group.GroupNotFoundException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
@@ -160,7 +160,7 @@ class GroupServiceTest {
         }
         every { groupDao.findGroupById(1) } returns null
 
-        assertFailsWith<GroupNotExistException> {
+        assertFailsWith<GroupNotFoundException> {
             groupService.fetchGroup(1)
         }
     }

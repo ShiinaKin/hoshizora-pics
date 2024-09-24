@@ -5,8 +5,8 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.util.*
 import io.sakurasou.config.InstanceCenter
-import io.sakurasou.exception.PrincipalNotExistException
-import io.sakurasou.exception.UnauthorizedAccessException
+import io.sakurasou.exception.controller.access.PrincipalNotFoundException
+import io.sakurasou.exception.controller.status.UnauthorizedAccessException
 import io.sakurasou.extension.Principal
 
 /**
@@ -19,7 +19,7 @@ val AuthorizationPlugin = createRouteScopedPlugin(
 ) {
     pluginConfig.apply {
         on(AuthenticationChecked) { call ->
-            val principal = call.principal<JWTPrincipal>() ?: throw PrincipalNotExistException()
+            val principal = call.principal<JWTPrincipal>() ?: throw PrincipalNotFoundException()
             val id = principal.payload.getClaim("id").asLong()
             val groupId = principal.payload.getClaim("groupId").asLong()
             val username = principal.payload.getClaim("username").asString()

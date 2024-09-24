@@ -6,7 +6,7 @@ import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
-import io.sakurasou.exception.StrategyNotExistException
+import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
@@ -53,7 +53,7 @@ class StrategyServiceImpl(
     }
 
     override suspend fun fetchStrategy(id: Long): StrategyVO {
-        val strategy = dbQuery { strategyDao.findStrategyById(id) } ?: throw StrategyNotExistException()
+        val strategy = dbQuery { strategyDao.findStrategyById(id) } ?: throw StrategyNotFoundException()
         val strategyVO = StrategyVO(
             id = strategy.id,
             name = strategy.name,

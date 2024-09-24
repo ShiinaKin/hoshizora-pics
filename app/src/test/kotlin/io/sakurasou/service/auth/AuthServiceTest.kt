@@ -3,8 +3,8 @@ package io.sakurasou.service.auth
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.mockk.*
 import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.exception.UnauthorizedAccessException
-import io.sakurasou.exception.UserNotFoundException
+import io.sakurasou.exception.controller.status.UnauthorizedAccessException
+import io.sakurasou.exception.service.user.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.user.UserDao

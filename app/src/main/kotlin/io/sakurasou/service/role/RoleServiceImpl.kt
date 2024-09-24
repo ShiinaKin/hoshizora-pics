@@ -2,8 +2,8 @@ package io.sakurasou.service.role
 
 import io.sakurasou.controller.vo.PermissionVO
 import io.sakurasou.controller.vo.RoleVO
-import io.sakurasou.exception.PermissionNotExistException
-import io.sakurasou.exception.RoleNotExistException
+import io.sakurasou.exception.service.permission.PermissionNotFoundException
+import io.sakurasou.exception.service.role.RoleNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.permission.PermissionDao
 import io.sakurasou.model.dao.relation.RelationDao
@@ -25,7 +25,7 @@ class RoleServiceImpl(
                 val permissionNames = relationDao.listPermissionByRole(role.name)
                 val permissionVOList = permissionNames.map { permissionName ->
                     val permission = permissionDao.findPermissionByName(permissionName)
-                        ?: throw PermissionNotExistException()
+                        ?: throw PermissionNotFoundException()
                     PermissionVO(
                         permission.name,
                         permission.description
@@ -43,11 +43,11 @@ class RoleServiceImpl(
     override suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): Map<String, RoleVO> {
         return dbQuery {
             roleNames.associate { roleName ->
-                val role = roleDao.findRoleByName(roleName) ?: throw RoleNotExistException()
+                val role = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
                 val permissionNames = relationDao.listPermissionByRole(roleName)
                 val permissionVOList = permissionNames.map { permissionName ->
                     val permission = permissionDao.findPermissionByName(permissionName)
-                        ?: throw PermissionNotExistException()
+                        ?: throw PermissionNotFoundException()
                     PermissionVO(
                         permission.name,
                         permission.description

@@ -7,7 +7,7 @@ import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.exception.ServiceThrowable
-import io.sakurasou.exception.WrongParameterException
+import io.sakurasou.exception.controller.param.WrongParameterException
 
 /**
  * @author Shiina Kin

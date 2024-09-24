@@ -12,7 +12,7 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.ImagePageVO
 import io.sakurasou.controller.vo.ImageVO
 import io.sakurasou.controller.vo.PageResult
-import io.sakurasou.exception.FileSizeException
+import io.sakurasou.exception.controller.param.FileSizeException
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.plugins.AuthorizationPlugin
 import java.io.ByteArrayOutputStream
