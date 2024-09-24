@@ -16,12 +16,13 @@ import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.plugins.AuthorizationPlugin
+import io.sakurasou.service.group.GroupService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:58
  */
-fun Route.groupRoute() {
+fun Route.groupRoute(groupService: GroupService) {
     route("group", {
         protected = true
     }) {

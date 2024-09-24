@@ -5,5 +5,4 @@ package io.sakurasou.service.group
  * 2024/9/13 14:47
  */
 interface GroupService {
-    fun saveGroup()
 }

@@ -14,6 +14,7 @@ import io.ktor.server.routing.*
 import io.ktor.util.logging.*
 import io.sakurasou.config.InstanceCenter.authService
 import io.sakurasou.config.InstanceCenter.commonService
+import io.sakurasou.config.InstanceCenter.groupService
 import io.sakurasou.config.InstanceCenter.roleService
 import io.sakurasou.config.InstanceCenter.settingService
 import io.sakurasou.config.InstanceCenter.strategyService
@@ -54,7 +55,7 @@ fun Application.configureRouting() {
                     strategyRoute(strategyService)
                     settingRoute(settingService)
                     userRoute(userService)
-                    groupRoute()
+                    groupRoute(groupService)
                     roleRoute(roleService)
                 }
             }

@@ -27,6 +27,8 @@ import io.sakurasou.service.auth.AuthService
 import io.sakurasou.service.auth.AuthServiceImpl
 import io.sakurasou.service.common.CommonService
 import io.sakurasou.service.common.CommonServiceImpl
+import io.sakurasou.service.group.GroupService
+import io.sakurasou.service.group.GroupServiceImpl
 import io.sakurasou.service.image.ImageService
 import io.sakurasou.service.role.RoleService
 import io.sakurasou.service.role.RoleServiceImpl
@@ -55,6 +57,7 @@ object InstanceCenter {
 
     lateinit var authService: AuthService
     lateinit var userService: UserService
+    lateinit var groupService: GroupService
     lateinit var imageService: ImageService
     lateinit var albumService: AlbumService
 
@@ -83,6 +86,7 @@ object InstanceCenter {
     fun initService() {
         albumService = AlbumServiceImpl(albumDao)
         settingService = SettingServiceImpl(settingDao)
+        groupService = GroupServiceImpl(groupDao)
         strategyService = StrategyServiceImpl(strategyDao)
         authService = AuthServiceImpl(userDao, relationDao)
 
