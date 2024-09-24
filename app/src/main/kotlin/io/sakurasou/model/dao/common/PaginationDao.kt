@@ -27,7 +27,7 @@ interface PaginationDao {
 
         pageRequest.orderBy?.let {
             val column = getColumnByName(table, it)
-            val sortOrder = SortOrder.valueOf(pageRequest.order ?: "DESC")
+            val sortOrder = SortOrder.valueOf(pageRequest.order?.uppercase() ?: "DESC")
             query.orderBy(column, sortOrder)
         }
 
