@@ -16,4 +16,10 @@ object Groups : LongIdTable("groups") {
     init {
         foreignKey(strategyId to Strategies.id)
     }
+
+    val columnMap = mapOf(
+        "name" to name,
+        "description" to description,
+        "maxSize" to maxSize
+    )
 }

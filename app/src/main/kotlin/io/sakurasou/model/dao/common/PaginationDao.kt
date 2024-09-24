@@ -3,6 +3,7 @@ package io.sakurasou.model.dao.common
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.PagingParameterWrongException
+import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.strategy.Strategies
 import org.jetbrains.exposed.sql.*
 
@@ -43,6 +44,7 @@ interface PaginationDao {
 
     fun getColumnByName(table: Table, columnName: String): Column<*> {
         return when (table) {
+            Groups -> Groups.columnMap[columnName]
             Strategies -> Strategies.columnMap[columnName]
             else -> null
         } ?: throw PagingParameterWrongException("Column $columnName not found in table $table")
