@@ -36,7 +36,7 @@ interface PaginationDao {
             page = page,
             pageSize = pageSize,
             total = totalRecords,
-            list = data
+            data = data
         )
         return pageResult
     }

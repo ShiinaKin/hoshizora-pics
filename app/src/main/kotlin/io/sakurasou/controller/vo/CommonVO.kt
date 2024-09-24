@@ -11,7 +11,7 @@ data class PageResult<T>(
     val page: Long,
     val pageSize: Int,
     val total: Long,
-    val list: List<T>
+    val data: List<T>
 )
 
 @Serializable

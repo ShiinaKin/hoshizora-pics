@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
 data class GroupInsertRequest(
     val name: String,
     val description: String? = null,
-    val strategy: Long,
+    val strategyId: Long,
     val maxSize: Double,
-    val roles: List<Long>
+    val roles: List<String>
 )
 
 @Serializable
 data class GroupPatchRequest(
     val name: String? = null,
     val description: String? = null,
-    val strategy: Long? = null,
+    val strategyId: Long? = null,
     val maxSize: Double? = null,
-    val roles: List<Long>? = null
+    val roles: List<String>? = null
 )

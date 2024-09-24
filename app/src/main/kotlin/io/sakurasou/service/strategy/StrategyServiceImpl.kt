@@ -14,7 +14,6 @@ import io.sakurasou.model.dto.StrategyUpdateDTO
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.SerialName
 
 /**
  * @author Shiina Kin
@@ -68,7 +67,7 @@ class StrategyServiceImpl(
 
     override suspend fun pageStrategies(pageRequest: PageRequest): PageResult<StrategyPageVO> {
         val strategyPageResult = dbQuery { strategyDao.pagination(pageRequest) }
-        val pageVOList = strategyPageResult.list.map {
+        val pageVOList = strategyPageResult.data.map {
             StrategyPageVO(
                 id = it.id,
                 name = it.name,
@@ -79,7 +78,7 @@ class StrategyServiceImpl(
             page = strategyPageResult.page,
             pageSize = strategyPageResult.pageSize,
             total = strategyPageResult.total,
-            list = pageVOList
+            data = pageVOList
         )
     }
 }
