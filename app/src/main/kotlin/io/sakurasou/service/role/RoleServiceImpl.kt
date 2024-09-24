@@ -5,7 +5,6 @@ import io.sakurasou.controller.vo.RoleVO
 import io.sakurasou.exception.PermissionNotExistException
 import io.sakurasou.exception.RoleNotExistException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
-import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.permission.PermissionDao
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.role.RoleDao
@@ -21,11 +20,11 @@ class RoleServiceImpl(
 ) : RoleService {
     override suspend fun listRolesWithPermissions(): Map<String, RoleVO> {
         return dbQuery {
-            val roles = dbQueryInner { roleDao.listRoles() }
+            val roles = roleDao.listRoles()
             roles.associate { role ->
-                val permissionNames = dbQueryInner { relationDao.listPermissionByRole(role.name) }
+                val permissionNames = relationDao.listPermissionByRole(role.name)
                 val permissionVOList = permissionNames.map { permissionName ->
-                    val permission = dbQueryInner { permissionDao.findPermissionByName(permissionName) }
+                    val permission = permissionDao.findPermissionByName(permissionName)
                         ?: throw PermissionNotExistException()
                     PermissionVO(
                         permission.name,
@@ -44,10 +43,10 @@ class RoleServiceImpl(
     override suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): Map<String, RoleVO> {
         return dbQuery {
             roleNames.associate { roleName ->
-                val role = dbQueryInner { roleDao.findRoleByName(roleName) } ?: throw RoleNotExistException()
-                val permissionNames = dbQueryInner { relationDao.listPermissionByRole(roleName) }
+                val role = roleDao.findRoleByName(roleName) ?: throw RoleNotExistException()
+                val permissionNames = relationDao.listPermissionByRole(roleName)
                 val permissionVOList = permissionNames.map { permissionName ->
-                    val permission = dbQueryInner { permissionDao.findPermissionByName(permissionName) }
+                    val permission = permissionDao.findPermissionByName(permissionName)
                         ?: throw PermissionNotExistException()
                     PermissionVO(
                         permission.name,

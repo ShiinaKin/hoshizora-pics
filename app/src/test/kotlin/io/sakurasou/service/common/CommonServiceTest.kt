@@ -5,11 +5,11 @@ import io.mockk.*
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton
+import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemStatus
-import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.setting.SettingService
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
@@ -25,7 +25,7 @@ import kotlin.test.assertFailsWith
  */
 class CommonServiceTest {
     private lateinit var userDao: UserDao
-    private lateinit var albumService: AlbumService
+    private lateinit var albumDao: AlbumDao
     private lateinit var settingService: SettingService
     private lateinit var commonService: CommonServiceImpl
 
@@ -35,17 +35,11 @@ class CommonServiceTest {
         mockkStatic(BCrypt::class)
         mockkObject(Clock.System)
         userDao = mockk()
-        albumService = mockk()
+        albumDao = mockk()
         settingService = mockk()
-        commonService = CommonServiceImpl(userDao, albumService, settingService)
+        commonService = CommonServiceImpl(userDao, albumDao, settingService)
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<Long>(any()) } coAnswers {
-            this.arg<suspend () -> Long>(0).invoke()
         }
     }
 
@@ -110,7 +104,7 @@ class CommonServiceTest {
         coEvery { settingService.getSiteSetting() } returns oldSiteSetting
         every { BCrypt.withDefaults().hashToString(12, siteInitRequest.password.toCharArray()) } returns encodedPassword
         coEvery { userDao.saveUser(userInsertDTO) } returns 1
-        coEvery { albumService.initAlbumForUser(1) } returns 1
+        coEvery { albumDao.initAlbumForUser(1) } returns 1
         coEvery { userDao.updateUserDefaultAlbumId(1L, 1L) } just Runs
         coEvery { settingService.updateSiteSetting(siteSettingConfig) } just Runs
         coEvery { settingService.updateSystemStatus(systemStatus) } just Runs
@@ -119,10 +113,9 @@ class CommonServiceTest {
 
         coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
         coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
-        coVerify(exactly = 1) { albumService.initAlbumForUser(1) }
+        coVerify(exactly = 1) { albumDao.initAlbumForUser(1) }
         coVerify(exactly = 1) { userDao.updateUserDefaultAlbumId(1L, 1L) }
         coVerify(exactly = 1) { settingService.updateSiteSetting(siteSettingConfig) }
         coVerify(exactly = 1) { settingService.updateSystemStatus(systemStatus) }
     }
-
 }

@@ -61,12 +61,6 @@ class GroupServiceTest {
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
         }
-        coEvery { DatabaseSingleton.dbQueryInner<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<Long>(any()) } coAnswers {
-            this.arg<suspend () -> Long>(0).invoke()
-        }
         every { groupDao.saveGroup(exceptedInsertDTO) } returns 1
         every { relationDao.batchInsertGroupToRoles(1, exceptedRoles) } just Runs
 

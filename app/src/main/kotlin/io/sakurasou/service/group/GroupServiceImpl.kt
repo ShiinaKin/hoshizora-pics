@@ -7,8 +7,8 @@ import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.GroupNotExistException
+import io.sakurasou.exception.RoleNotExistException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
-import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dto.GroupInsertDTO
@@ -32,8 +32,12 @@ class GroupServiceImpl(
         val groupRoles = insertRequest.roles
 
         dbQuery {
-            val groupId = dbQueryInner { groupDao.saveGroup(groupInsertDTO) }
-            dbQueryInner { relationDao.batchInsertGroupToRoles(groupId, groupRoles) }
+            val groupId = groupDao.saveGroup(groupInsertDTO)
+            runCatching {
+                relationDao.batchInsertGroupToRoles(groupId, groupRoles)
+            }.onFailure {
+                throw RoleNotExistException()
+            }
         }
     }
 

@@ -69,12 +69,6 @@ class RoleServiceTest {
         coEvery { DatabaseSingleton.dbQuery<Map<String, RoleVO>>(any()) } coAnswers {
             this.arg<suspend () -> Map<String, RoleVO>>(0).invoke()
         }
-        coEvery { DatabaseSingleton.dbQueryInner<List<String>>(any()) } coAnswers {
-            this.arg<suspend () -> List<String>>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<Permission?>(any()) } coAnswers {
-            this.arg<suspend () -> Permission?>(0).invoke()
-        }
 
         val rolesWithPermissions = roleService.listRolesWithPermissions()
 
@@ -99,12 +93,6 @@ class RoleServiceTest {
         every { permissionDao.findPermissionByName(permission2.name) } returns permission2
         coEvery { DatabaseSingleton.dbQuery<Map<String, RoleVO>>(any()) } coAnswers {
             this.arg<suspend () -> Map<String, RoleVO>>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<List<String>>(any()) } coAnswers {
-            this.arg<suspend () -> List<String>>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQueryInner<Permission?>(any()) } coAnswers {
-            this.arg<suspend () -> Permission?>(0).invoke()
         }
 
         val rolesWithPermissions = roleService.listRolesWithPermissionsOfUser(listOf(role1.name))

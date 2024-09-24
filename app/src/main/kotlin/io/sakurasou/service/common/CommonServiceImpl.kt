@@ -5,12 +5,11 @@ import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
-import io.sakurasou.model.DatabaseSingleton.dbQueryInner
+import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemStatus
-import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.setting.SettingService
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -22,7 +21,7 @@ import kotlinx.datetime.toLocalDateTime
  */
 class CommonServiceImpl(
     private val userDao: UserDao,
-    private val albumService: AlbumService,
+    private val albumDao: AlbumDao,
     private val settingService: SettingService
 ) : CommonService {
     override suspend fun initSite(siteInitRequest: SiteInitRequest) {
@@ -58,11 +57,11 @@ class CommonServiceImpl(
         )
 
         dbQuery {
-            val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
-            val defaultAlbumId = dbQueryInner { albumService.initAlbumForUser(userId) }
-            dbQueryInner { userDao.updateUserDefaultAlbumId(userId, defaultAlbumId) }
-            dbQueryInner { settingService.updateSiteSetting(siteSettingConfig) }
-            dbQueryInner { settingService.updateSystemStatus(systemStatus) }
+            val userId = userDao.saveUser(userInsertDTO)
+            val defaultAlbumId = albumDao.initAlbumForUser(userId)
+            userDao.updateUserDefaultAlbumId(userId, defaultAlbumId)
+            settingService.updateSiteSetting(siteSettingConfig)
+            settingService.updateSystemStatus(systemStatus)
         }
         InstanceCenter.systemStatus = systemStatus
     }

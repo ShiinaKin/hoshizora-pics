@@ -4,10 +4,9 @@ import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.exception.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
-import io.sakurasou.model.DatabaseSingleton.dbQueryInner
+import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
-import io.sakurasou.service.album.AlbumService
 import io.sakurasou.service.setting.SettingService
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -19,7 +18,7 @@ import kotlinx.datetime.toLocalDateTime
  */
 class UserServiceImpl(
     private val userDao: UserDao,
-    private val albumService: AlbumService,
+    private val albumDao: AlbumDao,
     private val settingService: SettingService
 ) : UserService {
     override suspend fun saveUser(userInsertRequest: UserInsertRequest) {
@@ -42,9 +41,9 @@ class UserServiceImpl(
             updateTime = now
         )
         dbQuery {
-            val userId = dbQueryInner { userDao.saveUser(userInsertDTO) }
-            val defaultAlbumId = dbQueryInner { albumService.initAlbumForUser(userId) }
-            dbQueryInner { userDao.updateUserDefaultAlbumId(userId, defaultAlbumId) }
+            val userId = userDao.saveUser(userInsertDTO)
+            val defaultAlbumId = albumDao.initAlbumForUser(userId)
+            userDao.updateUserDefaultAlbumId(userId, defaultAlbumId)
         }
     }
 

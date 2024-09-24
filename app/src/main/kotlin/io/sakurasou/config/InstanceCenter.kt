@@ -1,7 +1,6 @@
 package io.sakurasou.config
 
 import io.sakurasou.model.DatabaseSingleton.dbQuery
-import io.sakurasou.model.DatabaseSingleton.dbQueryInner
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.album.AlbumDaoImpl
 import io.sakurasou.model.dao.group.GroupDao
@@ -90,9 +89,10 @@ object InstanceCenter {
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, relationDao)
 
+        userService = UserServiceImpl(userDao, albumDao, settingService)
+        commonService = CommonServiceImpl(userDao, albumDao, settingService)
+
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
-        userService = UserServiceImpl(userDao, albumService, settingService)
-        commonService = CommonServiceImpl(userDao, albumService, settingService)
     }
 
     fun initSystemStatus() {
@@ -104,9 +104,9 @@ object InstanceCenter {
     fun initRolePermissions() {
         rolePermissions = runBlocking {
             dbQuery {
-                val roles = dbQueryInner { roleDao.listRoles() }
+                val roles = roleDao.listRoles()
                 roles.associate {
-                    it.name to dbQueryInner { relationDao.listPermissionByRole(it.name).toSet() }
+                    it.name to relationDao.listPermissionByRole(it.name).toSet()
                 }
             }
         }
