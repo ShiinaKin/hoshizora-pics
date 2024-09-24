@@ -11,7 +11,7 @@ data class GroupInsertRequest(
     val name: String,
     val description: String? = null,
     val strategyId: Long,
-    val maxSize: Double,
+    val maxSize: Long,
     val roles: List<String>
 )
 
@@ -20,6 +20,6 @@ data class GroupPatchRequest(
     val name: String? = null,
     val description: String? = null,
     val strategyId: Long? = null,
-    val maxSize: Double? = null,
+    val maxSize: Long? = null,
     val roles: List<String>? = null
 )

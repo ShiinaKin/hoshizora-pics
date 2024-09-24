@@ -12,7 +12,7 @@ data class GroupVO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val maxSize: Double = 5 * 1024 * 1024 * 1024.0,
+    val maxSize: Long,
     val roles: List<String>
 )
 

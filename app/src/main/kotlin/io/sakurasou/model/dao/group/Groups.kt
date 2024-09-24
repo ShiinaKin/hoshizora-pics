@@ -11,7 +11,7 @@ object Groups : LongIdTable("groups") {
     val name = varchar("name", 255).uniqueIndex()
     val description = varchar("description", 255).nullable()
     val strategyId = long("strategy_id")
-    val maxSize = double("max_size").default(5 * 1024 * 1024 * 1024.0).check { it greaterEq 0.0 }
+    val maxSize = long("max_size").check { it greaterEq 0 }
 
     init {
         foreignKey(strategyId to Strategies.id)

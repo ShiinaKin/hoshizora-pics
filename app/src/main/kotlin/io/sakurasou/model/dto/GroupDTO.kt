@@ -8,5 +8,13 @@ data class GroupInsertDTO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val maxSize: Double = 5 * 1024 * 1024 * 1024.0
+    val maxSize: Long = 5 * 1024 * 1024 * 1024L
+)
+
+data class GroupUpdateDTO(
+    val id: Long,
+    val name: String,
+    val description: String?,
+    val strategyId: Long,
+    val maxSize: Long
 )
