@@ -25,6 +25,10 @@ fun ApplicationCall.pageRequest(): PageRequest {
     return PageRequest(page, pageSize, order, orderBy)
 }
 
+fun ApplicationCall.id(): Long {
+    return parameters["id"]?.toLong() ?: throw WrongParameterException()
+}
+
 fun OpenApiRoute.pageRequest() {
     request {
         queryParameter<Int>("page") {

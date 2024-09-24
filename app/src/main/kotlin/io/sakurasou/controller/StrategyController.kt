@@ -21,6 +21,7 @@ import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
 import io.sakurasou.exception.WrongParameterException
+import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
@@ -97,7 +98,7 @@ private fun Route.deleteStrategy(controller: StrategyController) {
                 }
             }
         }) {
-            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            val id = call.id()
             controller.handleDeleteStrategy(id)
             call.success()
         }
@@ -122,7 +123,7 @@ private fun Route.patchStrategy(controller: StrategyController) {
                 }
             }
         }) {
-            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            val id = call.id()
             val patchRequest = call.receive<StrategyPatchRequest>()
             controller.handlePatchStrategy(id, patchRequest)
             call.success()
@@ -143,7 +144,7 @@ private fun Route.fetchStrategy(controller: StrategyController) {
                 }
             }
         }) {
-            val id = call.parameters["id"]?.toLong() ?: throw WrongParameterException()
+            val id = call.id()
             val strategyVO = controller.handleFetchStrategy(id)
             call.success(strategyVO)
         }
