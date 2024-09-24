@@ -86,9 +86,9 @@ object InstanceCenter {
     fun initService() {
         albumService = AlbumServiceImpl(albumDao)
         settingService = SettingServiceImpl(settingDao)
-        groupService = GroupServiceImpl(groupDao)
         strategyService = StrategyServiceImpl(strategyDao)
         authService = AuthServiceImpl(userDao, relationDao)
+        groupService = GroupServiceImpl(groupDao, relationDao)
 
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
         userService = UserServiceImpl(userDao, albumService, settingService)
