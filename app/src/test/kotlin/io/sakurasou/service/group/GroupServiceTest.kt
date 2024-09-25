@@ -72,10 +72,10 @@ class GroupServiceTest {
 
     @Test
     fun `delete group should be successful`() = runBlocking {
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { groupDao.deleteGroupById(1) } just Runs
+        every { groupDao.deleteGroupById(1) } returns 1
 
         groupService.deleteGroup(1)
 
@@ -109,10 +109,10 @@ class GroupServiceTest {
         )
 
         coEvery { groupService.fetchGroup(1) } returns oldGroup
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { groupDao.updateGroupById(exceptedUpdateDTO) } just Runs
+        every { groupDao.updateGroupById(exceptedUpdateDTO) } returns 1
 
         groupService.updateGroup(1, patchRequest)
 

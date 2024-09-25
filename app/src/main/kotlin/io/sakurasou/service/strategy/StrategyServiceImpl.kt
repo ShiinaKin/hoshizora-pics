@@ -6,7 +6,10 @@ import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
+import io.sakurasou.exception.service.strategy.StrategyDeleteFailedException
+import io.sakurasou.exception.service.strategy.StrategyInsertFailedException
 import io.sakurasou.exception.service.strategy.StrategyNotFoundException
+import io.sakurasou.exception.service.strategy.StrategyUpdateFailedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
@@ -23,10 +26,6 @@ class StrategyServiceImpl(
     private val strategyDao: StrategyDao
 ) : StrategyService {
     override suspend fun saveStrategy(insertRequest: StrategyInsertRequest) {
-        // val strategyConfig = when (insertRequest.strategyType) {
-        //     StrategyType.LOCAL -> Json.decodeFromString<LocalStrategy>(insertRequest.config)
-        //     StrategyType.S3 -> Json.decodeFromString<S3Strategy>(insertRequest.config)
-        // }
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val strategyInsertDTO = StrategyInsertDTO(
             name = insertRequest.name,
@@ -34,11 +33,18 @@ class StrategyServiceImpl(
             createTime = now,
             updateTime = now
         )
-        dbQuery { strategyDao.saveStrategy(strategyInsertDTO) }
+        runCatching { dbQuery { strategyDao.saveStrategy(strategyInsertDTO) } }
+            .onFailure { throw StrategyInsertFailedException(null, "Possibly due to duplicate StrategyName") }
     }
 
     override suspend fun deleteStrategy(id: Long) {
-        dbQuery { strategyDao.deleteStrategyById(id) }
+        runCatching {
+            val influenceRowCnt = dbQuery { strategyDao.deleteStrategyById(id) }
+            if (influenceRowCnt < 1) throw StrategyNotFoundException()
+        }.onFailure {
+            if (it is StrategyNotFoundException) throw StrategyDeleteFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun updateStrategy(id: Long, patchRequest: StrategyPatchRequest) {
@@ -49,7 +55,13 @@ class StrategyServiceImpl(
             config = patchRequest.config ?: oldStrategy.config,
             updateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         )
-        dbQuery { strategyDao.updateStrategyById(strategyUpdateDTO) }
+        runCatching {
+            val influenceRowCnt = dbQuery { strategyDao.updateStrategyById(strategyUpdateDTO) }
+            if (influenceRowCnt < 1) throw StrategyNotFoundException()
+        }.onFailure {
+            if (it is StrategyNotFoundException) throw StrategyUpdateFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun fetchStrategy(id: Long): StrategyVO {

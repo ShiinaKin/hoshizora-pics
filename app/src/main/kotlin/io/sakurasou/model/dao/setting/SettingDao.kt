@@ -10,6 +10,6 @@ import io.sakurasou.model.entity.Setting
  */
 interface SettingDao {
     fun saveSetting(settingInsertDTO: SettingInsertDTO)
-    fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO)
+    fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO): Int
     fun getSettingByName(name: String): Setting?
 }

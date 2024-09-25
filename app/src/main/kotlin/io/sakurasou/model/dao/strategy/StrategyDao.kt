@@ -11,10 +11,10 @@ import io.sakurasou.model.entity.Strategy
  * @author ShiinaKin
  * 2024/9/7 14:07
  */
-interface StrategyDao: PaginationDao {
+interface StrategyDao : PaginationDao {
     fun saveStrategy(strategy: StrategyInsertDTO): Long
-    fun deleteStrategyById(id: Long)
-    fun updateStrategyById(strategy: StrategyUpdateDTO)
+    fun deleteStrategyById(id: Long): Int
+    fun updateStrategyById(strategy: StrategyUpdateDTO): Int
     fun findStrategyById(id: Long): Strategy?
     fun pagination(pageRequest: PageRequest): PageResult<Strategy>
 }

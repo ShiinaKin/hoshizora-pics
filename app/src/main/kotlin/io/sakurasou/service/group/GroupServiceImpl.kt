@@ -6,7 +6,10 @@ import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.GroupVO
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.exception.service.group.GroupDeleteFailedException
+import io.sakurasou.exception.service.group.GroupInsertFailedException
 import io.sakurasou.exception.service.group.GroupNotFoundException
+import io.sakurasou.exception.service.group.GroupUpdateFailedException
 import io.sakurasou.exception.service.role.RoleNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.group.GroupDao
@@ -31,18 +34,30 @@ class GroupServiceImpl(
         )
         val groupRoles = insertRequest.roles
 
-        dbQuery {
-            val groupId = groupDao.saveGroup(groupInsertDTO)
-            runCatching {
-                relationDao.batchInsertGroupToRoles(groupId, groupRoles)
-            }.onFailure {
-                throw RoleNotFoundException()
+        runCatching {
+            dbQuery {
+                val groupId = groupDao.saveGroup(groupInsertDTO)
+                runCatching {
+                    relationDao.batchInsertGroupToRoles(groupId, groupRoles)
+                }.onFailure {
+                    throw RoleNotFoundException()
+                }
+                Unit
             }
+        }.onFailure {
+            if (it is RoleNotFoundException) throw GroupInsertFailedException(it)
+            else throw GroupInsertFailedException(null, "Possibly due to duplicate GroupName")
         }
     }
 
     override suspend fun deleteGroup(id: Long) {
-        dbQuery { groupDao.deleteGroupById(id) }
+        runCatching {
+            val influenceRow = dbQuery { groupDao.deleteGroupById(id) }
+            if (influenceRow < 1) throw GroupNotFoundException()
+        }.onFailure {
+            if (it is GroupNotFoundException) throw GroupDeleteFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun updateGroup(id: Long, patchRequest: GroupPatchRequest) {
@@ -56,7 +71,13 @@ class GroupServiceImpl(
             maxSize = patchRequest.maxSize ?: oldGroup.maxSize
         )
 
-        dbQuery { groupDao.updateGroupById(groupUpdateDTO) }
+        runCatching {
+            val influenceRow = dbQuery { groupDao.updateGroupById(groupUpdateDTO) }
+            if (influenceRow < 1) throw GroupNotFoundException()
+        }.onFailure {
+            if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun fetchGroup(id: Long): GroupVO {

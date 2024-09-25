@@ -8,8 +8,9 @@ import io.sakurasou.model.entity.User
  * 2024/9/7 14:06
  */
 interface UserDao {
+    fun saveUser(user: UserInsertDTO): Long
+    fun deleteUserById(id: Long): Int
+    fun updateUserDefaultAlbumId(userId: Long, defaultAlbumId: Long): Int
     fun findUserById(id: Long): User?
     fun findUserByName(name: String): User?
-    fun saveUser(user: UserInsertDTO): Long
-    fun updateUserDefaultAlbumId(userId: Long, defaultAlbumId: Long)
 }

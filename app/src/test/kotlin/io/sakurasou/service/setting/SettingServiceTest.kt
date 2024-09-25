@@ -55,10 +55,10 @@ class SettingServiceTest {
 
         coEvery { settingService.getSystemSetting() } returns
                 SystemSetting(defaultGroupId = 1, allowSignup = false)
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { settingDao.updateSettingByName(expectedDTO) } just Runs
+        every { settingDao.updateSettingByName(expectedDTO) } returns 1
 
         settingService.updateSystemSetting(patchRequest)
 
@@ -95,10 +95,10 @@ class SettingServiceTest {
                     siteKeyword = "Keyword",
                     homePageRandomPicDisplay = false
                 )
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { settingDao.updateSettingByName(expectedDTO) } just Runs
+        every { settingDao.updateSettingByName(expectedDTO) } returns 1
 
         settingService.updateSiteSetting(patchRequest)
 
@@ -119,10 +119,10 @@ class SettingServiceTest {
 
         coEvery { settingService.getStrategySetting() } returns
                 StrategySetting(allowedImageTypes = emptyList())
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { settingDao.updateSettingByName(expectedDTO) } just Runs
+        every { settingDao.updateSettingByName(expectedDTO) } returns 1
 
         settingService.updateStrategySetting(request)
 

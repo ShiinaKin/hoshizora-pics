@@ -26,12 +26,12 @@ class StrategyDaoImpl : StrategyDao {
         return entityID.value
     }
 
-    override fun deleteStrategyById(id: Long) {
-        Strategies.deleteWhere { Strategies.id eq id }
+    override fun deleteStrategyById(id: Long): Int {
+        return Strategies.deleteWhere { Strategies.id eq id }
     }
 
-    override fun updateStrategyById(strategy: StrategyUpdateDTO) {
-        Strategies.update({ Strategies.id eq strategy.id }) {
+    override fun updateStrategyById(strategy: StrategyUpdateDTO): Int {
+        return Strategies.update({ Strategies.id eq strategy.id }) {
             it[name] = strategy.name
             it[config] = strategy.config
             it[updateTime] = strategy.updateTime

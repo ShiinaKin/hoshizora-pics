@@ -11,10 +11,10 @@ import io.sakurasou.model.entity.Group
  * @author ShiinaKin
  * 2024/9/7 14:08
  */
-interface GroupDao: PaginationDao {
+interface GroupDao : PaginationDao {
     fun saveGroup(groupInsertDTO: GroupInsertDTO): Long
-    fun deleteGroupById(id: Long)
-    fun updateGroupById(groupUpdateDTO: GroupUpdateDTO)
+    fun deleteGroupById(id: Long): Int
+    fun updateGroupById(groupUpdateDTO: GroupUpdateDTO): Int
     fun findGroupById(id: Long): Group?
     fun pagination(pageRequest: PageRequest): PageResult<Group>
 }

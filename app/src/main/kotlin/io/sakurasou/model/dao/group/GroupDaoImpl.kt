@@ -26,12 +26,12 @@ class GroupDaoImpl : GroupDao {
         return entityID.value
     }
 
-    override fun deleteGroupById(id: Long) {
-        Groups.deleteWhere { Groups.id eq id }
+    override fun deleteGroupById(id: Long): Int {
+        return Groups.deleteWhere { Groups.id eq id }
     }
 
-    override fun updateGroupById(groupUpdateDTO: GroupUpdateDTO) {
-        Groups.update({ Groups.id eq groupUpdateDTO.id }) {
+    override fun updateGroupById(groupUpdateDTO: GroupUpdateDTO): Int {
+        return Groups.update({ Groups.id eq groupUpdateDTO.id }) {
             it[name] = groupUpdateDTO.name
             it[description] = groupUpdateDTO.description
             it[strategyId] = groupUpdateDTO.strategyId

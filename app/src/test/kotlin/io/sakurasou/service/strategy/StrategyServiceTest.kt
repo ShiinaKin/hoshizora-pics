@@ -66,10 +66,10 @@ class StrategyServiceTest {
 
     @Test
     fun `delete should be successful`() = runBlocking {
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { strategyDao.deleteStrategyById(1L) } just Runs
+        every { strategyDao.deleteStrategyById(1L) } returns 1
 
         strategyService.deleteStrategy(1L)
 
@@ -84,7 +84,7 @@ class StrategyServiceTest {
                 "config": null
             }
         """.trimIndent()
-        val patchRequest =  Json.decodeFromString<StrategyPatchRequest>(json)
+        val patchRequest = Json.decodeFromString<StrategyPatchRequest>(json)
         val oldStrategyConfig = LocalStrategy("/uploads")
         val oldStrategy = StrategyVO(
             id = 1L,
@@ -103,10 +103,10 @@ class StrategyServiceTest {
 
         strategyService = spyk(strategyService)
         coEvery { strategyService.fetchStrategy(1L) } returns oldStrategy
-        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
-            this.arg<suspend () -> Unit>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
+            this.arg<suspend () -> Int>(0).invoke()
         }
-        every { strategyDao.updateStrategyById(exceptedUpdateDTO) } just Runs
+        every { strategyDao.updateStrategyById(exceptedUpdateDTO) } returns 1
 
         strategyService.updateStrategy(1L, patchRequest)
 

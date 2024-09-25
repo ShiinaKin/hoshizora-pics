@@ -21,8 +21,8 @@ class SettingDaoImpl : SettingDao {
         }
     }
 
-    override fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO) {
-        Settings.update({ Settings.name eq settingUpdateDTO.name }) {
+    override fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO): Int {
+        return Settings.update({ Settings.name eq settingUpdateDTO.name }) {
             it[config] = settingUpdateDTO.config
             it[updateTime] = settingUpdateDTO.updateTime
         }

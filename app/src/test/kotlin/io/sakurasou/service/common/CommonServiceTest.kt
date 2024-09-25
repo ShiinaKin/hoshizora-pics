@@ -103,18 +103,18 @@ class CommonServiceTest {
         coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = false)
         coEvery { settingService.getSiteSetting() } returns oldSiteSetting
         every { BCrypt.withDefaults().hashToString(12, siteInitRequest.password.toCharArray()) } returns encodedPassword
-        coEvery { userDao.saveUser(userInsertDTO) } returns 1
-        coEvery { albumDao.initAlbumForUser(1) } returns 1
-        coEvery { userDao.updateUserDefaultAlbumId(1L, 1L) } just Runs
+        every { userDao.saveUser(userInsertDTO) } returns 1
+        every { albumDao.initAlbumForUser(1) } returns 1
+        every { userDao.updateUserDefaultAlbumId(1L, 1L) } returns 1
         coEvery { settingService.updateSiteSetting(siteSettingConfig) } just Runs
         coEvery { settingService.updateSystemStatus(systemStatus) } just Runs
 
         commonService.initSite(siteInitRequest)
 
         coVerify(exactly = 1) { DatabaseSingleton.dbQuery<Unit>(any()) }
-        coVerify(exactly = 1) { userDao.saveUser(userInsertDTO) }
-        coVerify(exactly = 1) { albumDao.initAlbumForUser(1) }
-        coVerify(exactly = 1) { userDao.updateUserDefaultAlbumId(1L, 1L) }
+        verify(exactly = 1) { userDao.saveUser(userInsertDTO) }
+        verify(exactly = 1) { albumDao.initAlbumForUser(1) }
+        verify(exactly = 1) { userDao.updateUserDefaultAlbumId(1L, 1L) }
         coVerify(exactly = 1) { settingService.updateSiteSetting(siteSettingConfig) }
         coVerify(exactly = 1) { settingService.updateSystemStatus(systemStatus) }
     }

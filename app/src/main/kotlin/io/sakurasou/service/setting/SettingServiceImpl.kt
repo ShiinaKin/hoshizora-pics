@@ -7,8 +7,9 @@ import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.controller.request.SiteSettingPatchRequest
 import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.controller.request.SystemSettingPatchRequest
-import io.sakurasou.exception.service.setting.ConfigTypeNotMatchException
 import io.sakurasou.exception.dao.MissingNecessaryColumnException
+import io.sakurasou.exception.service.setting.ConfigTypeNotMatchException
+import io.sakurasou.exception.service.setting.SettingUpdateFailedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.setting.SettingDao
 import io.sakurasou.model.dto.SettingUpdateDTO
@@ -39,8 +40,12 @@ class SettingServiceImpl(
             config = systemSettingConfig,
             updateTime = now
         )
-        dbQuery {
-            settingDao.updateSettingByName(settingUpdateDTO)
+        runCatching {
+            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
+            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+        }.onFailure {
+            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+            else throw it
         }
     }
 
@@ -51,8 +56,12 @@ class SettingServiceImpl(
             config = siteSetting,
             updateTime = now
         )
-        dbQuery {
-            settingDao.updateSettingByName(settingUpdateDTO)
+        runCatching {
+            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
+            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+        }.onFailure {
+            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+            else throw it
         }
     }
 
@@ -72,8 +81,12 @@ class SettingServiceImpl(
             config = siteSettingConfig,
             updateTime = now
         )
-        dbQuery {
-            settingDao.updateSettingByName(settingUpdateDTO)
+        runCatching {
+            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
+            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+        }.onFailure {
+            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+            else throw it
         }
     }
 
@@ -87,8 +100,12 @@ class SettingServiceImpl(
             config = strategySettingConfig,
             updateTime = now
         )
-        dbQuery {
-            settingDao.updateSettingByName(settingUpdateDTO)
+        runCatching {
+            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
+            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+        }.onFailure {
+            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+            else throw it
         }
     }
 
@@ -99,8 +116,12 @@ class SettingServiceImpl(
             config = systemStatus,
             updateTime = now
         )
-        dbQuery {
-            settingDao.updateSettingByName(settingUpdateDTO)
+        runCatching {
+            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
+            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+        }.onFailure {
+            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+            else throw it
         }
     }
 
