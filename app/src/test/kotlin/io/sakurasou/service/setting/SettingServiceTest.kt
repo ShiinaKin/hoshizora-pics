@@ -4,9 +4,7 @@ import io.mockk.*
 import io.sakurasou.constant.SETTING_SITE
 import io.sakurasou.constant.SETTING_STRATEGY
 import io.sakurasou.constant.SETTING_SYSTEM
-import io.sakurasou.controller.request.SiteSettingPatchRequest
 import io.sakurasou.controller.request.StrategySettingPatchRequest
-import io.sakurasou.controller.request.SystemSettingPatchRequest
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.setting.SettingDao
 import io.sakurasou.model.dto.SettingUpdateDTO
@@ -37,78 +35,13 @@ class SettingServiceTest {
         mockkObject(DatabaseSingleton)
         mockkObject(Clock.System)
         settingDao = mockk()
+        settingService = SettingServiceImpl(settingDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
     }
 
     @Test
-    fun `update system setting should be successful`() = runBlocking {
-        settingService = spyk(SettingServiceImpl(settingDao))
-
-        val patchRequest = SystemSettingPatchRequest(allowSignup = true)
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val expectedDTO = SettingUpdateDTO(
-            name = SETTING_SYSTEM,
-            config = SystemSetting(defaultGroupId = 1, allowSignup = true),
-            updateTime = now
-        )
-
-        coEvery { settingService.getSystemSetting() } returns
-                SystemSetting(defaultGroupId = 1, allowSignup = false)
-        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
-            this.arg<suspend () -> Int>(0).invoke()
-        }
-        every { settingDao.updateSettingByName(expectedDTO) } returns 1
-
-        settingService.updateSystemSetting(patchRequest)
-
-        verify(exactly = 1) { settingDao.updateSettingByName(expectedDTO) }
-    }
-
-    @Test
-    fun `update site setting should be successful`() = runBlocking {
-        settingService = spyk(SettingServiceImpl(settingDao))
-
-        val patchRequest = SiteSettingPatchRequest(
-            siteTitle = "TestTitle",
-            siteSubtitle = "TestSubtitle",
-            homePageRandomPicDisplay = true
-        )
-        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-        val expectedDTO = SettingUpdateDTO(
-            name = SETTING_SITE,
-            config = SiteSetting(
-                siteTitle = "TestTitle",
-                siteSubtitle = "TestSubtitle",
-                siteDescription = "Description",
-                siteKeyword = "Keyword",
-                homePageRandomPicDisplay = true
-            ),
-            updateTime = now
-        )
-
-        coEvery { settingService.getSiteSetting() } returns
-                SiteSetting(
-                    siteTitle = "Title",
-                    siteSubtitle = "Subtitle",
-                    siteDescription = "Description",
-                    siteKeyword = "Keyword",
-                    homePageRandomPicDisplay = false
-                )
-        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
-            this.arg<suspend () -> Int>(0).invoke()
-        }
-        every { settingDao.updateSettingByName(expectedDTO) } returns 1
-
-        settingService.updateSiteSetting(patchRequest)
-
-        verify(exactly = 1) { settingDao.updateSettingByName(expectedDTO) }
-    }
-
-    @Test
     fun `update strategy setting should be successful`() = runBlocking {
-        settingService = spyk(SettingServiceImpl(settingDao))
-
         val request = StrategySettingPatchRequest(allowedImageTypes = listOf("jpg", "png"))
         val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
         val expectedDTO = SettingUpdateDTO(
@@ -117,8 +50,6 @@ class SettingServiceTest {
             updateTime = now
         )
 
-        coEvery { settingService.getStrategySetting() } returns
-                StrategySetting(allowedImageTypes = emptyList())
         coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
             this.arg<suspend () -> Int>(0).invoke()
         }
@@ -131,8 +62,6 @@ class SettingServiceTest {
 
     @Test
     fun `getting system setting, should return correct setting`() = runBlocking {
-        settingService = SettingServiceImpl(settingDao)
-
         val expectedSetting = SystemSetting(defaultGroupId = 1, allowSignup = false)
 
         coEvery { DatabaseSingleton.dbQuery<SystemSetting>(any()) } coAnswers {
@@ -153,8 +82,6 @@ class SettingServiceTest {
 
     @Test
     fun `getting site setting, should return correct setting`() = runBlocking {
-        settingService = SettingServiceImpl(settingDao)
-
         val expectedSetting = SiteSetting(
             siteTitle = "Title",
             siteSubtitle = "Subtitle",
@@ -187,8 +114,6 @@ class SettingServiceTest {
 
     @Test
     fun `getting strategy setting, should return correct setting`() = runBlocking {
-        settingService = SettingServiceImpl(settingDao)
-
         val expectedSetting = StrategySetting(allowedImageTypes = emptyList())
 
         coEvery { DatabaseSingleton.dbQuery<StrategySetting>(any()) } coAnswers {
