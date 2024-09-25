@@ -2,6 +2,7 @@ package io.sakurasou.service.auth
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserLoginRequest
+import io.sakurasou.exception.controller.access.UserBannedException
 import io.sakurasou.exception.controller.status.UnauthorizedAccessException
 import io.sakurasou.exception.service.user.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
@@ -18,17 +19,17 @@ class AuthServiceImpl(
     private val relationDao: RelationDao
 ) : AuthService {
     override suspend fun login(loginRequest: UserLoginRequest): String {
-        val user = dbQuery {
-            userDao.findUserByName(loginRequest.username) ?: run { throw UserNotFoundException() }
+        return dbQuery {
+            val user = userDao.findUserByName(loginRequest.username) ?: throw UserNotFoundException()
+
+            if (user.isBanned) throw UserBannedException()
+
+            val isCorrectPassword = BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password)
+            if (!isCorrectPassword.verified) throw UnauthorizedAccessException()
+
+            val roles: List<String> = relationDao.listRoleByGroupId(user.groupId)
+
+            JwtUtils.generateJwtToken(user, roles)
         }
-
-        val isCorrectPassword = BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password)
-        if (!isCorrectPassword.verified) throw UnauthorizedAccessException()
-
-        val roles: List<String> = dbQuery {
-            relationDao.listRoleByGroupId(user.groupId)
-        }
-
-        return JwtUtils.generateJwtToken(user, roles)
     }
 }

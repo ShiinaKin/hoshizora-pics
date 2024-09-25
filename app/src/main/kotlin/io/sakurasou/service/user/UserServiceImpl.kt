@@ -36,8 +36,9 @@ class UserServiceImpl(
             email = userInsertRequest.email,
             isDefaultImagePrivate = true,
             defaultAlbumId = null,
-            createTime = now,
-            updateTime = now
+            isBanned = false,
+            updateTime = now,
+            createTime = now
         )
         dbQuery {
             val userId = userDao.saveUser(userInsertDTO)

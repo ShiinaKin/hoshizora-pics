@@ -72,6 +72,7 @@ class AuthServiceTest {
             email = email,
             isDefaultImagePrivate = true,
             defaultAlbumId = 1,
+            isBanned = false,
             createTime = now,
             updateTime = now
         )
@@ -102,6 +103,7 @@ class AuthServiceTest {
             email = email,
             isDefaultImagePrivate = true,
             defaultAlbumId = 1,
+            isBanned = false,
             createTime = now,
             updateTime = now
         )

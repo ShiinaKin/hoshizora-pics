@@ -13,6 +13,9 @@ data class UserInsertDTO(
     val email: String?,
     val isDefaultImagePrivate: Boolean,
     val defaultAlbumId: Long?,
-    val createTime: LocalDateTime,
+    val isBanned: Boolean,
+    val updateTime: LocalDateTime,
+    val createTime: LocalDateTime
+)
     val updateTime: LocalDateTime
 )

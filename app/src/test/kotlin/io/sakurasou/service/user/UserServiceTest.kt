@@ -83,6 +83,7 @@ class UserServiceTest {
             email = "test@example.com",
             isDefaultImagePrivate = true,
             defaultAlbumId = null,
+            isBanned = false,
             createTime = now,
             updateTime = now
         )

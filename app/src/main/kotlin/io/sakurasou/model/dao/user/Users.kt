@@ -16,8 +16,9 @@ object Users : LongIdTable("users") {
     val email = varchar("email", 255).nullable()
     val isDefaultImagePrivate = bool("is_default_image_private")
     val defaultAlbumId = long("default_album_id").nullable()
-    val createTime = datetime("create_time")
+    val isBanned = bool("is_banned").default(false)
     val updateTime = datetime("update_time")
+    val createTime = datetime("create_time")
 
     init {
         foreignKey(groupId to Groups.id)

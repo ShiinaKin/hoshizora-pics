@@ -21,6 +21,7 @@ class UserDaoImpl : UserDao {
             it[email] = user.email
             it[isDefaultImagePrivate] = user.isDefaultImagePrivate
             it[defaultAlbumId] = user.defaultAlbumId
+            it[isBanned] = user.isBanned
             it[createTime] = user.createTime
             it[updateTime] = user.updateTime
         }
