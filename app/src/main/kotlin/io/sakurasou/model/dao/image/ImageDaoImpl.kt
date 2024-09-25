@@ -1,29 +1,15 @@
 package io.sakurasou.model.dao.image
 
+import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.entity.Image
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 /**
  * @author ShiinaKin
  * 2024/9/5 15:35
  */
 class ImageDaoImpl : ImageDao {
-    override fun listImageByAlbumId(albumId: Long): List<Image> {
-        return Images.selectAll()
-            .where { Images.albumId eq albumId }
-            .map { toImage(it) }
-    }
-
-    override fun getImageById(imageId: Long): Image? {
-        return Images.selectAll()
-            .where { Images.id eq imageId }
-            .map { toImage(it) }
-            .firstOrNull()
-    }
-
     override fun saveImage(insertDTO: ImageInsertDTO): Long {
         val entityID = Images.insertAndGetId {
             it[userId] = insertDTO.userId
@@ -45,6 +31,38 @@ class ImageDaoImpl : ImageDao {
             it[createTime] = insertDTO.createTime
         }
         return entityID.value
+    }
+
+    override fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int {
+        return Images.update({ Images.userId eq userId }) {
+            it[Images.groupId] = groupId
+        }
+    }
+
+    override fun listImageByAlbumId(albumId: Long): List<Image> {
+        return Images.selectAll()
+            .where { Images.albumId eq albumId }
+            .map { toImage(it) }
+    }
+
+    override fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO {
+        return Images
+            .select(Images.id.count(), Images.size.sum())
+            .where { Images.userId eq userId }
+            .first()
+            .let {
+                ImageCountAndTotalSizeDTO(
+                    count = it[Images.id.count()],
+                    totalSize = it[Images.size.sum()] ?: 0.0
+                )
+            }
+    }
+
+    override fun getImageById(imageId: Long): Image? {
+        return Images.selectAll()
+            .where { Images.id eq imageId }
+            .map { toImage(it) }
+            .firstOrNull()
     }
 
     private fun toImage(it: ResultRow) = Image(

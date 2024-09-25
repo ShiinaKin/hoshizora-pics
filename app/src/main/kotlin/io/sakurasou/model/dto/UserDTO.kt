@@ -17,5 +17,22 @@ data class UserInsertDTO(
     val updateTime: LocalDateTime,
     val createTime: LocalDateTime
 )
+
+data class UserSelfUpdateDTO(
+    val id: Long,
+    val password: String,
+    val email: String?,
+    val isDefaultImagePrivate: Boolean,
+    val defaultAlbumId: Long?,
+    val updateTime: LocalDateTime
+)
+
+data class UserManageUpdateDTO(
+    val id: Long,
+    val groupId: Long,
+    val password: String,
+    val email: String?,
+    val isDefaultImagePrivate: Boolean,
+    val defaultAlbumId: Long?,
     val updateTime: LocalDateTime
 )

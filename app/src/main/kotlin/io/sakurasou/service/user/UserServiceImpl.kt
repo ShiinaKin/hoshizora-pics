@@ -5,6 +5,8 @@ import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.exception.controller.access.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
+import io.sakurasou.model.dao.group.GroupDao
+import io.sakurasou.model.dao.image.ImageDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.service.setting.SettingService
@@ -18,7 +20,9 @@ import kotlinx.datetime.toLocalDateTime
  */
 class UserServiceImpl(
     private val userDao: UserDao,
+    private val groupDao: GroupDao,
     private val albumDao: AlbumDao,
+    private val imageDao: ImageDao,
     private val settingService: SettingService
 ) : UserService {
     override suspend fun saveUser(userInsertRequest: UserInsertRequest) {

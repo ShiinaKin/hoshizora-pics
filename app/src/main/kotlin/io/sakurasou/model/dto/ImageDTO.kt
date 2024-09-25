@@ -25,3 +25,8 @@ data class ImageInsertDTO(
     val isPrivate: Boolean,
     val createTime: LocalDateTime
 )
+
+data class ImageCountAndTotalSizeDTO(
+    val count: Long,
+    val totalSize: Double
+)
