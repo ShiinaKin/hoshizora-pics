@@ -43,5 +43,4 @@ data class UserManageInsertRequest(
     val password: String,
     val email: String,
     val isDefaultImagePrivate: Boolean,
-    val defaultAlbumId: Long
 )
