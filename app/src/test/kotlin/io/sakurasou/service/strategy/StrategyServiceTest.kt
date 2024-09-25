@@ -77,7 +77,15 @@ class StrategyServiceTest {
     }
 
     @Test
-    fun updateStrategy_updatesSuccessfully() = runBlocking {
+    fun `update strategy should be successful`() = runBlocking {
+        val strategy = Strategy(
+            id = 1L,
+            name = "Test Strategy",
+            config = LocalStrategy("/uploads"),
+            createTime = now,
+            updateTime = now
+        )
+
         val json = """
             {
                 "name": "Test Patch Strategy",
@@ -86,13 +94,6 @@ class StrategyServiceTest {
         """.trimIndent()
         val patchRequest = Json.decodeFromString<StrategyPatchRequest>(json)
         val oldStrategyConfig = LocalStrategy("/uploads")
-        val oldStrategy = StrategyVO(
-            id = 1L,
-            name = "Test Strategy",
-            config = oldStrategyConfig,
-            type = oldStrategyConfig.strategyType,
-            createTime = now
-        )
 
         val exceptedUpdateDTO = StrategyUpdateDTO(
             id = 1L,
@@ -101,11 +102,10 @@ class StrategyServiceTest {
             updateTime = now
         )
 
-        strategyService = spyk(strategyService)
-        coEvery { strategyService.fetchStrategy(1L) } returns oldStrategy
-        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
-            this.arg<suspend () -> Int>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
+            this.arg<suspend () -> Unit>(0).invoke()
         }
+        every { strategyDao.findStrategyById(1L) } returns strategy
         every { strategyDao.updateStrategyById(exceptedUpdateDTO) } returns 1
 
         strategyService.updateStrategy(1L, patchRequest)

@@ -29,23 +29,28 @@ class SettingServiceImpl(
     private val settingDao: SettingDao
 ) : SettingService {
     override suspend fun updateSystemSetting(systemSetting: SystemSettingPatchRequest) {
-        val oldSystemSetting = getSystemSetting()
-        val systemSettingConfig = SystemSetting(
-            defaultGroupId = systemSetting.defaultGroupId ?: oldSystemSetting.defaultGroupId,
-            allowSignup = systemSetting.allowSignup ?: oldSystemSetting.allowSignup,
-        )
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val settingUpdateDTO = SettingUpdateDTO(
-            name = SETTING_SYSTEM,
-            config = systemSettingConfig,
-            updateTime = now
-        )
-        runCatching {
-            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
-            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
-        }.onFailure {
-            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
-            else throw it
+        dbQuery {
+            val oldSystemSetting = settingDao.getSettingByName(SETTING_SYSTEM)?.let {
+                if (it.config !is SystemSetting) throw ConfigTypeNotMatchException()
+                it.config
+            } ?: throw MissingNecessaryColumnException()
+            val systemSettingConfig = SystemSetting(
+                defaultGroupId = systemSetting.defaultGroupId ?: oldSystemSetting.defaultGroupId,
+                allowSignup = systemSetting.allowSignup ?: oldSystemSetting.allowSignup,
+            )
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val settingUpdateDTO = SettingUpdateDTO(
+                name = SETTING_SYSTEM,
+                config = systemSettingConfig,
+                updateTime = now
+            )
+            runCatching {
+                val influenceRowCnt = settingDao.updateSettingByName(settingUpdateDTO)
+                if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+            }.onFailure {
+                if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+                else throw it
+            }
         }
     }
 
@@ -66,27 +71,33 @@ class SettingServiceImpl(
     }
 
     override suspend fun updateSiteSetting(siteSettingPatch: SiteSettingPatchRequest) {
-        val oldSiteSetting = getSiteSetting()
-        val siteSettingConfig = SiteSetting(
-            siteTitle = siteSettingPatch.siteTitle ?: oldSiteSetting.siteTitle,
-            siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
-            siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription,
-            siteKeyword = siteSettingPatch.siteKeyword ?: oldSiteSetting.siteKeyword,
-            homePageRandomPicDisplay = siteSettingPatch.homePageRandomPicDisplay
-                ?: oldSiteSetting.homePageRandomPicDisplay
-        )
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val settingUpdateDTO = SettingUpdateDTO(
-            name = SETTING_SITE,
-            config = siteSettingConfig,
-            updateTime = now
-        )
-        runCatching {
-            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
-            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
-        }.onFailure {
-            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
-            else throw it
+        dbQuery {
+            val oldSiteSetting = settingDao.getSettingByName(SETTING_SITE)?.let {
+                if (it.config !is SiteSetting) throw ConfigTypeNotMatchException()
+                it.config
+            } ?: throw MissingNecessaryColumnException()
+
+            val siteSettingConfig = SiteSetting(
+                siteTitle = siteSettingPatch.siteTitle ?: oldSiteSetting.siteTitle,
+                siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
+                siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription,
+                siteKeyword = siteSettingPatch.siteKeyword ?: oldSiteSetting.siteKeyword,
+                homePageRandomPicDisplay = siteSettingPatch.homePageRandomPicDisplay
+                    ?: oldSiteSetting.homePageRandomPicDisplay
+            )
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val settingUpdateDTO = SettingUpdateDTO(
+                name = SETTING_SITE,
+                config = siteSettingConfig,
+                updateTime = now
+            )
+            runCatching {
+                val influenceRowCnt = settingDao.updateSettingByName(settingUpdateDTO)
+                if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+            }.onFailure {
+                if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
+                else throw it
+            }
         }
     }
 

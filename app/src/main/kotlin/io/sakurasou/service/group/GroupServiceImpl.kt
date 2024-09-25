@@ -37,11 +37,8 @@ class GroupServiceImpl(
         runCatching {
             dbQuery {
                 val groupId = groupDao.saveGroup(groupInsertDTO)
-                runCatching {
-                    relationDao.batchInsertGroupToRoles(groupId, groupRoles)
-                }.onFailure {
-                    throw RoleNotFoundException()
-                }
+                runCatching { relationDao.batchInsertGroupToRoles(groupId, groupRoles) }
+                    .onFailure { throw RoleNotFoundException() }
                 Unit
             }
         }.onFailure {
@@ -61,22 +58,24 @@ class GroupServiceImpl(
     }
 
     override suspend fun updateGroup(id: Long, patchRequest: GroupPatchRequest) {
-        val oldGroup = fetchGroup(id)
+        dbQuery {
+            val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
 
-        val groupUpdateDTO = GroupUpdateDTO(
-            id = id,
-            name = patchRequest.name ?: oldGroup.name,
-            description = patchRequest.description ?: oldGroup.description,
-            strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
-            maxSize = patchRequest.maxSize ?: oldGroup.maxSize
-        )
+            val groupUpdateDTO = GroupUpdateDTO(
+                id = id,
+                name = patchRequest.name ?: oldGroup.name,
+                description = patchRequest.description ?: oldGroup.description,
+                strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
+                maxSize = patchRequest.maxSize ?: oldGroup.maxSize
+            )
 
-        runCatching {
-            val influenceRow = dbQuery { groupDao.updateGroupById(groupUpdateDTO) }
-            if (influenceRow < 1) throw GroupNotFoundException()
-        }.onFailure {
-            if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
-            else throw it
+            runCatching {
+                val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
+                if (influenceRow < 1) throw GroupNotFoundException()
+            }.onFailure {
+                if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
+                else throw it
+            }
         }
     }
 

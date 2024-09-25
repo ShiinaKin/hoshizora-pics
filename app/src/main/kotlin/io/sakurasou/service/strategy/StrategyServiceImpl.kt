@@ -48,19 +48,21 @@ class StrategyServiceImpl(
     }
 
     override suspend fun updateStrategy(id: Long, patchRequest: StrategyPatchRequest) {
-        val oldStrategy = fetchStrategy(id)
-        val strategyUpdateDTO = StrategyUpdateDTO(
-            id = id,
-            name = patchRequest.name ?: oldStrategy.name,
-            config = patchRequest.config ?: oldStrategy.config,
-            updateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        )
-        runCatching {
-            val influenceRowCnt = dbQuery { strategyDao.updateStrategyById(strategyUpdateDTO) }
-            if (influenceRowCnt < 1) throw StrategyNotFoundException()
-        }.onFailure {
-            if (it is StrategyNotFoundException) throw StrategyUpdateFailedException(it)
-            else throw it
+        dbQuery {
+            val oldStrategy = strategyDao.findStrategyById(id) ?: throw StrategyNotFoundException()
+            val strategyUpdateDTO = StrategyUpdateDTO(
+                id = id,
+                name = patchRequest.name ?: oldStrategy.name,
+                config = patchRequest.config ?: oldStrategy.config,
+                updateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            )
+            runCatching {
+                val influenceRowCnt = strategyDao.updateStrategyById(strategyUpdateDTO)
+                if (influenceRowCnt < 1) throw StrategyNotFoundException()
+            }.onFailure {
+                if (it is StrategyNotFoundException) throw StrategyUpdateFailedException(it)
+                else throw it
+            }
         }
     }
 

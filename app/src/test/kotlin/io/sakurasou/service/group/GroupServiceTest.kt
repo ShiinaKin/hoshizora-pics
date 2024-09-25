@@ -84,15 +84,12 @@ class GroupServiceTest {
 
     @Test
     fun `update group should be successful`() = runBlocking {
-        groupService = spyk(groupService)
-
-        val oldGroup = GroupVO(
+        val group = Group(
             id = 1,
-            name = "Old Group",
-            description = null,
+            name = "Test Group",
+            description = "test",
             strategyId = 1,
             maxSize = 5 * 1024 * 1024L,
-            roles = listOf("user")
         )
         val patchRequest = GroupPatchRequest(
             name = "Test Group",
@@ -108,10 +105,10 @@ class GroupServiceTest {
             maxSize = 1 * 1024L
         )
 
-        coEvery { groupService.fetchGroup(1) } returns oldGroup
-        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
-            this.arg<suspend () -> Int>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
+            this.arg<suspend () -> Unit>(0).invoke()
         }
+        every { groupDao.findGroupById(1) } returns group
         every { groupDao.updateGroupById(exceptedUpdateDTO) } returns 1
 
         groupService.updateGroup(1, patchRequest)

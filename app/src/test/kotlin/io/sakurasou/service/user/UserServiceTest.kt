@@ -6,6 +6,8 @@ import io.sakurasou.controller.request.UserInsertRequest
 import io.sakurasou.exception.controller.access.SignupNotAllowedException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.album.AlbumDao
+import io.sakurasou.model.dao.group.GroupDao
+import io.sakurasou.model.dao.image.ImageDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SystemSetting
@@ -25,6 +27,8 @@ import kotlin.test.assertFailsWith
 class UserServiceTest {
     private lateinit var userDao: UserDao
     private lateinit var albumDao: AlbumDao
+    private lateinit var groupDao: GroupDao
+    private lateinit var imageDao: ImageDao
     private lateinit var settingService: SettingService
     private lateinit var userService: UserServiceImpl
 
@@ -35,8 +39,10 @@ class UserServiceTest {
         mockkObject(Clock.System)
         userDao = mockk()
         albumDao = mockk()
+        groupDao = mockk()
+        imageDao = mockk()
         settingService = mockk()
-        userService = UserServiceImpl(userDao, albumDao, settingService)
+        userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
         }
