@@ -23,7 +23,7 @@ interface PaginationDao {
         val offset = (page - 1) * pageSize
 
         val totalRecords: Long = table.selectAll().count()
-        val query = table.selectAll().limit(pageSize, offset)
+        val query = table.selectAll().limit(pageSize).offset(offset)
 
         pageRequest.orderBy?.let {
             val column = getColumnByName(table, it)
