@@ -93,18 +93,19 @@ class UserDaoImpl : UserDao {
         val totalRecords: Long = Users.selectAll().count()
         val query = Users
             .join(Groups, JoinType.INNER, Users.groupId, Groups.id)
-            .join(Images, JoinType.INNER, Users.id, Images.userId)
+            .join(Images, JoinType.LEFT, Users.id, Images.userId)
             .select(
-                Users.id, Users.name, Users.isBanned,
+                Users.id, Users.name, Users.isBanned, Users.createTime,
                 Groups.name, Images.id.count(), Images.size.sum()
             )
             .groupBy(Users.id, Users.name, Users.isBanned, Groups.name)
-            .limit(pageSize, offset)
+            .limit(pageSize)
+            .offset(offset)
 
         val finalQuery = pageRequest.orderBy?.let {
             val sortOrder = SortOrder.valueOf(pageRequest.order?.uppercase() ?: "DESC")
             setPageQueryCondition(query, it, sortOrder)
-        } ?: query
+        } ?: query.orderBy(Users.createTime, SortOrder.ASC)
 
         val data = finalQuery.map {
             UserPageVO(
@@ -112,6 +113,7 @@ class UserDaoImpl : UserDao {
                 username = it[Users.name],
                 groupName = it[Groups.name],
                 isBanned = it[Users.isBanned],
+                createTime = it[Users.createTime],
                 imageCount = it[Images.id.count()],
                 totalImageSize = it[Images.size.sum()] ?: 0.0
             )
@@ -131,6 +133,7 @@ class UserDaoImpl : UserDao {
         "name" to Users.name,
         "isBanned" to Users.isBanned,
         "groupName" to Groups.name,
+        "createTime" to Users.createTime
     )
 
     private fun setPageQueryCondition(query: Query, columnName: String, order: SortOrder): Query {

@@ -26,6 +26,7 @@ data class UserPageVO(
     val username: String,
     val groupName: String,
     val isBanned: Boolean,
+    val createTime: LocalDateTime,
     val imageCount: Long,
     val totalImageSize: Double
 )
