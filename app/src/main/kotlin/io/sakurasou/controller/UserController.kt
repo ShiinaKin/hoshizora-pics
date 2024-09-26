@@ -3,9 +3,10 @@ package io.sakurasou.controller
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
+import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.request.UserManageInsertRequest
 import io.sakurasou.controller.request.UserManagePatchRequest
 import io.sakurasou.controller.request.UserSelfPatchRequest
@@ -13,8 +14,11 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
 import io.sakurasou.controller.vo.UserVO
+import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.getPrincipal
+import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.user.UserService
 
@@ -24,17 +28,17 @@ import io.sakurasou.service.user.UserService
  */
 
 fun Route.userRoute(userService: UserService) {
-    val userController = UserController(userService)
+    val controller = UserController(userService)
     route("user", {
         protected = true
     }) {
-        userSelfRoute(userController)
-        userManageRoute(userController)
-        banAndUnban(userController)
+        userSelfRoute(controller)
+        userManageRoute(controller)
+        banAndUnban(controller)
     }
 }
 
-private fun Route.userSelfRoute(userController: UserController) {
+private fun Route.userSelfRoute(controller: UserController) {
     route("self", {
         response {
             HttpStatusCode.NotFound to {
@@ -43,12 +47,12 @@ private fun Route.userSelfRoute(userController: UserController) {
             }
         }
     }) {
-        updateSelf(userController)
-        fetchSelf(userController)
+        patchSelf(controller)
+        fetchSelf(controller)
     }
 }
 
-private fun Route.updateSelf(userController: UserController) {
+private fun Route.patchSelf(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_SELF
@@ -67,12 +71,15 @@ private fun Route.updateSelf(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val id = call.getPrincipal().id
+            val patchRequest = call.receive<UserSelfPatchRequest>()
+            controller.handleSelfPatch(id, patchRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.fetchSelf(userController: UserController) {
+private fun Route.fetchSelf(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_READ_SELF
@@ -85,17 +92,18 @@ private fun Route.fetchSelf(userController: UserController) {
                 }
             }
         }) {
-            val principal = call.getPrincipal()
-            call.respond(principal)
+            val id = call.getPrincipal().id
+            val userVO = controller.handleSelfFetch(id)
+            call.success(userVO)
         }
     }
 }
 
-private fun Route.userManageRoute(userController: UserController) {
+private fun Route.userManageRoute(controller: UserController) {
     route("manage", {
         protected = true
     }) {
-        insertUser(userController)
+        insertUser(controller)
         route("{id}", {
             request {
                 pathParameter<Long>("id") {
@@ -110,15 +118,15 @@ private fun Route.userManageRoute(userController: UserController) {
                 }
             }
         }) {
-            deleteUser(userController)
-            updateUser(userController)
-            fetchUser(userController)
+            deleteUser(controller)
+            patchUser(controller)
+            fetchUser(controller)
         }
-        pageUser(userController)
+        pageUser(controller)
     }
 }
 
-private fun Route.insertUser(userController: UserController) {
+private fun Route.insertUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
@@ -137,12 +145,14 @@ private fun Route.insertUser(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val insertRequest = call.receive<UserManageInsertRequest>()
+            controller.handleManageInsert(insertRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.deleteUser(userController: UserController) {
+private fun Route.deleteUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_DELETE
@@ -155,12 +165,17 @@ private fun Route.deleteUser(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val currentUserId = call.getPrincipal().id
+            val inputId = call.id()
+            if (currentUserId == inputId) throw WrongParameterException()
+
+            controller.handleManageDelete(inputId)
+            call.success()
         }
     }
 }
 
-private fun Route.updateUser(userController: UserController) {
+private fun Route.patchUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
@@ -179,12 +194,15 @@ private fun Route.updateUser(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val id = call.id()
+            val patchRequest = call.receive<UserManagePatchRequest>()
+            controller.handleManagePatch(id, patchRequest)
+            call.success()
         }
     }
 }
 
-private fun Route.fetchUser(userController: UserController) {
+private fun Route.fetchUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_READ_ALL_SINGLE
@@ -197,12 +215,14 @@ private fun Route.fetchUser(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val id = call.id()
+            val userVO = controller.handleManageFetch(id)
+            call.success(userVO)
         }
     }
 }
 
-private fun Route.pageUser(userController: UserController) {
+private fun Route.pageUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_READ_ALL_ALL
@@ -221,14 +241,14 @@ private fun Route.pageUser(userController: UserController) {
                 }
             }
         }) {
-            val pageVO = call.pageRequest()
-
-            TODO()
+            val pageRequest = call.pageRequest()
+            val voPageResult = controller.handleManagePage(pageRequest)
+            call.success(voPageResult)
         }
     }
 }
 
-private fun Route.banAndUnban(userController: UserController) {
+private fun Route.banAndUnban(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_BAN
@@ -247,7 +267,12 @@ private fun Route.banAndUnban(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val currentUserId = call.getPrincipal().id
+            val inputId = call.id()
+            if (currentUserId == inputId) throw WrongParameterException()
+
+            controller.handleManageBan(inputId)
+            call.success()
         }
         patch("unban/{id}", {
             request {
@@ -263,7 +288,12 @@ private fun Route.banAndUnban(userController: UserController) {
                 }
             }
         }) {
-            TODO()
+            val currentUserId = call.getPrincipal().id
+            val inputId = call.id()
+            if (currentUserId == inputId) throw WrongParameterException()
+
+            controller.handleManageUnban(inputId)
+            call.success()
         }
     }
 }
@@ -271,5 +301,42 @@ private fun Route.banAndUnban(userController: UserController) {
 class UserController(
     private val userService: UserService
 ) {
+    suspend fun handleSelfPatch(id: Long, patchRequest: UserSelfPatchRequest) {
+        userService.patchSelf(id, patchRequest)
+    }
 
+    suspend fun handleSelfFetch(id: Long): UserVO {
+        val userVO = userService.fetchUser(id)
+        return userVO
+    }
+
+    suspend fun handleManageInsert(insertRequest: UserManageInsertRequest) {
+        userService.saveUserManually(insertRequest)
+    }
+
+    suspend fun handleManageDelete(id: Long) {
+        userService.deleteUser(id)
+    }
+
+    suspend fun handleManagePatch(id: Long, patchRequest: UserManagePatchRequest) {
+        userService.patchUser(id, patchRequest)
+    }
+
+    suspend fun handleManageBan(id: Long) {
+        userService.banUser(id)
+    }
+
+    suspend fun handleManageUnban(id: Long) {
+        userService.unbanUser(id)
+    }
+
+    suspend fun handleManageFetch(id: Long): UserVO {
+        val userVO = userService.fetchUser(id)
+        return userVO
+    }
+
+    suspend fun handleManagePage(pageRequest: PageRequest): PageResult<UserPageVO> {
+        val pageResult = userService.pageUsers(pageRequest)
+        return pageResult
+    }
 }
