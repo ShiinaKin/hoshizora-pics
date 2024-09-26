@@ -5,6 +5,7 @@ import io.sakurasou.model.entity.Album
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
 
@@ -16,33 +17,13 @@ class AlbumDaoImpl : AlbumDao {
     override fun listAlbumByUserId(userId: Long): List<Album> {
         return Albums.selectAll()
             .where { Albums.userId eq userId }
-            .map {
-                Album(
-                    it[Albums.id].value,
-                    it[Albums.userId],
-                    it[Albums.name],
-                    it[Albums.description],
-                    it[Albums.imageCount],
-                    it[Albums.isUncategorized],
-                    it[Albums.createTime],
-                )
-            }
+            .map { toAlbum(it) }
     }
 
-    override fun getAlbumById(albumId: Long): Album? {
+    override fun findAlbumById(albumId: Long): Album? {
         return Albums.selectAll()
             .where { Albums.id eq albumId }
-            .map {
-                Album(
-                    it[Albums.id].value,
-                    it[Albums.userId],
-                    it[Albums.name],
-                    it[Albums.description],
-                    it[Albums.imageCount],
-                    it[Albums.isUncategorized],
-                    it[Albums.createTime],
-                )
-            }
+            .map { toAlbum(it) }
             .firstOrNull()
     }
 
@@ -70,4 +51,14 @@ class AlbumDaoImpl : AlbumDao {
         )
         return saveAlbum(uncategorizedAlbum)
     }
+
+    private fun toAlbum(it: ResultRow) = Album(
+        it[Albums.id].value,
+        it[Albums.userId],
+        it[Albums.name],
+        it[Albums.description],
+        it[Albums.imageCount],
+        it[Albums.isUncategorized],
+        it[Albums.createTime],
+    )
 }

@@ -9,7 +9,7 @@ import io.sakurasou.model.entity.Album
  */
 interface AlbumDao {
     fun listAlbumByUserId(userId: Long): List<Album>
-    fun getAlbumById(albumId: Long): Album?
+    fun findAlbumById(albumId: Long): Album?
     fun saveAlbum(insertDTO: AlbumInsertDTO): Long
     fun initAlbumForUser(userId: Long): Long
 }

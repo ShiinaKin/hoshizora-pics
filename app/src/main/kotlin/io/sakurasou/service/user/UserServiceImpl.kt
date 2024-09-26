@@ -6,6 +6,8 @@ import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
 import io.sakurasou.controller.vo.UserVO
 import io.sakurasou.exception.controller.access.SignupNotAllowedException
+import io.sakurasou.exception.controller.param.WrongParameterException
+import io.sakurasou.exception.service.album.AlbumNotFoundException
 import io.sakurasou.exception.service.user.UserDeleteFailedException
 import io.sakurasou.exception.service.user.UserInsertFailedException
 import io.sakurasou.exception.service.user.UserNotFoundException
@@ -120,7 +122,13 @@ class UserServiceImpl(
                 updateTime = now
             )
 
+            val isModifyDefaultAlbum = patchRequest.defaultAlbumId != null
+
             runCatching {
+                if (isModifyDefaultAlbum) {
+                    val album = albumDao.findAlbumById(selfUpdateDTO.defaultAlbumId!!) ?: throw AlbumNotFoundException()
+                    if (album.userId != id) throw WrongParameterException("Album not belong to user")
+                }
                 val influenceRowCnt = userDao.updateSelfById(selfUpdateDTO)
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }.onFailure {
