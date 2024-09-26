@@ -10,6 +10,8 @@ import io.sakurasou.model.entity.Image
  */
 interface ImageDao {
     fun saveImage(insertDTO: ImageInsertDTO): Long
+    fun deleteImageById(imageId: Long): Int
+    fun deleteImageByUserId(userId: Long): Int
     fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int
     fun listImageByAlbumId(albumId: Long): List<Image>
     fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO

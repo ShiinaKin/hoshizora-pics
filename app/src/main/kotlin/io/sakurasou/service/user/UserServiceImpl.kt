@@ -92,6 +92,7 @@ class UserServiceImpl(
     override suspend fun deleteUser(id: Long) {
         runCatching {
             dbQuery {
+                imageDao.deleteImageByUserId(id)
                 val influenceRowCnt = userDao.deleteUserById(id)
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }

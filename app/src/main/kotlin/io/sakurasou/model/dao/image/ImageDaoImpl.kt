@@ -4,6 +4,7 @@ import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.entity.Image
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 /**
  * @author ShiinaKin
@@ -31,6 +32,14 @@ class ImageDaoImpl : ImageDao {
             it[createTime] = insertDTO.createTime
         }
         return entityID.value
+    }
+
+    override fun deleteImageById(imageId: Long): Int {
+        return Images.deleteWhere { Images.id eq imageId }
+    }
+
+    override fun deleteImageByUserId(userId: Long): Int {
+        return Images.deleteWhere { Images.userId eq userId }
     }
 
     override fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int {
