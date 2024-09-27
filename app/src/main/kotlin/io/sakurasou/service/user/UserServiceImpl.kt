@@ -158,8 +158,13 @@ class UserServiceImpl(
             )
 
             val isModifyGroup = patchRequest.groupId != null
+            val isModifyDefaultAlbum = patchRequest.defaultAlbumId != null
 
             runCatching {
+                if (isModifyDefaultAlbum) {
+                    val album = albumDao.findAlbumById(userUpdateDTO.defaultAlbumId!!) ?: throw AlbumNotFoundException()
+                    if (album.userId != id) throw WrongParameterException("Album not belong to user")
+                }
                 val influenceRowCnt = userDao.updateUserById(userUpdateDTO)
                 if (influenceRowCnt < 1) throw UserNotFoundException()
                 if (isModifyGroup) imageDao.updateImageGroupIdByUserId(id, userUpdateDTO.groupId)

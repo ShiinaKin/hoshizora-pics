@@ -21,6 +21,7 @@ import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.dto.UserManageUpdateDTO
 import io.sakurasou.model.dto.UserSelfUpdateDTO
+import io.sakurasou.model.entity.Album
 import io.sakurasou.model.entity.Group
 import io.sakurasou.model.entity.User
 import io.sakurasou.model.setting.SystemSetting
@@ -200,6 +201,7 @@ class UserServiceTest {
     @Test
     fun `deleteUser should delete user successfully when user exists`() = runBlocking {
         val userId = 1L
+        every { imageDao.deleteImageByUserId(userId) } returns 1
         every { userDao.deleteUserById(userId) } returns 1
 
         userService.deleteUser(userId)
@@ -210,6 +212,7 @@ class UserServiceTest {
     @Test
     fun `deleteUser should throw UserDeleteFailedException when user not found`() = runBlocking {
         val userId = 1L
+        every { imageDao.deleteImageByUserId(userId) } returns 1
         every { userDao.deleteUserById(userId) } returns 0
 
         assertFailsWith<UserDeleteFailedException> {
@@ -234,6 +237,14 @@ class UserServiceTest {
             updateTime = now,
             createTime = now
         )
+        val newAlbum = Album(
+            id = 2,
+            name = "newAlbum",
+            userId = userId,
+            createTime = now,
+            imageCount = 1,
+            isUncategorized = false,
+        )
         val patchRequest = UserSelfPatchRequest(
             password = "newPassword",
             email = "new@example.com",
@@ -251,6 +262,7 @@ class UserServiceTest {
             updateTime = now
         )
 
+        every { albumDao.findAlbumById(exceptedUpdateDTO.defaultAlbumId!!) } returns newAlbum
         every { userDao.findUserById(userId) } returns oldUserInfo
         every { BCrypt.withDefaults().hashToString(12, patchRequest.password!!.toCharArray()) } returns encodedPassword
         every { userDao.updateSelfById(exceptedUpdateDTO) } returns 1
@@ -342,6 +354,14 @@ class UserServiceTest {
             updateTime = now,
             createTime = now
         )
+        val newAlbum = Album(
+            id = 2,
+            name = "newAlbum",
+            userId = userId,
+            createTime = now,
+            imageCount = 1,
+            isUncategorized = false,
+        )
         val patchRequest = UserManagePatchRequest(
             groupId = 2,
             password = "newPassword",
@@ -361,6 +381,7 @@ class UserServiceTest {
             updateTime = now
         )
 
+        every { albumDao.findAlbumById(exceptedUpdateDTO.defaultAlbumId!!) } returns newAlbum
         every { userDao.findUserById(userId) } returns oldUserInfo
         every { BCrypt.withDefaults().hashToString(12, patchRequest.password!!.toCharArray()) } returns encodedPassword
         every { userDao.updateUserById(exceptedUpdateDTO) } returns 1
