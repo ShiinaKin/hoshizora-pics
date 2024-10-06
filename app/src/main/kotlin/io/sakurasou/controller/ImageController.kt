@@ -15,21 +15,23 @@ import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.controller.param.FileSizeException
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.plugins.AuthorizationPlugin
+import io.sakurasou.service.image.ImageService
 import java.io.ByteArrayOutputStream
 
 /**
  * @author ShiinaKin
  * 2024/9/5 15:17
  */
-fun Route.imageRoute() {
+fun Route.imageRoute(imageService: ImageService) {
+    val controller = ImageController(imageService)
     route("image") {
-        imageSelfRoute()
-        imageManageRoute()
+        imageSelfRoute(controller)
+        imageManageRoute(controller)
     }
 }
 
-private fun Route.imageSelfRoute() {
-    imageSelfUpload()
+private fun Route.imageSelfRoute(controller: ImageController) {
+    imageSelfUpload(controller)
     route("{imageId}", {
         protected = true
         request {
@@ -39,14 +41,14 @@ private fun Route.imageSelfRoute() {
             }
         }
     }) {
-        imageSelfDelete()
-        imageSelfUpdate()
-        imageSelfFetch()
-        imageSelfPage()
+        imageSelfDelete(controller)
+        imageSelfUpdate(controller)
+        imageSelfFetch(controller)
+        imageSelfPage(controller)
     }
 }
 
-private fun Route.imageSelfUpload() {
+private fun Route.imageSelfUpload(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_WRITE_SELF
@@ -100,7 +102,7 @@ private fun Route.imageSelfUpload() {
     }
 }
 
-private fun Route.imageSelfDelete() {
+private fun Route.imageSelfDelete(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_DELETE_SELF
@@ -118,7 +120,7 @@ private fun Route.imageSelfDelete() {
     }
 }
 
-private fun Route.imageSelfUpdate() {
+private fun Route.imageSelfUpdate(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_WRITE_SELF
@@ -141,7 +143,7 @@ private fun Route.imageSelfUpdate() {
     }
 }
 
-private fun Route.imageSelfFetch() {
+private fun Route.imageSelfFetch(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_SELF_SINGLE
@@ -159,7 +161,7 @@ private fun Route.imageSelfFetch() {
     }
 }
 
-private fun Route.imageSelfPage() {
+private fun Route.imageSelfPage(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_SELF_ALL
@@ -183,7 +185,7 @@ private fun Route.imageSelfPage() {
     }
 }
 
-private fun Route.imageManageRoute() {
+private fun Route.imageManageRoute(controller: ImageController) {
     route("manage", {
         protected = true
         request {
@@ -207,15 +209,15 @@ private fun Route.imageManageRoute() {
                 }
             }
         }) {
-            imageManageDelete()
-            imageManageUpdate()
-            imageManageFetch()
-            imageManagePage()
+            imageManageDelete(controller)
+            imageManageUpdate(controller)
+            imageManageFetch(controller)
+            imageManagePage(controller)
         }
     }
 }
 
-private fun Route.imageManageDelete() {
+private fun Route.imageManageDelete(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_DELETE_ALL
@@ -233,7 +235,7 @@ private fun Route.imageManageDelete() {
     }
 }
 
-private fun Route.imageManageUpdate() {
+private fun Route.imageManageUpdate(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_WRITE_ALL
@@ -256,7 +258,7 @@ private fun Route.imageManageUpdate() {
     }
 }
 
-private fun Route.imageManageFetch() {
+private fun Route.imageManageFetch(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_ALL_SINGLE
@@ -280,7 +282,7 @@ private fun Route.imageManageFetch() {
     }
 }
 
-private fun Route.imageManagePage() {
+private fun Route.imageManagePage(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_ALL_ALL
@@ -304,5 +306,7 @@ private fun Route.imageManagePage() {
     }
 }
 
-class ImageController {
+class ImageController(
+    private val imageService: ImageService
+) {
 }

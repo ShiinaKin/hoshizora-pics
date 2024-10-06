@@ -29,6 +29,7 @@ import io.sakurasou.service.common.CommonServiceImpl
 import io.sakurasou.service.group.GroupService
 import io.sakurasou.service.group.GroupServiceImpl
 import io.sakurasou.service.image.ImageService
+import io.sakurasou.service.image.ImageServiceImpl
 import io.sakurasou.service.role.RoleService
 import io.sakurasou.service.role.RoleServiceImpl
 import io.sakurasou.service.setting.SettingService
@@ -88,6 +89,7 @@ object InstanceCenter {
         strategyService = StrategyServiceImpl(strategyDao)
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, relationDao)
+        imageService = ImageServiceImpl(imageDao, albumDao)
 
         commonService = CommonServiceImpl(userDao, albumDao, settingService)
         userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)

@@ -19,23 +19,25 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.plugins.AuthorizationPlugin
+import io.sakurasou.service.album.AlbumService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:58
  */
-fun Route.albumRoute() {
+fun Route.albumRoute(albumService: AlbumService) {
+    val controller = AlbumController(albumService)
     route("album") {
-        albumSelfRoute()
-        albumManageRoute()
+        albumSelfRoute(controller)
+        albumManageRoute(controller)
     }
 }
 
-private fun Route.albumSelfRoute() {
+private fun Route.albumSelfRoute(controller: AlbumController) {
     route({
         protected = true
     }) {
-        albumSelfInsert()
+        albumSelfInsert(controller)
         route("{albumId}", {
             request {
                 pathParameter<Long>("album id") {
@@ -44,15 +46,15 @@ private fun Route.albumSelfRoute() {
                 }
             }
         }) {
-            albumSelfDelete()
-            albumSelfUpdate()
-            albumSelfFetch()
+            albumSelfDelete(controller)
+            albumSelfUpdate(controller)
+            albumSelfFetch(controller)
         }
-        albumSelfPage()
+        albumSelfPage(controller)
     }
 }
 
-private fun Route.albumSelfInsert() {
+private fun Route.albumSelfInsert(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
@@ -75,7 +77,7 @@ private fun Route.albumSelfInsert() {
     }
 }
 
-private fun Route.albumSelfDelete() {
+private fun Route.albumSelfDelete(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_DELETE_SELF
@@ -93,7 +95,7 @@ private fun Route.albumSelfDelete() {
     }
 }
 
-private fun Route.albumSelfUpdate() {
+private fun Route.albumSelfUpdate(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
@@ -116,7 +118,7 @@ private fun Route.albumSelfUpdate() {
     }
 }
 
-private fun Route.albumSelfFetch() {
+private fun Route.albumSelfFetch(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_SELF_SINGLE
@@ -134,7 +136,7 @@ private fun Route.albumSelfFetch() {
     }
 }
 
-private fun Route.albumSelfPage() {
+private fun Route.albumSelfPage(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_SELF_ALL
@@ -153,14 +155,14 @@ private fun Route.albumSelfPage() {
                 }
             }
         }) {
-            val pageVO = call.pageRequest()
+            val pageRequest = call.pageRequest()
 
             TODO()
         }
     }
 }
 
-private fun Route.albumManageRoute() {
+private fun Route.albumManageRoute(controller: AlbumController) {
     route("manage", {
         protected = true
         request {
@@ -176,7 +178,7 @@ private fun Route.albumManageRoute() {
             }
         }
     }) {
-        albumManageInsert()
+        albumManageInsert(controller)
         route("{albumId}", {
             protected = true
             request {
@@ -186,15 +188,15 @@ private fun Route.albumManageRoute() {
                 }
             }
         }) {
-            albumManageDelete()
-            albumManageUpdate()
-            albumManageFetch()
+            albumManageDelete(controller)
+            albumManageUpdate(controller)
+            albumManageFetch(controller)
         }
-        albumManagePage()
+        albumManagePage(controller)
     }
 }
 
-private fun Route.albumManageInsert() {
+private fun Route.albumManageInsert(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
@@ -217,7 +219,7 @@ private fun Route.albumManageInsert() {
     }
 }
 
-private fun Route.albumManageDelete() {
+private fun Route.albumManageDelete(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_DELETE_ALL
@@ -235,7 +237,7 @@ private fun Route.albumManageDelete() {
     }
 }
 
-private fun Route.albumManageUpdate() {
+private fun Route.albumManageUpdate(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
@@ -258,7 +260,7 @@ private fun Route.albumManageUpdate() {
     }
 }
 
-private fun Route.albumManageFetch() {
+private fun Route.albumManageFetch(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_ALL_SINGLE
@@ -276,7 +278,7 @@ private fun Route.albumManageFetch() {
     }
 }
 
-private fun Route.albumManagePage() {
+private fun Route.albumManagePage(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_ALL_ALL
@@ -295,12 +297,15 @@ private fun Route.albumManagePage() {
                 }
             }
         }) {
-            val pageVO = call.pageRequest()
+            val pageRequest = call.pageRequest()
 
             TODO()
         }
     }
 }
 
-class AlbumController {
+class AlbumController(
+    private val albumService: AlbumService
+) {
+
 }
