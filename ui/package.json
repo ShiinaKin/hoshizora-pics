@@ -15,7 +15,7 @@
     "build-only": "vite build",
     "build-packages": "pnpm --filter \"./packages/**\" build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "api-generate": "pnpm --filter \"./packages/api-client\" generate"
   },
@@ -31,6 +31,9 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.12.0",
     "@iconify/vue": "^4.1.2",
     "@rushstack/eslint-patch": "^1.10.4",
     "@tsconfig/node20": "^20.1.4",
@@ -42,11 +45,13 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.12.0",
     "eslint-plugin-vue": "^9.28.0",
+    "globals": "^15.10.0",
     "npm-run-all2": "^6.2.3",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.13",
     "typescript": "~5.6.2",
+    "typescript-eslint": "^8.8.1",
     "vite": "^5.4.8",
     "vite-plugin-vue-devtools": "^7.4.6",
     "vue-tsc": "^2.1.6"
