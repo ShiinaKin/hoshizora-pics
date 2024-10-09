@@ -27,7 +27,9 @@ import io.sakurasou.service.album.AlbumService
  */
 fun Route.albumRoute(albumService: AlbumService) {
     val controller = AlbumController(albumService)
-    route("album") {
+    route("album", {
+        tags("Album")
+    }) {
         albumSelfRoute(controller)
         albumManageRoute(controller)
     }

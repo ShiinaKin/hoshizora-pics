@@ -20,6 +20,7 @@ fun Route.authRoute(authService: AuthService, userService: UserService) {
     val authController = AuthController(authService, userService)
     route("user", {
         protected = false
+        tags("Auth")
     }) {
         login(authController)
         signup(authController)

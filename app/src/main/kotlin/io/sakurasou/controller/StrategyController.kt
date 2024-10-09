@@ -32,7 +32,10 @@ import io.sakurasou.service.strategy.StrategyService
  */
 fun Route.strategyRoute(strategyService: StrategyService) {
     val controller = StrategyController(strategyService)
-    route("strategy") {
+    route("strategy", {
+        protected = true
+        tags("Strategy")
+    }) {
         insertStrategy(controller)
         route("{id}", {
             protected = true

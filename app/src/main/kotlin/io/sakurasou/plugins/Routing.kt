@@ -1,5 +1,6 @@
 package io.sakurasou.plugins
 
+import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.autohead.*
@@ -17,7 +18,9 @@ fun Application.configureRouting() {
     install(DoubleReceive)
     routing {
         apiRoute()
-        staticResources("", "static")
+        route({ hidden = true }) {
+            staticResources("", "static")
+        }
         // post("/double-receive") {
         //     val first = call.receiveText()
         //     val theSame = call.receiveText()

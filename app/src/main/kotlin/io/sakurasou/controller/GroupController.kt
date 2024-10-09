@@ -30,6 +30,7 @@ fun Route.groupRoute(groupService: GroupService) {
     val controller = GroupController(groupService)
     route("group", {
         protected = true
+        tags("Group")
     }) {
         groupInsert(controller)
         route("{id}", {

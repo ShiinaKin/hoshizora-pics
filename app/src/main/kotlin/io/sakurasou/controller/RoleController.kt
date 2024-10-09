@@ -20,7 +20,10 @@ import io.sakurasou.service.role.RoleService
 
 fun Route.roleRoute(roleService: RoleService) {
     val controller = RoleController(roleService)
-    route("role") {
+    route("role", {
+        protected = true
+        tags("Role")
+    }) {
         fetchAllRolesAndPermissions(controller)
         fetchAllRolesAndPermissionsOfUser(controller)
     }

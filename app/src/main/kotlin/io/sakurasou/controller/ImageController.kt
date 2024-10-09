@@ -24,7 +24,10 @@ import java.io.ByteArrayOutputStream
  */
 fun Route.imageRoute(imageService: ImageService) {
     val controller = ImageController(imageService)
-    route("image") {
+    route("image", {
+        protected = true
+        tags("Image")
+    }) {
         imageSelfRoute(controller)
         imageManageRoute(controller)
     }

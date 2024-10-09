@@ -25,6 +25,7 @@ fun Route.settingRoute(settingService: SettingService) {
     val controller = SettingController(settingService)
     route("setting", {
         protected = true
+        tags("Setting")
         response {
             HttpStatusCode.OK to {
                 description = "success"

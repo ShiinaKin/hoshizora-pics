@@ -31,6 +31,7 @@ fun Route.userRoute(userService: UserService) {
     val controller = UserController(userService)
     route("user", {
         protected = true
+        tags("User")
     }) {
         userSelfRoute(controller)
         userManageRoute(controller)
