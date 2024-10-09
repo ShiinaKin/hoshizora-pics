@@ -7,17 +7,19 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
-import io.sakurasou.controller.request.AlbumManageInsertRequest
-import io.sakurasou.controller.request.AlbumManagePatchRequest
-import io.sakurasou.controller.request.AlbumSelfInsertRequest
-import io.sakurasou.controller.request.AlbumSelfPatchRequest
+import io.sakurasou.controller.request.*
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.AlbumVO
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.exception.controller.param.WrongParameterException
+import io.sakurasou.extension.getPrincipal
+import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.album.AlbumService
 
@@ -42,7 +44,7 @@ private fun Route.albumSelfRoute(controller: AlbumController) {
         albumSelfInsert(controller)
         route("{albumId}", {
             request {
-                pathParameter<Long>("album id") {
+                pathParameter<Long>("albumId") {
                     description = "album id"
                     required = true
                 }
@@ -74,7 +76,10 @@ private fun Route.albumSelfInsert(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val userId = call.getPrincipal().id
+            val selfInsertRequest = call.receive<AlbumSelfInsertRequest>()
+            controller.handleSelfInsert(userId, selfInsertRequest)
+            call.success()
         }
     }
 }
@@ -92,7 +97,10 @@ private fun Route.albumSelfDelete(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val userId = call.getPrincipal().id
+            val albumId = call.albumId()
+            controller.handleSelfDelete(userId, albumId)
+            call.success()
         }
     }
 }
@@ -115,7 +123,11 @@ private fun Route.albumSelfUpdate(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val userId = call.getPrincipal().id
+            val albumId = call.albumId()
+            val selfPatchRequest = call.receive<AlbumSelfPatchRequest>()
+            controller.handleSelfPatch(userId, albumId, selfPatchRequest)
+            call.success()
         }
     }
 }
@@ -133,7 +145,10 @@ private fun Route.albumSelfFetch(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val userId = call.getPrincipal().id
+            val albumId = call.albumId()
+            val albumVO = controller.handleSelfFetch(userId, albumId)
+            call.success(albumVO)
         }
     }
 }
@@ -157,9 +172,10 @@ private fun Route.albumSelfPage(controller: AlbumController) {
                 }
             }
         }) {
+            val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
-
-            TODO()
+            val pageResult = controller.handleSelfPage(userId, pageRequest)
+            call.success(pageResult)
         }
     }
 }
@@ -167,12 +183,6 @@ private fun Route.albumSelfPage(controller: AlbumController) {
 private fun Route.albumManageRoute(controller: AlbumController) {
     route("manage", {
         protected = true
-        request {
-            pathParameter<Long>("userId") {
-                description = "user id"
-                required = true
-            }
-        }
         response {
             HttpStatusCode.NotFound to {
                 description = "album not found"
@@ -184,7 +194,7 @@ private fun Route.albumManageRoute(controller: AlbumController) {
         route("{albumId}", {
             protected = true
             request {
-                pathParameter<Long>("album id") {
+                pathParameter<Long>("albumId") {
                     description = "album id"
                     required = true
                 }
@@ -216,7 +226,9 @@ private fun Route.albumManageInsert(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val manageInsertRequest = call.receive<AlbumManageInsertRequest>()
+            controller.handleManageInsert(manageInsertRequest)
+            call.success()
         }
     }
 }
@@ -234,7 +246,9 @@ private fun Route.albumManageDelete(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val albumId = call.albumId()
+            controller.handleManageDelete(albumId)
+            call.success()
         }
     }
 }
@@ -257,7 +271,10 @@ private fun Route.albumManageUpdate(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val albumId = call.albumId()
+            val managePatchRequest = call.receive<AlbumManagePatchRequest>()
+            controller.handleManagePatch(albumId, managePatchRequest)
+            call.success()
         }
     }
 }
@@ -275,7 +292,9 @@ private fun Route.albumManageFetch(controller: AlbumController) {
                 }
             }
         }) {
-            TODO()
+            val albumId = call.albumId()
+            val albumVO = controller.handleManageFetch(albumId)
+            call.success(albumVO)
         }
     }
 }
@@ -300,14 +319,58 @@ private fun Route.albumManagePage(controller: AlbumController) {
             }
         }) {
             val pageRequest = call.pageRequest()
-
-            TODO()
+            val pageResult = controller.handleManagePage(pageRequest)
+            call.success(pageResult)
         }
     }
 }
 
+private fun ApplicationCall.albumId() = parameters["albumId"]?.toLongOrNull() ?: throw WrongParameterException()
+
 class AlbumController(
     private val albumService: AlbumService
 ) {
+    suspend fun handleSelfInsert(userId: Long, selfInsertRequest: AlbumSelfInsertRequest) {
+        albumService.saveSelf(userId, selfInsertRequest)
+    }
 
+    suspend fun handleSelfPatch(userId: Long, albumId: Long, selfPatchRequest: AlbumSelfPatchRequest) {
+        albumService.patchSelf(userId, albumId, selfPatchRequest)
+    }
+
+    suspend fun handleSelfDelete(userId: Long, albumId: Long) {
+        albumService.deleteSelf(userId, albumId)
+    }
+
+    suspend fun handleSelfFetch(userId: Long, albumId: Long): AlbumVO {
+        val albumVO = albumService.fetchSelf(userId, albumId)
+        return albumVO
+    }
+
+    suspend fun handleSelfPage(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO> {
+        val pageResult = albumService.pageSelf(userId, pageRequest)
+        return pageResult
+    }
+
+    suspend fun handleManageInsert(manageInsertRequest: AlbumManageInsertRequest) {
+        albumService.saveAlbum(manageInsertRequest)
+    }
+
+    suspend fun handleManagePatch(albumId: Long, managePatchRequest: AlbumManagePatchRequest) {
+        albumService.patchAlbum(albumId, managePatchRequest)
+    }
+
+    suspend fun handleManageDelete(albumId: Long) {
+        albumService.deleteAlbum(albumId)
+    }
+
+    suspend fun handleManageFetch(albumId: Long): AlbumVO {
+        val albumVO = albumService.fetchAlbum(albumId)
+        return albumVO
+    }
+
+    suspend fun handleManagePage(pageRequest: PageRequest): PageResult<AlbumPageVO> {
+        val pageResult = albumService.pageAlbum(pageRequest)
+        return pageResult
+    }
 }
