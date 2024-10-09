@@ -242,7 +242,6 @@ class UserServiceTest {
             name = "newAlbum",
             userId = userId,
             createTime = now,
-            imageCount = 1,
             isUncategorized = false,
         )
         val patchRequest = UserSelfPatchRequest(
@@ -359,7 +358,6 @@ class UserServiceTest {
             name = "newAlbum",
             userId = userId,
             createTime = now,
-            imageCount = 1,
             isUncategorized = false,
         )
         val patchRequest = UserManagePatchRequest(

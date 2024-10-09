@@ -17,7 +17,6 @@ interface AlbumDao: PaginationDao {
     fun saveAlbum(insertDTO: AlbumInsertDTO): Long
     fun deleteAlbumById(albumId: Long): Int
     fun updateAlbumById(updateDTO: AlbumUpdateDTO): Int
-    fun updateImageCountById(id: Long, influenceImageCnt: Int): Int
     fun findAlbumById(albumId: Long): Album?
     fun findDefaultAlbumByUserId(userId: Long): Album
     fun listAlbumByUserId(userId: Long): List<Album>

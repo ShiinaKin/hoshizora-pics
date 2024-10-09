@@ -54,12 +54,6 @@ class ImageDaoImpl : ImageDao {
         }
     }
 
-    override fun listImageByAlbumId(albumId: Long): List<Image> {
-        return Images.selectAll()
-            .where { Images.albumId eq albumId }
-            .map { toImage(it) }
-    }
-
     override fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO {
         return Images
             .select(Images.id.count(), Images.size.sum())
@@ -78,6 +72,18 @@ class ImageDaoImpl : ImageDao {
             .where { Images.id eq imageId }
             .map { toImage(it) }
             .firstOrNull()
+    }
+
+    override fun countImageByAlbumId(albumId: Long): Long {
+        return Images.select(Images.id)
+            .where { Images.albumId eq albumId }
+            .count()
+    }
+
+    override fun listImageByAlbumId(albumId: Long): List<Image> {
+        return Images.selectAll()
+            .where { Images.albumId eq albumId }
+            .map { toImage(it) }
     }
 
     private fun toImage(it: ResultRow) = Image(

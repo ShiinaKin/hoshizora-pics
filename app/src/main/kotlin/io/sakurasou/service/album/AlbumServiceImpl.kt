@@ -62,8 +62,7 @@ class AlbumServiceImpl(
                 if (album.userId != userId) throw AlbumAccessDeniedException()
 
                 val uncategorizedAlbum = albumDao.findDefaultAlbumByUserId(album.userId)
-                val influenceImageCnt = imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id)
-                albumDao.updateImageCountById(uncategorizedAlbum.id, influenceImageCnt)
+                imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id)
 
                 val influenceRowCnt = albumDao.deleteAlbumById(albumId)
                 if (influenceRowCnt < 1) throw AlbumDeleteFailedException()
@@ -81,8 +80,7 @@ class AlbumServiceImpl(
                 if (album.isUncategorized) throw AlbumDeleteFailedException(null, "Cannot delete uncategorized album")
 
                 val uncategorizedAlbum = albumDao.findDefaultAlbumByUserId(album.userId)
-                val influenceImageCnt = imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id)
-                albumDao.updateImageCountById(uncategorizedAlbum.id, influenceImageCnt)
+                imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id)
 
                 val influenceRowCnt = albumDao.deleteAlbumById(albumId)
                 if (influenceRowCnt < 1) throw AlbumDeleteFailedException()
@@ -142,30 +140,37 @@ class AlbumServiceImpl(
     }
 
     override suspend fun fetchSelf(userId: Long, albumId: Long): AlbumVO {
-        val album = dbQuery { albumDao.findAlbumById(albumId) } ?: throw AlbumNotFoundException()
-        if (album.userId != userId) throw AlbumAccessDeniedException()
+        return dbQuery {
+            val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
+            if (album.userId != userId) throw AlbumAccessDeniedException()
 
-        return AlbumVO(
-            id = album.id,
-            name = album.name,
-            description = album.description,
-            imageCount = album.imageCount,
-            isUncategorized = album.isUncategorized,
-            createTime = album.createTime
-        )
+            val imageCount = imageDao.countImageByAlbumId(albumId)
+
+            AlbumVO(
+                id = album.id,
+                name = album.name,
+                description = album.description,
+                imageCount = imageCount,
+                isUncategorized = album.isUncategorized,
+                createTime = album.createTime
+            )
+        }
     }
 
     override suspend fun fetchAlbum(albumId: Long): AlbumVO {
-        val album = dbQuery { albumDao.findAlbumById(albumId) } ?: throw AlbumNotFoundException()
+        return dbQuery {
+            val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
+            val imageCount = imageDao.countImageByAlbumId(albumId)
 
-        return AlbumVO(
-            id = album.id,
-            name = album.name,
-            description = album.description,
-            imageCount = album.imageCount,
-            isUncategorized = album.isUncategorized,
-            createTime = album.createTime
-        )
+            AlbumVO(
+                id = album.id,
+                name = album.name,
+                description = album.description,
+                imageCount = imageCount,
+                isUncategorized = album.isUncategorized,
+                createTime = album.createTime
+            )
+        }
     }
 
     override suspend fun pageSelf(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO> {

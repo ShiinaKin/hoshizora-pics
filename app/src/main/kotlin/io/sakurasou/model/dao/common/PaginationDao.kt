@@ -46,7 +46,7 @@ interface PaginationDao {
         return pageResult
     }
 
-    fun getColumnByName(table: Table, columnName: String): Column<*> {
+    fun getColumnByName(table: Table, columnName: String): ExpressionWithColumnType<*> {
         return when (table) {
             Albums -> Albums.columnMap[columnName]
             Groups -> Groups.columnMap[columnName]

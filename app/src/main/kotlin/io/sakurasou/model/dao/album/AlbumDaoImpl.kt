@@ -4,6 +4,7 @@ import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.dao.MissingUserDefaultAlbumException
+import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dto.AlbumInsertDTO
 import io.sakurasou.model.dto.AlbumUpdateDTO
 import io.sakurasou.model.entity.Album
@@ -12,7 +13,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 
 /**
  * @author ShiinaKin
@@ -37,7 +37,6 @@ class AlbumDaoImpl : AlbumDao {
             it[userId] = insertDTO.userId
             it[name] = insertDTO.name
             it[description] = insertDTO.description
-            it[imageCount] = insertDTO.imageCount
             it[isUncategorized] = insertDTO.isUncategorized
             it[createTime] = insertDTO.createTime
         }
@@ -53,12 +52,6 @@ class AlbumDaoImpl : AlbumDao {
             it[userId] = updateDTO.userId
             it[name] = updateDTO.name
             it[description] = updateDTO.description
-        }
-    }
-
-    override fun updateImageCountById(id: Long, influenceImageCnt: Int): Int {
-        return Albums.update({ Albums.id eq id }) {
-            it[imageCount] = imageCount + influenceImageCnt
         }
     }
 
@@ -83,16 +76,18 @@ class AlbumDaoImpl : AlbumDao {
     }
 
     override fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO> {
-        val customWhereCond = if (userId != null) {
-            { it.where { Albums.userId eq userId } }
-        } else {
-            { query: Query -> query }
+        val customWhereCond: (Query) -> Query = {
+            val query = it.adjustColumnSet { join(Images, JoinType.INNER) { Images.albumId eq Albums.id } }
+                .adjustSelect { select(Albums.fields + Images.id.count()) }
+                .groupBy(Albums.id, Albums.name, Albums.createTime)
+            userId?.let { query.andWhere { Albums.userId eq userId } }
+            query
         }
         return fetchPage(Albums, pageRequest, customWhereCond) { row ->
             AlbumPageVO(
                 row[Albums.id].value,
                 row[Albums.name],
-                row[Albums.imageCount],
+                row[Images.id.count()],
                 row[Albums.isUncategorized]
             )
         }
@@ -103,7 +98,6 @@ class AlbumDaoImpl : AlbumDao {
         it[Albums.userId],
         it[Albums.name],
         it[Albums.description],
-        it[Albums.imageCount],
         it[Albums.isUncategorized],
         it[Albums.createTime],
     )

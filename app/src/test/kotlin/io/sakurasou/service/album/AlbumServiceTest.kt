@@ -101,7 +101,6 @@ class AlbumServiceTest {
             userId = userId,
             name = "My Album",
             description = "Test Album",
-            imageCount = 0,
             isUncategorized = false,
             createTime = now
         )
@@ -110,8 +109,6 @@ class AlbumServiceTest {
         every { albumDao.findAlbumById(albumId) } returns album
         every { albumDao.findDefaultAlbumByUserId(userId) } returns uncategorizedAlbum
         every { imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id) } returns 1
-        every { imageDao.updateAlbumIdByAlbumId(albumId, uncategorizedAlbum.id) } returns 5
-        every { albumDao.updateImageCountById(uncategorizedAlbum.id, 5) } returns 1
         every { albumDao.deleteAlbumById(albumId) } returns 1
 
         albumService.deleteSelf(userId, albumId)
@@ -147,7 +144,6 @@ class AlbumServiceTest {
             userId = userId,
             name = "Old Album",
             description = "Old Description",
-            imageCount = 0,
             isUncategorized = false,
             createTime = now
         )
@@ -159,6 +155,9 @@ class AlbumServiceTest {
             description = "New Description"
         )
 
+        coEvery { DatabaseSingleton.dbQuery<AlbumVO>(any()) } coAnswers {
+            this.arg<suspend () -> AlbumVO>(0).invoke()
+        }
         every { albumDao.findAlbumById(albumId) } returns album
         every { albumDao.updateAlbumById(any()) } returns 1
 
@@ -177,12 +176,14 @@ class AlbumServiceTest {
             userId = anotherUserId,
             name = "Old Album",
             description = "Old Description",
-            imageCount = 0,
             isUncategorized = false,
             createTime = now
         )
         val patchRequest = AlbumSelfPatchRequest(name = "New Album", description = "New Description")
 
+        coEvery { DatabaseSingleton.dbQuery<AlbumVO>(any()) } coAnswers {
+            this.arg<suspend () -> AlbumVO>(0).invoke()
+        }
         every { albumDao.findAlbumById(albumId) } returns album
 
         assertFailsWith<AlbumUpdateFailedException> {
@@ -201,7 +202,6 @@ class AlbumServiceTest {
             userId = userId,
             name = "My Album",
             description = "Test Album",
-            imageCount = 0,
             isUncategorized = false,
             createTime = now
         )
@@ -214,10 +214,11 @@ class AlbumServiceTest {
             createTime = album.createTime
         )
 
-        coEvery { DatabaseSingleton.dbQuery<Album>(any()) } coAnswers {
-            this.arg<suspend () -> Album>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<AlbumVO>(any()) } coAnswers {
+            this.arg<suspend () -> AlbumVO>(0).invoke()
         }
         every { albumDao.findAlbumById(albumId) } returns album
+        every { imageDao.countImageByAlbumId(albumId) } returns 0
 
         val result = albumService.fetchSelf(userId, albumId)
 
@@ -234,7 +235,6 @@ class AlbumServiceTest {
             userId = anotherUserId,
             name = "Old Album",
             description = "Old Description",
-            imageCount = 0,
             isUncategorized = false,
             createTime = now
         )

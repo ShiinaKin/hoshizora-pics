@@ -13,7 +13,6 @@ data class Album(
     val userId: Long,
     val name: String,
     val description: String? = null,
-    val imageCount: Int,
     val isUncategorized: Boolean,
     val createTime: LocalDateTime
 )
