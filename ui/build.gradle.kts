@@ -14,7 +14,7 @@ dependencies {
 }
 
 frontend {
-    nodeVersion.set("20.17.0")
+    nodeVersion.set("20.18.0")
     assembleScript.set("run build")
     checkScript.set("run lint")
     verboseModeEnabled.set(true)
