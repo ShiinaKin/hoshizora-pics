@@ -48,6 +48,12 @@ class ImageDaoImpl : ImageDao {
         }
     }
 
+    override fun updateAlbumIdByAlbumId(oldAlbumId: Long, newAlbumId: Long): Int {
+        return Images.update({ Images.albumId eq oldAlbumId }) {
+            it[albumId] = newAlbumId
+        }
+    }
+
     override fun listImageByAlbumId(albumId: Long): List<Image> {
         return Images.selectAll()
             .where { Images.albumId eq albumId }

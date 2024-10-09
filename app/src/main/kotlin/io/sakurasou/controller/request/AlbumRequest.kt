@@ -27,7 +27,7 @@ data class AlbumSelfPatchRequest(
 
 @Serializable
 data class AlbumManagePatchRequest(
-    val userId: Long,
+    val userId: Long? = null,
     val name: String? = null,
     val description: String? = null
 )

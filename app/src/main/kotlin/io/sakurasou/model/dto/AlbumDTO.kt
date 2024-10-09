@@ -14,3 +14,10 @@ data class AlbumInsertDTO(
     val isUncategorized: Boolean,
     val createTime: LocalDateTime
 )
+
+data class AlbumUpdateDTO(
+    val id: Long,
+    val userId: Long,
+    val name: String,
+    val description: String? = null,
+)

@@ -1,30 +1,35 @@
 package io.sakurasou.model.dao.album
 
+import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.AlbumPageVO
+import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.exception.dao.MissingUserDefaultAlbumException
 import io.sakurasou.model.dto.AlbumInsertDTO
+import io.sakurasou.model.dto.AlbumUpdateDTO
 import io.sakurasou.model.entity.Album
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 
 /**
  * @author ShiinaKin
  * 2024/9/7 14:09
  */
 class AlbumDaoImpl : AlbumDao {
-    override fun listAlbumByUserId(userId: Long): List<Album> {
-        return Albums.selectAll()
-            .where { Albums.userId eq userId }
-            .map { toAlbum(it) }
-    }
-
-    override fun findAlbumById(albumId: Long): Album? {
-        return Albums.selectAll()
-            .where { Albums.id eq albumId }
-            .map { toAlbum(it) }
-            .firstOrNull()
+    override fun initAlbumForUser(userId: Long): Long {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val uncategorizedAlbum = AlbumInsertDTO(
+            userId = userId,
+            name = "uncategorized",
+            description = "default, cannot delete",
+            imageCount = 0,
+            isUncategorized = true,
+            createTime = now
+        )
+        return saveAlbum(uncategorizedAlbum)
     }
 
     override fun saveAlbum(insertDTO: AlbumInsertDTO): Long {
@@ -39,17 +44,58 @@ class AlbumDaoImpl : AlbumDao {
         return entityID.value
     }
 
-    override fun initAlbumForUser(userId: Long): Long {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val uncategorizedAlbum = AlbumInsertDTO(
-            userId = userId,
-            name = "uncategorized",
-            description = "default, cannot delete",
-            imageCount = 0,
-            isUncategorized = true,
-            createTime = now
-        )
-        return saveAlbum(uncategorizedAlbum)
+    override fun deleteAlbumById(albumId: Long): Int {
+        return Albums.deleteWhere { Albums.id eq albumId }
+    }
+
+    override fun updateAlbumById(updateDTO: AlbumUpdateDTO): Int {
+        return Albums.update({ Albums.id eq updateDTO.id }) {
+            it[userId] = updateDTO.userId
+            it[name] = updateDTO.name
+            it[description] = updateDTO.description
+        }
+    }
+
+    override fun updateImageCountById(id: Long, influenceImageCnt: Int): Int {
+        return Albums.update({ Albums.id eq id }) {
+            it[imageCount] = imageCount + influenceImageCnt
+        }
+    }
+
+    override fun findAlbumById(albumId: Long): Album? {
+        return Albums.selectAll()
+            .where { Albums.id eq albumId }
+            .map { toAlbum(it) }
+            .firstOrNull()
+    }
+
+    override fun findDefaultAlbumByUserId(userId: Long): Album {
+        return Albums.selectAll()
+            .where { (Albums.userId eq userId) and (Albums.isUncategorized eq true) }
+            .map { toAlbum(it) }
+            .firstOrNull() ?: throw MissingUserDefaultAlbumException(userId)
+    }
+
+    override fun listAlbumByUserId(userId: Long): List<Album> {
+        return Albums.selectAll()
+            .where { Albums.userId eq userId }
+            .map { toAlbum(it) }
+    }
+
+    override fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO> {
+        val customWhereCond = if (userId != null) {
+            { it.where { Albums.userId eq userId } }
+        } else {
+            { query: Query -> query }
+        }
+        return fetchPage(Albums, pageRequest, customWhereCond) { row ->
+            AlbumPageVO(
+                row[Albums.id].value,
+                row[Albums.name],
+                row[Albums.imageCount],
+                row[Albums.isUncategorized]
+            )
+        }
     }
 
     private fun toAlbum(it: ResultRow) = Album(

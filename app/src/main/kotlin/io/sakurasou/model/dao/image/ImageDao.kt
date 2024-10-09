@@ -13,6 +13,7 @@ interface ImageDao {
     fun deleteImageById(imageId: Long): Int
     fun deleteImageByUserId(userId: Long): Int
     fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int
+    fun updateAlbumIdByAlbumId(oldAlbumId: Long, newAlbumId: Long): Int
     fun listImageByAlbumId(albumId: Long): List<Image>
     fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO
     fun getImageById(imageId: Long): Image?

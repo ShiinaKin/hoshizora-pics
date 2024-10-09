@@ -3,6 +3,7 @@ package io.sakurasou.model.dao.common
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.controller.param.PagingParameterWrongException
+import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.strategy.Strategies
 import org.jetbrains.exposed.sql.*
@@ -15,6 +16,7 @@ interface PaginationDao {
     fun <T> fetchPage(
         table: Table,
         pageRequest: PageRequest,
+        customWhereCond: (Query) -> Query = { it -> it },
         transform: (ResultRow) -> T
     ): PageResult<T> {
         val page = pageRequest.page
@@ -22,7 +24,7 @@ interface PaginationDao {
 
         val offset = (page - 1) * pageSize
 
-        val totalRecords: Long = table.selectAll().count()
+        val totalRecords: Long = customWhereCond(table.selectAll()).count()
         val query = table.selectAll().limit(pageSize).offset(offset)
 
         pageRequest.orderBy?.let {
@@ -31,7 +33,9 @@ interface PaginationDao {
             query.orderBy(column, sortOrder)
         }
 
-        val data = query.map { transform(it) }.toList()
+        val finalQuery = customWhereCond(query)
+
+        val data = finalQuery.map { transform(it) }.toList()
 
         val pageResult = PageResult(
             page = page,
@@ -44,9 +48,10 @@ interface PaginationDao {
 
     fun getColumnByName(table: Table, columnName: String): Column<*> {
         return when (table) {
+            Albums -> Albums.columnMap[columnName]
             Groups -> Groups.columnMap[columnName]
             Strategies -> Strategies.columnMap[columnName]
             else -> null
-        } ?: throw PagingParameterWrongException("Column $columnName not found in table $table")
+        } ?: throw PagingParameterWrongException("Column $columnName not found in table ${table.tableName}")
     }
 }

@@ -2,6 +2,7 @@ package io.sakurasou.model.dao.album
 
 import io.sakurasou.model.dao.user.Users
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
 /**
@@ -17,6 +18,13 @@ object Albums : LongIdTable("albums") {
     val createTime = datetime("create_time")
 
     init {
+        uniqueIndex(userId, name)
         foreignKey(userId to Users.id)
     }
+
+    val columnMap = mapOf(
+        "name" to name,
+        "imageCount" to imageCount,
+        "createTime" to createTime
+    )
 }
