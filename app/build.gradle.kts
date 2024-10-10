@@ -1,4 +1,3 @@
-val kotlinVersion: String by project
 val logbackVersion: String by project
 val exposedVersion: String by project
 val ktorSimpleCacheVersion: String by project
@@ -10,9 +9,9 @@ val mockkVersion: String by project
 val version: String by project
 
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
     id("io.ktor.plugin") version "2.3.12"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 }
 
 group = "io.sakurasou"
@@ -75,7 +74,7 @@ dependencies {
     testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("io.ktor:ktor-client-content-negotiation")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 tasks.register<Copy>("copyFrontendBuildResults") {
