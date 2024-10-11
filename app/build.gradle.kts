@@ -39,7 +39,6 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common-jvm")
     implementation("io.ktor:ktor-server-status-pages-jvm")
     implementation("io.ktor:ktor-server-auto-head-response-jvm")
-    implementation("io.ktor:ktor-server-double-receive-jvm")
     implementation("io.ktor:ktor-server-caching-headers-jvm")
     implementation("io.ktor:ktor-server-compression-jvm")
     implementation("io.ktor:ktor-server-conditional-headers-jvm")
