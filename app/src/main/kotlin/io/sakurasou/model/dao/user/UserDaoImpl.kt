@@ -115,7 +115,7 @@ class UserDaoImpl : UserDao {
                 isBanned = it[Users.isBanned],
                 createTime = it[Users.createTime],
                 imageCount = it[Images.id.count()],
-                totalImageSize = it[Images.size.sum()] ?: 0.0
+                totalImageSize = it[Images.size.sum()] ?: 0
             )
         }.toList()
 

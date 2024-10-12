@@ -27,7 +27,7 @@ class ImageDaoImpl : ImageDao {
             it[width] = insertDTO.width
             it[height] = insertDTO.height
             it[md5] = insertDTO.md5
-            it[sha1] = insertDTO.sha1
+            it[sha256] = insertDTO.sha256
             it[isPrivate] = insertDTO.isPrivate
             it[createTime] = insertDTO.createTime
         }
@@ -62,7 +62,7 @@ class ImageDaoImpl : ImageDao {
             .let {
                 ImageCountAndTotalSizeDTO(
                     count = it[Images.id.count()],
-                    totalSize = it[Images.size.sum()] ?: 0.0
+                    totalSize = it[Images.size.sum()] ?: 0
                 )
             }
     }
@@ -102,7 +102,7 @@ class ImageDaoImpl : ImageDao {
         it[Images.width],
         it[Images.height],
         it[Images.md5],
-        it[Images.sha1],
+        it[Images.sha256],
         it[Images.isPrivate],
         it[Images.createTime]
     )

@@ -22,11 +22,11 @@ object Images : LongIdTable() {
     val originName = varchar("origin_name", 255)
     val mimeType = varchar("mime_type", 255)
     val extension = varchar("extension", 255)
-    val size = double("size").check { it greater 0.0 }
+    val size = long("size").check { it greater 0 }
     val width = integer("width").check { it greater 0 }
     val height = integer("height").check { it greater 0 }
     val md5 = char("md5", 32)
-    val sha1 = char("sha1", 40)
+    val sha256 = char("sha256", 64)
     val isPrivate = bool("is_private")
     val createTime = datetime("create_time")
 

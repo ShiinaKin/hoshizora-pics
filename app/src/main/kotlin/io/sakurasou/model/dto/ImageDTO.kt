@@ -17,16 +17,16 @@ data class ImageInsertDTO(
     val originName: String,
     val mimeType: String,
     val extension: String,
-    val size: Double,
+    val size: Long,
     val width: Int,
     val height: Int,
     val md5: String,
-    val sha1: String,
+    val sha256: String,
     val isPrivate: Boolean,
     val createTime: LocalDateTime
 )
 
 data class ImageCountAndTotalSizeDTO(
     val count: Long,
-    val totalSize: Double
+    val totalSize: Long
 )

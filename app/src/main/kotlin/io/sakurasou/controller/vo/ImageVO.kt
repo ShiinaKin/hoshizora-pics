@@ -1,5 +1,6 @@
 package io.sakurasou.controller.vo
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -9,7 +10,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ImageVO(
     val id: Long,
+    val ownerId: Long,
+    val ownerName: String,
     val name: String,
+    val albumId: Long,
     val albumName: String,
     val originName: String,
     val description: String?,
@@ -20,6 +24,8 @@ data class ImageVO(
     val height: Int,
     val md5: String,
     val sha1: String,
+    val isPrivate: Boolean,
+    val createTime: LocalDateTime
 )
 
 @Serializable
@@ -27,5 +33,6 @@ data class ImagePageVO(
     val id: Long,
     val originName: String,
     val externalUrl: String,
-    val size: Double
+    val size: Double,
+    val isPrivate: Boolean
 )
