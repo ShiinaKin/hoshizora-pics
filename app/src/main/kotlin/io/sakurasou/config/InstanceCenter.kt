@@ -89,13 +89,14 @@ object InstanceCenter {
 
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, relationDao)
-        imageService = ImageServiceImpl(imageDao, albumDao)
         albumService = AlbumServiceImpl(albumDao, imageDao)
 
+        roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
         commonService = CommonServiceImpl(userDao, albumDao, settingService)
+
         userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)
 
-        roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
+        imageService = ImageServiceImpl(imageDao, albumDao, userDao, groupDao, strategyDao, settingService)
     }
 
     fun initSystemStatus() {
