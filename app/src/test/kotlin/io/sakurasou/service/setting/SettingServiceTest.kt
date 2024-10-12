@@ -2,15 +2,11 @@ package io.sakurasou.service.setting
 
 import io.mockk.*
 import io.sakurasou.constant.SETTING_SITE
-import io.sakurasou.constant.SETTING_STRATEGY
 import io.sakurasou.constant.SETTING_SYSTEM
-import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.setting.SettingDao
-import io.sakurasou.model.dto.SettingUpdateDTO
 import io.sakurasou.model.entity.Setting
 import io.sakurasou.model.setting.SiteSetting
-import io.sakurasou.model.setting.StrategySetting
 import io.sakurasou.model.setting.SystemSetting
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
@@ -38,26 +34,6 @@ class SettingServiceTest {
         settingService = SettingServiceImpl(settingDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
-    }
-
-    @Test
-    fun `update strategy setting should be successful`() = runBlocking {
-        val request = StrategySettingPatchRequest(allowedImageTypes = listOf("jpg", "png"))
-        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-        val expectedDTO = SettingUpdateDTO(
-            name = SETTING_STRATEGY,
-            config = StrategySetting(allowedImageTypes = listOf("jpg", "png")),
-            updateTime = now
-        )
-
-        coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
-            this.arg<suspend () -> Int>(0).invoke()
-        }
-        every { settingDao.updateSettingByName(expectedDTO) } returns 1
-
-        settingService.updateStrategySetting(request)
-
-        verify(exactly = 1) { settingDao.updateSettingByName(expectedDTO) }
     }
 
     @Test
@@ -110,25 +86,5 @@ class SettingServiceTest {
         val siteSetting = settingService.getSiteSetting()
 
         assertEquals(expectedSetting, siteSetting)
-    }
-
-    @Test
-    fun `getting strategy setting, should return correct setting`() = runBlocking {
-        val expectedSetting = StrategySetting(allowedImageTypes = emptyList())
-
-        coEvery { DatabaseSingleton.dbQuery<StrategySetting>(any()) } coAnswers {
-            this.arg<suspend () -> StrategySetting>(0).invoke()
-        }
-        every { settingDao.getSettingByName(SETTING_STRATEGY) } returns
-                Setting(
-                    name = SETTING_STRATEGY,
-                    config = StrategySetting(allowedImageTypes = emptyList()),
-                    createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),
-                    updateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-                )
-
-        val strategySetting = settingService.getStrategySetting()
-
-        assertEquals(expectedSetting, strategySetting)
     }
 }

@@ -35,7 +35,6 @@ fun Route.settingRoute(settingService: SettingService) {
     }) {
         fetchAllSetting(controller)
         handlePatchSiteSetting(controller)
-        handlePatchStrategySetting(controller)
         handlePatchSystemSetting(controller)
     }
 }
@@ -80,26 +79,6 @@ private fun Route.handlePatchSiteSetting(controller: SettingController) {
     }
 }
 
-private fun Route.handlePatchStrategySetting(controller: SettingController) {
-    route {
-        install(AuthorizationPlugin) {
-            permission = SETTING_WRITE
-        }
-        patch("strategy", {
-            description = "strategy setting"
-            request {
-                body<StrategySettingPatchRequest> {
-                    required = true
-                }
-            }
-        }) {
-            val strategySettingPatch = call.receive<StrategySettingPatchRequest>()
-            controller.handlePatchStrategySetting(strategySettingPatch)
-            call.success()
-        }
-    }
-}
-
 private fun Route.handlePatchSystemSetting(controller: SettingController) {
     route {
         install(AuthorizationPlugin) {
@@ -126,7 +105,6 @@ class SettingController(
     suspend fun handleFetchAllSetting(): Map<String, SettingVO> {
         val systemSetting = settingService.getSystemSetting()
         val siteSetting = settingService.getSiteSetting()
-        val strategySetting = settingService.getStrategySetting()
         val systemSettingVO = SettingVO(
             SETTING_SYSTEM,
             systemSetting,
@@ -135,23 +113,14 @@ class SettingController(
             SETTING_SITE,
             siteSetting,
         )
-        val strategySettingVO = SettingVO(
-            SETTING_STRATEGY,
-            strategySetting,
-        )
         return mapOf(
             SETTING_SYSTEM to systemSettingVO,
             SETTING_SITE to siteSettingVO,
-            SETTING_STRATEGY to strategySettingVO,
         )
     }
 
     suspend fun handlePatchSiteSetting(siteSettingPatch: SiteSettingPatchRequest) {
         settingService.updateSiteSetting(siteSettingPatch)
-    }
-
-    suspend fun handlePatchStrategySetting(strategySettingPatch: StrategySettingPatchRequest) {
-        settingService.updateStrategySetting(strategySettingPatch)
     }
 
     suspend fun handlePatchSystemSetting(systemSettingPatch: SystemSettingPatchRequest) {

@@ -2,7 +2,6 @@ package io.sakurasou.service.setting
 
 import io.sakurasou.constant.SETTING_SITE
 import io.sakurasou.constant.SETTING_STATUS
-import io.sakurasou.constant.SETTING_STRATEGY
 import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.controller.request.SiteSettingPatchRequest
 import io.sakurasou.controller.request.StrategySettingPatchRequest
@@ -14,7 +13,6 @@ import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.setting.SettingDao
 import io.sakurasou.model.dto.SettingUpdateDTO
 import io.sakurasou.model.setting.SiteSetting
-import io.sakurasou.model.setting.StrategySetting
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.model.setting.SystemStatus
 import kotlinx.datetime.Clock
@@ -101,25 +99,6 @@ class SettingServiceImpl(
         }
     }
 
-    override suspend fun updateStrategySetting(strategySetting: StrategySettingPatchRequest) {
-        val strategySettingConfig = StrategySetting(
-            allowedImageTypes = strategySetting.allowedImageTypes
-        )
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val settingUpdateDTO = SettingUpdateDTO(
-            name = SETTING_STRATEGY,
-            config = strategySettingConfig,
-            updateTime = now
-        )
-        runCatching {
-            val influenceRowCnt = dbQuery { settingDao.updateSettingByName(settingUpdateDTO) }
-            if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
-        }.onFailure {
-            if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
-            else throw it
-        }
-    }
-
     override suspend fun updateSystemStatus(systemStatus: SystemStatus) {
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val settingUpdateDTO = SettingUpdateDTO(
@@ -150,15 +129,6 @@ class SettingServiceImpl(
             settingDao.getSettingByName(SETTING_SITE)
         }?.let {
             if (it.config !is SiteSetting) throw ConfigTypeNotMatchException()
-            it.config
-        } ?: throw MissingNecessaryColumnException()
-    }
-
-    override suspend fun getStrategySetting(): StrategySetting {
-        return dbQuery {
-            settingDao.getSettingByName(SETTING_STRATEGY)
-        }?.let {
-            if (it.config !is StrategySetting) throw ConfigTypeNotMatchException()
             it.config
         } ?: throw MissingNecessaryColumnException()
     }
