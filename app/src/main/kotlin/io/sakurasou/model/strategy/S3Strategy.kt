@@ -14,5 +14,6 @@ data class S3Strategy(
     val bucketName: String,
     val region: String,
     val accessKey: String,
-    val secretKey: String
+    val secretKey: String,
+    val publicUrl: String
 ) : StrategyConfig(StrategyType.S3)
