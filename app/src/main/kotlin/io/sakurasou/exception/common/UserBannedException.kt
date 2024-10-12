@@ -1,4 +1,4 @@
-package io.sakurasou.exception.controller.access
+package io.sakurasou.exception.common
 
 import io.sakurasou.exception.ServiceThrowable
 

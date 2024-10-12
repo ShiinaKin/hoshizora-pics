@@ -12,7 +12,6 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.ImagePageVO
 import io.sakurasou.controller.vo.ImageVO
 import io.sakurasou.controller.vo.PageResult
-import io.sakurasou.exception.controller.param.FileSizeException
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.image.ImageService
@@ -73,9 +72,6 @@ private fun Route.imageSelfUpload(controller: ImageController) {
         {
             val contentLength = call.request.header(HttpHeaders.ContentLength)?.toIntOrNull() ?: 0
 
-            if (contentLength < 0 || TODO("less than Group Limit")) {
-                throw FileSizeException()
-            }
 
             var fileDescription = ""
             var fileName = ""

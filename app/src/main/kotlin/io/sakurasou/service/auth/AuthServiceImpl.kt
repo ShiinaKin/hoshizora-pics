@@ -2,7 +2,7 @@ package io.sakurasou.service.auth
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.exception.controller.access.UserBannedException
+import io.sakurasou.exception.common.UserBannedException
 import io.sakurasou.exception.controller.status.UnauthorizedAccessException
 import io.sakurasou.exception.service.user.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
