@@ -66,7 +66,7 @@ class ImageServiceImpl(
             if (currentUsedSize + imageRawFile.size > maxSize) throw FileSizeException()
 
             val fileNamePrefix = imageRawFile.name.split(".")[0]
-            val extension = imageRawFile.name.split(".")[1]
+            var extension = imageRawFile.name.split(".")[1]
 
             // if extension not allow
             if (!groupConfig.groupStrategyConfig.allowedImageTypes.contains(ImageType.valueOf(extension.uppercase()))) {
@@ -79,9 +79,8 @@ class ImageServiceImpl(
             val name = PlaceholderUtils.parsePlaceholder(fileNamingRule, fileNamePrefix, user.id)
             val subFolder = PlaceholderUtils.parsePlaceholder(pathNamingRule, fileNamePrefix, user.id)
 
-            val fileName = "$name.$extension"
-
             // transform image if needed
+            var size = imageRawFile.size
             var imageBytes = imageRawFile.bytes
             var image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
             if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
@@ -97,11 +96,14 @@ class ImageServiceImpl(
                 } else {
                     ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
                 }
+                extension = groupConfig.groupStrategyConfig.imageAutoTransformTarget.name.lowercase()
+                size = imageBytes.size.toLong()
                 image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
             }
             val md5 = DigestUtils.md5Hex(imageBytes)
             val sha256 = DigestUtils.sha256Hex(imageBytes)
 
+            val fileName = "$name.$extension"
             val relativePath = ImageUtils.uploadImageAndGetRelativePath(
                 strategy = strategy,
                 subFolder = subFolder,
@@ -118,10 +120,10 @@ class ImageServiceImpl(
                 name = name,
                 path = relativePath,
                 strategyId = group.strategyId,
-                originName = imageRawFile.name,
+                originName = "$fileNamePrefix.$extension",
                 mimeType = imageRawFile.mimeType,
                 extension = extension,
-                size = imageRawFile.size,
+                size = size,
                 width = image.width,
                 height = image.height,
                 md5 = md5,
