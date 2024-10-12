@@ -1,5 +1,6 @@
 package io.sakurasou.model.common
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.config.InstanceCenter
 import io.sakurasou.constant.*
 import io.sakurasou.model.dao.album.Albums
@@ -23,12 +24,13 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.exposedLogger
 
 /**
  * @author Shiina Kin
  * 2024/9/12 16:22
  */
+private val logger = KotlinLogging.logger {}
+
 fun init() {
     if (isFirstRunning()) return
     SchemaUtils.create(Images)
@@ -131,7 +133,7 @@ private fun initPermission() {
 
     InstanceCenter.permissionDao.batchSavePermission(allPermissions)
 
-    exposedLogger.info("permission init success")
+    logger.info { "permission init success" }
 }
 
 private fun initRole() {
@@ -140,7 +142,7 @@ private fun initRole() {
     InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
     InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
 
-    exposedLogger.info("role init success")
+    logger.info { "role init success" }
 }
 
 private fun initStrategy() {
@@ -154,7 +156,7 @@ private fun initStrategy() {
     )
 
     InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
-    exposedLogger.info("strategy init success")
+    logger.info { "strategy init success" }
 }
 
 private fun initGroup() {
@@ -169,7 +171,7 @@ private fun initGroup() {
     InstanceCenter.groupDao.saveGroup(adminGroup)
     InstanceCenter.groupDao.saveGroup(userGroup)
 
-    exposedLogger.info("group init success")
+    logger.info { "group init success" }
 }
 
 private fun initRelation() {
@@ -200,7 +202,7 @@ private fun initRelation() {
     InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
     InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
 
-    exposedLogger.info("role-permission relation init success")
+    logger.info { "role-permission relation init success" }
 
     // group-role
     val adminRoles = listOf(ROLE_ADMIN)
@@ -208,7 +210,7 @@ private fun initRelation() {
     InstanceCenter.relationDao.batchInsertGroupToRoles(1, adminRoles)
     InstanceCenter.relationDao.batchInsertGroupToRoles(2, userRoles)
 
-    exposedLogger.info("group-role relation init success")
+    logger.info { "group-role relation init success" }
 }
 
 private fun initSetting() {
@@ -238,5 +240,5 @@ private fun initSetting() {
     InstanceCenter.settingDao.saveSetting(systemSettingInsertDTO)
     InstanceCenter.settingDao.saveSetting(systemStatusInsertDTO)
 
-    exposedLogger.info("setting init success")
+    logger.info { "setting init success" }
 }

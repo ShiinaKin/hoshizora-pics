@@ -61,14 +61,21 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
 
+    implementation("commons-codec:commons-codec:1.17.1")
     implementation("at.favre.lib:bcrypt:0.10.2")
+
+    implementation("net.coobird:thumbnailator:0.4.20")
+    implementation("org.sejda.imageio:webp-imageio:0.1.6")
+
+    implementation("software.amazon.awssdk:s3:2.28.21")
 
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation("io.ktor:ktor-server-test-host-jvm")

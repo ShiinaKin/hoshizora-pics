@@ -12,7 +12,6 @@ data class GroupInsertRequest(
     val name: String,
     val description: String? = null,
     val strategyId: Long,
-    val maxSize: Long,
     val roles: List<String>
 )
 
