@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SiteSettingPatchRequest(
+    val siteExternalUrl: String? = null,
     val siteTitle: String? = null,
     val siteSubtitle: String? = null,
     val siteKeyword: String? = null,

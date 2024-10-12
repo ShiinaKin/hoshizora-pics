@@ -46,6 +46,7 @@ class CommonServiceImpl(
 
         val oldSiteSetting = settingService.getSiteSetting()
         val siteSettingConfig = SiteSetting(
+            siteExternalUrl = siteInitRequest.siteExternalUrl,
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
             siteDescription = siteInitRequest.siteDescription,

@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SiteSetting(
+    val siteExternalUrl: String,
     val siteTitle: String,
     val siteSubtitle: String,
     val siteKeyword: String,

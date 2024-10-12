@@ -19,6 +19,7 @@ data class SiteInitRequest(
     val username: String,
     val password: String,
     val email: String,
+    val siteExternalUrl: String,
     val siteTitle: String,
     val siteSubtitle: String,
     val siteDescription: String

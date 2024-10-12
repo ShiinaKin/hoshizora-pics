@@ -4,7 +4,6 @@ import io.sakurasou.constant.SETTING_SITE
 import io.sakurasou.constant.SETTING_STATUS
 import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.controller.request.SiteSettingPatchRequest
-import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.controller.request.SystemSettingPatchRequest
 import io.sakurasou.exception.dao.MissingNecessaryColumnException
 import io.sakurasou.exception.service.setting.ConfigTypeNotMatchException
@@ -76,6 +75,7 @@ class SettingServiceImpl(
             } ?: throw MissingNecessaryColumnException()
 
             val siteSettingConfig = SiteSetting(
+                siteExternalUrl = siteSettingPatch.siteExternalUrl ?: oldSiteSetting.siteExternalUrl,
                 siteTitle = siteSettingPatch.siteTitle ?: oldSiteSetting.siteTitle,
                 siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
                 siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription,

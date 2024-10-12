@@ -213,6 +213,7 @@ private fun initRelation() {
 
 private fun initSetting() {
     val siteSettingConfig = SiteSetting(
+        siteExternalUrl = "http://localhost:8080",
         siteTitle = "HoshizoraPics",
         siteSubtitle = "A simple pic management",
         siteKeyword = "pic, management",
