@@ -1,10 +1,6 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -23,8 +19,12 @@ import io.sakurasou.controller.vo.StrategyVO
 import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.extension.success
+import io.sakurasou.model.strategy.LocalStrategy
+import io.sakurasou.model.strategy.S3Strategy
+import io.sakurasou.model.strategy.StrategyConfig
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.strategy.StrategyService
+import io.swagger.v3.oas.models.media.Schema
 
 /**
  * @author Shiina Kin
@@ -68,8 +68,60 @@ private fun Route.insertStrategy(controller: StrategyController) {
         post({
             protected = true
             request {
-                body<StrategyInsertRequest> {
-                    description = "strategy request"
+                body(Schema<StrategyInsertRequest>().apply {
+                    addProperty("config", Schema<StrategyConfig>().apply {
+                        description = "io/sakurasou/model/strategy/StrategyConfig.kt"
+                        oneOf(
+                            listOf(
+                                Schema<LocalStrategy>().apply {
+                                    description = "Local strategy configuration"
+                                    addProperty("uploadFolder", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("strategyType", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("type", Schema<Any>().apply {
+                                        type = "string"
+                                        description = "same to strategyType"
+                                    })
+                                },
+                                Schema<S3Strategy>().apply {
+                                    description = "S3 strategy configuration"
+                                    addProperty("endpoint", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("bucketName", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("region", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("accessKey", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("secretKey", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("publicUrl", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("strategyType", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("type", Schema<Any>().apply {
+                                        type = "string"
+                                        description = "same to strategyType"
+                                    })
+                                }
+                            )
+                        )
+                    })
+                    addProperty("name", Schema<Any>().apply {
+                        type = "string"
+                    })
+                }) {
+                    description = "`config` need a extra field `type`, same to strategyType"
                     required = true
                 }
             }
