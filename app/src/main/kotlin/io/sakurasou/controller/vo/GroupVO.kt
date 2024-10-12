@@ -12,7 +12,6 @@ data class GroupVO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val maxSize: Long,
     val roles: List<String>
 )
 

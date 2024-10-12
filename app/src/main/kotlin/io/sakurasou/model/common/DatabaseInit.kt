@@ -13,6 +13,8 @@ import io.sakurasou.model.dao.setting.Settings
 import io.sakurasou.model.dao.strategy.Strategies
 import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.dto.*
+import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.GroupStrategyConfig
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.model.setting.SystemStatus
@@ -156,8 +158,14 @@ private fun initStrategy() {
 }
 
 private fun initGroup() {
-    val adminGroup = GroupInsertDTO(GROUP_ADMIN, "admin group", 1)
-    val userGroup = GroupInsertDTO(GROUP_USER, "user group", 1)
+    val adminGroupConfig = GroupConfig(
+        groupStrategyConfig = GroupStrategyConfig()
+    )
+    val adminGroup = GroupInsertDTO(GROUP_ADMIN, "admin group", 1, adminGroupConfig)
+    val userGroupConfig = GroupConfig(
+        groupStrategyConfig = GroupStrategyConfig()
+    )
+    val userGroup = GroupInsertDTO(GROUP_USER, "user group", 1, userGroupConfig)
     InstanceCenter.groupDao.saveGroup(adminGroup)
     InstanceCenter.groupDao.saveGroup(userGroup)
 

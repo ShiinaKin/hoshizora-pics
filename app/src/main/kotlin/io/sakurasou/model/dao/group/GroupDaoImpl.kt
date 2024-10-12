@@ -21,7 +21,7 @@ class GroupDaoImpl : GroupDao {
             it[name] = groupInsertDTO.name
             it[description] = groupInsertDTO.description
             it[strategyId] = groupInsertDTO.strategyId
-            it[maxSize] = groupInsertDTO.maxSize
+            it[config] = groupInsertDTO.config
         }
         return entityID.value
     }
@@ -35,7 +35,7 @@ class GroupDaoImpl : GroupDao {
             it[name] = groupUpdateDTO.name
             it[description] = groupUpdateDTO.description
             it[strategyId] = groupUpdateDTO.strategyId
-            it[maxSize] = groupUpdateDTO.maxSize
+            it[config] = groupUpdateDTO.config
         }
     }
 
@@ -48,7 +48,7 @@ class GroupDaoImpl : GroupDao {
                     it[Groups.name],
                     it[Groups.description],
                     it[Groups.strategyId],
-                    it[Groups.maxSize]
+                    it[Groups.config]
                 )
             }
             .firstOrNull()
@@ -61,7 +61,7 @@ class GroupDaoImpl : GroupDao {
                 row[Groups.name],
                 row[Groups.description],
                 row[Groups.strategyId],
-                row[Groups.maxSize]
+                row[Groups.config]
             )
         }
     }

@@ -16,6 +16,8 @@ import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
+import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.GroupStrategyConfig
 
 /**
  * @author Shiina Kin
@@ -30,7 +32,9 @@ class GroupServiceImpl(
             name = insertRequest.name,
             description = insertRequest.description,
             strategyId = insertRequest.strategyId,
-            maxSize = insertRequest.maxSize
+            config = GroupConfig(
+                groupStrategyConfig = GroupStrategyConfig()
+            )
         )
         val groupRoles = insertRequest.roles
 
@@ -57,6 +61,7 @@ class GroupServiceImpl(
         }
     }
 
+    // TODO rewrite, distinct group basic info & group config
     override suspend fun updateGroup(id: Long, patchRequest: GroupPatchRequest) {
         dbQuery {
             val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
@@ -66,7 +71,7 @@ class GroupServiceImpl(
                 name = patchRequest.name ?: oldGroup.name,
                 description = patchRequest.description ?: oldGroup.description,
                 strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
-                maxSize = patchRequest.maxSize ?: oldGroup.maxSize
+                config = patchRequest.config ?: oldGroup.config
             )
 
             runCatching {
@@ -79,6 +84,7 @@ class GroupServiceImpl(
         }
     }
 
+    // TODO rewrite, distinct group basic info & group config
     override suspend fun fetchGroup(id: Long): GroupVO {
         val group = dbQuery { groupDao.findGroupById(id) } ?: throw GroupNotFoundException()
         val roles = dbQuery { relationDao.listRoleByGroupId(group.id) }
@@ -87,7 +93,6 @@ class GroupServiceImpl(
             name = group.name,
             description = group.description,
             strategyId = group.strategyId,
-            maxSize = group.maxSize,
             roles = roles
         )
     }

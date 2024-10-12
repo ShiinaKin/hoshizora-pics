@@ -1,7 +1,10 @@
 package io.sakurasou.model.dao.group
 
 import io.sakurasou.model.dao.strategy.Strategies
+import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.plugins.jsonFormat
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.json.json
 
 /**
  * @author ShiinaKin
@@ -11,7 +14,7 @@ object Groups : LongIdTable("groups") {
     val name = varchar("name", 255).uniqueIndex()
     val description = varchar("description", 255).nullable()
     val strategyId = long("strategy_id")
-    val maxSize = long("max_size").check { it greaterEq 0 }
+    val config = json<GroupConfig>("config", jsonFormat)
 
     init {
         foreignKey(strategyId to Strategies.id)
@@ -20,6 +23,5 @@ object Groups : LongIdTable("groups") {
     val columnMap = mapOf(
         "name" to name,
         "description" to description,
-        "maxSize" to maxSize
     )
 }

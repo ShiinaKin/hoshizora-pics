@@ -1,5 +1,7 @@
 package io.sakurasou.model.dto
 
+import io.sakurasou.model.group.GroupConfig
+
 /**
  * @author Shiina Kin
  * 2024/9/12 13:46
@@ -8,7 +10,7 @@ data class GroupInsertDTO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val maxSize: Long = 5 * 1024 * 1024 * 1024L
+    val config: GroupConfig
 )
 
 data class GroupUpdateDTO(
@@ -16,5 +18,5 @@ data class GroupUpdateDTO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val maxSize: Long
+    val config: GroupConfig
 )
