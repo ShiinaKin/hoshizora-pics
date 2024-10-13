@@ -163,6 +163,54 @@ class ImageServiceImpl(
 
     override suspend fun fetchImage(imageId: Long): ImageVO {
         TODO("Not yet implemented")
+    override suspend fun fetchSelfImageFile(userId: Long, imageId: Long): ImageFileDTO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            if (image.userId != userId) throw ImageAccessDeniedException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when (strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+            }
+        }
+    }
+
+    override suspend fun fetchSelfImageThumbnailFile(userId: Long, imageId: Long): ImageFileDTO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            if (image.userId != userId) throw ImageAccessDeniedException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when (strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+            }
+        }
+    }
+
+    override suspend fun fetchImageFile(imageId: Long): ImageFileDTO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when (strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+            }
+        }
+    }
+
+    override suspend fun fetchImageThumbnailFile(imageId: Long): ImageFileDTO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when (strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+            }
+        }
     }
 
     override suspend fun pageSelfImage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
