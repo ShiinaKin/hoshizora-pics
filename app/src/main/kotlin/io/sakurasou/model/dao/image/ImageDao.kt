@@ -15,7 +15,7 @@ interface ImageDao {
     fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int
     fun updateAlbumIdByAlbumId(oldAlbumId: Long, newAlbumId: Long): Int
     fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO
-    fun getImageById(imageId: Long): Image?
+    fun findImageById(imageId: Long): Image?
     fun countImageByAlbumId(albumId: Long): Long
     fun listImageByAlbumId(albumId: Long): List<Image>
 }

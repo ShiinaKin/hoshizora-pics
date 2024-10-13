@@ -12,7 +12,7 @@ data class ImageVO(
     val id: Long,
     val ownerId: Long,
     val ownerName: String,
-    val name: String,
+    val displayName: String,
     val albumId: Long,
     val albumName: String,
     val originName: String,

@@ -16,7 +16,8 @@ class ImageDaoImpl : ImageDao {
             it[userId] = insertDTO.userId
             it[groupId] = insertDTO.groupId
             it[albumId] = insertDTO.albumId
-            it[name] = insertDTO.name
+            it[uniqueName] = insertDTO.uniqueName
+            it[displayName] = insertDTO.displayName
             it[description] = insertDTO.description
             it[path] = insertDTO.path
             it[strategyId] = insertDTO.strategyId
@@ -67,7 +68,7 @@ class ImageDaoImpl : ImageDao {
             }
     }
 
-    override fun getImageById(imageId: Long): Image? {
+    override fun findImageById(imageId: Long): Image? {
         return Images.selectAll()
             .where { Images.id eq imageId }
             .map { toImage(it) }
@@ -91,7 +92,8 @@ class ImageDaoImpl : ImageDao {
         it[Images.userId],
         it[Images.groupId],
         it[Images.albumId],
-        it[Images.name],
+        it[Images.uniqueName],
+        it[Images.displayName],
         it[Images.description],
         it[Images.path],
         it[Images.strategyId],

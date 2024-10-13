@@ -38,6 +38,7 @@ data class ImageRawFile(
 @Serializable
 data class ImagePatchRequest(
     val albumId: Long? = null,
+    val displayName: String? = null,
     val description: String? = null,
     val isPrivate: Boolean? = null
 )
@@ -46,6 +47,7 @@ data class ImagePatchRequest(
 data class ImageManagePatchRequest(
     val userId: Long? = null,
     val albumId: Long? = null,
+    val displayName: String? = null,
     val description: String? = null,
     val isPrivate: Boolean? = null
 )
