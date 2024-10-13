@@ -2,6 +2,7 @@ package io.sakurasou.model.dao.image
 
 import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
+import io.sakurasou.model.dto.ImageUpdateDTO
 import io.sakurasou.model.entity.Image
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -41,6 +42,15 @@ class ImageDaoImpl : ImageDao {
 
     override fun deleteImageByUserId(userId: Long): Int {
         return Images.deleteWhere { Images.userId eq userId }
+    }
+
+    override fun updateImageById(imageUpdateDTO: ImageUpdateDTO): Int {
+        return Images.update({Images.id eq imageUpdateDTO.id}) {
+            it[albumId] = imageUpdateDTO.albumId
+            it[displayName] = imageUpdateDTO.displayName
+            it[description] = imageUpdateDTO.description
+            it[isPrivate] = imageUpdateDTO.isPrivate
+        }
     }
 
     override fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int {

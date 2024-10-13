@@ -150,11 +150,51 @@ class ImageServiceImpl(
     }
 
     override suspend fun patchSelfImage(userId: Long, imageId: Long, selfPatchRequest: ImagePatchRequest) {
-        TODO("Not yet implemented")
+        runCatching {
+            dbQuery {
+                val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+                if (image.userId != userId) throw ImageAccessDeniedException()
+
+                val imageUpdateDTO = ImageUpdateDTO(
+                    id = imageId,
+                    albumId = image.albumId,
+                    displayName = selfPatchRequest.displayName ?: image.displayName,
+                    description = selfPatchRequest.description ?: image.description,
+                    isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate
+                )
+
+                imageDao.updateImageById(imageUpdateDTO)
+            }
+        }.onFailure {
+            if (it is ServiceThrowable) throw ImageUpdateFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun patchImage(imageId: Long, managePatchRequest: ImageManagePatchRequest) {
-        TODO("Not yet implemented")
+        runCatching {
+            dbQuery {
+                val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+
+                if (managePatchRequest.albumId != null) {
+                    val album = albumDao.findAlbumById(managePatchRequest.albumId) ?: throw AlbumNotFoundException()
+                    if (album.userId != image.userId) throw AlbumAccessDeniedException()
+                }
+
+                val imageUpdateDTO = ImageUpdateDTO(
+                    id = imageId,
+                    albumId = managePatchRequest.albumId ?: image.albumId,
+                    displayName = managePatchRequest.displayName ?: image.displayName,
+                    description = managePatchRequest.description ?: image.description,
+                    isPrivate = managePatchRequest.isPrivate ?: image.isPrivate
+                )
+
+                imageDao.updateImageById(imageUpdateDTO)
+            }
+        }.onFailure {
+            if (it is ServiceThrowable) throw ImageUpdateFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun fetchSelfImageInfo(userId: Long, imageId: Long): ImageVO {
