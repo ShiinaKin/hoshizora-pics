@@ -15,5 +15,7 @@ data class S3Strategy(
     val region: String,
     val accessKey: String,
     val secretKey: String,
+    val uploadFolder: String,
+    val thumbnailFolder: String,
     val publicUrl: String
 ) : StrategyConfig(StrategyType.S3)

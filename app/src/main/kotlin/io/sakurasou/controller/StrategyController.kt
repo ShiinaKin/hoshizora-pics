@@ -78,6 +78,9 @@ private fun Route.insertStrategy(controller: StrategyController) {
                                     addProperty("uploadFolder", Schema<Any>().apply {
                                         type = "string"
                                     })
+                                    addProperty("thumbnailFolder", Schema<Any>().apply {
+                                        type = "string"
+                                    })
                                     addProperty("strategyType", Schema<Any>().apply {
                                         type = "string"
                                     })
@@ -101,6 +104,12 @@ private fun Route.insertStrategy(controller: StrategyController) {
                                         type = "string"
                                     })
                                     addProperty("secretKey", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("uploadFolder", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("thumbnailFolder", Schema<Any>().apply {
                                         type = "string"
                                     })
                                     addProperty("publicUrl", Schema<Any>().apply {

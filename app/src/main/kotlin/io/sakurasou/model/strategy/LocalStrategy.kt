@@ -10,5 +10,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("LOCAL")
 data class LocalStrategy(
-    val uploadFolder: String
+    val uploadFolder: String,
+    val thumbnailFolder: String
 ) : StrategyConfig(StrategyType.LOCAL)
