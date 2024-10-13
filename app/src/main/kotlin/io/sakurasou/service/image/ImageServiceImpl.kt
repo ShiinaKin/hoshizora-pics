@@ -76,7 +76,7 @@ class ImageServiceImpl(
             val fileNamingRule = groupConfig.groupStrategyConfig.fileNamingRule
             val pathNamingRule = groupConfig.groupStrategyConfig.pathNamingRule
 
-            val name = PlaceholderUtils.parsePlaceholder(fileNamingRule, fileNamePrefix, user.id)
+            val uniqueName = PlaceholderUtils.parsePlaceholder(fileNamingRule, fileNamePrefix, user.id)
             val subFolder = PlaceholderUtils.parsePlaceholder(pathNamingRule, fileNamePrefix, user.id)
 
             // transform image if needed
@@ -103,24 +103,21 @@ class ImageServiceImpl(
             val md5 = DigestUtils.md5Hex(imageBytes)
             val sha256 = DigestUtils.sha256Hex(imageBytes)
 
-            val fileName = "$name.$extension"
-            val relativePath = ImageUtils.uploadImageAndGetRelativePath(
-                strategy = strategy,
-                subFolder = subFolder,
-                fileName = fileName,
-                bytes = imageBytes
-            )
+            val fileName = "$uniqueName.$extension"
+            val relativePath = ImageUtils.uploadImageAndGetRelativePath(strategy, subFolder, fileName, imageBytes)
 
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
+            val displayName = "$fileNamePrefix.$extension"
             val imageInsertDTO = ImageInsertDTO(
                 userId = user.id,
                 groupId = group.id,
                 albumId = defaultAlbum.id,
-                name = name,
+                uniqueName = uniqueName,
+                displayName = displayName,
                 path = relativePath,
                 strategyId = group.strategyId,
-                originName = "$fileNamePrefix.$extension",
+                originName = displayName,
                 mimeType = imageRawFile.mimeType,
                 extension = extension,
                 size = size,
@@ -134,9 +131,11 @@ class ImageServiceImpl(
 
             imageDao.saveImage(imageInsertDTO)
 
+            ImageUtils.createAndUploadThumbnail(strategy, subFolder, fileName, image)
+
             if (user.isDefaultImagePrivate) ""
             else when (strategy.config) {
-                is LocalStrategy -> "${siteSetting.siteExternalUrl}/$relativePath"
+                is LocalStrategy -> "${siteSetting.siteExternalUrl}/s/$uniqueName"
                 is S3Strategy -> "${strategy.config.publicUrl}/$relativePath"
             }
         }
