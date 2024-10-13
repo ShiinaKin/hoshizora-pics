@@ -39,6 +39,7 @@ object PlaceholderUtils {
     }
 
     @OptIn(ExperimentalUuidApi::class)
+    @Synchronized
     fun parsePlaceholder(namingRule: String, fileName: String, userId: Long): String {
         val instant = Clock.System.now()
         val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())

@@ -54,89 +54,108 @@ class ImageServiceImpl(
 ) : ImageService {
     override suspend fun saveImage(userId: Long, imageRawFile: ImageRawFile): String {
         val siteSetting = settingService.getSiteSetting()
-        return dbQuery {
-            val user = userDao.findUserById(userId) ?: throw IllegalArgumentException("User not found")
-            val group = groupDao.findGroupById(user.groupId) ?: throw IllegalArgumentException("Group not found")
-            val defaultAlbum =
-                albumDao.findAlbumById(user.defaultAlbumId) ?: throw IllegalArgumentException("Default Album not found")
-            val strategy = strategyDao.findStrategyById(group.strategyId) ?: throw StrategyNotFoundException()
-            val groupConfig = group.config
+        return runCatching {
+            dbQuery {
+                val user = userDao.findUserById(userId) ?: throw UserNotFoundException()
+                val group = groupDao.findGroupById(user.groupId) ?: throw GroupNotFoundException()
+                val defaultAlbum =
+                    albumDao.findAlbumById(user.defaultAlbumId) ?: throw AlbumNotFoundException()
+                val strategy = strategyDao.findStrategyById(group.strategyId) ?: throw StrategyNotFoundException()
+                val groupConfig = group.config
 
-            // if user is banned
-            if (user.isBanned) throw UserBannedException()
+                // if user is banned
+                if (user.isBanned) throw UserBannedException()
 
-            // if over single file maxSize
-            if (imageRawFile.size > groupConfig.groupStrategyConfig.singleFileMaxSize) throw FileSizeException()
+                // if over single file maxSize
+                if (imageRawFile.size > groupConfig.groupStrategyConfig.singleFileMaxSize) throw FileSizeException()
 
-            // if over group maxSize
-            val imageCountAndTotalSizeOfUser = imageDao.getImageCountAndTotalSizeOfUser(user.id)
-            val currentUsedSize = imageCountAndTotalSizeOfUser.totalSize
-            val maxSize = groupConfig.groupStrategyConfig.maxSize
-            if (currentUsedSize + imageRawFile.size > maxSize) throw FileSizeException()
+                // if over group maxSize
+                val imageCountAndTotalSizeOfUser = imageDao.getImageCountAndTotalSizeOfUser(user.id)
+                val currentUsedSize = imageCountAndTotalSizeOfUser.totalSize
+                val maxSize = groupConfig.groupStrategyConfig.maxSize
+                if (currentUsedSize + imageRawFile.size > maxSize) throw FileSizeException()
 
-            val fileNamePrefix = imageRawFile.name.split(".")[0]
-            var extension = imageRawFile.name.split(".")[1]
+                val fileNamePrefix = imageRawFile.name.split(".")[0]
+                var extension = imageRawFile.name.split(".")[1]
 
-            // if extension not allow
-            if (!groupConfig.groupStrategyConfig.allowedImageTypes.contains(ImageType.valueOf(extension.uppercase()))) {
-                throw FileExtensionNotAllowedException()
-            }
-
-            val fileNamingRule = groupConfig.groupStrategyConfig.fileNamingRule
-            val pathNamingRule = groupConfig.groupStrategyConfig.pathNamingRule
-
-            val uniqueName = PlaceholderUtils.parsePlaceholder(fileNamingRule, fileNamePrefix, user.id)
-            val subFolder = PlaceholderUtils.parsePlaceholder(pathNamingRule, fileNamePrefix, user.id)
-
-            // transform image if needed
-            var size = imageRawFile.size
-            var imageBytes = imageRawFile.bytes
-            var image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
-            if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
-                imageBytes = if (groupConfig.groupStrategyConfig.imageQuality != 100) {
-                    val quality = groupConfig.groupStrategyConfig.imageQuality
-                    if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
-                    val imageQuality = quality / 100.0
-                    ImageUtils.transformImage(
-                        image,
-                        groupConfig.groupStrategyConfig.imageAutoTransformTarget,
-                        imageQuality
-                    )
-                } else {
-                    ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
+                // if extension not allow
+                if (!groupConfig.groupStrategyConfig.allowedImageTypes.contains(ImageType.valueOf(extension.uppercase()))) {
+                    throw FileExtensionNotAllowedException()
                 }
-                extension = groupConfig.groupStrategyConfig.imageAutoTransformTarget.name.lowercase()
-                size = imageBytes.size.toLong()
-                image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
+
+                val fileNamingRule = groupConfig.groupStrategyConfig.fileNamingRule
+                val pathNamingRule = groupConfig.groupStrategyConfig.pathNamingRule
+
+                val uniqueName = PlaceholderUtils.parsePlaceholder("{uniq}", "", -1)
+                val subFolder = PlaceholderUtils.parsePlaceholder(pathNamingRule, fileNamePrefix, user.id)
+                val fileName = PlaceholderUtils.parsePlaceholder(fileNamingRule, fileNamePrefix, user.id)
+
+                // transform image if needed
+                var size = imageRawFile.size
+                var imageBytes = imageRawFile.bytes
+                var image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
+                if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
+                    imageBytes = if (groupConfig.groupStrategyConfig.imageQuality != 100) {
+                        val quality = groupConfig.groupStrategyConfig.imageQuality
+                        if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
+                        val imageQuality = quality / 100.0
+                        ImageUtils.transformImage(
+                            image,
+                            groupConfig.groupStrategyConfig.imageAutoTransformTarget,
+                            imageQuality
+                        )
+                    } else {
+                        ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
+                    }
+                    extension = groupConfig.groupStrategyConfig.imageAutoTransformTarget.name.lowercase()
+                    size = imageBytes.size.toLong()
+                    image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
+                }
+                val md5 = DigestUtils.md5Hex(imageBytes)
+                val sha256 = DigestUtils.sha256Hex(imageBytes)
+
+                val storageFileName = "$fileName.$extension"
+                val relativePath =
+                    ImageUtils.uploadImageAndGetRelativePath(strategy, subFolder, storageFileName, imageBytes)
+
+                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+                val displayName = "$fileNamePrefix.$extension"
+                val imageInsertDTO = ImageInsertDTO(
+                    userId = user.id,
+                    groupId = group.id,
+                    albumId = defaultAlbum.id,
+                    uniqueName = uniqueName,
+                    displayName = displayName,
+                    path = relativePath,
+                    strategyId = group.strategyId,
+                    originName = imageRawFile.name,
+                    mimeType = imageRawFile.mimeType,
+                    extension = extension,
+                    size = size,
+                    width = image.width,
+                    height = image.height,
+                    md5 = md5,
+                    sha256 = sha256,
+                    isPrivate = user.isDefaultImagePrivate,
+                    createTime = now
+                )
+
+                imageDao.saveImage(imageInsertDTO)
+
+                ImageUtils.createAndUploadThumbnail(strategy, subFolder, storageFileName, image)
+
+                if (user.isDefaultImagePrivate) ""
+                else when (strategy.config) {
+                    is LocalStrategy -> "${siteSetting.siteExternalUrl}/s/$uniqueName"
+                    is S3Strategy -> "${strategy.config.publicUrl}/$relativePath"
+                }
             }
-            val md5 = DigestUtils.md5Hex(imageBytes)
-            val sha256 = DigestUtils.sha256Hex(imageBytes)
-
-            val fileName = "$uniqueName.$extension"
-            val relativePath = ImageUtils.uploadImageAndGetRelativePath(strategy, subFolder, fileName, imageBytes)
-
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-
-            val displayName = "$fileNamePrefix.$extension"
-            val imageInsertDTO = ImageInsertDTO(
-                userId = user.id,
-                groupId = group.id,
-                albumId = defaultAlbum.id,
-                uniqueName = uniqueName,
-                displayName = displayName,
-                path = relativePath,
-                strategyId = group.strategyId,
-                originName = displayName,
-                mimeType = imageRawFile.mimeType,
-                extension = extension,
-                size = size,
-                width = image.width,
-                height = image.height,
-                md5 = md5,
-                sha256 = sha256,
-                isPrivate = user.isDefaultImagePrivate,
-                createTime = now
-            )
+        }.onFailure {
+            if (it is ServiceThrowable) throw ImageInsertFailedException(it)
+            else throw it
+        }.getOrThrow()
+    }
 
     override suspend fun deleteSelfImage(userId: Long, imageId: Long) {
         runCatching {
