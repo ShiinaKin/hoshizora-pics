@@ -157,12 +157,68 @@ class ImageServiceImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun fetchSelfImage(userId: Long, imageId: Long): ImageVO {
-        TODO("Not yet implemented")
+    override suspend fun fetchSelfImageInfo(userId: Long, imageId: Long): ImageVO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            if (image.userId != userId) throw ImageAccessDeniedException()
+            val user = userDao.findUserById(image.userId) ?: throw UserNotFoundException()
+            val album = albumDao.findAlbumById(image.albumId) ?: throw AlbumNotFoundException()
+
+            val sizeForVO = image.size / 1024.0 / 1024.0
+
+            ImageVO(
+                id = image.id,
+                ownerId = user.id,
+                ownerName = user.name,
+                displayName = image.displayName,
+                albumId = album.id,
+                albumName = album.name,
+                originName = image.originName,
+                description = image.description,
+                mimeType = image.mimeType,
+                size = sizeForVO,
+                width = image.width,
+                height = image.height,
+                md5 = image.md5,
+                sha256 = image.sha256,
+                isPrivate = image.isPrivate,
+                createTime = image.createTime
+            )
+        }
     }
 
-    override suspend fun fetchImage(imageId: Long): ImageVO {
-        TODO("Not yet implemented")
+    override suspend fun fetchImageInfo(imageId: Long): ImageManageVO {
+        return dbQuery {
+            val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+            val user = userDao.findUserById(image.userId) ?: throw UserNotFoundException()
+            val group = groupDao.findGroupById(user.groupId) ?: throw GroupNotFoundException()
+            val album = albumDao.findAlbumById(image.albumId) ?: throw AlbumNotFoundException()
+
+            val sizeForVO = image.size / 1024.0 / 1024.0
+
+            ImageManageVO(
+                id = image.id,
+                ownerId = user.id,
+                ownerName = user.name,
+                groupId = group.id,
+                groupName = group.name,
+                displayName = image.displayName,
+                albumId = album.id,
+                albumName = album.name,
+                originName = image.originName,
+                description = image.description,
+                mimeType = image.mimeType,
+                size = sizeForVO,
+                width = image.width,
+                height = image.height,
+                md5 = image.md5,
+                sha256 = image.sha256,
+                isPrivate = image.isPrivate,
+                createTime = image.createTime
+            )
+        }
+    }
+
     override suspend fun fetchSelfImageFile(userId: Long, imageId: Long): ImageFileDTO {
         return dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
