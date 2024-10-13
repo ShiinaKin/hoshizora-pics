@@ -4,20 +4,29 @@ import io.sakurasou.controller.request.ImageManagePatchRequest
 import io.sakurasou.controller.request.ImagePatchRequest
 import io.sakurasou.controller.request.ImageRawFile
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.ImageManageVO
 import io.sakurasou.controller.vo.ImagePageVO
 import io.sakurasou.controller.vo.ImageVO
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.exception.ServiceThrowable
 import io.sakurasou.exception.common.FileExtensionNotAllowedException
 import io.sakurasou.exception.common.FileSizeException
 import io.sakurasou.exception.common.UserBannedException
+import io.sakurasou.exception.service.album.AlbumAccessDeniedException
+import io.sakurasou.exception.service.album.AlbumNotFoundException
+import io.sakurasou.exception.service.group.GroupNotFoundException
+import io.sakurasou.exception.service.image.*
 import io.sakurasou.exception.service.strategy.StrategyNotFoundException
+import io.sakurasou.exception.service.user.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.image.ImageDao
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dao.user.UserDao
+import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.model.dto.ImageInsertDTO
+import io.sakurasou.model.dto.ImageUpdateDTO
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
@@ -129,24 +138,39 @@ class ImageServiceImpl(
                 createTime = now
             )
 
-            imageDao.saveImage(imageInsertDTO)
+    override suspend fun deleteSelfImage(userId: Long, imageId: Long) {
+        runCatching {
+            dbQuery {
+                val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
 
-            ImageUtils.createAndUploadThumbnail(strategy, subFolder, fileName, image)
+                if (image.userId != userId) throw ImageAccessDeniedException()
 
-            if (user.isDefaultImagePrivate) ""
-            else when (strategy.config) {
-                is LocalStrategy -> "${siteSetting.siteExternalUrl}/s/$uniqueName"
-                is S3Strategy -> "${strategy.config.publicUrl}/$relativePath"
+                val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+                imageDao.deleteImageById(imageId)
+                ImageUtils.deleteImage(strategy, image.path)
+                ImageUtils.deleteThumbnail(strategy, image.path)
             }
+        }.onFailure {
+            if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
+            else throw it
         }
     }
 
-    override suspend fun deleteSelfImage(userId: Long, imageId: Long) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteImage(imageId: Long) {
-        TODO("Not yet implemented")
+        runCatching {
+            dbQuery {
+                val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
+                val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+                imageDao.deleteImageById(imageId)
+                ImageUtils.deleteImage(strategy, image.path)
+                ImageUtils.deleteThumbnail(strategy, image.path)
+            }
+        }.onFailure {
+            if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
+            else throw it
+        }
     }
 
     override suspend fun patchSelfImage(userId: Long, imageId: Long, selfPatchRequest: ImagePatchRequest) {

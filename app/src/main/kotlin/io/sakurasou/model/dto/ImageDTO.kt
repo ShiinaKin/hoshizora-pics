@@ -32,6 +32,14 @@ data class ImageCountAndTotalSizeDTO(
     val totalSize: Long
 )
 
+data class ImageUpdateDTO(
+    val id: Long,
+    val albumId: Long,
+    val displayName: String,
+    val description: String? = null,
+    val isPrivate: Boolean
+)
+
 data class ImageFileDTO(
     val bytes: ByteArray? = null,
     val url: String? = null

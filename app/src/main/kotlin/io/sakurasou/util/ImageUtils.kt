@@ -1,6 +1,10 @@
 package io.sakurasou.util
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.sakurasou.exception.service.image.io.ImageFileCreateFailedException
+import io.sakurasou.exception.service.image.io.ImageFileDeleteFailedException
+import io.sakurasou.exception.service.image.io.ImageFileNotFoundException
+import io.sakurasou.exception.service.image.io.ImageParentFolderCreateFailedException
 import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
@@ -34,11 +38,17 @@ object ImageUtils {
                     val uploadFolderStr = strategyConfig.uploadFolder
                     val uploadFolder = File(uploadFolderStr, subFolder)
                     if (!uploadFolder.exists() && !uploadFolder.mkdirs()) {
-                        throw RuntimeException("Failed to create upload folder")
+                        throw ImageParentFolderCreateFailedException()
                     }
                     val uploadFile = File(uploadFolder, fileName)
-                    uploadFile.writeBytes(bytes)
-                    logger.trace { "save image $fileName at ${uploadFile.absolutePath}" }
+                    runCatching {
+                        uploadFile.writeBytes(bytes)
+                    }.onFailure {
+                        logger.error(it) { "Failed to save image $fileName at ${uploadFile.absolutePath}" }
+                        throw ImageFileCreateFailedException()
+                    }.onSuccess {
+                        logger.trace { "save image $fileName at ${uploadFile.absolutePath}" }
+                    }
                 }
 
                 is S3Strategy -> {
@@ -69,14 +79,19 @@ object ImageUtils {
                         logger.error { "Failed to create thumbnail folder" }
                         return@withContext
                     }
-
                     val thumbnailFile = File(thumbnailFolder, fileName)
-                    thumbnailFile.writeBytes(thumbnailBytes)
-                    logger.trace { "save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
+                    runCatching {
+                        thumbnailFile.writeBytes(thumbnailBytes)
+                    }.onFailure {
+                        logger.error(it) { "Failed to save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
+                        return@withContext
+                    }.onSuccess {
+                        logger.trace { "save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
+                    }
                 }
 
                 is S3Strategy -> {
-                    val filePath = "${strategyConfig.uploadFolder}/$relativePath"
+                    val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
                     S3Utils.uploadImage(filePath, thumbnailBytes, strategy)
                 }
             }
@@ -91,12 +106,33 @@ object ImageUtils {
                     val uploadFile = File(uploadFolderStr, relativePath)
 
                     if (uploadFile.exists() && !uploadFile.delete()) {
-                        throw RuntimeException("Failed to delete image")
+                        logger.error { "Failed to delete image at $uploadFolderStr/$relativePath" }
+                        throw ImageFileDeleteFailedException()
                     }
                 }
 
                 is S3Strategy -> {
                     val filePath = "${strategyConfig.uploadFolder}/$relativePath"
+                    S3Utils.deleteImage(filePath, strategy)
+                }
+            }
+        }
+    }
+
+    suspend fun deleteThumbnail(strategy: Strategy, relativePath: String) {
+        return withContext(Dispatchers.IO) {
+            when (val strategyConfig = strategy.config) {
+                is LocalStrategy -> {
+                    val thumbnailFolder = strategyConfig.thumbnailFolder
+                    val thumbnailFile = File(thumbnailFolder, relativePath)
+
+                    if (thumbnailFile.exists() && !thumbnailFile.delete()) {
+                        logger.error { "Failed to delete thumbnail at $thumbnailFolder/$relativePath" }
+                    }
+                }
+
+                is S3Strategy -> {
+                    val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
                     S3Utils.deleteImage(filePath, strategy)
                 }
             }
@@ -112,10 +148,7 @@ object ImageUtils {
                     val parentFolderStr =
                         if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
                     val uploadFile = File(parentFolderStr, relativePath)
-
-                    if (!uploadFile.exists()) {
-                        throw RuntimeException("Image not found")
-                    }
+                    if (!uploadFile.exists()) throw ImageFileNotFoundException()
                     uploadFile.readBytes()
                 }
             }
