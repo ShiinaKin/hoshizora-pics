@@ -1,5 +1,10 @@
 package io.sakurasou.model.dao.image
 
+import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.ImageManagePageVO
+import io.sakurasou.controller.vo.ImagePageVO
+import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.dto.ImageUpdateDTO
@@ -45,7 +50,7 @@ class ImageDaoImpl : ImageDao {
     }
 
     override fun updateImageById(imageUpdateDTO: ImageUpdateDTO): Int {
-        return Images.update({Images.id eq imageUpdateDTO.id}) {
+        return Images.update({ Images.id eq imageUpdateDTO.id }) {
             it[albumId] = imageUpdateDTO.albumId
             it[displayName] = imageUpdateDTO.displayName
             it[description] = imageUpdateDTO.description
@@ -95,6 +100,35 @@ class ImageDaoImpl : ImageDao {
         return Images.selectAll()
             .where { Images.albumId eq albumId }
             .map { toImage(it) }
+    }
+
+    override fun pagination(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
+        val query = { query: Query -> query.adjustWhere { Images.userId eq userId } }
+        return fetchPage(Images, pageRequest, query) {
+            ImagePageVO(
+                it[Images.id].value,
+                it[Images.displayName],
+                it[Images.isPrivate],
+                it[Images.createTime]
+            )
+        }
+    }
+
+    override fun paginationForManage(pageRequest: PageRequest): PageResult<ImageManagePageVO> {
+        val query = { query: Query ->
+            query.adjustColumnSet { join(Users, JoinType.INNER) { Users.id eq Images.userId } }
+                .adjustSelect { select(Images.fields + Users.name) }
+        }
+        return fetchPage(Images, pageRequest, query) {
+            ImageManagePageVO(
+                it[Images.id].value,
+                it[Images.displayName],
+                it[Images.userId],
+                it[Users.name],
+                it[Images.isPrivate],
+                it[Images.createTime]
+            )
+        }
     }
 
     private fun toImage(it: ResultRow) = Image(

@@ -4,10 +4,7 @@ import io.sakurasou.controller.request.ImageManagePatchRequest
 import io.sakurasou.controller.request.ImagePatchRequest
 import io.sakurasou.controller.request.ImageRawFile
 import io.sakurasou.controller.request.PageRequest
-import io.sakurasou.controller.vo.ImageManageVO
-import io.sakurasou.controller.vo.ImagePageVO
-import io.sakurasou.controller.vo.ImageVO
-import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.controller.vo.*
 import io.sakurasou.model.dto.ImageFileDTO
 
 /**
@@ -32,5 +29,5 @@ interface ImageService {
     suspend fun fetchImageThumbnailFile(imageId: Long): ImageFileDTO
 
     suspend fun pageSelfImage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO>
-    suspend fun pageImage(pageRequest: PageRequest): PageResult<ImagePageVO>
+    suspend fun pageImage(pageRequest: PageRequest): PageResult<ImageManagePageVO>
 }

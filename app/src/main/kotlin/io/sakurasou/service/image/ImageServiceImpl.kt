@@ -4,10 +4,7 @@ import io.sakurasou.controller.request.ImageManagePatchRequest
 import io.sakurasou.controller.request.ImagePatchRequest
 import io.sakurasou.controller.request.ImageRawFile
 import io.sakurasou.controller.request.PageRequest
-import io.sakurasou.controller.vo.ImageManageVO
-import io.sakurasou.controller.vo.ImagePageVO
-import io.sakurasou.controller.vo.ImageVO
-import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.controller.vo.*
 import io.sakurasou.exception.ServiceThrowable
 import io.sakurasou.exception.common.FileExtensionNotAllowedException
 import io.sakurasou.exception.common.FileSizeException
@@ -353,10 +350,10 @@ class ImageServiceImpl(
     }
 
     override suspend fun pageSelfImage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
-        TODO("Not yet implemented")
+        return dbQuery { imageDao.pagination(userId, pageRequest) }
     }
 
-    override suspend fun pageImage(pageRequest: PageRequest): PageResult<ImagePageVO> {
-        TODO("Not yet implemented")
+    override suspend fun pageImage(pageRequest: PageRequest): PageResult<ImageManagePageVO> {
+        return dbQuery { imageDao.paginationForManage(pageRequest) }
     }
 }

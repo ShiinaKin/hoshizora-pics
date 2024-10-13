@@ -37,4 +37,9 @@ object Images : LongIdTable() {
         foreignKey(albumId to Albums.id)
         foreignKey(strategyId to Strategies.id)
     }
+
+    val columnMap = mapOf(
+        "name" to displayName,
+        "createTime" to createTime
+    )
 }

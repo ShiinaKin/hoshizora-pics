@@ -5,6 +5,7 @@ import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.controller.param.PagingParameterWrongException
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
+import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dao.strategy.Strategies
 import org.jetbrains.exposed.sql.*
 
@@ -48,6 +49,7 @@ interface PaginationDao {
 
     fun getColumnByName(table: Table, columnName: String): ExpressionWithColumnType<*> {
         return when (table) {
+            Images -> Images.columnMap[columnName]
             Albums -> Albums.columnMap[columnName]
             Groups -> Groups.columnMap[columnName]
             Strategies -> Strategies.columnMap[columnName]

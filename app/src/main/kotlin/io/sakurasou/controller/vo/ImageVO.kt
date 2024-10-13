@@ -52,8 +52,17 @@ data class ImageManageVO(
 @Serializable
 data class ImagePageVO(
     val id: Long,
-    val originName: String,
-    val externalUrl: String,
-    val size: Double,
-    val isPrivate: Boolean
+    val displayName: String,
+    val isPrivate: Boolean,
+    val createTime: LocalDateTime
+)
+
+@Serializable
+data class ImageManagePageVO(
+    val id: Long,
+    val displayName: String,
+    val userId: Long,
+    val userName: String,
+    val isPrivate: Boolean,
+    val createTime: LocalDateTime
 )
