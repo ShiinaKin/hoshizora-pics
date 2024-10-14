@@ -98,19 +98,7 @@ class GroupServiceImpl(
     }
 
     override suspend fun pageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {
-        val groupPageResult = dbQuery { groupDao.pagination(pageRequest) }
-        val pageVOList = groupPageResult.data.map {
-            GroupPageVO(
-                id = it.id,
-                name = it.name,
-                strategyId = it.strategyId,
-            )
-        }
-        return PageResult(
-            page = groupPageResult.page,
-            pageSize = groupPageResult.pageSize,
-            total = groupPageResult.total,
-            data = pageVOList
-        )
+        val pageResult = dbQuery { groupDao.pagination(pageRequest) }
+        return pageResult
     }
 }

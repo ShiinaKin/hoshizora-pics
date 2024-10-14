@@ -1,15 +1,14 @@
 package io.sakurasou.model.dao.group
 
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.entity.Group
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
 
 /**
  * @author ShiinaKin
@@ -54,14 +53,21 @@ class GroupDaoImpl : GroupDao {
             .firstOrNull()
     }
 
-    override fun pagination(pageRequest: PageRequest): PageResult<Group> {
-        return fetchPage(Groups, pageRequest) { row ->
-            Group(
+    override fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO> {
+        val query = { query: Query ->
+            query.adjustColumnSet { join(Images, JoinType.FULL) {Images.groupId eq Groups.id} }
+                .adjustSelect { select(Groups.fields + Images.id.count() + Images.size.sum()) }
+                .groupBy(Groups.id, Groups.name)
+        }
+        return fetchPage(Groups, pageRequest, query) { row ->
+            GroupPageVO(
                 row[Groups.id].value,
                 row[Groups.name],
-                row[Groups.description],
                 row[Groups.strategyId],
-                row[Groups.config]
+                row[Images.id.count()],
+                row[Images.size.sum()]?.let {
+                    it / 1024.0 / 1024.0
+                } ?: 0.0
             )
         }
     }

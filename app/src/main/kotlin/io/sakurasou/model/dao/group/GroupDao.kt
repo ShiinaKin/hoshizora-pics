@@ -1,6 +1,7 @@
 package io.sakurasou.model.dao.group
 
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.model.dao.common.PaginationDao
 import io.sakurasou.model.dto.GroupInsertDTO
@@ -16,5 +17,5 @@ interface GroupDao : PaginationDao {
     fun deleteGroupById(id: Long): Int
     fun updateGroupById(groupUpdateDTO: GroupUpdateDTO): Int
     fun findGroupById(id: Long): Group?
-    fun pagination(pageRequest: PageRequest): PageResult<Group>
+    fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO>
 }

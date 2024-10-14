@@ -21,5 +21,7 @@ data class GroupVO(
 data class GroupPageVO(
     val id: Long,
     val name: String,
-    val strategyId: Long
+    val strategyId: Long,
+    val totalImageCount: Long,
+    val totalImageSize: Double
 )
