@@ -46,6 +46,7 @@ class StrategyServiceTest {
         val json = """
             {
                 "uploadFolder": "/uploads",
+                "thumbnailFolder": "/thumbnails",
                 "type": "LOCAL",
                 "strategyType": "LOCAL"
             }
@@ -81,7 +82,10 @@ class StrategyServiceTest {
         val strategy = Strategy(
             id = 1L,
             name = "Test Strategy",
-            config = LocalStrategy("/uploads"),
+            config = LocalStrategy(
+                uploadFolder = "/uploads",
+                thumbnailFolder = "/thumbnails"
+            ),
             createTime = now,
             updateTime = now
         )
@@ -89,16 +93,24 @@ class StrategyServiceTest {
         val json = """
             {
                 "name": "Test Patch Strategy",
-                "config": null
+                "config": {
+                    "uploadFolder": "/test-uploads",
+                    "thumbnailFolder": "/test-thumbnails",
+                    "type": "LOCAL",
+                    "strategyType": "LOCAL"
+                }
             }
         """.trimIndent()
         val patchRequest = Json.decodeFromString<StrategyPatchRequest>(json)
-        val oldStrategyConfig = LocalStrategy("/uploads")
+        val exceptedConfig = LocalStrategy(
+            uploadFolder = "/test-uploads",
+            thumbnailFolder = "/test-thumbnails"
+        )
 
         val exceptedUpdateDTO = StrategyUpdateDTO(
             id = 1L,
             name = "Test Patch Strategy",
-            config = oldStrategyConfig,
+            config = exceptedConfig,
             updateTime = now
         )
 
@@ -118,7 +130,10 @@ class StrategyServiceTest {
         val strategy = Strategy(
             id = 1L,
             name = "Test Strategy",
-            config = LocalStrategy("/uploads"),
+            config = LocalStrategy(
+                uploadFolder = "/uploads",
+                thumbnailFolder = "/thumbnails"
+            ),
             createTime = now,
             updateTime = now
         )
