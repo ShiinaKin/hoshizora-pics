@@ -1,6 +1,6 @@
 package io.sakurasou.controller.request
 
-import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.GroupStrategyConfig
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,6 +20,11 @@ data class GroupPatchRequest(
     val name: String? = null,
     val description: String? = null,
     val strategyId: Long? = null,
-    val config: GroupConfig? = null,
+    val config: GroupConfigUpdatePatch? = null,
     val roles: List<String>? = null
+)
+
+@Serializable
+data class GroupConfigUpdatePatch(
+    val groupStrategyConfig: GroupStrategyConfig? = null
 )

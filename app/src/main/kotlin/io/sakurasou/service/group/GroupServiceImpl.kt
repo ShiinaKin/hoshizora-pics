@@ -61,20 +61,24 @@ class GroupServiceImpl(
         }
     }
 
-    // TODO rewrite, distinct group basic info & group config
     override suspend fun updateGroup(id: Long, patchRequest: GroupPatchRequest) {
         dbQuery {
-            val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-
-            val groupUpdateDTO = GroupUpdateDTO(
-                id = id,
-                name = patchRequest.name ?: oldGroup.name,
-                description = patchRequest.description ?: oldGroup.description,
-                strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
-                config = patchRequest.config ?: oldGroup.config
-            )
-
             runCatching {
+                val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+
+                val groupUpdateDTO = GroupUpdateDTO(
+                    id = id,
+                    name = patchRequest.name ?: oldGroup.name,
+                    description = patchRequest.description ?: oldGroup.description,
+                    strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
+                    config = if (patchRequest.config != null) {
+                        GroupConfig(
+                            groupStrategyConfig = patchRequest.config.groupStrategyConfig
+                                ?: oldGroup.config.groupStrategyConfig
+                        )
+                    } else oldGroup.config
+                )
+
                 val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
                 if (influenceRow < 1) throw GroupNotFoundException()
             }.onFailure {
