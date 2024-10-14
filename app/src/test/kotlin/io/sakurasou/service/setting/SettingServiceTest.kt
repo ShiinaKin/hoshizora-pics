@@ -1,6 +1,9 @@
 package io.sakurasou.service.setting
 
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
 import io.sakurasou.constant.SETTING_SITE
 import io.sakurasou.constant.SETTING_SYSTEM
 import io.sakurasou.model.DatabaseSingleton
@@ -59,6 +62,7 @@ class SettingServiceTest {
     @Test
     fun `getting site setting, should return correct setting`() = runBlocking {
         val expectedSetting = SiteSetting(
+            siteExternalUrl = "http://localhost:8080",
             siteTitle = "Title",
             siteSubtitle = "Subtitle",
             siteDescription = "Description",
@@ -73,6 +77,7 @@ class SettingServiceTest {
                 Setting(
                     name = SETTING_SITE,
                     config = SiteSetting(
+                        siteExternalUrl = "http://localhost:8080",
                         siteTitle = "Title",
                         siteSubtitle = "Subtitle",
                         siteDescription = "Description",
