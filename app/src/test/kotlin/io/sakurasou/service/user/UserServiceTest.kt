@@ -24,6 +24,8 @@ import io.sakurasou.model.dto.UserSelfUpdateDTO
 import io.sakurasou.model.entity.Album
 import io.sakurasou.model.entity.Group
 import io.sakurasou.model.entity.User
+import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.GroupStrategyConfig
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.service.setting.SettingService
 import kotlinx.coroutines.runBlocking
@@ -521,9 +523,10 @@ class UserServiceTest {
             id = 2,
             name = "UserGroup",
             description = null,
-            strategyId = 1
+            strategyId = 1,
+            config = GroupConfig(GroupStrategyConfig())
         )
-        val imageCountAndTotalSizeDTO = ImageCountAndTotalSizeDTO(10, 2048.0)
+        val imageCountAndTotalSizeDTO = ImageCountAndTotalSizeDTO(10, 204800)
 
         val exceptedUserVO = UserVO(
             id = userId,
