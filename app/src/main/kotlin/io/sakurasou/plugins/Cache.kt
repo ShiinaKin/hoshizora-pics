@@ -4,7 +4,7 @@ import com.ucasoft.ktor.simpleCache.SimpleCache
 import com.ucasoft.ktor.simpleMemoryCache.memoryCache
 import com.ucasoft.ktor.simpleRedisCache.redisCache
 import io.ktor.server.application.*
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * @author Shiina Kin
@@ -14,13 +14,13 @@ fun Application.configureCache(host: String, port: String) {
     install(SimpleCache) {
         if (host != "disabled") {
             redisCache {
-                invalidateAt = 10.seconds
+                invalidateAt = 15.minutes
                 this.host = host
                 this.port = port.toInt()
             }
         } else {
             memoryCache {
-                invalidateAt = 10.seconds
+                invalidateAt = 15.minutes
             }
         }
     }
