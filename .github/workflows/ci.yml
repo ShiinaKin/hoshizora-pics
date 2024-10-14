@@ -62,10 +62,17 @@ jobs:
           path: build
 
       - name: Generate Changelog
-        run: echo "# Good things have arrived" > ${{ github.workspace }}-CHANGELOG.txt
+        uses: heinrichreimer/action-github-changelog-generator@v2.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: CHANGELOG.md
+          onlyLastTag: true
+          stripGeneratorNotice: true
+          headerLabel: "## Good things have arrived"
 
-      - name: release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          name: "Hoshizora-Pics ${{ github.ref_name }}"
+          body_path: CHANGELOG.md
           files: build/*
