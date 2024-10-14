@@ -1,6 +1,7 @@
 package io.sakurasou.service.group
 
 import io.mockk.*
+import io.sakurasou.controller.request.GroupConfigUpdatePatch
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
 import io.sakurasou.controller.vo.GroupVO
@@ -11,6 +12,8 @@ import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.entity.Group
+import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.GroupStrategyConfig
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.*
 import kotlin.test.BeforeTest
@@ -47,14 +50,13 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 5 * 1024 * 1024L,
             roles = listOf("user")
         )
         val exceptedInsertDTO = GroupInsertDTO(
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 5 * 1024 * 1024L
+            config = GroupConfig(GroupStrategyConfig())
         )
         val exceptedRoles = listOf("user")
 
@@ -89,12 +91,14 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 5 * 1024 * 1024L,
+            config = GroupConfig(GroupStrategyConfig())
         )
         val patchRequest = GroupPatchRequest(
             name = "Test Group",
             description = "test",
-            maxSize = 1 * 1024L
+            config = GroupConfigUpdatePatch(
+                groupStrategyConfig = null
+            )
         )
 
         val exceptedUpdateDTO = GroupUpdateDTO(
@@ -102,7 +106,7 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 1 * 1024L
+            config = GroupConfig(GroupStrategyConfig())
         )
 
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
@@ -123,7 +127,7 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 5 * 1024 * 1024L,
+            config = GroupConfig(GroupStrategyConfig())
         )
         val roles = listOf("user")
 
@@ -132,7 +136,7 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            maxSize = 5 * 1024 * 1024L,
+            groupConfig = GroupConfig(GroupStrategyConfig()),
             roles = listOf("user")
         )
 
