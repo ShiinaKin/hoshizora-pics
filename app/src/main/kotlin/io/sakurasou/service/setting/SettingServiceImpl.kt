@@ -25,6 +25,9 @@ import kotlinx.datetime.toLocalDateTime
 class SettingServiceImpl(
     private val settingDao: SettingDao
 ) : SettingService {
+
+    private var systemSetting: SystemSetting? = null
+
     override suspend fun updateSystemSetting(systemSetting: SystemSettingPatchRequest) {
         dbQuery {
             val oldSystemSetting = settingDao.getSettingByName(SETTING_SYSTEM)?.let {
@@ -45,6 +48,7 @@ class SettingServiceImpl(
             runCatching {
                 val influenceRowCnt = settingDao.updateSettingByName(settingUpdateDTO)
                 if (influenceRowCnt < 1) throw MissingNecessaryColumnException()
+                this.systemSetting = systemSettingConfig
             }.onFailure {
                 if (it is MissingNecessaryColumnException) throw SettingUpdateFailedException(it)
                 else throw it
@@ -117,12 +121,14 @@ class SettingServiceImpl(
     }
 
     override suspend fun getSystemSetting(): SystemSetting {
+        this.systemSetting?.let { return it }
         return dbQuery {
             settingDao.getSettingByName(SETTING_SYSTEM)
         }?.let {
             if (it.config !is SystemSetting) throw ConfigTypeNotMatchException()
             it.config
-        } ?: throw MissingNecessaryColumnException()
+        }.also { this.systemSetting = it }
+            ?: throw MissingNecessaryColumnException()
     }
 
     override suspend fun getSiteSetting(): SiteSetting {
