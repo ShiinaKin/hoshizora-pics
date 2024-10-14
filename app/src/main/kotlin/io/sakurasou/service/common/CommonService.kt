@@ -1,6 +1,7 @@
 package io.sakurasou.service.common
 
 import io.sakurasou.controller.request.SiteInitRequest
+import io.sakurasou.model.dto.ImageFileDTO
 
 /**
  * @author Shiina Kin
@@ -8,4 +9,6 @@ import io.sakurasou.controller.request.SiteInitRequest
  */
 interface CommonService {
     suspend fun initSite(siteInitRequest: SiteInitRequest)
+    suspend fun fetchImage(imageUniqueName: String): ImageFileDTO
+    suspend fun fetchRandomImage(): ImageFileDTO
 }

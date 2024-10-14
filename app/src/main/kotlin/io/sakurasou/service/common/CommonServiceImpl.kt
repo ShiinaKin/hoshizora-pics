@@ -3,14 +3,28 @@ package io.sakurasou.service.common
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.config.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
+import io.sakurasou.exception.controller.access.RandomFetchAllowedException
 import io.sakurasou.exception.controller.status.SiteRepeatedInitializationException
+import io.sakurasou.exception.service.image.ImageAccessDeniedException
+import io.sakurasou.exception.service.image.ImageNotFoundException
+import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
+import io.sakurasou.model.dao.image.ImageDao
+import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dao.user.UserDao
+import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemStatus
+import io.sakurasou.model.strategy.LocalStrategy
+import io.sakurasou.model.strategy.S3Strategy
 import io.sakurasou.service.setting.SettingService
+import io.sakurasou.util.ImageUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -22,6 +36,8 @@ import kotlinx.datetime.toLocalDateTime
 class CommonServiceImpl(
     private val userDao: UserDao,
     private val albumDao: AlbumDao,
+    private val strategyDao: StrategyDao,
+    private val imageDao: ImageDao,
     private val settingService: SettingService
 ) : CommonService {
     override suspend fun initSite(siteInitRequest: SiteInitRequest) {
@@ -66,5 +82,33 @@ class CommonServiceImpl(
             settingService.updateSystemStatus(systemStatus)
         }
         InstanceCenter.systemStatus = systemStatus
+    }
+
+    override suspend fun fetchImage(imageUniqueName: String): ImageFileDTO {
+        return dbQuery {
+            val image = imageDao.findImageByUniqueName(imageUniqueName) ?: throw ImageNotFoundException()
+            if (image.isPrivate) throw ImageAccessDeniedException()
+
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when(strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+            }
+        }
+    }
+
+    override suspend fun fetchRandomImage(): ImageFileDTO {
+        if (!settingService.getSystemSetting().allowRandomFetch) throw RandomFetchAllowedException()
+        return dbQuery {
+
+            val image = imageDao.findRandomImage() ?: throw ImageNotFoundException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
+
+            when(strategy.config) {
+                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
+                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@ import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.controller.status.SiteRepeatedInitializationException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.album.AlbumDao
+import io.sakurasou.model.dao.image.ImageDao
+import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.setting.SiteSetting
@@ -26,6 +28,8 @@ import kotlin.test.assertFailsWith
 class CommonServiceTest {
     private lateinit var userDao: UserDao
     private lateinit var albumDao: AlbumDao
+    private lateinit var imageDao: ImageDao
+    private lateinit var strategyDao: StrategyDao
     private lateinit var settingService: SettingService
     private lateinit var commonService: CommonServiceImpl
 
@@ -36,8 +40,10 @@ class CommonServiceTest {
         mockkObject(Clock.System)
         userDao = mockk()
         albumDao = mockk()
+        imageDao = mockk()
+        strategyDao = mockk()
         settingService = mockk()
-        commonService = CommonServiceImpl(userDao, albumDao, settingService)
+        commonService = CommonServiceImpl(userDao, albumDao, strategyDao, imageDao, settingService)
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
         }
