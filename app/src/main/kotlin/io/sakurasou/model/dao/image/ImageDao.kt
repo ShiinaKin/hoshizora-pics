@@ -26,9 +26,11 @@ interface ImageDao : PaginationDao {
 
     fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO
     fun findImageById(imageId: Long): Image?
+    fun findImageByUniqueName(imageUniqueName: String): Image?
+    fun findRandomImage(): Image?
+
     fun countImageByAlbumId(albumId: Long): Long
     fun listImageByAlbumId(albumId: Long): List<Image>
-
     fun pagination(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO>
     fun paginationForManage(pageRequest: PageRequest): PageResult<ImageManagePageVO>
 }

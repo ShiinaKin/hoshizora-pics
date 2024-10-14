@@ -77,7 +77,8 @@ class UserServiceTest {
         )
         val systemSetting = SystemSetting(
             defaultGroupId = 2,
-            allowSignup = false
+            allowSignup = false,
+            allowRandomFetch = false
         )
 
         coEvery { settingService.getSystemSetting() } returns systemSetting
@@ -96,7 +97,8 @@ class UserServiceTest {
         )
         val systemSetting = SystemSetting(
             defaultGroupId = 2,
-            allowSignup = true
+            allowSignup = true,
+            allowRandomFetch = false
         )
 
         val encodedPassword = "encodedPassword"

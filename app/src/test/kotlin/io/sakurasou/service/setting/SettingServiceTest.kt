@@ -41,7 +41,11 @@ class SettingServiceTest {
 
     @Test
     fun `getting system setting, should return correct setting`() = runBlocking {
-        val expectedSetting = SystemSetting(defaultGroupId = 1, allowSignup = false)
+        val expectedSetting = SystemSetting(
+            defaultGroupId = 1,
+            allowSignup = false,
+            allowRandomFetch = false
+        )
 
         coEvery { DatabaseSingleton.dbQuery<SystemSetting>(any()) } coAnswers {
             this.arg<suspend () -> SystemSetting>(0).invoke()
@@ -49,7 +53,7 @@ class SettingServiceTest {
         every { settingDao.getSettingByName(SETTING_SYSTEM) } returns
                 Setting(
                     name = SETTING_SYSTEM,
-                    config = SystemSetting(defaultGroupId = 1, allowSignup = false),
+                    config = SystemSetting(defaultGroupId = 1, allowSignup = false, allowRandomFetch = false),
                     createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),
                     updateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
                 )

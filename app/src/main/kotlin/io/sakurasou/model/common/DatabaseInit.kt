@@ -224,7 +224,8 @@ private fun initSetting() {
     )
     val systemSettingConfig = SystemSetting(
         defaultGroupId = 2,
-        allowSignup = false
+        allowSignup = false,
+        allowRandomFetch = false
     )
     val systemStatus = SystemStatus(
         isInit = false

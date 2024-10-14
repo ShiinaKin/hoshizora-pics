@@ -34,6 +34,7 @@ class SettingServiceImpl(
             val systemSettingConfig = SystemSetting(
                 defaultGroupId = systemSetting.defaultGroupId ?: oldSystemSetting.defaultGroupId,
                 allowSignup = systemSetting.allowSignup ?: oldSystemSetting.allowSignup,
+                allowRandomFetch = systemSetting.allowRandomFetch ?: oldSystemSetting.allowRandomFetch
             )
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             val settingUpdateDTO = SettingUpdateDTO(

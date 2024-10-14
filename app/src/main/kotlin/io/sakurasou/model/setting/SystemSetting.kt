@@ -9,5 +9,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SystemSetting(
     val defaultGroupId: Long,
-    val allowSignup: Boolean
+    val allowSignup: Boolean,
+    val allowRandomFetch: Boolean
 ) : SettingConfig()

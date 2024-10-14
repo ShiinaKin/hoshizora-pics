@@ -9,6 +9,7 @@ import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.dto.ImageUpdateDTO
 import io.sakurasou.model.entity.Image
+import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -86,6 +87,22 @@ class ImageDaoImpl : ImageDao {
     override fun findImageById(imageId: Long): Image? {
         return Images.selectAll()
             .where { Images.id eq imageId }
+            .map { toImage(it) }
+            .firstOrNull()
+    }
+
+    override fun findImageByUniqueName(imageUniqueName: String): Image? {
+        return Images.selectAll()
+            .where { Images.uniqueName eq imageUniqueName }
+            .map { toImage(it) }
+            .firstOrNull()
+    }
+
+    override fun findRandomImage(): Image? {
+        return Images.selectAll()
+            .where { Images.isPrivate eq false }
+            .orderBy(Random())
+            .limit(1)
             .map { toImage(it) }
             .firstOrNull()
     }

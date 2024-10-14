@@ -24,5 +24,6 @@ data class StrategySettingPatchRequest(
 @Serializable
 data class SystemSettingPatchRequest(
     val defaultGroupId: Long? = null,
-    val allowSignup: Boolean? = null
+    val allowSignup: Boolean? = null,
+    val allowRandomFetch: Boolean? = null
 )
