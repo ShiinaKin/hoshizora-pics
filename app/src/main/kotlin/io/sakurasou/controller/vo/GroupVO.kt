@@ -1,5 +1,6 @@
 package io.sakurasou.controller.vo
 
+import io.sakurasou.model.group.GroupConfig
 import kotlinx.serialization.Serializable
 
 /**
@@ -11,6 +12,7 @@ data class GroupVO(
     val id: Long,
     val name: String,
     val description: String?,
+    val groupConfig: GroupConfig,
     val strategyId: Long,
     val roles: List<String>
 )

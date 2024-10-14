@@ -84,7 +84,6 @@ class GroupServiceImpl(
         }
     }
 
-    // TODO rewrite, distinct group basic info & group config
     override suspend fun fetchGroup(id: Long): GroupVO {
         val group = dbQuery { groupDao.findGroupById(id) } ?: throw GroupNotFoundException()
         val roles = dbQuery { relationDao.listRoleByGroupId(group.id) }
@@ -92,6 +91,7 @@ class GroupServiceImpl(
             id = group.id,
             name = group.name,
             description = group.description,
+            groupConfig = group.config,
             strategyId = group.strategyId,
             roles = roles
         )
