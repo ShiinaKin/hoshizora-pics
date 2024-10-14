@@ -10,5 +10,5 @@ class ImageAccessDeniedException : ServiceThrowable() {
     override val code: Int
         get() = 4003
     override val message: String
-        get() = "Image Access Denied. This image is not yours."
+        get() = "Image Access Denied."
 }
