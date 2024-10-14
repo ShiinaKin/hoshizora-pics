@@ -51,7 +51,8 @@ class CommonServiceTest {
             email = "test@example.com",
             siteTitle = "Test Site",
             siteSubtitle = "Test Subtitle",
-            siteDescription = "Test Description"
+            siteDescription = "Test Description",
+            siteExternalUrl = "http://localhost:8080"
         )
         coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = true)
 
@@ -68,7 +69,8 @@ class CommonServiceTest {
             email = "test@example.com",
             siteTitle = "Test Site",
             siteSubtitle = "Test Subtitle",
-            siteDescription = "Test Description"
+            siteDescription = "Test Description",
+            siteExternalUrl = "http://localhost:8080"
         )
         val instant = Clock.System.now()
         val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -85,13 +87,15 @@ class CommonServiceTest {
             updateTime = now
         )
         val oldSiteSetting = SiteSetting(
-            "oldTitle",
-            "oldSubtitle",
-            "oldDescription",
-            "oldKeyword",
-            true
+            siteExternalUrl = "http://localhost:8080",
+            siteTitle = "oldTitle",
+            siteSubtitle = "oldSubtitle",
+            siteKeyword = "oldDescription",
+            siteDescription = "oldKeyword",
+            homePageRandomPicDisplay = true
         )
         val siteSettingConfig = SiteSetting(
+            siteExternalUrl = siteInitRequest.siteExternalUrl,
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
             siteDescription = siteInitRequest.siteDescription,
