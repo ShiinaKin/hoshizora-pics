@@ -32,7 +32,7 @@ repositories {
         url = uri("https://maven.pkg.github.com/ShiinaKin/ktor-simple-cache")
         credentials {
             username = "ShiinaKin"
-            password = env.fetchOrNull("GITHUB_PAT") ?: System.getenv("GITHUB_TOKEN")
+            password = env.fetchOrNull("GITHUB_PAT") ?: System.getenv("PAT")
         }
     }
 }

@@ -17,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
 
     steps:
       - name: Checkout code
@@ -40,6 +37,8 @@ jobs:
           node-version: 20
 
       - name: Build with Gradle Wrapper
+        env:
+          PAT: ${{ secrets.PAT }}
         run: chmod +x ./gradlew && ./gradlew build
 
       - name: Upload artifact
