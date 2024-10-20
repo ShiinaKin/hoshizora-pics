@@ -11,6 +11,7 @@ data class PageResult<T>(
     val page: Long,
     val pageSize: Int,
     val total: Long,
+    val totalPage: Long,
     val data: List<T>
 )
 

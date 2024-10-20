@@ -26,6 +26,7 @@ interface PaginationDao {
         val offset = (page - 1) * pageSize
 
         val totalRecords: Long = customWhereCond(table.selectAll()).count()
+        val totalPage: Long = (totalRecords + pageSize - 1) / pageSize
         val query = table.selectAll().limit(pageSize).offset(offset)
 
         pageRequest.orderBy?.let {
@@ -42,6 +43,7 @@ interface PaginationDao {
             page = page,
             pageSize = pageSize,
             total = totalRecords,
+            totalPage = totalPage,
             data = data
         )
         return pageResult

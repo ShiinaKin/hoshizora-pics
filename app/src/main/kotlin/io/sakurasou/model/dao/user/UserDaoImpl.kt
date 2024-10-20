@@ -123,6 +123,7 @@ class UserDaoImpl : UserDao {
             page = page,
             pageSize = pageSize,
             total = totalRecords,
+            totalPage = (totalRecords + pageSize - 1) / pageSize,
             data = data
         )
         return pageResult

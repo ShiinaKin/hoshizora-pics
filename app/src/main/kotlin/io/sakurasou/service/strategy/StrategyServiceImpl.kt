@@ -92,6 +92,7 @@ class StrategyServiceImpl(
             page = strategyPageResult.page,
             pageSize = strategyPageResult.pageSize,
             total = strategyPageResult.total,
+            totalPage = strategyPageResult.totalPage,
             data = pageVOList
         )
     }
