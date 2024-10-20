@@ -10,8 +10,8 @@ val version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21"
     id("io.ktor.plugin") version "2.3.12"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 }
 
 group = "io.sakurasou"
@@ -28,6 +28,13 @@ ktor {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/ShiinaKin/ktor-simple-cache")
+        credentials {
+            username = "ShiinaKin"
+            password = env.GITHUB_PAT.orNull() ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -48,7 +55,8 @@ dependencies {
     implementation("io.swagger.parser.v3:swagger-parser:2.1.21")
     implementation("io.github.smiley4:ktor-swagger-ui:3.5.0")
 
-    implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
+    // implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
+    implementation("io.sakurasou.simple-cache:ktor-simple-cache-jvm:0.4.5")
     implementation("com.ucasoft.ktor:ktor-simple-memory-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-redis-cache-jvm:$ktorSimpleCacheVersion")
 
