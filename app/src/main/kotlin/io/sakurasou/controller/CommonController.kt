@@ -15,6 +15,7 @@ import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.service.common.CommonService
+import kotlin.time.Duration.Companion.hours
 
 /**
  * @author Shiina Kin
@@ -22,6 +23,7 @@ import io.sakurasou.service.common.CommonService
  */
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
+    cacheOutput(6.hours, listOf("id"), true) { route("random") { randomFetchImage(commonController) } }
     cacheOutput { route("s") { anonymousGetImage(commonController) } }
 }
 
@@ -41,22 +43,26 @@ fun Route.siteInitRoute() {
 }
 
 private fun Route.randomFetchImage(commonController: CommonController) {
-    get("random", {
+    get({
         description = "return random image if setting allow"
+        request {
+            queryParameter<String>("id") {
+                description = "identify resources"
+                required = false
+            }
+        }
         response {
             HttpStatusCode.OK to {
-                description = "strategy local: direct, S3: redirect"
+                description = "LOCAL: byte array"
             }
-            HttpStatusCode.Forbidden to {
-                description = "setting not allow"
-            }
-            HttpStatusCode.NotFound to {
-                description = "no image found"
+            HttpStatusCode.Found to {
+                description = "S3: redirect"
             }
         }
     }) {
-        commonController.handleRandomFetchImage()
-
+        val fileDTO = commonController.handleRandomFetchImage()
+        if (fileDTO.bytes != null) call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
+        else call.respondRedirect(fileDTO.url!!)
     }
 }
 
@@ -92,8 +98,9 @@ class CommonController(
         commonService.initSite(siteInitRequest)
     }
 
-    suspend fun handleRandomFetchImage() {
-
+    suspend fun handleRandomFetchImage(): ImageFileDTO {
+        val imageFileDTO = commonService.fetchRandomImage()
+        return imageFileDTO
     }
 
     suspend fun handleFetchImage(imageUniqueName: String): ImageFileDTO {
