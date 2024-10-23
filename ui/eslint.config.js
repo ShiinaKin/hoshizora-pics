@@ -17,7 +17,7 @@ export default [
   ...tsEslint.configs.recommended,
   ...pluginVue.configs["flat/essential"],
   { files: ["**/*.vue"], languageOptions: { parserOptions: { parser: tsEslint.parser } } },
-  // { ignores: [`packages/api-client/**`] },
+  { ignores: [`packages/api-client/**`] },
   includeIgnoreFile(gitignorePath),
   {
     plugins: { tsEslint },
