@@ -33,6 +33,12 @@ export interface IoSakurasouControllerVoAlbumPageVO {
     imageCount: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoAlbumPageVO
+     */
+    isUncategorized: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoAlbumPageVO
      */
@@ -45,6 +51,7 @@ export interface IoSakurasouControllerVoAlbumPageVO {
 export function instanceOfIoSakurasouControllerVoAlbumPageVO(value: object): value is IoSakurasouControllerVoAlbumPageVO {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('imageCount' in value) || value['imageCount'] === undefined) return false;
+    if (!('isUncategorized' in value) || value['isUncategorized'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
@@ -61,6 +68,7 @@ export function IoSakurasouControllerVoAlbumPageVOFromJSONTyped(json: any, ignor
         
         'id': json['id'],
         'imageCount': json['imageCount'],
+        'isUncategorized': json['isUncategorized'],
         'name': json['name'],
     };
 }
@@ -73,6 +81,7 @@ export function IoSakurasouControllerVoAlbumPageVOToJSON(value?: IoSakurasouCont
         
         'id': value['id'],
         'imageCount': value['imageCount'],
+        'isUncategorized': value['isUncategorized'],
         'name': value['name'],
     };
 }

@@ -37,6 +37,18 @@ export interface IoSakurasouControllerVoGroupPageVO {
      * @memberof IoSakurasouControllerVoGroupPageVO
      */
     strategyId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoGroupPageVO
+     */
+    totalImageCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoGroupPageVO
+     */
+    totalImageSize: number;
 }
 
 /**
@@ -46,6 +58,8 @@ export function instanceOfIoSakurasouControllerVoGroupPageVO(value: object): val
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('strategyId' in value) || value['strategyId'] === undefined) return false;
+    if (!('totalImageCount' in value) || value['totalImageCount'] === undefined) return false;
+    if (!('totalImageSize' in value) || value['totalImageSize'] === undefined) return false;
     return true;
 }
 
@@ -62,6 +76,8 @@ export function IoSakurasouControllerVoGroupPageVOFromJSONTyped(json: any, ignor
         'id': json['id'],
         'name': json['name'],
         'strategyId': json['strategyId'],
+        'totalImageCount': json['totalImageCount'],
+        'totalImageSize': json['totalImageSize'],
     };
 }
 
@@ -74,6 +90,8 @@ export function IoSakurasouControllerVoGroupPageVOToJSON(value?: IoSakurasouCont
         'id': value['id'],
         'name': value['name'],
         'strategyId': value['strategyId'],
+        'totalImageCount': value['totalImageCount'],
+        'totalImageSize': value['totalImageSize'],
     };
 }
 

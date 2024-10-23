@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { IoSakurasouModelStrategyStrategyConfig } from './IoSakurasouModelStrategyStrategyConfig';
+import {
+    IoSakurasouModelStrategyStrategyConfigFromJSON,
+    IoSakurasouModelStrategyStrategyConfigFromJSONTyped,
+    IoSakurasouModelStrategyStrategyConfigToJSON,
+} from './IoSakurasouModelStrategyStrategyConfig';
+
 /**
  * 
  * @export
@@ -21,16 +28,16 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestStrategyPatchRequest {
     /**
      * 
-     * @type {string}
+     * @type {IoSakurasouModelStrategyStrategyConfig}
      * @memberof IoSakurasouControllerRequestStrategyPatchRequest
      */
-    config?: string;
+    config?: IoSakurasouModelStrategyStrategyConfig | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestStrategyPatchRequest
      */
-    name?: string;
+    name?: any | null;
 }
 
 /**
@@ -50,7 +57,7 @@ export function IoSakurasouControllerRequestStrategyPatchRequestFromJSONTyped(js
     }
     return {
         
-        'config': json['config'] == null ? undefined : json['config'],
+        'config': json['config'] == null ? undefined : IoSakurasouModelStrategyStrategyConfigFromJSON(json['config']),
         'name': json['name'] == null ? undefined : json['name'],
     };
 }
@@ -61,7 +68,7 @@ export function IoSakurasouControllerRequestStrategyPatchRequestToJSON(value?: I
     }
     return {
         
-        'config': value['config'],
+        'config': IoSakurasouModelStrategyStrategyConfigToJSON(value['config']),
         'name': value['name'],
     };
 }

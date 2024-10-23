@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { IoSakurasouControllerRequestGroupConfigUpdatePatch } from './IoSakurasouControllerRequestGroupConfigUpdatePatch';
+import {
+    IoSakurasouControllerRequestGroupConfigUpdatePatchFromJSON,
+    IoSakurasouControllerRequestGroupConfigUpdatePatchFromJSONTyped,
+    IoSakurasouControllerRequestGroupConfigUpdatePatchToJSON,
+} from './IoSakurasouControllerRequestGroupConfigUpdatePatch';
+
 /**
  * 
  * @export
@@ -21,34 +28,34 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestGroupPatchRequest {
     /**
      * 
-     * @type {string}
+     * @type {IoSakurasouControllerRequestGroupConfigUpdatePatch}
      * @memberof IoSakurasouControllerRequestGroupPatchRequest
      */
-    description?: string;
+    config?: IoSakurasouControllerRequestGroupConfigUpdatePatch | null;
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestGroupPatchRequest
      */
-    maxSize?: number;
+    description?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestGroupPatchRequest
      */
-    name?: string;
+    name?: any | null;
     /**
      * 
-     * @type {Array<number>}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestGroupPatchRequest
      */
-    roles?: Array<number>;
+    roles?: any | null;
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestGroupPatchRequest
      */
-    strategy?: number;
+    strategyId?: any | null;
 }
 
 /**
@@ -68,11 +75,11 @@ export function IoSakurasouControllerRequestGroupPatchRequestFromJSONTyped(json:
     }
     return {
         
+        'config': json['config'] == null ? undefined : IoSakurasouControllerRequestGroupConfigUpdatePatchFromJSON(json['config']),
         'description': json['description'] == null ? undefined : json['description'],
-        'maxSize': json['maxSize'] == null ? undefined : json['maxSize'],
         'name': json['name'] == null ? undefined : json['name'],
         'roles': json['roles'] == null ? undefined : json['roles'],
-        'strategy': json['strategy'] == null ? undefined : json['strategy'],
+        'strategyId': json['strategyId'] == null ? undefined : json['strategyId'],
     };
 }
 
@@ -82,11 +89,11 @@ export function IoSakurasouControllerRequestGroupPatchRequestToJSON(value?: IoSa
     }
     return {
         
+        'config': IoSakurasouControllerRequestGroupConfigUpdatePatchToJSON(value['config']),
         'description': value['description'],
-        'maxSize': value['maxSize'],
         'name': value['name'],
         'roles': value['roles'],
-        'strategy': value['strategy'],
+        'strategyId': value['strategyId'],
     };
 }
 

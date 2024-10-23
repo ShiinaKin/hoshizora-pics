@@ -24,6 +24,12 @@ export interface IoSakurasouModelSettingSystemSetting {
      * @type {boolean}
      * @memberof IoSakurasouModelSettingSystemSetting
      */
+    allowRandomFetch: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IoSakurasouModelSettingSystemSetting
+     */
     allowSignup: boolean;
     /**
      * 
@@ -37,6 +43,7 @@ export interface IoSakurasouModelSettingSystemSetting {
  * Check if a given object implements the IoSakurasouModelSettingSystemSetting interface.
  */
 export function instanceOfIoSakurasouModelSettingSystemSetting(value: object): value is IoSakurasouModelSettingSystemSetting {
+    if (!('allowRandomFetch' in value) || value['allowRandomFetch'] === undefined) return false;
     if (!('allowSignup' in value) || value['allowSignup'] === undefined) return false;
     if (!('defaultGroupId' in value) || value['defaultGroupId'] === undefined) return false;
     return true;
@@ -52,6 +59,7 @@ export function IoSakurasouModelSettingSystemSettingFromJSONTyped(json: any, ign
     }
     return {
         
+        'allowRandomFetch': json['allowRandomFetch'],
         'allowSignup': json['allowSignup'],
         'defaultGroupId': json['defaultGroupId'],
     };
@@ -63,6 +71,7 @@ export function IoSakurasouModelSettingSystemSettingToJSON(value?: IoSakurasouMo
     }
     return {
         
+        'allowRandomFetch': value['allowRandomFetch'],
         'allowSignup': value['allowSignup'],
         'defaultGroupId': value['defaultGroupId'],
     };

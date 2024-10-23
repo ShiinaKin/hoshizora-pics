@@ -21,28 +21,28 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestUserSelfPatchRequest {
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserSelfPatchRequest
      */
-    defaultAlbumId?: number;
+    defaultAlbumId?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserSelfPatchRequest
      */
-    email?: string;
+    email?: any | null;
     /**
      * 
-     * @type {boolean}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserSelfPatchRequest
      */
-    isDefaultImagePrivate?: boolean;
+    isDefaultImagePrivate?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserSelfPatchRequest
      */
-    password?: string;
+    password?: any | null;
 }
 
 /**

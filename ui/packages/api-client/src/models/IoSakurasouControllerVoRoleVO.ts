@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { IoSakurasouModelEntityPermission } from './IoSakurasouModelEntityPermission';
+import type { IoSakurasouControllerVoPermissionVO } from './IoSakurasouControllerVoPermissionVO';
 import {
-    IoSakurasouModelEntityPermissionFromJSON,
-    IoSakurasouModelEntityPermissionFromJSONTyped,
-    IoSakurasouModelEntityPermissionToJSON,
-} from './IoSakurasouModelEntityPermission';
+    IoSakurasouControllerVoPermissionVOFromJSON,
+    IoSakurasouControllerVoPermissionVOFromJSONTyped,
+    IoSakurasouControllerVoPermissionVOToJSON,
+} from './IoSakurasouControllerVoPermissionVO';
 
 /**
  * 
@@ -28,16 +28,10 @@ import {
 export interface IoSakurasouControllerVoRoleVO {
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerVoRoleVO
      */
-    description?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof IoSakurasouControllerVoRoleVO
-     */
-    id: number;
+    description?: any | null;
     /**
      * 
      * @type {string}
@@ -46,17 +40,16 @@ export interface IoSakurasouControllerVoRoleVO {
     name: string;
     /**
      * 
-     * @type {Array<IoSakurasouModelEntityPermission>}
+     * @type {Array<IoSakurasouControllerVoPermissionVO>}
      * @memberof IoSakurasouControllerVoRoleVO
      */
-    permissions: Array<IoSakurasouModelEntityPermission>;
+    permissions: Array<IoSakurasouControllerVoPermissionVO>;
 }
 
 /**
  * Check if a given object implements the IoSakurasouControllerVoRoleVO interface.
  */
 export function instanceOfIoSakurasouControllerVoRoleVO(value: object): value is IoSakurasouControllerVoRoleVO {
-    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
@@ -73,9 +66,8 @@ export function IoSakurasouControllerVoRoleVOFromJSONTyped(json: any, ignoreDisc
     return {
         
         'description': json['description'] == null ? undefined : json['description'],
-        'id': json['id'],
         'name': json['name'],
-        'permissions': ((json['permissions'] as Array<any>).map(IoSakurasouModelEntityPermissionFromJSON)),
+        'permissions': ((json['permissions'] as Array<any>).map(IoSakurasouControllerVoPermissionVOFromJSON)),
     };
 }
 
@@ -86,9 +78,8 @@ export function IoSakurasouControllerVoRoleVOToJSON(value?: IoSakurasouControlle
     return {
         
         'description': value['description'],
-        'id': value['id'],
         'name': value['name'],
-        'permissions': ((value['permissions'] as Array<any>).map(IoSakurasouModelEntityPermissionToJSON)),
+        'permissions': ((value['permissions'] as Array<any>).map(IoSakurasouControllerVoPermissionVOToJSON)),
     };
 }
 

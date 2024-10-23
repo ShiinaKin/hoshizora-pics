@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { IoSakurasouModelStrategyStrategyType } from './IoSakurasouModelStrategyStrategyType';
+import {
+    IoSakurasouModelStrategyStrategyTypeFromJSON,
+    IoSakurasouModelStrategyStrategyTypeFromJSONTyped,
+    IoSakurasouModelStrategyStrategyTypeToJSON,
+} from './IoSakurasouModelStrategyStrategyType';
+
 /**
  * 
  * @export
@@ -24,14 +31,30 @@ export interface IoSakurasouModelStrategyLocalStrategy {
      * @type {string}
      * @memberof IoSakurasouModelStrategyLocalStrategy
      */
+    thumbnailFolder: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouModelStrategyLocalStrategy
+     */
     uploadFolder: string;
+    /**
+     * 
+     * @type {IoSakurasouModelStrategyStrategyType}
+     * @memberof IoSakurasouModelStrategyLocalStrategy
+     */
+    strategyType: IoSakurasouModelStrategyStrategyType;
 }
+
+
 
 /**
  * Check if a given object implements the IoSakurasouModelStrategyLocalStrategy interface.
  */
 export function instanceOfIoSakurasouModelStrategyLocalStrategy(value: object): value is IoSakurasouModelStrategyLocalStrategy {
+    if (!('thumbnailFolder' in value) || value['thumbnailFolder'] === undefined) return false;
     if (!('uploadFolder' in value) || value['uploadFolder'] === undefined) return false;
+    if (!('strategyType' in value) || value['strategyType'] === undefined) return false;
     return true;
 }
 
@@ -45,7 +68,9 @@ export function IoSakurasouModelStrategyLocalStrategyFromJSONTyped(json: any, ig
     }
     return {
         
+        'thumbnailFolder': json['thumbnailFolder'],
         'uploadFolder': json['uploadFolder'],
+        'strategyType': IoSakurasouModelStrategyStrategyTypeFromJSON(json['strategyType']),
     };
 }
 
@@ -55,7 +80,9 @@ export function IoSakurasouModelStrategyLocalStrategyToJSON(value?: IoSakurasouM
     }
     return {
         
+        'thumbnailFolder': value['thumbnailFolder'],
         'uploadFolder': value['uploadFolder'],
+        'strategyType': IoSakurasouModelStrategyStrategyTypeToJSON(value['strategyType']),
     };
 }
 

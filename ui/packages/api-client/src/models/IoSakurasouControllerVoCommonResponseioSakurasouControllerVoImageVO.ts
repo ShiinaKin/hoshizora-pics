@@ -23,50 +23,50 @@ import {
 /**
  * 
  * @export
- * @interface IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO
+ * @interface IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO
  */
-export interface IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO {
+export interface IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO {
     /**
      * 
      * @type {number}
-     * @memberof IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO
+     * @memberof IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO
      */
     code: number;
     /**
      * 
      * @type {IoSakurasouControllerVoImageVO}
-     * @memberof IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO
+     * @memberof IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO
      */
-    data?: IoSakurasouControllerVoImageVO;
+    data?: IoSakurasouControllerVoImageVO | null;
     /**
      * 
      * @type {boolean}
-     * @memberof IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO
+     * @memberof IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO
      */
     isSuccessful: boolean;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO
+     * @memberof IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO
      */
     message: string;
 }
 
 /**
- * Check if a given object implements the IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO interface.
+ * Check if a given object implements the IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO interface.
  */
-export function instanceOfIoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO(value: object): value is IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO {
+export function instanceOfIoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO(value: object): value is IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO {
     if (!('code' in value) || value['code'] === undefined) return false;
     if (!('isSuccessful' in value) || value['isSuccessful'] === undefined) return false;
     if (!('message' in value) || value['message'] === undefined) return false;
     return true;
 }
 
-export function IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVOFromJSON(json: any): IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO {
-    return IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVOFromJSONTyped(json, false);
+export function IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOFromJSON(json: any): IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO {
+    return IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOFromJSONTyped(json, false);
 }
 
-export function IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO {
+export function IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO {
     if (json == null) {
         return json;
     }
@@ -79,7 +79,7 @@ export function IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImag
     };
 }
 
-export function IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVOToJSON(value?: IoSakurasouControllerVoCommonResponseioSakurasouControllerVoImageVO | null): any {
+export function IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOToJSON(value?: IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO | null): any {
     if (value == null) {
         return value;
     }

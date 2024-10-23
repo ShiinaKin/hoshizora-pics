@@ -21,45 +21,46 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestSiteSettingPatchRequest {
     /**
      * 
-     * @type {boolean}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
      */
-    homePageRandomPicDisplay: boolean;
+    homePageRandomPicDisplay?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
      */
-    siteDescription: string;
+    siteDescription?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
      */
-    siteKeyword: string;
+    siteExternalUrl?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
      */
-    siteSubtitle: string;
+    siteKeyword?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
      */
-    siteTitle: string;
+    siteSubtitle?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof IoSakurasouControllerRequestSiteSettingPatchRequest
+     */
+    siteTitle?: any | null;
 }
 
 /**
  * Check if a given object implements the IoSakurasouControllerRequestSiteSettingPatchRequest interface.
  */
 export function instanceOfIoSakurasouControllerRequestSiteSettingPatchRequest(value: object): value is IoSakurasouControllerRequestSiteSettingPatchRequest {
-    if (!('homePageRandomPicDisplay' in value) || value['homePageRandomPicDisplay'] === undefined) return false;
-    if (!('siteDescription' in value) || value['siteDescription'] === undefined) return false;
-    if (!('siteKeyword' in value) || value['siteKeyword'] === undefined) return false;
-    if (!('siteSubtitle' in value) || value['siteSubtitle'] === undefined) return false;
-    if (!('siteTitle' in value) || value['siteTitle'] === undefined) return false;
     return true;
 }
 
@@ -73,11 +74,12 @@ export function IoSakurasouControllerRequestSiteSettingPatchRequestFromJSONTyped
     }
     return {
         
-        'homePageRandomPicDisplay': json['homePageRandomPicDisplay'],
-        'siteDescription': json['siteDescription'],
-        'siteKeyword': json['siteKeyword'],
-        'siteSubtitle': json['siteSubtitle'],
-        'siteTitle': json['siteTitle'],
+        'homePageRandomPicDisplay': json['homePageRandomPicDisplay'] == null ? undefined : json['homePageRandomPicDisplay'],
+        'siteDescription': json['siteDescription'] == null ? undefined : json['siteDescription'],
+        'siteExternalUrl': json['siteExternalUrl'] == null ? undefined : json['siteExternalUrl'],
+        'siteKeyword': json['siteKeyword'] == null ? undefined : json['siteKeyword'],
+        'siteSubtitle': json['siteSubtitle'] == null ? undefined : json['siteSubtitle'],
+        'siteTitle': json['siteTitle'] == null ? undefined : json['siteTitle'],
     };
 }
 
@@ -89,6 +91,7 @@ export function IoSakurasouControllerRequestSiteSettingPatchRequestToJSON(value?
         
         'homePageRandomPicDisplay': value['homePageRandomPicDisplay'],
         'siteDescription': value['siteDescription'],
+        'siteExternalUrl': value['siteExternalUrl'],
         'siteKeyword': value['siteKeyword'],
         'siteSubtitle': value['siteSubtitle'],
         'siteTitle': value['siteTitle'],

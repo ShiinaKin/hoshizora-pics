@@ -21,22 +21,28 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestImagePatchRequest {
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestImagePatchRequest
      */
-    albumId?: number;
+    albumId?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestImagePatchRequest
      */
-    description?: string;
+    description?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestImagePatchRequest
      */
-    originName?: string;
+    displayName?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof IoSakurasouControllerRequestImagePatchRequest
+     */
+    isPrivate?: any | null;
 }
 
 /**
@@ -58,7 +64,8 @@ export function IoSakurasouControllerRequestImagePatchRequestFromJSONTyped(json:
         
         'albumId': json['albumId'] == null ? undefined : json['albumId'],
         'description': json['description'] == null ? undefined : json['description'],
-        'originName': json['originName'] == null ? undefined : json['originName'],
+        'displayName': json['displayName'] == null ? undefined : json['displayName'],
+        'isPrivate': json['isPrivate'] == null ? undefined : json['isPrivate'],
     };
 }
 
@@ -70,7 +77,8 @@ export function IoSakurasouControllerRequestImagePatchRequestToJSON(value?: IoSa
         
         'albumId': value['albumId'],
         'description': value['description'],
-        'originName': value['originName'],
+        'displayName': value['displayName'],
+        'isPrivate': value['isPrivate'],
     };
 }
 

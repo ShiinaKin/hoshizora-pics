@@ -16,50 +16,50 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface IoSakurasouControllerVoCommonResponsekotlinUnit
+ * @interface IoSakurasouControllerVoCommonResponseKotlinUnit
  */
-export interface IoSakurasouControllerVoCommonResponsekotlinUnit {
+export interface IoSakurasouControllerVoCommonResponseKotlinUnit {
     /**
      * 
      * @type {number}
-     * @memberof IoSakurasouControllerVoCommonResponsekotlinUnit
+     * @memberof IoSakurasouControllerVoCommonResponseKotlinUnit
      */
     code: number;
     /**
      * 
      * @type {any}
-     * @memberof IoSakurasouControllerVoCommonResponsekotlinUnit
+     * @memberof IoSakurasouControllerVoCommonResponseKotlinUnit
      */
     data?: any | null;
     /**
      * 
      * @type {boolean}
-     * @memberof IoSakurasouControllerVoCommonResponsekotlinUnit
+     * @memberof IoSakurasouControllerVoCommonResponseKotlinUnit
      */
     isSuccessful: boolean;
     /**
      * 
      * @type {string}
-     * @memberof IoSakurasouControllerVoCommonResponsekotlinUnit
+     * @memberof IoSakurasouControllerVoCommonResponseKotlinUnit
      */
     message: string;
 }
 
 /**
- * Check if a given object implements the IoSakurasouControllerVoCommonResponsekotlinUnit interface.
+ * Check if a given object implements the IoSakurasouControllerVoCommonResponseKotlinUnit interface.
  */
-export function instanceOfIoSakurasouControllerVoCommonResponsekotlinUnit(value: object): value is IoSakurasouControllerVoCommonResponsekotlinUnit {
+export function instanceOfIoSakurasouControllerVoCommonResponseKotlinUnit(value: object): value is IoSakurasouControllerVoCommonResponseKotlinUnit {
     if (!('code' in value) || value['code'] === undefined) return false;
     if (!('isSuccessful' in value) || value['isSuccessful'] === undefined) return false;
     if (!('message' in value) || value['message'] === undefined) return false;
     return true;
 }
 
-export function IoSakurasouControllerVoCommonResponsekotlinUnitFromJSON(json: any): IoSakurasouControllerVoCommonResponsekotlinUnit {
-    return IoSakurasouControllerVoCommonResponsekotlinUnitFromJSONTyped(json, false);
+export function IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(json: any): IoSakurasouControllerVoCommonResponseKotlinUnit {
+    return IoSakurasouControllerVoCommonResponseKotlinUnitFromJSONTyped(json, false);
 }
 
-export function IoSakurasouControllerVoCommonResponsekotlinUnitFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoCommonResponsekotlinUnit {
+export function IoSakurasouControllerVoCommonResponseKotlinUnitFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoCommonResponseKotlinUnit {
     if (json == null) {
         return json;
     }
@@ -72,7 +72,7 @@ export function IoSakurasouControllerVoCommonResponsekotlinUnitFromJSONTyped(jso
     };
 }
 
-export function IoSakurasouControllerVoCommonResponsekotlinUnitToJSON(value?: IoSakurasouControllerVoCommonResponsekotlinUnit | null): any {
+export function IoSakurasouControllerVoCommonResponseKotlinUnitToJSON(value?: IoSakurasouControllerVoCommonResponseKotlinUnit | null): any {
     if (value == null) {
         return value;
     }

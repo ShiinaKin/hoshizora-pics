@@ -42,6 +42,12 @@ export interface IoSakurasouControllerRequestSiteInitRequest {
      * @type {string}
      * @memberof IoSakurasouControllerRequestSiteInitRequest
      */
+    siteExternalUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouControllerRequestSiteInitRequest
+     */
     siteSubtitle: string;
     /**
      * 
@@ -64,6 +70,7 @@ export function instanceOfIoSakurasouControllerRequestSiteInitRequest(value: obj
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('password' in value) || value['password'] === undefined) return false;
     if (!('siteDescription' in value) || value['siteDescription'] === undefined) return false;
+    if (!('siteExternalUrl' in value) || value['siteExternalUrl'] === undefined) return false;
     if (!('siteSubtitle' in value) || value['siteSubtitle'] === undefined) return false;
     if (!('siteTitle' in value) || value['siteTitle'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
@@ -83,6 +90,7 @@ export function IoSakurasouControllerRequestSiteInitRequestFromJSONTyped(json: a
         'email': json['email'],
         'password': json['password'],
         'siteDescription': json['siteDescription'],
+        'siteExternalUrl': json['siteExternalUrl'],
         'siteSubtitle': json['siteSubtitle'],
         'siteTitle': json['siteTitle'],
         'username': json['username'],
@@ -98,6 +106,7 @@ export function IoSakurasouControllerRequestSiteInitRequestToJSON(value?: IoSaku
         'email': value['email'],
         'password': value['password'],
         'siteDescription': value['siteDescription'],
+        'siteExternalUrl': value['siteExternalUrl'],
         'siteSubtitle': value['siteSubtitle'],
         'siteTitle': value['siteTitle'],
         'username': value['username'],

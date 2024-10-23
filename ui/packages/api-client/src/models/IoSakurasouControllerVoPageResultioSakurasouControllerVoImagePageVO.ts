@@ -23,73 +23,82 @@ import {
 /**
  * 
  * @export
- * @interface IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO
+ * @interface IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
  */
-export interface IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO {
+export interface IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO {
     /**
      * 
      * @type {Array<IoSakurasouControllerVoImagePageVO>}
-     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO
+     * @memberof IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
      */
-    list: Array<IoSakurasouControllerVoImagePageVO>;
+    data: Array<IoSakurasouControllerVoImagePageVO>;
     /**
      * 
      * @type {number}
-     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO
+     * @memberof IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
      */
     page: number;
     /**
      * 
      * @type {number}
-     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO
+     * @memberof IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
      */
     pageSize: number;
     /**
      * 
      * @type {number}
-     * @memberof IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO
+     * @memberof IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
      */
     total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO
+     */
+    totalPage: number;
 }
 
 /**
- * Check if a given object implements the IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO interface.
+ * Check if a given object implements the IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO interface.
  */
-export function instanceOfIoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO(value: object): value is IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO {
-    if (!('list' in value) || value['list'] === undefined) return false;
+export function instanceOfIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO(value: object): value is IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO {
+    if (!('data' in value) || value['data'] === undefined) return false;
     if (!('page' in value) || value['page'] === undefined) return false;
     if (!('pageSize' in value) || value['pageSize'] === undefined) return false;
     if (!('total' in value) || value['total'] === undefined) return false;
+    if (!('totalPage' in value) || value['totalPage'] === undefined) return false;
     return true;
 }
 
-export function IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVOFromJSON(json: any): IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO {
-    return IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVOFromJSONTyped(json, false);
+export function IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSON(json: any): IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO {
+    return IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSONTyped(json, false);
 }
 
-export function IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO {
+export function IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO {
     if (json == null) {
         return json;
     }
     return {
         
-        'list': ((json['list'] as Array<any>).map(IoSakurasouControllerVoImagePageVOFromJSON)),
+        'data': ((json['data'] as Array<any>).map(IoSakurasouControllerVoImagePageVOFromJSON)),
         'page': json['page'],
         'pageSize': json['pageSize'],
         'total': json['total'],
+        'totalPage': json['totalPage'],
     };
 }
 
-export function IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVOToJSON(value?: IoSakurasouControllerVoPageResultioSakurasouControllerVoImagePageVO | null): any {
+export function IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOToJSON(value?: IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO | null): any {
     if (value == null) {
         return value;
     }
     return {
         
-        'list': ((value['list'] as Array<any>).map(IoSakurasouControllerVoImagePageVOToJSON)),
+        'data': ((value['data'] as Array<any>).map(IoSakurasouControllerVoImagePageVOToJSON)),
         'page': value['page'],
         'pageSize': value['pageSize'],
         'total': value['total'],
+        'totalPage': value['totalPage'],
     };
 }
 

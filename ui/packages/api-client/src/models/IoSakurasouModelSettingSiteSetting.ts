@@ -36,6 +36,12 @@ export interface IoSakurasouModelSettingSiteSetting {
      * @type {string}
      * @memberof IoSakurasouModelSettingSiteSetting
      */
+    siteExternalUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouModelSettingSiteSetting
+     */
     siteKeyword: string;
     /**
      * 
@@ -57,6 +63,7 @@ export interface IoSakurasouModelSettingSiteSetting {
 export function instanceOfIoSakurasouModelSettingSiteSetting(value: object): value is IoSakurasouModelSettingSiteSetting {
     if (!('homePageRandomPicDisplay' in value) || value['homePageRandomPicDisplay'] === undefined) return false;
     if (!('siteDescription' in value) || value['siteDescription'] === undefined) return false;
+    if (!('siteExternalUrl' in value) || value['siteExternalUrl'] === undefined) return false;
     if (!('siteKeyword' in value) || value['siteKeyword'] === undefined) return false;
     if (!('siteSubtitle' in value) || value['siteSubtitle'] === undefined) return false;
     if (!('siteTitle' in value) || value['siteTitle'] === undefined) return false;
@@ -75,6 +82,7 @@ export function IoSakurasouModelSettingSiteSettingFromJSONTyped(json: any, ignor
         
         'homePageRandomPicDisplay': json['homePageRandomPicDisplay'],
         'siteDescription': json['siteDescription'],
+        'siteExternalUrl': json['siteExternalUrl'],
         'siteKeyword': json['siteKeyword'],
         'siteSubtitle': json['siteSubtitle'],
         'siteTitle': json['siteTitle'],
@@ -89,6 +97,7 @@ export function IoSakurasouModelSettingSiteSettingToJSON(value?: IoSakurasouMode
         
         'homePageRandomPicDisplay': value['homePageRandomPicDisplay'],
         'siteDescription': value['siteDescription'],
+        'siteExternalUrl': value['siteExternalUrl'],
         'siteKeyword': value['siteKeyword'],
         'siteSubtitle': value['siteSubtitle'],
         'siteTitle': value['siteTitle'],

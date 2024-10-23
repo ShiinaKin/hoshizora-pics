@@ -13,12 +13,25 @@
  */
 
 import { mapValues } from '../runtime';
+import type { KotlinxDatetimeLocalDateTime } from './KotlinxDatetimeLocalDateTime';
+import {
+    KotlinxDatetimeLocalDateTimeFromJSON,
+    KotlinxDatetimeLocalDateTimeFromJSONTyped,
+    KotlinxDatetimeLocalDateTimeToJSON,
+} from './KotlinxDatetimeLocalDateTime';
+
 /**
  * 
  * @export
  * @interface IoSakurasouControllerVoUserPageVO
  */
 export interface IoSakurasouControllerVoUserPageVO {
+    /**
+     * 
+     * @type {KotlinxDatetimeLocalDateTime}
+     * @memberof IoSakurasouControllerVoUserPageVO
+     */
+    createTime: KotlinxDatetimeLocalDateTime;
     /**
      * 
      * @type {string}
@@ -39,6 +52,12 @@ export interface IoSakurasouControllerVoUserPageVO {
     imageCount: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoUserPageVO
+     */
+    isBanned: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof IoSakurasouControllerVoUserPageVO
      */
@@ -55,9 +74,11 @@ export interface IoSakurasouControllerVoUserPageVO {
  * Check if a given object implements the IoSakurasouControllerVoUserPageVO interface.
  */
 export function instanceOfIoSakurasouControllerVoUserPageVO(value: object): value is IoSakurasouControllerVoUserPageVO {
+    if (!('createTime' in value) || value['createTime'] === undefined) return false;
     if (!('groupName' in value) || value['groupName'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('imageCount' in value) || value['imageCount'] === undefined) return false;
+    if (!('isBanned' in value) || value['isBanned'] === undefined) return false;
     if (!('totalImageSize' in value) || value['totalImageSize'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
     return true;
@@ -73,9 +94,11 @@ export function IoSakurasouControllerVoUserPageVOFromJSONTyped(json: any, ignore
     }
     return {
         
+        'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
         'groupName': json['groupName'],
         'id': json['id'],
         'imageCount': json['imageCount'],
+        'isBanned': json['isBanned'],
         'totalImageSize': json['totalImageSize'],
         'username': json['username'],
     };
@@ -87,9 +110,11 @@ export function IoSakurasouControllerVoUserPageVOToJSON(value?: IoSakurasouContr
     }
     return {
         
+        'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
         'groupName': value['groupName'],
         'id': value['id'],
         'imageCount': value['imageCount'],
+        'isBanned': value['isBanned'],
         'totalImageSize': value['totalImageSize'],
         'username': value['username'],
     };

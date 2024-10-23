@@ -21,34 +21,34 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestUserManagePatchRequest {
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserManagePatchRequest
      */
-    defaultAlbumId?: number;
+    defaultAlbumId?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserManagePatchRequest
      */
-    email?: string;
+    email?: any | null;
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserManagePatchRequest
      */
-    groupId?: number;
+    groupId?: any | null;
     /**
      * 
-     * @type {boolean}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserManagePatchRequest
      */
-    isDefaultImagePrivate?: boolean;
+    isDefaultImagePrivate?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestUserManagePatchRequest
      */
-    password?: string;
+    password?: any | null;
 }
 
 /**

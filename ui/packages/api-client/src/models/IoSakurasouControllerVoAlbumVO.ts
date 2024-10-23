@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { KotlinxDatetimeLocalDateTime } from './KotlinxDatetimeLocalDateTime';
+import {
+    KotlinxDatetimeLocalDateTimeFromJSON,
+    KotlinxDatetimeLocalDateTimeFromJSONTyped,
+    KotlinxDatetimeLocalDateTimeToJSON,
+} from './KotlinxDatetimeLocalDateTime';
+
 /**
  * 
  * @export
@@ -21,10 +28,16 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerVoAlbumVO {
     /**
      * 
-     * @type {string}
+     * @type {KotlinxDatetimeLocalDateTime}
      * @memberof IoSakurasouControllerVoAlbumVO
      */
-    description?: string;
+    createTime: KotlinxDatetimeLocalDateTime;
+    /**
+     * 
+     * @type {any}
+     * @memberof IoSakurasouControllerVoAlbumVO
+     */
+    description?: any | null;
     /**
      * 
      * @type {number}
@@ -39,6 +52,12 @@ export interface IoSakurasouControllerVoAlbumVO {
     imageCount: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoAlbumVO
+     */
+    isUncategorized: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoAlbumVO
      */
@@ -49,8 +68,10 @@ export interface IoSakurasouControllerVoAlbumVO {
  * Check if a given object implements the IoSakurasouControllerVoAlbumVO interface.
  */
 export function instanceOfIoSakurasouControllerVoAlbumVO(value: object): value is IoSakurasouControllerVoAlbumVO {
+    if (!('createTime' in value) || value['createTime'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('imageCount' in value) || value['imageCount'] === undefined) return false;
+    if (!('isUncategorized' in value) || value['isUncategorized'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
@@ -65,9 +86,11 @@ export function IoSakurasouControllerVoAlbumVOFromJSONTyped(json: any, ignoreDis
     }
     return {
         
+        'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
         'description': json['description'] == null ? undefined : json['description'],
         'id': json['id'],
         'imageCount': json['imageCount'],
+        'isUncategorized': json['isUncategorized'],
         'name': json['name'],
     };
 }
@@ -78,9 +101,11 @@ export function IoSakurasouControllerVoAlbumVOToJSON(value?: IoSakurasouControll
     }
     return {
         
+        'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
         'description': value['description'],
         'id': value['id'],
         'imageCount': value['imageCount'],
+        'isUncategorized': value['isUncategorized'],
         'name': value['name'],
     };
 }

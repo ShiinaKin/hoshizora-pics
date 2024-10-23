@@ -13,18 +13,24 @@
  */
 
 import { mapValues } from '../runtime';
+import type { KotlinxDatetimeLocalDateTime } from './KotlinxDatetimeLocalDateTime';
+import {
+    KotlinxDatetimeLocalDateTimeFromJSON,
+    KotlinxDatetimeLocalDateTimeFromJSONTyped,
+    KotlinxDatetimeLocalDateTimeToJSON,
+} from './KotlinxDatetimeLocalDateTime';
 import type { IoSakurasouModelStrategyStrategyConfig } from './IoSakurasouModelStrategyStrategyConfig';
 import {
     IoSakurasouModelStrategyStrategyConfigFromJSON,
     IoSakurasouModelStrategyStrategyConfigFromJSONTyped,
     IoSakurasouModelStrategyStrategyConfigToJSON,
 } from './IoSakurasouModelStrategyStrategyConfig';
-import type { KotlinxSerializationJsonJsonElement } from './KotlinxSerializationJsonJsonElement';
+import type { IoSakurasouModelStrategyStrategyType } from './IoSakurasouModelStrategyStrategyType';
 import {
-    KotlinxSerializationJsonJsonElementFromJSON,
-    KotlinxSerializationJsonJsonElementFromJSONTyped,
-    KotlinxSerializationJsonJsonElementToJSON,
-} from './KotlinxSerializationJsonJsonElement';
+    IoSakurasouModelStrategyStrategyTypeFromJSON,
+    IoSakurasouModelStrategyStrategyTypeFromJSONTyped,
+    IoSakurasouModelStrategyStrategyTypeToJSON,
+} from './IoSakurasouModelStrategyStrategyType';
 
 /**
  * 
@@ -34,10 +40,16 @@ import {
 export interface IoSakurasouControllerVoStrategyVO {
     /**
      * 
-     * @type {KotlinxSerializationJsonJsonElement}
+     * @type {IoSakurasouModelStrategyStrategyConfig}
      * @memberof IoSakurasouControllerVoStrategyVO
      */
-    config: KotlinxSerializationJsonJsonElement;
+    config: IoSakurasouModelStrategyStrategyConfig;
+    /**
+     * 
+     * @type {KotlinxDatetimeLocalDateTime}
+     * @memberof IoSakurasouControllerVoStrategyVO
+     */
+    createTime: KotlinxDatetimeLocalDateTime;
     /**
      * 
      * @type {number}
@@ -52,17 +64,20 @@ export interface IoSakurasouControllerVoStrategyVO {
     name: string;
     /**
      * 
-     * @type {IoSakurasouModelStrategyStrategyConfig}
+     * @type {IoSakurasouModelStrategyStrategyType}
      * @memberof IoSakurasouControllerVoStrategyVO
      */
-    type: IoSakurasouModelStrategyStrategyConfig;
+    type: IoSakurasouModelStrategyStrategyType;
 }
+
+
 
 /**
  * Check if a given object implements the IoSakurasouControllerVoStrategyVO interface.
  */
 export function instanceOfIoSakurasouControllerVoStrategyVO(value: object): value is IoSakurasouControllerVoStrategyVO {
     if (!('config' in value) || value['config'] === undefined) return false;
+    if (!('createTime' in value) || value['createTime'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('type' in value) || value['type'] === undefined) return false;
@@ -79,10 +94,11 @@ export function IoSakurasouControllerVoStrategyVOFromJSONTyped(json: any, ignore
     }
     return {
         
-        'config': KotlinxSerializationJsonJsonElementFromJSON(json['config']),
+        'config': IoSakurasouModelStrategyStrategyConfigFromJSON(json['config']),
+        'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
         'id': json['id'],
         'name': json['name'],
-        'type': IoSakurasouModelStrategyStrategyConfigFromJSON(json['type']),
+        'type': IoSakurasouModelStrategyStrategyTypeFromJSON(json['type']),
     };
 }
 
@@ -92,10 +108,11 @@ export function IoSakurasouControllerVoStrategyVOToJSON(value?: IoSakurasouContr
     }
     return {
         
-        'config': KotlinxSerializationJsonJsonElementToJSON(value['config']),
+        'config': IoSakurasouModelStrategyStrategyConfigToJSON(value['config']),
+        'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
         'id': value['id'],
         'name': value['name'],
-        'type': IoSakurasouModelStrategyStrategyConfigToJSON(value['type']),
+        'type': IoSakurasouModelStrategyStrategyTypeToJSON(value['type']),
     };
 }
 

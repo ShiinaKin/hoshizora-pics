@@ -25,6 +25,12 @@ import {
     IoSakurasouModelStrategyLocalStrategyFromJSONTyped,
     IoSakurasouModelStrategyLocalStrategyToJSON,
 } from './IoSakurasouModelStrategyLocalStrategy';
+import type { IoSakurasouModelStrategyStrategyType } from './IoSakurasouModelStrategyStrategyType';
+import {
+    IoSakurasouModelStrategyStrategyTypeFromJSON,
+    IoSakurasouModelStrategyStrategyTypeFromJSONTyped,
+    IoSakurasouModelStrategyStrategyTypeToJSON,
+} from './IoSakurasouModelStrategyStrategyType';
 
 /**
  * 
@@ -37,7 +43,19 @@ export interface IoSakurasouModelStrategyStrategyConfig {
      * @type {string}
      * @memberof IoSakurasouModelStrategyStrategyConfig
      */
+    thumbnailFolder: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouModelStrategyStrategyConfig
+     */
     uploadFolder: string;
+    /**
+     * 
+     * @type {IoSakurasouModelStrategyStrategyType}
+     * @memberof IoSakurasouModelStrategyStrategyConfig
+     */
+    strategyType: IoSakurasouModelStrategyStrategyType;
     /**
      * 
      * @type {string}
@@ -61,6 +79,12 @@ export interface IoSakurasouModelStrategyStrategyConfig {
      * @type {string}
      * @memberof IoSakurasouModelStrategyStrategyConfig
      */
+    publicUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouModelStrategyStrategyConfig
+     */
     region: string;
     /**
      * 
@@ -70,14 +94,19 @@ export interface IoSakurasouModelStrategyStrategyConfig {
     secretKey: string;
 }
 
+
+
 /**
  * Check if a given object implements the IoSakurasouModelStrategyStrategyConfig interface.
  */
 export function instanceOfIoSakurasouModelStrategyStrategyConfig(value: object): value is IoSakurasouModelStrategyStrategyConfig {
+    if (!('thumbnailFolder' in value) || value['thumbnailFolder'] === undefined) return false;
     if (!('uploadFolder' in value) || value['uploadFolder'] === undefined) return false;
+    if (!('strategyType' in value) || value['strategyType'] === undefined) return false;
     if (!('accessKey' in value) || value['accessKey'] === undefined) return false;
     if (!('bucketName' in value) || value['bucketName'] === undefined) return false;
     if (!('endpoint' in value) || value['endpoint'] === undefined) return false;
+    if (!('publicUrl' in value) || value['publicUrl'] === undefined) return false;
     if (!('region' in value) || value['region'] === undefined) return false;
     if (!('secretKey' in value) || value['secretKey'] === undefined) return false;
     return true;
@@ -93,10 +122,13 @@ export function IoSakurasouModelStrategyStrategyConfigFromJSONTyped(json: any, i
     }
     return {
         
+        'thumbnailFolder': json['thumbnailFolder'],
         'uploadFolder': json['uploadFolder'],
+        'strategyType': IoSakurasouModelStrategyStrategyTypeFromJSON(json['strategyType']),
         'accessKey': json['accessKey'],
         'bucketName': json['bucketName'],
         'endpoint': json['endpoint'],
+        'publicUrl': json['publicUrl'],
         'region': json['region'],
         'secretKey': json['secretKey'],
     };
@@ -108,10 +140,13 @@ export function IoSakurasouModelStrategyStrategyConfigToJSON(value?: IoSakurasou
     }
     return {
         
+        'thumbnailFolder': value['thumbnailFolder'],
         'uploadFolder': value['uploadFolder'],
+        'strategyType': IoSakurasouModelStrategyStrategyTypeToJSON(value['strategyType']),
         'accessKey': value['accessKey'],
         'bucketName': value['bucketName'],
         'endpoint': value['endpoint'],
+        'publicUrl': value['publicUrl'],
         'region': value['region'],
         'secretKey': value['secretKey'],
     };

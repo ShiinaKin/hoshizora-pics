@@ -21,29 +21,28 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestAlbumManagePatchRequest {
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestAlbumManagePatchRequest
      */
-    description?: string;
+    description?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestAlbumManagePatchRequest
      */
-    name?: string;
+    name?: any | null;
     /**
      * 
-     * @type {number}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestAlbumManagePatchRequest
      */
-    userId: number;
+    userId?: any | null;
 }
 
 /**
  * Check if a given object implements the IoSakurasouControllerRequestAlbumManagePatchRequest interface.
  */
 export function instanceOfIoSakurasouControllerRequestAlbumManagePatchRequest(value: object): value is IoSakurasouControllerRequestAlbumManagePatchRequest {
-    if (!('userId' in value) || value['userId'] === undefined) return false;
     return true;
 }
 
@@ -59,7 +58,7 @@ export function IoSakurasouControllerRequestAlbumManagePatchRequestFromJSONTyped
         
         'description': json['description'] == null ? undefined : json['description'],
         'name': json['name'] == null ? undefined : json['name'],
-        'userId': json['userId'],
+        'userId': json['userId'] == null ? undefined : json['userId'],
     };
 }
 

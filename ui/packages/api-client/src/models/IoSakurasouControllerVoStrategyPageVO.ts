@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { IoSakurasouModelStrategyStrategyConfig } from './IoSakurasouModelStrategyStrategyConfig';
+import type { IoSakurasouModelStrategyStrategyType } from './IoSakurasouModelStrategyStrategyType';
 import {
-    IoSakurasouModelStrategyStrategyConfigFromJSON,
-    IoSakurasouModelStrategyStrategyConfigFromJSONTyped,
-    IoSakurasouModelStrategyStrategyConfigToJSON,
-} from './IoSakurasouModelStrategyStrategyConfig';
+    IoSakurasouModelStrategyStrategyTypeFromJSON,
+    IoSakurasouModelStrategyStrategyTypeFromJSONTyped,
+    IoSakurasouModelStrategyStrategyTypeToJSON,
+} from './IoSakurasouModelStrategyStrategyType';
 
 /**
  * 
@@ -40,11 +40,13 @@ export interface IoSakurasouControllerVoStrategyPageVO {
     name: string;
     /**
      * 
-     * @type {IoSakurasouModelStrategyStrategyConfig}
+     * @type {IoSakurasouModelStrategyStrategyType}
      * @memberof IoSakurasouControllerVoStrategyPageVO
      */
-    type: IoSakurasouModelStrategyStrategyConfig;
+    type: IoSakurasouModelStrategyStrategyType;
 }
+
+
 
 /**
  * Check if a given object implements the IoSakurasouControllerVoStrategyPageVO interface.
@@ -68,7 +70,7 @@ export function IoSakurasouControllerVoStrategyPageVOFromJSONTyped(json: any, ig
         
         'id': json['id'],
         'name': json['name'],
-        'type': IoSakurasouModelStrategyStrategyConfigFromJSON(json['type']),
+        'type': IoSakurasouModelStrategyStrategyTypeFromJSON(json['type']),
     };
 }
 
@@ -80,7 +82,7 @@ export function IoSakurasouControllerVoStrategyPageVOToJSON(value?: IoSakurasouC
         
         'id': value['id'],
         'name': value['name'],
-        'type': IoSakurasouModelStrategyStrategyConfigToJSON(value['type']),
+        'type': IoSakurasouModelStrategyStrategyTypeToJSON(value['type']),
     };
 }
 

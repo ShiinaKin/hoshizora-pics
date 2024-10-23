@@ -21,16 +21,16 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestAlbumSelfPatchRequest {
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestAlbumSelfPatchRequest
      */
-    description?: string;
+    description?: any | null;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestAlbumSelfPatchRequest
      */
-    name?: string;
+    name?: any | null;
 }
 
 /**

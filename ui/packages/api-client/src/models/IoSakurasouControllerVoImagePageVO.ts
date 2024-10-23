@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { KotlinxDatetimeLocalDateTime } from './KotlinxDatetimeLocalDateTime';
+import {
+    KotlinxDatetimeLocalDateTimeFromJSON,
+    KotlinxDatetimeLocalDateTimeFromJSONTyped,
+    KotlinxDatetimeLocalDateTimeToJSON,
+} from './KotlinxDatetimeLocalDateTime';
+
 /**
  * 
  * @export
@@ -21,10 +28,16 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerVoImagePageVO {
     /**
      * 
+     * @type {KotlinxDatetimeLocalDateTime}
+     * @memberof IoSakurasouControllerVoImagePageVO
+     */
+    createTime: KotlinxDatetimeLocalDateTime;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoImagePageVO
      */
-    externalUrl: string;
+    displayName: string;
     /**
      * 
      * @type {number}
@@ -33,26 +46,20 @@ export interface IoSakurasouControllerVoImagePageVO {
     id: number;
     /**
      * 
-     * @type {string}
+     * @type {boolean}
      * @memberof IoSakurasouControllerVoImagePageVO
      */
-    originName: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof IoSakurasouControllerVoImagePageVO
-     */
-    size: number;
+    isPrivate: boolean;
 }
 
 /**
  * Check if a given object implements the IoSakurasouControllerVoImagePageVO interface.
  */
 export function instanceOfIoSakurasouControllerVoImagePageVO(value: object): value is IoSakurasouControllerVoImagePageVO {
-    if (!('externalUrl' in value) || value['externalUrl'] === undefined) return false;
+    if (!('createTime' in value) || value['createTime'] === undefined) return false;
+    if (!('displayName' in value) || value['displayName'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('originName' in value) || value['originName'] === undefined) return false;
-    if (!('size' in value) || value['size'] === undefined) return false;
+    if (!('isPrivate' in value) || value['isPrivate'] === undefined) return false;
     return true;
 }
 
@@ -66,10 +73,10 @@ export function IoSakurasouControllerVoImagePageVOFromJSONTyped(json: any, ignor
     }
     return {
         
-        'externalUrl': json['externalUrl'],
+        'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
+        'displayName': json['displayName'],
         'id': json['id'],
-        'originName': json['originName'],
-        'size': json['size'],
+        'isPrivate': json['isPrivate'],
     };
 }
 
@@ -79,10 +86,10 @@ export function IoSakurasouControllerVoImagePageVOToJSON(value?: IoSakurasouCont
     }
     return {
         
-        'externalUrl': value['externalUrl'],
+        'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
+        'displayName': value['displayName'],
         'id': value['id'],
-        'originName': value['originName'],
-        'size': value['size'],
+        'isPrivate': value['isPrivate'],
     };
 }
 

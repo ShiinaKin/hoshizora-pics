@@ -13,12 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { IoSakurasouModelSettingStrategySetting } from './IoSakurasouModelSettingStrategySetting';
-import {
-    IoSakurasouModelSettingStrategySettingFromJSON,
-    IoSakurasouModelSettingStrategySettingFromJSONTyped,
-    IoSakurasouModelSettingStrategySettingToJSON,
-} from './IoSakurasouModelSettingStrategySetting';
 import type { IoSakurasouModelSettingSystemSetting } from './IoSakurasouModelSettingSystemSetting';
 import {
     IoSakurasouModelSettingSystemSettingFromJSON,
@@ -61,6 +55,12 @@ export interface IoSakurasouModelSettingSettingConfig {
      * @type {string}
      * @memberof IoSakurasouModelSettingSettingConfig
      */
+    siteExternalUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouModelSettingSettingConfig
+     */
     siteKeyword: string;
     /**
      * 
@@ -76,10 +76,10 @@ export interface IoSakurasouModelSettingSettingConfig {
     siteTitle: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {boolean}
      * @memberof IoSakurasouModelSettingSettingConfig
      */
-    allowedImageTypes: Array<string>;
+    allowRandomFetch: boolean;
     /**
      * 
      * @type {boolean}
@@ -106,10 +106,11 @@ export interface IoSakurasouModelSettingSettingConfig {
 export function instanceOfIoSakurasouModelSettingSettingConfig(value: object): value is IoSakurasouModelSettingSettingConfig {
     if (!('homePageRandomPicDisplay' in value) || value['homePageRandomPicDisplay'] === undefined) return false;
     if (!('siteDescription' in value) || value['siteDescription'] === undefined) return false;
+    if (!('siteExternalUrl' in value) || value['siteExternalUrl'] === undefined) return false;
     if (!('siteKeyword' in value) || value['siteKeyword'] === undefined) return false;
     if (!('siteSubtitle' in value) || value['siteSubtitle'] === undefined) return false;
     if (!('siteTitle' in value) || value['siteTitle'] === undefined) return false;
-    if (!('allowedImageTypes' in value) || value['allowedImageTypes'] === undefined) return false;
+    if (!('allowRandomFetch' in value) || value['allowRandomFetch'] === undefined) return false;
     if (!('allowSignup' in value) || value['allowSignup'] === undefined) return false;
     if (!('defaultGroupId' in value) || value['defaultGroupId'] === undefined) return false;
     if (!('isInit' in value) || value['isInit'] === undefined) return false;
@@ -128,10 +129,11 @@ export function IoSakurasouModelSettingSettingConfigFromJSONTyped(json: any, ign
         
         'homePageRandomPicDisplay': json['homePageRandomPicDisplay'],
         'siteDescription': json['siteDescription'],
+        'siteExternalUrl': json['siteExternalUrl'],
         'siteKeyword': json['siteKeyword'],
         'siteSubtitle': json['siteSubtitle'],
         'siteTitle': json['siteTitle'],
-        'allowedImageTypes': json['allowedImageTypes'],
+        'allowRandomFetch': json['allowRandomFetch'],
         'allowSignup': json['allowSignup'],
         'defaultGroupId': json['defaultGroupId'],
         'isInit': json['isInit'],
@@ -146,10 +148,11 @@ export function IoSakurasouModelSettingSettingConfigToJSON(value?: IoSakurasouMo
         
         'homePageRandomPicDisplay': value['homePageRandomPicDisplay'],
         'siteDescription': value['siteDescription'],
+        'siteExternalUrl': value['siteExternalUrl'],
         'siteKeyword': value['siteKeyword'],
         'siteSubtitle': value['siteSubtitle'],
         'siteTitle': value['siteTitle'],
-        'allowedImageTypes': value['allowedImageTypes'],
+        'allowRandomFetch': value['allowRandomFetch'],
         'allowSignup': value['allowSignup'],
         'defaultGroupId': value['defaultGroupId'],
         'isInit': value['isInit'],

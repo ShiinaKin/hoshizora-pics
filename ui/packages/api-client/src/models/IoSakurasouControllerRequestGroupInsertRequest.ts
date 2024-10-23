@@ -21,16 +21,10 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestGroupInsertRequest {
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerRequestGroupInsertRequest
      */
-    description?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof IoSakurasouControllerRequestGroupInsertRequest
-     */
-    maxSize: number;
+    description?: any | null;
     /**
      * 
      * @type {string}
@@ -39,26 +33,25 @@ export interface IoSakurasouControllerRequestGroupInsertRequest {
     name: string;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof IoSakurasouControllerRequestGroupInsertRequest
      */
-    roles: Array<number>;
+    roles: Array<string>;
     /**
      * 
      * @type {number}
      * @memberof IoSakurasouControllerRequestGroupInsertRequest
      */
-    strategy: number;
+    strategyId: number;
 }
 
 /**
  * Check if a given object implements the IoSakurasouControllerRequestGroupInsertRequest interface.
  */
 export function instanceOfIoSakurasouControllerRequestGroupInsertRequest(value: object): value is IoSakurasouControllerRequestGroupInsertRequest {
-    if (!('maxSize' in value) || value['maxSize'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('roles' in value) || value['roles'] === undefined) return false;
-    if (!('strategy' in value) || value['strategy'] === undefined) return false;
+    if (!('strategyId' in value) || value['strategyId'] === undefined) return false;
     return true;
 }
 
@@ -73,10 +66,9 @@ export function IoSakurasouControllerRequestGroupInsertRequestFromJSONTyped(json
     return {
         
         'description': json['description'] == null ? undefined : json['description'],
-        'maxSize': json['maxSize'],
         'name': json['name'],
         'roles': json['roles'],
-        'strategy': json['strategy'],
+        'strategyId': json['strategyId'],
     };
 }
 
@@ -87,10 +79,9 @@ export function IoSakurasouControllerRequestGroupInsertRequestToJSON(value?: IoS
     return {
         
         'description': value['description'],
-        'maxSize': value['maxSize'],
         'name': value['name'],
         'roles': value['roles'],
-        'strategy': value['strategy'],
+        'strategyId': value['strategyId'],
     };
 }
 

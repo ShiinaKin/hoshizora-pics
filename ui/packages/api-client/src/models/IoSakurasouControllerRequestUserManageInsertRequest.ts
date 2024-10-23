@@ -21,12 +21,6 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerRequestUserManageInsertRequest {
     /**
      * 
-     * @type {number}
-     * @memberof IoSakurasouControllerRequestUserManageInsertRequest
-     */
-    defaultAlbumId: number;
-    /**
-     * 
      * @type {string}
      * @memberof IoSakurasouControllerRequestUserManageInsertRequest
      */
@@ -61,7 +55,6 @@ export interface IoSakurasouControllerRequestUserManageInsertRequest {
  * Check if a given object implements the IoSakurasouControllerRequestUserManageInsertRequest interface.
  */
 export function instanceOfIoSakurasouControllerRequestUserManageInsertRequest(value: object): value is IoSakurasouControllerRequestUserManageInsertRequest {
-    if (!('defaultAlbumId' in value) || value['defaultAlbumId'] === undefined) return false;
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('groupId' in value) || value['groupId'] === undefined) return false;
     if (!('isDefaultImagePrivate' in value) || value['isDefaultImagePrivate'] === undefined) return false;
@@ -80,7 +73,6 @@ export function IoSakurasouControllerRequestUserManageInsertRequestFromJSONTyped
     }
     return {
         
-        'defaultAlbumId': json['defaultAlbumId'],
         'email': json['email'],
         'groupId': json['groupId'],
         'isDefaultImagePrivate': json['isDefaultImagePrivate'],
@@ -95,7 +87,6 @@ export function IoSakurasouControllerRequestUserManageInsertRequestToJSON(value?
     }
     return {
         
-        'defaultAlbumId': value['defaultAlbumId'],
         'email': value['email'],
         'groupId': value['groupId'],
         'isDefaultImagePrivate': value['isDefaultImagePrivate'],

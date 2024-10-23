@@ -34,10 +34,10 @@ export interface IoSakurasouControllerVoUserVO {
     createTime: KotlinxDatetimeLocalDateTime;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerVoUserVO
      */
-    email: string;
+    email?: any | null;
     /**
      * 
      * @type {string}
@@ -58,6 +58,18 @@ export interface IoSakurasouControllerVoUserVO {
     imageCount: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoUserVO
+     */
+    isBanned: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoUserVO
+     */
+    isDefaultImagePrivate: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof IoSakurasouControllerVoUserVO
      */
@@ -75,10 +87,11 @@ export interface IoSakurasouControllerVoUserVO {
  */
 export function instanceOfIoSakurasouControllerVoUserVO(value: object): value is IoSakurasouControllerVoUserVO {
     if (!('createTime' in value) || value['createTime'] === undefined) return false;
-    if (!('email' in value) || value['email'] === undefined) return false;
     if (!('groupName' in value) || value['groupName'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('imageCount' in value) || value['imageCount'] === undefined) return false;
+    if (!('isBanned' in value) || value['isBanned'] === undefined) return false;
+    if (!('isDefaultImagePrivate' in value) || value['isDefaultImagePrivate'] === undefined) return false;
     if (!('totalImageSize' in value) || value['totalImageSize'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
     return true;
@@ -95,10 +108,12 @@ export function IoSakurasouControllerVoUserVOFromJSONTyped(json: any, ignoreDisc
     return {
         
         'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
-        'email': json['email'],
+        'email': json['email'] == null ? undefined : json['email'],
         'groupName': json['groupName'],
         'id': json['id'],
         'imageCount': json['imageCount'],
+        'isBanned': json['isBanned'],
+        'isDefaultImagePrivate': json['isDefaultImagePrivate'],
         'totalImageSize': json['totalImageSize'],
         'username': json['username'],
     };
@@ -115,6 +130,8 @@ export function IoSakurasouControllerVoUserVOToJSON(value?: IoSakurasouControlle
         'groupName': value['groupName'],
         'id': value['id'],
         'imageCount': value['imageCount'],
+        'isBanned': value['isBanned'],
+        'isDefaultImagePrivate': value['isDefaultImagePrivate'],
         'totalImageSize': value['totalImageSize'],
         'username': value['username'],
     };

@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { KotlinxDatetimeLocalDateTime } from './KotlinxDatetimeLocalDateTime';
+import {
+    KotlinxDatetimeLocalDateTimeFromJSON,
+    KotlinxDatetimeLocalDateTimeFromJSONTyped,
+    KotlinxDatetimeLocalDateTimeToJSON,
+} from './KotlinxDatetimeLocalDateTime';
+
 /**
  * 
  * @export
@@ -21,22 +28,34 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerVoImageVO {
     /**
      * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoImageVO
+     */
+    albumId: number;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoImageVO
      */
     albumName: string;
     /**
      * 
-     * @type {string}
+     * @type {KotlinxDatetimeLocalDateTime}
      * @memberof IoSakurasouControllerVoImageVO
      */
-    description?: string;
+    createTime: KotlinxDatetimeLocalDateTime;
+    /**
+     * 
+     * @type {any}
+     * @memberof IoSakurasouControllerVoImageVO
+     */
+    description?: any | null;
     /**
      * 
      * @type {string}
      * @memberof IoSakurasouControllerVoImageVO
      */
-    extension: string;
+    displayName: string;
     /**
      * 
      * @type {number}
@@ -49,6 +68,12 @@ export interface IoSakurasouControllerVoImageVO {
      * @memberof IoSakurasouControllerVoImageVO
      */
     id: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IoSakurasouControllerVoImageVO
+     */
+    isPrivate: boolean;
     /**
      * 
      * @type {string}
@@ -66,19 +91,25 @@ export interface IoSakurasouControllerVoImageVO {
      * @type {string}
      * @memberof IoSakurasouControllerVoImageVO
      */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IoSakurasouControllerVoImageVO
-     */
     originName: string;
     /**
      * 
+     * @type {number}
+     * @memberof IoSakurasouControllerVoImageVO
+     */
+    ownerId: number;
+    /**
+     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoImageVO
      */
-    sha1: string;
+    ownerName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IoSakurasouControllerVoImageVO
+     */
+    sha256: string;
     /**
      * 
      * @type {number}
@@ -97,15 +128,19 @@ export interface IoSakurasouControllerVoImageVO {
  * Check if a given object implements the IoSakurasouControllerVoImageVO interface.
  */
 export function instanceOfIoSakurasouControllerVoImageVO(value: object): value is IoSakurasouControllerVoImageVO {
+    if (!('albumId' in value) || value['albumId'] === undefined) return false;
     if (!('albumName' in value) || value['albumName'] === undefined) return false;
-    if (!('extension' in value) || value['extension'] === undefined) return false;
+    if (!('createTime' in value) || value['createTime'] === undefined) return false;
+    if (!('displayName' in value) || value['displayName'] === undefined) return false;
     if (!('height' in value) || value['height'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('isPrivate' in value) || value['isPrivate'] === undefined) return false;
     if (!('md5' in value) || value['md5'] === undefined) return false;
     if (!('mimeType' in value) || value['mimeType'] === undefined) return false;
-    if (!('name' in value) || value['name'] === undefined) return false;
     if (!('originName' in value) || value['originName'] === undefined) return false;
-    if (!('sha1' in value) || value['sha1'] === undefined) return false;
+    if (!('ownerId' in value) || value['ownerId'] === undefined) return false;
+    if (!('ownerName' in value) || value['ownerName'] === undefined) return false;
+    if (!('sha256' in value) || value['sha256'] === undefined) return false;
     if (!('size' in value) || value['size'] === undefined) return false;
     if (!('width' in value) || value['width'] === undefined) return false;
     return true;
@@ -121,16 +156,20 @@ export function IoSakurasouControllerVoImageVOFromJSONTyped(json: any, ignoreDis
     }
     return {
         
+        'albumId': json['albumId'],
         'albumName': json['albumName'],
+        'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
         'description': json['description'] == null ? undefined : json['description'],
-        'extension': json['extension'],
+        'displayName': json['displayName'],
         'height': json['height'],
         'id': json['id'],
+        'isPrivate': json['isPrivate'],
         'md5': json['md5'],
         'mimeType': json['mimeType'],
-        'name': json['name'],
         'originName': json['originName'],
-        'sha1': json['sha1'],
+        'ownerId': json['ownerId'],
+        'ownerName': json['ownerName'],
+        'sha256': json['sha256'],
         'size': json['size'],
         'width': json['width'],
     };
@@ -142,16 +181,20 @@ export function IoSakurasouControllerVoImageVOToJSON(value?: IoSakurasouControll
     }
     return {
         
+        'albumId': value['albumId'],
         'albumName': value['albumName'],
+        'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
         'description': value['description'],
-        'extension': value['extension'],
+        'displayName': value['displayName'],
         'height': value['height'],
         'id': value['id'],
+        'isPrivate': value['isPrivate'],
         'md5': value['md5'],
         'mimeType': value['mimeType'],
-        'name': value['name'],
         'originName': value['originName'],
-        'sha1': value['sha1'],
+        'ownerId': value['ownerId'],
+        'ownerName': value['ownerName'],
+        'sha256': value['sha256'],
         'size': value['size'],
         'width': value['width'],
     };

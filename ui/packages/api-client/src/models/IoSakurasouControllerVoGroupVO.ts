@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { IoSakurasouModelGroupGroupConfig } from './IoSakurasouModelGroupGroupConfig';
+import {
+    IoSakurasouModelGroupGroupConfigFromJSON,
+    IoSakurasouModelGroupGroupConfigFromJSONTyped,
+    IoSakurasouModelGroupGroupConfigToJSON,
+} from './IoSakurasouModelGroupGroupConfig';
+
 /**
  * 
  * @export
@@ -21,10 +28,16 @@ import { mapValues } from '../runtime';
 export interface IoSakurasouControllerVoGroupVO {
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof IoSakurasouControllerVoGroupVO
      */
-    description?: string;
+    description?: any | null;
+    /**
+     * 
+     * @type {IoSakurasouModelGroupGroupConfig}
+     * @memberof IoSakurasouControllerVoGroupVO
+     */
+    groupConfig: IoSakurasouModelGroupGroupConfig;
     /**
      * 
      * @type {number}
@@ -33,16 +46,16 @@ export interface IoSakurasouControllerVoGroupVO {
     id: number;
     /**
      * 
-     * @type {number}
-     * @memberof IoSakurasouControllerVoGroupVO
-     */
-    maxSize: number;
-    /**
-     * 
      * @type {string}
      * @memberof IoSakurasouControllerVoGroupVO
      */
     name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IoSakurasouControllerVoGroupVO
+     */
+    roles: Array<string>;
     /**
      * 
      * @type {number}
@@ -55,9 +68,10 @@ export interface IoSakurasouControllerVoGroupVO {
  * Check if a given object implements the IoSakurasouControllerVoGroupVO interface.
  */
 export function instanceOfIoSakurasouControllerVoGroupVO(value: object): value is IoSakurasouControllerVoGroupVO {
+    if (!('groupConfig' in value) || value['groupConfig'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('maxSize' in value) || value['maxSize'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('roles' in value) || value['roles'] === undefined) return false;
     if (!('strategyId' in value) || value['strategyId'] === undefined) return false;
     return true;
 }
@@ -73,9 +87,10 @@ export function IoSakurasouControllerVoGroupVOFromJSONTyped(json: any, ignoreDis
     return {
         
         'description': json['description'] == null ? undefined : json['description'],
+        'groupConfig': IoSakurasouModelGroupGroupConfigFromJSON(json['groupConfig']),
         'id': json['id'],
-        'maxSize': json['maxSize'],
         'name': json['name'],
+        'roles': json['roles'],
         'strategyId': json['strategyId'],
     };
 }
@@ -87,9 +102,10 @@ export function IoSakurasouControllerVoGroupVOToJSON(value?: IoSakurasouControll
     return {
         
         'description': value['description'],
+        'groupConfig': IoSakurasouModelGroupGroupConfigToJSON(value['groupConfig']),
         'id': value['id'],
-        'maxSize': value['maxSize'],
         'name': value['name'],
+        'roles': value['roles'],
         'strategyId': value['strategyId'],
     };
 }
