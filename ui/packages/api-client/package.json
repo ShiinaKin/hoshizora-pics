@@ -31,7 +31,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.14.0",
+    "@openapitools/openapi-generator-cli": "^2.14.1",
     "unbuild": "3.0.0-rc.11"
   }
 }
