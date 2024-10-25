@@ -23,7 +23,7 @@ val version: String by project
 plugins {
     kotlin("jvm") version "2.0.21"
     kotlin("plugin.serialization") version "2.0.21"
-    id("io.ktor.plugin") version "2.3.12"
+    id("io.ktor.plugin") version "3.0.0"
 }
 
 group = "io.sakurasou"
@@ -67,8 +67,7 @@ dependencies {
     implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
-    // implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
-    implementation("io.sakurasou.simple-cache:ktor-simple-cache-jvm:0.4.5")
+    implementation("io.sakurasou.ktor:ktor-simple-cache-jvm:0.4.7")
     implementation("com.ucasoft.ktor:ktor-simple-memory-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-redis-cache-jvm:$ktorSimpleCacheVersion")
 

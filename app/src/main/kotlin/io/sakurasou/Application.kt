@@ -33,5 +33,5 @@ fun Application.mainModule() {
     configureSerialization()
     configureRouting()
 
-    if (environment.developmentMode) { swaggerModule() }
+    if (developmentMode) { swaggerModule() }
 }
