@@ -6,7 +6,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
-    "generate": "openapi-generator-cli generate -i http://127.0.0.1:8080/api/openapi.json -g typescript-fetch -c ./.openapi_config.yaml -o ./src --skip-validate-spec"
+    "generate": "openapi-generator-cli generate -i ../../../app/openapi/openapi.json -g typescript-fetch -c ./.openapi_config.yaml -o ./src --skip-validate-spec"
   },
   "keywords": [],
   "exports": {
