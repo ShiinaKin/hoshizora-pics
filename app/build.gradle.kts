@@ -64,6 +64,9 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers-jvm")
     implementation("io.ktor:ktor-server-forwarded-header-jvm")
 
+    implementation("io.ktor:ktor-client-core")
+    implementation("io.ktor:ktor-client-cio")
+
     implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 

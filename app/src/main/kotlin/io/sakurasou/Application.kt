@@ -33,5 +33,8 @@ fun Application.mainModule() {
     configureSerialization()
     configureRouting()
 
-    if (developmentMode) { swaggerModule() }
+    if (developmentMode) {
+        swaggerModule()
+        generateOpenApiJson()
+    }
 }
