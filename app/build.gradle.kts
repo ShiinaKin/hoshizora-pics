@@ -15,6 +15,7 @@ val swaggerUIVersion: String by project
 
 val awsS3Version: String by project
 
+val commonsIOVersion: String by project
 val commonsCodecVersion: String by project
 
 val mockkVersion: String by project
@@ -88,6 +89,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
 
+    implementation("commons-io:commons-io:$commonsIOVersion")
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("at.favre.lib:bcrypt:0.10.2")
 
