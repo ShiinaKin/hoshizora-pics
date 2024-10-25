@@ -49,12 +49,12 @@ class RoleServiceTest {
         val permission1 = Permission("permission1", "description1")
         val permission2 = Permission("permission2", null)
         val permission3 = Permission("permission3", "description3")
-        val expected = mapOf(
-            role1.name to RoleVO(role1.name, role1.description, listOf(
+        val expected = listOf(
+            RoleVO(role1.name, role1.description, listOf(
                 PermissionVO(permission1.name, permission1.description),
                 PermissionVO(permission2.name, permission2.description)
             )),
-            role2.name to RoleVO(role2.name, role2.description, listOf(
+            RoleVO(role2.name, role2.description, listOf(
                 PermissionVO(permission2.name, permission2.description),
                 PermissionVO(permission3.name, permission3.description)
             ))
@@ -66,8 +66,8 @@ class RoleServiceTest {
         every { permissionDao.findPermissionByName(permission1.name) } returns permission1
         every { permissionDao.findPermissionByName(permission2.name) } returns permission2
         every { permissionDao.findPermissionByName(permission3.name) } returns permission3
-        coEvery { DatabaseSingleton.dbQuery<Map<String, RoleVO>>(any()) } coAnswers {
-            this.arg<suspend () -> Map<String, RoleVO>>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<List<RoleVO>>(any()) } coAnswers {
+            this.arg<suspend () -> List<RoleVO>>(0).invoke()
         }
 
         val rolesWithPermissions = roleService.listRolesWithPermissions()
@@ -80,8 +80,8 @@ class RoleServiceTest {
         val role1 = Role("role1", null)
         val permission1 = Permission("permission1", "description1")
         val permission2 = Permission("permission2", null)
-        val expected = mapOf(
-            role1.name to RoleVO(role1.name, role1.description, listOf(
+        val expected = listOf(
+            RoleVO(role1.name, role1.description, listOf(
                 PermissionVO(permission1.name, permission1.description),
                 PermissionVO(permission2.name, permission2.description)
             ))
@@ -91,8 +91,8 @@ class RoleServiceTest {
         every { relationDao.listPermissionByRole(role1.name) } returns listOf(permission1.name, permission2.name)
         every { permissionDao.findPermissionByName(permission1.name) } returns permission1
         every { permissionDao.findPermissionByName(permission2.name) } returns permission2
-        coEvery { DatabaseSingleton.dbQuery<Map<String, RoleVO>>(any()) } coAnswers {
-            this.arg<suspend () -> Map<String, RoleVO>>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<List<RoleVO>>(any()) } coAnswers {
+            this.arg<suspend () -> List<RoleVO>>(0).invoke()
         }
 
         val rolesWithPermissions = roleService.listRolesWithPermissionsOfUser(listOf(role1.name))
