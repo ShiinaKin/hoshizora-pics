@@ -1,5 +1,6 @@
 package io.sakurasou.controller.request
 
+import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -36,6 +37,7 @@ data class ImageRawFile(
 }
 
 @Serializable
+@Name("ImageInsertRequest")
 data class ImagePatchRequest(
     val albumId: Long? = null,
     val displayName: String? = null,
@@ -44,6 +46,7 @@ data class ImagePatchRequest(
 )
 
 @Serializable
+@Name("ImageManagePatchRequest")
 data class ImageManagePatchRequest(
     val userId: Long? = null,
     val albumId: Long? = null,

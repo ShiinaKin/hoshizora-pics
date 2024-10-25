@@ -6,6 +6,10 @@ import io.github.smiley4.ktorswaggerui.data.AuthScheme
 import io.github.smiley4.ktorswaggerui.data.AuthType
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
+import io.github.smiley4.schemakenerator.core.handleNameAnnotation
+import io.github.smiley4.schemakenerator.reflection.processReflection
+import io.github.smiley4.schemakenerator.swagger.compileReferencingRoot
+import io.github.smiley4.schemakenerator.swagger.generateSwaggerSchema
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
@@ -39,6 +43,15 @@ fun Application.configureSwagger(baseUrl: String) {
         server {
             url = baseUrl
             description = "Server"
+        }
+        schemas {
+            generator = { type ->
+                type
+                    .processReflection()
+                    .handleNameAnnotation()
+                    .generateSwaggerSchema()
+                    .compileReferencingRoot()
+            }
         }
         security {
             defaultSecuritySchemeNames("JWT")

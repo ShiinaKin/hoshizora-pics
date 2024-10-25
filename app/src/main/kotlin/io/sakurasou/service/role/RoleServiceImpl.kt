@@ -18,10 +18,10 @@ class RoleServiceImpl(
     private val permissionDao: PermissionDao,
     private val relationDao: RelationDao
 ) : RoleService {
-    override suspend fun listRolesWithPermissions(): Map<String, RoleVO> {
+    override suspend fun listRolesWithPermissions(): List<RoleVO> {
         return dbQuery {
             val roles = roleDao.listRoles()
-            roles.associate { role ->
+            roles.map { role ->
                 val permissionNames = relationDao.listPermissionByRole(role.name)
                 val permissionVOList = permissionNames.map { permissionName ->
                     val permission = permissionDao.findPermissionByName(permissionName)
@@ -31,7 +31,7 @@ class RoleServiceImpl(
                         permission.description
                     )
                 }
-                role.name to RoleVO(
+                RoleVO(
                     role.name,
                     role.description,
                     permissionVOList
@@ -40,9 +40,9 @@ class RoleServiceImpl(
         }
     }
 
-    override suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): Map<String, RoleVO> {
+    override suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): List<RoleVO> {
         return dbQuery {
-            roleNames.associate { roleName ->
+            roleNames.map { roleName ->
                 val role = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
                 val permissionNames = relationDao.listPermissionByRole(roleName)
                 val permissionVOList = permissionNames.map { permissionName ->
@@ -53,7 +53,7 @@ class RoleServiceImpl(
                         permission.description
                     )
                 }
-                role.name to RoleVO(
+                RoleVO(
                     role.name,
                     role.description,
                     permissionVOList

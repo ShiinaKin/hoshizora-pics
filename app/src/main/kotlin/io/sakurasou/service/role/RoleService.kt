@@ -7,6 +7,6 @@ import io.sakurasou.controller.vo.RoleVO
  * 2024/9/18 17:30
  */
 interface RoleService {
-    suspend fun listRolesWithPermissions(): Map<String, RoleVO>
-    suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): Map<String, RoleVO>
+    suspend fun listRolesWithPermissions(): List<RoleVO>
+    suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): List<RoleVO>
 }

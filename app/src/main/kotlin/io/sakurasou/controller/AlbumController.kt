@@ -163,7 +163,7 @@ private fun Route.albumSelfPage(controller: AlbumController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<AlbumPageVO>> {
+                    body<CommonResponse<PageResult<AlbumPageVO>>> {
                         description = "page result"
                     }
                 }
@@ -309,7 +309,7 @@ private fun Route.albumManagePage(controller: AlbumController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<AlbumPageVO>> {
+                    body<CommonResponse<PageResult<AlbumPageVO>>> {
                         description = "page result"
                     }
                 }

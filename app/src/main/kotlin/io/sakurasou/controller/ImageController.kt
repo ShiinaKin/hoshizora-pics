@@ -274,7 +274,7 @@ private fun Route.imageSelfPage(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<ImagePageVO>> {
+                    body<CommonResponse<PageResult<ImagePageVO>>> {
                         description = "page result"
                     }
                 }

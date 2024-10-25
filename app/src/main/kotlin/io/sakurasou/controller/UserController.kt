@@ -233,7 +233,7 @@ private fun Route.pageUser(controller: UserController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<PageResult<UserPageVO>> {
+                    body<CommonResponse<PageResult<UserPageVO>>> {
                         description = "page result"
                     }
                 }

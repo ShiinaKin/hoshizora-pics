@@ -1,5 +1,6 @@
 package io.sakurasou.model.strategy
 
+import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,6 +10,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("S3")
+@Name("S3Strategy")
 data class S3Strategy(
     val endpoint: String,
     val bucketName: String,

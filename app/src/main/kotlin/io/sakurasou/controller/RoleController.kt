@@ -7,11 +7,13 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.ROLE_READ_ALL
 import io.sakurasou.constant.ROLE_READ_SELF
+import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.RoleVO
 import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.role.RoleService
+import io.swagger.v3.oas.models.media.Schema
 
 /**
  * @author Shiina Kin
@@ -39,7 +41,7 @@ private fun Route.fetchAllRolesAndPermissions(controller: RoleController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<List<RoleVO>> {
+                    body<CommonResponse<List<RoleVO>>> {
                         description = "all roles with permissions"
                     }
                 }
@@ -61,7 +63,7 @@ private fun Route.fetchAllRolesAndPermissionsOfUser(controller: RoleController) 
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<List<RoleVO>> {
+                    body<CommonResponse<List<RoleVO>>> {
                         description = "all roles with permissions of user"
                     }
                 }
@@ -77,11 +79,11 @@ private fun Route.fetchAllRolesAndPermissionsOfUser(controller: RoleController) 
 class RoleController(
     private val roleService: RoleService
 ) {
-    suspend fun handleListAllRolesWithPermissions(): Map<String, RoleVO> {
+    suspend fun handleListAllRolesWithPermissions(): List<RoleVO> {
         return roleService.listRolesWithPermissions()
     }
 
-    suspend fun handleListAllRolesWithPermissionsOfUser(roles: List<String>): Map<String, RoleVO> {
+    suspend fun handleListAllRolesWithPermissionsOfUser(roles: List<String>): List<RoleVO> {
         return roleService.listRolesWithPermissionsOfUser(roles)
     }
 }

@@ -1,5 +1,6 @@
 package io.sakurasou.model.setting
 
+import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,6 +8,7 @@ import kotlinx.serialization.Serializable
  * 2024/9/13 15:58
  */
 @Serializable
+@Name("SystemStatus")
 data class SystemStatus(
     val isInit: Boolean
 ) : SettingConfig()

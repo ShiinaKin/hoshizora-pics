@@ -1,5 +1,6 @@
 package io.sakurasou.controller.vo
 
+import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.model.group.GroupConfig
 import kotlinx.serialization.Serializable
 
@@ -8,6 +9,7 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 10:28
  */
 @Serializable
+@Name("GroupVO")
 data class GroupVO(
     val id: Long,
     val name: String,
@@ -18,6 +20,7 @@ data class GroupVO(
 )
 
 @Serializable
+@Name("GroupPageVO")
 data class GroupPageVO(
     val id: Long,
     val name: String,
