@@ -15,28 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestSiteSettingPatchRequest,
-  IoSakurasouControllerRequestStrategySettingPatchRequest,
-  IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVO,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
+  CommonResponseKotlinCollectionsMapKotlinStringSettingVO,
+  CommonResponseKotlinUnit,
+  SiteSettingPatchRequest,
+  StrategySettingPatchRequest,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestSiteSettingPatchRequestFromJSON,
-    IoSakurasouControllerRequestSiteSettingPatchRequestToJSON,
-    IoSakurasouControllerRequestStrategySettingPatchRequestFromJSON,
-    IoSakurasouControllerRequestStrategySettingPatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVOFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
+    CommonResponseKotlinCollectionsMapKotlinStringSettingVOFromJSON,
+    CommonResponseKotlinCollectionsMapKotlinStringSettingVOToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    SiteSettingPatchRequestFromJSON,
+    SiteSettingPatchRequestToJSON,
+    StrategySettingPatchRequestFromJSON,
+    StrategySettingPatchRequestToJSON,
 } from '../models/index';
 
 export interface ApiSettingSitePatchRequest {
-    ioSakurasouControllerRequestSiteSettingPatchRequest: IoSakurasouControllerRequestSiteSettingPatchRequest;
+    siteSettingPatchRequest: SiteSettingPatchRequest;
 }
 
 export interface ApiSettingSystemPatchRequest {
-    ioSakurasouControllerRequestStrategySettingPatchRequest: IoSakurasouControllerRequestStrategySettingPatchRequest;
+    strategySettingPatchRequest: StrategySettingPatchRequest;
 }
 
 /**
@@ -47,7 +47,7 @@ export class SettingApi extends runtime.BaseAPI {
     /**
      * get all settings
      */
-    async apiSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVO>> {
+    async apiSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinCollectionsMapKotlinStringSettingVO>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -67,13 +67,13 @@ export class SettingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinCollectionsMapKotlinStringSettingVOFromJSON(jsonValue));
     }
 
     /**
      * get all settings
      */
-    async apiSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinCollectionsMapKotlinStringIoSakurasouControllerVoSettingVO> {
+    async apiSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinCollectionsMapKotlinStringSettingVO> {
         const response = await this.apiSettingGetRaw(initOverrides);
         return await response.value();
     }
@@ -81,11 +81,11 @@ export class SettingApi extends runtime.BaseAPI {
     /**
      * site setting
      */
-    async apiSettingSitePatchRaw(requestParameters: ApiSettingSitePatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestSiteSettingPatchRequest'] == null) {
+    async apiSettingSitePatchRaw(requestParameters: ApiSettingSitePatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['siteSettingPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestSiteSettingPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestSiteSettingPatchRequest" was null or undefined when calling apiSettingSitePatch().'
+                'siteSettingPatchRequest',
+                'Required parameter "siteSettingPatchRequest" was null or undefined when calling apiSettingSitePatch().'
             );
         }
 
@@ -108,16 +108,16 @@ export class SettingApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestSiteSettingPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestSiteSettingPatchRequest']),
+            body: SiteSettingPatchRequestToJSON(requestParameters['siteSettingPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      * site setting
      */
-    async apiSettingSitePatch(requestParameters: ApiSettingSitePatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiSettingSitePatch(requestParameters: ApiSettingSitePatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiSettingSitePatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -125,11 +125,11 @@ export class SettingApi extends runtime.BaseAPI {
     /**
      * system setting
      */
-    async apiSettingSystemPatchRaw(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestStrategySettingPatchRequest'] == null) {
+    async apiSettingSystemPatchRaw(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['strategySettingPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestStrategySettingPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestStrategySettingPatchRequest" was null or undefined when calling apiSettingSystemPatch().'
+                'strategySettingPatchRequest',
+                'Required parameter "strategySettingPatchRequest" was null or undefined when calling apiSettingSystemPatch().'
             );
         }
 
@@ -152,16 +152,16 @@ export class SettingApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestStrategySettingPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestStrategySettingPatchRequest']),
+            body: StrategySettingPatchRequestToJSON(requestParameters['strategySettingPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      * system setting
      */
-    async apiSettingSystemPatch(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiSettingSystemPatch(requestParameters: ApiSettingSystemPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiSettingSystemPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }

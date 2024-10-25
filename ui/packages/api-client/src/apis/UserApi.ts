@@ -15,26 +15,26 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestUserManageInsertRequest,
-  IoSakurasouControllerRequestUserManagePatchRequest,
-  IoSakurasouControllerRequestUserSelfPatchRequest,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVO,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
-  IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVO,
+  CommonResponseKotlinUnit,
+  CommonResponsePageResultUserManageVO,
+  CommonResponseUserVO,
+  UserManageInsertRequest,
+  UserManagePatchRequest,
+  UserSelfPatchRequest,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestUserManageInsertRequestFromJSON,
-    IoSakurasouControllerRequestUserManageInsertRequestToJSON,
-    IoSakurasouControllerRequestUserManagePatchRequestFromJSON,
-    IoSakurasouControllerRequestUserManagePatchRequestToJSON,
-    IoSakurasouControllerRequestUserSelfPatchRequestFromJSON,
-    IoSakurasouControllerRequestUserSelfPatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVOFromJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVOToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponsePageResultUserManageVOFromJSON,
+    CommonResponsePageResultUserManageVOToJSON,
+    CommonResponseUserVOFromJSON,
+    CommonResponseUserVOToJSON,
+    UserManageInsertRequestFromJSON,
+    UserManageInsertRequestToJSON,
+    UserManagePatchRequestFromJSON,
+    UserManagePatchRequestToJSON,
+    UserSelfPatchRequestFromJSON,
+    UserSelfPatchRequestToJSON,
 } from '../models/index';
 
 export interface ApiUserBanIdPatchRequest {
@@ -51,7 +51,7 @@ export interface ApiUserManageIdGetRequest {
 
 export interface ApiUserManageIdPatchRequest {
     id: number;
-    ioSakurasouControllerRequestUserManagePatchRequest: IoSakurasouControllerRequestUserManagePatchRequest;
+    userManagePatchRequest: UserManagePatchRequest;
 }
 
 export interface ApiUserManagePageGetRequest {
@@ -62,11 +62,11 @@ export interface ApiUserManagePageGetRequest {
 }
 
 export interface ApiUserManagePostRequest {
-    ioSakurasouControllerRequestUserManageInsertRequest: IoSakurasouControllerRequestUserManageInsertRequest;
+    userManageInsertRequest: UserManageInsertRequest;
 }
 
 export interface ApiUserSelfPatchRequest {
-    ioSakurasouControllerRequestUserSelfPatchRequest: IoSakurasouControllerRequestUserSelfPatchRequest;
+    userSelfPatchRequest: UserSelfPatchRequest;
 }
 
 export interface ApiUserUnbanIdPatchRequest {
@@ -80,7 +80,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserBanIdPatchRaw(requestParameters: ApiUserBanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiUserBanIdPatchRaw(requestParameters: ApiUserBanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -107,19 +107,19 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserBanIdPatch(requestParameters: ApiUserBanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserBanIdPatch(requestParameters: ApiUserBanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserBanIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserManageIdDeleteRaw(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiUserManageIdDeleteRaw(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -146,19 +146,19 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserManageIdDelete(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserManageIdDelete(requestParameters: ApiUserManageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserManageIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserManageIdGetRaw(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVO>> {
+    async apiUserManageIdGetRaw(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseUserVO>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -185,12 +185,12 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseUserVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserManageIdGet(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVO> {
+    async apiUserManageIdGet(requestParameters: ApiUserManageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseUserVO> {
         const response = await this.apiUserManageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -198,7 +198,7 @@ export class UserApi extends runtime.BaseAPI {
     /**
      * modify any user
      */
-    async apiUserManageIdPatchRaw(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiUserManageIdPatchRaw(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -206,10 +206,10 @@ export class UserApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestUserManagePatchRequest'] == null) {
+        if (requestParameters['userManagePatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserManagePatchRequest',
-                'Required parameter "ioSakurasouControllerRequestUserManagePatchRequest" was null or undefined when calling apiUserManageIdPatch().'
+                'userManagePatchRequest',
+                'Required parameter "userManagePatchRequest" was null or undefined when calling apiUserManageIdPatch().'
             );
         }
 
@@ -232,23 +232,23 @@ export class UserApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserManagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestUserManagePatchRequest']),
+            body: UserManagePatchRequestToJSON(requestParameters['userManagePatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      * modify any user
      */
-    async apiUserManageIdPatch(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserManageIdPatch(requestParameters: ApiUserManageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserManageIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserManagePageGetRaw(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVO>> {
+    async apiUserManagePageGetRaw(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultUserManageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -298,12 +298,12 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultUserManageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserManagePageGet(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultIoSakurasouControllerVoUserPageVO> {
+    async apiUserManagePageGet(requestParameters: ApiUserManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultUserManageVO> {
         const response = await this.apiUserManagePageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -311,11 +311,11 @@ export class UserApi extends runtime.BaseAPI {
     /**
      * admin manual add user
      */
-    async apiUserManagePostRaw(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestUserManageInsertRequest'] == null) {
+    async apiUserManagePostRaw(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['userManageInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserManageInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestUserManageInsertRequest" was null or undefined when calling apiUserManagePost().'
+                'userManageInsertRequest',
+                'Required parameter "userManageInsertRequest" was null or undefined when calling apiUserManagePost().'
             );
         }
 
@@ -338,23 +338,23 @@ export class UserApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserManageInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestUserManageInsertRequest']),
+            body: UserManageInsertRequestToJSON(requestParameters['userManageInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      * admin manual add user
      */
-    async apiUserManagePost(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserManagePost(requestParameters: ApiUserManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserManagePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserSelfGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVO>> {
+    async apiUserSelfGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseUserVO>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -374,12 +374,12 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseUserVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserSelfGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoUserVO> {
+    async apiUserSelfGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseUserVO> {
         const response = await this.apiUserSelfGetRaw(initOverrides);
         return await response.value();
     }
@@ -387,11 +387,11 @@ export class UserApi extends runtime.BaseAPI {
     /**
      * modify self
      */
-    async apiUserSelfPatchRaw(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestUserSelfPatchRequest'] == null) {
+    async apiUserSelfPatchRaw(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['userSelfPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserSelfPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestUserSelfPatchRequest" was null or undefined when calling apiUserSelfPatch().'
+                'userSelfPatchRequest',
+                'Required parameter "userSelfPatchRequest" was null or undefined when calling apiUserSelfPatch().'
             );
         }
 
@@ -414,23 +414,23 @@ export class UserApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserSelfPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestUserSelfPatchRequest']),
+            body: UserSelfPatchRequestToJSON(requestParameters['userSelfPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      * modify self
      */
-    async apiUserSelfPatch(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserSelfPatch(requestParameters: ApiUserSelfPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserSelfPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserUnbanIdPatchRaw(requestParameters: ApiUserUnbanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiUserUnbanIdPatchRaw(requestParameters: ApiUserUnbanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -457,12 +457,12 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserUnbanIdPatch(requestParameters: ApiUserUnbanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiUserUnbanIdPatch(requestParameters: ApiUserUnbanIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiUserUnbanIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }

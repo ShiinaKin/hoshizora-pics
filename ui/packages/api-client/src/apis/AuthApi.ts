@@ -15,22 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestUserInsertRequest,
-  IoSakurasouControllerRequestUserLoginRequest,
+  UserInsertRequest,
+  UserLoginRequest,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestUserInsertRequestFromJSON,
-    IoSakurasouControllerRequestUserInsertRequestToJSON,
-    IoSakurasouControllerRequestUserLoginRequestFromJSON,
-    IoSakurasouControllerRequestUserLoginRequestToJSON,
+    UserInsertRequestFromJSON,
+    UserInsertRequestToJSON,
+    UserLoginRequestFromJSON,
+    UserLoginRequestToJSON,
 } from '../models/index';
 
 export interface ApiUserLoginPostRequest {
-    ioSakurasouControllerRequestUserLoginRequest: IoSakurasouControllerRequestUserLoginRequest;
+    userLoginRequest: UserLoginRequest;
 }
 
 export interface ApiUserSignupPostRequest {
-    ioSakurasouControllerRequestUserInsertRequest: IoSakurasouControllerRequestUserInsertRequest;
+    userInsertRequest: UserInsertRequest;
 }
 
 /**
@@ -41,10 +41,10 @@ export class AuthApi extends runtime.BaseAPI {
     /**
      */
     async apiUserLoginPostRaw(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['ioSakurasouControllerRequestUserLoginRequest'] == null) {
+        if (requestParameters['userLoginRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserLoginRequest',
-                'Required parameter "ioSakurasouControllerRequestUserLoginRequest" was null or undefined when calling apiUserLoginPost().'
+                'userLoginRequest',
+                'Required parameter "userLoginRequest" was null or undefined when calling apiUserLoginPost().'
             );
         }
 
@@ -59,7 +59,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserLoginRequestToJSON(requestParameters['ioSakurasouControllerRequestUserLoginRequest']),
+            body: UserLoginRequestToJSON(requestParameters['userLoginRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -74,10 +74,10 @@ export class AuthApi extends runtime.BaseAPI {
     /**
      */
     async apiUserSignupPostRaw(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['ioSakurasouControllerRequestUserInsertRequest'] == null) {
+        if (requestParameters['userInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestUserInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestUserInsertRequest" was null or undefined when calling apiUserSignupPost().'
+                'userInsertRequest',
+                'Required parameter "userInsertRequest" was null or undefined when calling apiUserSignupPost().'
             );
         }
 
@@ -92,7 +92,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestUserInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestUserInsertRequest']),
+            body: UserInsertRequestToJSON(requestParameters['userInsertRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);

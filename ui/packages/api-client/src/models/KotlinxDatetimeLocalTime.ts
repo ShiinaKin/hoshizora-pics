@@ -73,10 +73,15 @@ export function KotlinxDatetimeLocalTimeFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function KotlinxDatetimeLocalTimeToJSON(value?: KotlinxDatetimeLocalTime | null): any {
+  export function KotlinxDatetimeLocalTimeToJSON(json: any): KotlinxDatetimeLocalTime {
+      return KotlinxDatetimeLocalTimeToJSONTyped(json, false);
+  }
+
+  export function KotlinxDatetimeLocalTimeToJSONTyped(value?: KotlinxDatetimeLocalTime | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'hour': value['hour'],

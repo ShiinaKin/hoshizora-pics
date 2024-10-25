@@ -18,24 +18,28 @@ import {
     KotlinxDatetimeLocalTimeFromJSON,
     KotlinxDatetimeLocalTimeFromJSONTyped,
     KotlinxDatetimeLocalTimeToJSON,
+    KotlinxDatetimeLocalTimeToJSONTyped,
 } from './KotlinxDatetimeLocalTime';
 import type { KotlinxDatetimeLocalDate } from './KotlinxDatetimeLocalDate';
 import {
     KotlinxDatetimeLocalDateFromJSON,
     KotlinxDatetimeLocalDateFromJSONTyped,
     KotlinxDatetimeLocalDateToJSON,
+    KotlinxDatetimeLocalDateToJSONTyped,
 } from './KotlinxDatetimeLocalDate';
 import type { JavaTimeMonth } from './JavaTimeMonth';
 import {
     JavaTimeMonthFromJSON,
     JavaTimeMonthFromJSONTyped,
     JavaTimeMonthToJSON,
+    JavaTimeMonthToJSONTyped,
 } from './JavaTimeMonth';
 import type { JavaTimeDayOfWeek } from './JavaTimeDayOfWeek';
 import {
     JavaTimeDayOfWeekFromJSON,
     JavaTimeDayOfWeekFromJSONTyped,
     JavaTimeDayOfWeekToJSON,
+    JavaTimeDayOfWeekToJSONTyped,
 } from './JavaTimeDayOfWeek';
 
 /**
@@ -164,10 +168,15 @@ export function KotlinxDatetimeLocalDateTimeFromJSONTyped(json: any, ignoreDiscr
     };
 }
 
-export function KotlinxDatetimeLocalDateTimeToJSON(value?: KotlinxDatetimeLocalDateTime | null): any {
+  export function KotlinxDatetimeLocalDateTimeToJSON(json: any): KotlinxDatetimeLocalDateTime {
+      return KotlinxDatetimeLocalDateTimeToJSONTyped(json, false);
+  }
+
+  export function KotlinxDatetimeLocalDateTimeToJSONTyped(value?: KotlinxDatetimeLocalDateTime | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'date': KotlinxDatetimeLocalDateToJSON(value['date']),

@@ -52,3 +52,7 @@ export function JavaTimeDayOfWeekToJSON(value?: JavaTimeDayOfWeek | null): any {
     return value as any;
 }
 
+export function JavaTimeDayOfWeekToJSONTyped(value: any, ignoreDiscriminator: boolean): JavaTimeDayOfWeek {
+    return value as JavaTimeDayOfWeek;
+}
+

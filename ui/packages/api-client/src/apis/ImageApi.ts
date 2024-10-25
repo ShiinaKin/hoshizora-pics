@@ -15,35 +15,29 @@
 
 import * as runtime from '../runtime';
 import type {
-  ApiImageImageIdGet200Response,
-  IoSakurasouControllerRequestImageManagePatchRequest,
-  IoSakurasouControllerRequestImagePatchRequest,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVO,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO,
-  IoSakurasouControllerVoCommonResponseKotlinString,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
-  IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO,
+  CommonResponseImageManageVO,
+  CommonResponseImageVO,
+  CommonResponseKotlinString,
+  CommonResponseKotlinUnit,
+  CommonResponsePageResultImagePageVO,
+  ImageInsertRequest,
+  ImageManagePatchRequest,
 } from '../models/index';
 import {
-    ApiImageImageIdGet200ResponseFromJSON,
-    ApiImageImageIdGet200ResponseToJSON,
-    IoSakurasouControllerRequestImageManagePatchRequestFromJSON,
-    IoSakurasouControllerRequestImageManagePatchRequestToJSON,
-    IoSakurasouControllerRequestImagePatchRequestFromJSON,
-    IoSakurasouControllerRequestImagePatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVOToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinStringFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinStringToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOToJSON,
+    CommonResponseImageManageVOFromJSON,
+    CommonResponseImageManageVOToJSON,
+    CommonResponseImageVOFromJSON,
+    CommonResponseImageVOToJSON,
+    CommonResponseKotlinStringFromJSON,
+    CommonResponseKotlinStringToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponsePageResultImagePageVOFromJSON,
+    CommonResponsePageResultImagePageVOToJSON,
+    ImageInsertRequestFromJSON,
+    ImageInsertRequestToJSON,
+    ImageManagePatchRequestFromJSON,
+    ImageManagePatchRequestToJSON,
 } from '../models/index';
 
 export interface ApiImageImageIdDeleteRequest {
@@ -60,7 +54,7 @@ export interface ApiImageImageIdInfoGetRequest {
 
 export interface ApiImageImageIdPatchRequest {
     imageId: number;
-    ioSakurasouControllerRequestImagePatchRequest: IoSakurasouControllerRequestImagePatchRequest;
+    imageInsertRequest: ImageInsertRequest;
 }
 
 export interface ApiImageImageIdThumbnailGetRequest {
@@ -81,7 +75,7 @@ export interface ApiImageManageImageIdInfoGetRequest {
 
 export interface ApiImageManageImageIdPatchRequest {
     imageId: number;
-    ioSakurasouControllerRequestImageManagePatchRequest: IoSakurasouControllerRequestImageManagePatchRequest;
+    imageManagePatchRequest: ImageManagePatchRequest;
 }
 
 export interface ApiImageManageImageIdThumbnailGetRequest {
@@ -109,7 +103,7 @@ export class ImageApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageImageIdDeleteRaw(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiImageImageIdDeleteRaw(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -136,19 +130,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdDelete(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiImageImageIdDelete(requestParameters: ApiImageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiImageImageIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageImageIdGetRaw(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiImageImageIdGet200Response>> {
+    async apiImageImageIdGetRaw(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -175,19 +169,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApiImageImageIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdGet(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiImageImageIdGet200Response> {
+    async apiImageImageIdGet(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
         const response = await this.apiImageImageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageImageIdInfoGetRaw(requestParameters: ApiImageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO>> {
+    async apiImageImageIdInfoGetRaw(requestParameters: ApiImageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseImageVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -214,19 +208,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseImageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdInfoGet(requestParameters: ApiImageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageVO> {
+    async apiImageImageIdInfoGet(requestParameters: ApiImageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseImageVO> {
         const response = await this.apiImageImageIdInfoGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageImageIdPatchRaw(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiImageImageIdPatchRaw(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -234,10 +228,10 @@ export class ImageApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestImagePatchRequest'] == null) {
+        if (requestParameters['imageInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestImagePatchRequest',
-                'Required parameter "ioSakurasouControllerRequestImagePatchRequest" was null or undefined when calling apiImageImageIdPatch().'
+                'imageInsertRequest',
+                'Required parameter "imageInsertRequest" was null or undefined when calling apiImageImageIdPatch().'
             );
         }
 
@@ -260,22 +254,22 @@ export class ImageApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestImagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestImagePatchRequest']),
+            body: ImageInsertRequestToJSON(requestParameters['imageInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdPatch(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiImageImageIdPatch(requestParameters: ApiImageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiImageImageIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageImageIdThumbnailGetRaw(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiImageImageIdGet200Response>> {
+    async apiImageImageIdThumbnailGetRaw(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -302,19 +296,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApiImageImageIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdThumbnailGet(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiImageImageIdGet200Response> {
+    async apiImageImageIdThumbnailGet(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
         const response = await this.apiImageImageIdThumbnailGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManageImageIdDeleteRaw(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiImageManageImageIdDeleteRaw(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -341,19 +335,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdDelete(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiImageManageImageIdDelete(requestParameters: ApiImageManageImageIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiImageManageImageIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManageImageIdGetRaw(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiImageImageIdGet200Response>> {
+    async apiImageManageImageIdGetRaw(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -380,19 +374,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApiImageImageIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdGet(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiImageImageIdGet200Response> {
+    async apiImageManageImageIdGet(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
         const response = await this.apiImageManageImageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManageImageIdInfoGetRaw(requestParameters: ApiImageManageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVO>> {
+    async apiImageManageImageIdInfoGetRaw(requestParameters: ApiImageManageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseImageManageVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -419,19 +413,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseImageManageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdInfoGet(requestParameters: ApiImageManageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoImageManageVO> {
+    async apiImageManageImageIdInfoGet(requestParameters: ApiImageManageImageIdInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseImageManageVO> {
         const response = await this.apiImageManageImageIdInfoGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManageImageIdPatchRaw(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiImageManageImageIdPatchRaw(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -439,10 +433,10 @@ export class ImageApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestImageManagePatchRequest'] == null) {
+        if (requestParameters['imageManagePatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestImageManagePatchRequest',
-                'Required parameter "ioSakurasouControllerRequestImageManagePatchRequest" was null or undefined when calling apiImageManageImageIdPatch().'
+                'imageManagePatchRequest',
+                'Required parameter "imageManagePatchRequest" was null or undefined when calling apiImageManageImageIdPatch().'
             );
         }
 
@@ -465,22 +459,22 @@ export class ImageApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestImageManagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestImageManagePatchRequest']),
+            body: ImageManagePatchRequestToJSON(requestParameters['imageManagePatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdPatch(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiImageManageImageIdPatch(requestParameters: ApiImageManageImageIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiImageManageImageIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManageImageIdThumbnailGetRaw(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiImageImageIdGet200Response>> {
+    async apiImageManageImageIdThumbnailGetRaw(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -507,19 +501,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApiImageImageIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdThumbnailGet(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiImageImageIdGet200Response> {
+    async apiImageManageImageIdThumbnailGet(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
         const response = await this.apiImageManageImageIdThumbnailGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImageManagePageGetRaw(requestParameters: ApiImageManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO>> {
+    async apiImageManagePageGetRaw(requestParameters: ApiImageManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultImagePageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -569,19 +563,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultImagePageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManagePageGet(requestParameters: ApiImageManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO> {
+    async apiImageManagePageGet(requestParameters: ApiImageManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultImagePageVO> {
         const response = await this.apiImageManagePageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImagePageGetRaw(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO>> {
+    async apiImagePageGetRaw(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultImagePageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -631,19 +625,19 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultImagePageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImagePageGet(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultIoSakurasouControllerVoImagePageVO> {
+    async apiImagePageGet(requestParameters: ApiImagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultImagePageVO> {
         const response = await this.apiImagePageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiImagePostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinString>> {
+    async apiImagePostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinString>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -663,12 +657,12 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinStringFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinStringFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImagePost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinString> {
+    async apiImagePost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinString> {
         const response = await this.apiImagePostRaw(initOverrides);
         return await response.value();
     }

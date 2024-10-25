@@ -15,29 +15,29 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestAlbumManageInsertRequest,
-  IoSakurasouControllerRequestAlbumManagePatchRequest,
-  IoSakurasouControllerRequestAlbumSelfInsertRequest,
-  IoSakurasouControllerRequestAlbumSelfPatchRequest,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVO,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
-  IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVO,
+  AlbumManageInsertRequest,
+  AlbumManagePatchRequest,
+  AlbumSelfInsertRequest,
+  AlbumSelfPatchRequest,
+  CommonResponseAlbumVO,
+  CommonResponseKotlinUnit,
+  CommonResponsePageResultAlbumPageVO,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestAlbumManageInsertRequestFromJSON,
-    IoSakurasouControllerRequestAlbumManageInsertRequestToJSON,
-    IoSakurasouControllerRequestAlbumManagePatchRequestFromJSON,
-    IoSakurasouControllerRequestAlbumManagePatchRequestToJSON,
-    IoSakurasouControllerRequestAlbumSelfInsertRequestFromJSON,
-    IoSakurasouControllerRequestAlbumSelfInsertRequestToJSON,
-    IoSakurasouControllerRequestAlbumSelfPatchRequestFromJSON,
-    IoSakurasouControllerRequestAlbumSelfPatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVOFromJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVOToJSON,
+    AlbumManageInsertRequestFromJSON,
+    AlbumManageInsertRequestToJSON,
+    AlbumManagePatchRequestFromJSON,
+    AlbumManagePatchRequestToJSON,
+    AlbumSelfInsertRequestFromJSON,
+    AlbumSelfInsertRequestToJSON,
+    AlbumSelfPatchRequestFromJSON,
+    AlbumSelfPatchRequestToJSON,
+    CommonResponseAlbumVOFromJSON,
+    CommonResponseAlbumVOToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponsePageResultAlbumPageVOFromJSON,
+    CommonResponsePageResultAlbumPageVOToJSON,
 } from '../models/index';
 
 export interface ApiAlbumAlbumIdDeleteRequest {
@@ -50,7 +50,7 @@ export interface ApiAlbumAlbumIdGetRequest {
 
 export interface ApiAlbumAlbumIdPatchRequest {
     albumId: number;
-    ioSakurasouControllerRequestAlbumSelfPatchRequest: IoSakurasouControllerRequestAlbumSelfPatchRequest;
+    albumSelfPatchRequest: AlbumSelfPatchRequest;
 }
 
 export interface ApiAlbumManageAlbumIdDeleteRequest {
@@ -63,7 +63,7 @@ export interface ApiAlbumManageAlbumIdGetRequest {
 
 export interface ApiAlbumManageAlbumIdPatchRequest {
     albumId: number;
-    ioSakurasouControllerRequestAlbumManagePatchRequest: IoSakurasouControllerRequestAlbumManagePatchRequest;
+    albumManagePatchRequest: AlbumManagePatchRequest;
 }
 
 export interface ApiAlbumManagePageGetRequest {
@@ -74,7 +74,7 @@ export interface ApiAlbumManagePageGetRequest {
 }
 
 export interface ApiAlbumManagePostRequest {
-    ioSakurasouControllerRequestAlbumManageInsertRequest: IoSakurasouControllerRequestAlbumManageInsertRequest;
+    albumManageInsertRequest: AlbumManageInsertRequest;
 }
 
 export interface ApiAlbumPageGetRequest {
@@ -85,7 +85,7 @@ export interface ApiAlbumPageGetRequest {
 }
 
 export interface ApiAlbumPostRequest {
-    ioSakurasouControllerRequestAlbumSelfInsertRequest: IoSakurasouControllerRequestAlbumSelfInsertRequest;
+    albumSelfInsertRequest: AlbumSelfInsertRequest;
 }
 
 /**
@@ -95,7 +95,7 @@ export class AlbumApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAlbumAlbumIdDeleteRaw(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiAlbumAlbumIdDeleteRaw(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -122,19 +122,19 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumAlbumIdDelete(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumAlbumIdDelete(requestParameters: ApiAlbumAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumAlbumIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumAlbumIdGetRaw(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVO>> {
+    async apiAlbumAlbumIdGetRaw(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseAlbumVO>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -161,19 +161,19 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseAlbumVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumAlbumIdGet(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVO> {
+    async apiAlbumAlbumIdGet(requestParameters: ApiAlbumAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseAlbumVO> {
         const response = await this.apiAlbumAlbumIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumAlbumIdPatchRaw(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiAlbumAlbumIdPatchRaw(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -181,10 +181,10 @@ export class AlbumApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestAlbumSelfPatchRequest'] == null) {
+        if (requestParameters['albumSelfPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumSelfPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumSelfPatchRequest" was null or undefined when calling apiAlbumAlbumIdPatch().'
+                'albumSelfPatchRequest',
+                'Required parameter "albumSelfPatchRequest" was null or undefined when calling apiAlbumAlbumIdPatch().'
             );
         }
 
@@ -207,22 +207,22 @@ export class AlbumApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumSelfPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumSelfPatchRequest']),
+            body: AlbumSelfPatchRequestToJSON(requestParameters['albumSelfPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumAlbumIdPatch(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumAlbumIdPatch(requestParameters: ApiAlbumAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumAlbumIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdDeleteRaw(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiAlbumManageAlbumIdDeleteRaw(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -249,19 +249,19 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdDelete(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumManageAlbumIdDelete(requestParameters: ApiAlbumManageAlbumIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumManageAlbumIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdGetRaw(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVO>> {
+    async apiAlbumManageAlbumIdGetRaw(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseAlbumVO>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -288,19 +288,19 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseAlbumVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdGet(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoAlbumVO> {
+    async apiAlbumManageAlbumIdGet(requestParameters: ApiAlbumManageAlbumIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseAlbumVO> {
         const response = await this.apiAlbumManageAlbumIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdPatchRaw(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiAlbumManageAlbumIdPatchRaw(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['albumId'] == null) {
             throw new runtime.RequiredError(
                 'albumId',
@@ -308,10 +308,10 @@ export class AlbumApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestAlbumManagePatchRequest'] == null) {
+        if (requestParameters['albumManagePatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumManagePatchRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumManagePatchRequest" was null or undefined when calling apiAlbumManageAlbumIdPatch().'
+                'albumManagePatchRequest',
+                'Required parameter "albumManagePatchRequest" was null or undefined when calling apiAlbumManageAlbumIdPatch().'
             );
         }
 
@@ -334,22 +334,22 @@ export class AlbumApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumManagePatchRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumManagePatchRequest']),
+            body: AlbumManagePatchRequestToJSON(requestParameters['albumManagePatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumManageAlbumIdPatch(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumManageAlbumIdPatch(requestParameters: ApiAlbumManageAlbumIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumManageAlbumIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumManagePageGetRaw(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVO>> {
+    async apiAlbumManagePageGetRaw(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultAlbumPageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -399,23 +399,23 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultAlbumPageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumManagePageGet(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVO> {
+    async apiAlbumManagePageGet(requestParameters: ApiAlbumManagePageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultAlbumPageVO> {
         const response = await this.apiAlbumManagePageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumManagePostRaw(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestAlbumManageInsertRequest'] == null) {
+    async apiAlbumManagePostRaw(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['albumManageInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumManageInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumManageInsertRequest" was null or undefined when calling apiAlbumManagePost().'
+                'albumManageInsertRequest',
+                'Required parameter "albumManageInsertRequest" was null or undefined when calling apiAlbumManagePost().'
             );
         }
 
@@ -438,22 +438,22 @@ export class AlbumApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumManageInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumManageInsertRequest']),
+            body: AlbumManageInsertRequestToJSON(requestParameters['albumManageInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumManagePost(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumManagePost(requestParameters: ApiAlbumManagePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumManagePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumPageGetRaw(requestParameters: ApiAlbumPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVO>> {
+    async apiAlbumPageGetRaw(requestParameters: ApiAlbumPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultAlbumPageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -503,23 +503,23 @@ export class AlbumApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultAlbumPageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumPageGet(requestParameters: ApiAlbumPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultIoSakurasouControllerVoAlbumPageVO> {
+    async apiAlbumPageGet(requestParameters: ApiAlbumPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultAlbumPageVO> {
         const response = await this.apiAlbumPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAlbumPostRaw(requestParameters: ApiAlbumPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestAlbumSelfInsertRequest'] == null) {
+    async apiAlbumPostRaw(requestParameters: ApiAlbumPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['albumSelfInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestAlbumSelfInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestAlbumSelfInsertRequest" was null or undefined when calling apiAlbumPost().'
+                'albumSelfInsertRequest',
+                'Required parameter "albumSelfInsertRequest" was null or undefined when calling apiAlbumPost().'
             );
         }
 
@@ -542,15 +542,15 @@ export class AlbumApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestAlbumSelfInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestAlbumSelfInsertRequest']),
+            body: AlbumSelfInsertRequestToJSON(requestParameters['albumSelfInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAlbumPost(requestParameters: ApiAlbumPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiAlbumPost(requestParameters: ApiAlbumPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiAlbumPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -18,12 +18,14 @@ import {
     JavaTimeMonthFromJSON,
     JavaTimeMonthFromJSONTyped,
     JavaTimeMonthToJSON,
+    JavaTimeMonthToJSONTyped,
 } from './JavaTimeMonth';
 import type { JavaTimeDayOfWeek } from './JavaTimeDayOfWeek';
 import {
     JavaTimeDayOfWeekFromJSON,
     JavaTimeDayOfWeekFromJSONTyped,
     JavaTimeDayOfWeekToJSON,
+    JavaTimeDayOfWeekToJSONTyped,
 } from './JavaTimeDayOfWeek';
 
 /**
@@ -104,10 +106,15 @@ export function KotlinxDatetimeLocalDateFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function KotlinxDatetimeLocalDateToJSON(value?: KotlinxDatetimeLocalDate | null): any {
+  export function KotlinxDatetimeLocalDateToJSON(json: any): KotlinxDatetimeLocalDate {
+      return KotlinxDatetimeLocalDateToJSONTyped(json, false);
+  }
+
+  export function KotlinxDatetimeLocalDateToJSONTyped(value?: KotlinxDatetimeLocalDate | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'dayOfMonth': value['dayOfMonth'],

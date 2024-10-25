@@ -57,3 +57,7 @@ export function JavaTimeMonthToJSON(value?: JavaTimeMonth | null): any {
     return value as any;
 }
 
+export function JavaTimeMonthToJSONTyped(value: any, ignoreDiscriminator: boolean): JavaTimeMonth {
+    return value as JavaTimeMonth;
+}
+

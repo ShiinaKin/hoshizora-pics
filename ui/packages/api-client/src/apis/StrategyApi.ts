@@ -15,23 +15,23 @@
 
 import * as runtime from '../runtime';
 import type {
-  ApiStrategyPostRequest,
-  IoSakurasouControllerRequestStrategyPatchRequest,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVO,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
-  IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVO,
+  CommonResponseKotlinUnit,
+  CommonResponsePageResultStrategyPageVO,
+  CommonResponseStrategyVO,
+  StrategyInsertRequest,
+  StrategyPatchRequest,
 } from '../models/index';
 import {
-    ApiStrategyPostRequestFromJSON,
-    ApiStrategyPostRequestToJSON,
-    IoSakurasouControllerRequestStrategyPatchRequestFromJSON,
-    IoSakurasouControllerRequestStrategyPatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVOFromJSON,
-    IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVOToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponsePageResultStrategyPageVOFromJSON,
+    CommonResponsePageResultStrategyPageVOToJSON,
+    CommonResponseStrategyVOFromJSON,
+    CommonResponseStrategyVOToJSON,
+    StrategyInsertRequestFromJSON,
+    StrategyInsertRequestToJSON,
+    StrategyPatchRequestFromJSON,
+    StrategyPatchRequestToJSON,
 } from '../models/index';
 
 export interface ApiStrategyIdDeleteRequest {
@@ -44,7 +44,7 @@ export interface ApiStrategyIdGetRequest {
 
 export interface ApiStrategyIdPatchRequest {
     id: number;
-    ioSakurasouControllerRequestStrategyPatchRequest: IoSakurasouControllerRequestStrategyPatchRequest;
+    strategyPatchRequest: StrategyPatchRequest;
 }
 
 export interface ApiStrategyPageGetRequest {
@@ -54,8 +54,8 @@ export interface ApiStrategyPageGetRequest {
     orderBy?: string;
 }
 
-export interface ApiStrategyPostOperationRequest {
-    apiStrategyPostRequest: ApiStrategyPostRequest;
+export interface ApiStrategyPostRequest {
+    strategyInsertRequest: StrategyInsertRequest;
 }
 
 /**
@@ -65,7 +65,7 @@ export class StrategyApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiStrategyIdDeleteRaw(requestParameters: ApiStrategyIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiStrategyIdDeleteRaw(requestParameters: ApiStrategyIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -92,19 +92,19 @@ export class StrategyApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiStrategyIdDelete(requestParameters: ApiStrategyIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiStrategyIdDelete(requestParameters: ApiStrategyIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiStrategyIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiStrategyIdGetRaw(requestParameters: ApiStrategyIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVO>> {
+    async apiStrategyIdGetRaw(requestParameters: ApiStrategyIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseStrategyVO>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -131,19 +131,19 @@ export class StrategyApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseStrategyVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiStrategyIdGet(requestParameters: ApiStrategyIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoStrategyVO> {
+    async apiStrategyIdGet(requestParameters: ApiStrategyIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseStrategyVO> {
         const response = await this.apiStrategyIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiStrategyIdPatchRaw(requestParameters: ApiStrategyIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiStrategyIdPatchRaw(requestParameters: ApiStrategyIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -151,10 +151,10 @@ export class StrategyApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestStrategyPatchRequest'] == null) {
+        if (requestParameters['strategyPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestStrategyPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestStrategyPatchRequest" was null or undefined when calling apiStrategyIdPatch().'
+                'strategyPatchRequest',
+                'Required parameter "strategyPatchRequest" was null or undefined when calling apiStrategyIdPatch().'
             );
         }
 
@@ -177,22 +177,22 @@ export class StrategyApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestStrategyPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestStrategyPatchRequest']),
+            body: StrategyPatchRequestToJSON(requestParameters['strategyPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiStrategyIdPatch(requestParameters: ApiStrategyIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiStrategyIdPatch(requestParameters: ApiStrategyIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiStrategyIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiStrategyPageGetRaw(requestParameters: ApiStrategyPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVO>> {
+    async apiStrategyPageGetRaw(requestParameters: ApiStrategyPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultStrategyPageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -242,23 +242,23 @@ export class StrategyApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultStrategyPageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiStrategyPageGet(requestParameters: ApiStrategyPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoPageResultIoSakurasouControllerVoStrategyPageVO> {
+    async apiStrategyPageGet(requestParameters: ApiStrategyPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultStrategyPageVO> {
         const response = await this.apiStrategyPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiStrategyPostRaw(requestParameters: ApiStrategyPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['apiStrategyPostRequest'] == null) {
+    async apiStrategyPostRaw(requestParameters: ApiStrategyPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['strategyInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'apiStrategyPostRequest',
-                'Required parameter "apiStrategyPostRequest" was null or undefined when calling apiStrategyPost().'
+                'strategyInsertRequest',
+                'Required parameter "strategyInsertRequest" was null or undefined when calling apiStrategyPost().'
             );
         }
 
@@ -281,15 +281,15 @@ export class StrategyApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ApiStrategyPostRequestToJSON(requestParameters['apiStrategyPostRequest']),
+            body: StrategyInsertRequestToJSON(requestParameters['strategyInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiStrategyPost(requestParameters: ApiStrategyPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiStrategyPost(requestParameters: ApiStrategyPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiStrategyPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

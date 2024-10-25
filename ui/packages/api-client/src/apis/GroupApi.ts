@@ -15,23 +15,23 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerRequestGroupInsertRequest,
-  IoSakurasouControllerRequestGroupPatchRequest,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVO,
-  IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVO,
-  IoSakurasouControllerVoCommonResponseKotlinUnit,
+  CommonResponseGroupVO,
+  CommonResponseKotlinUnit,
+  CommonResponsePageResultGroupPageVO,
+  GroupInsertRequest,
+  GroupPatchRequest,
 } from '../models/index';
 import {
-    IoSakurasouControllerRequestGroupInsertRequestFromJSON,
-    IoSakurasouControllerRequestGroupInsertRequestToJSON,
-    IoSakurasouControllerRequestGroupPatchRequestFromJSON,
-    IoSakurasouControllerRequestGroupPatchRequestToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVOToJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVOFromJSON,
-    IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVOToJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON,
-    IoSakurasouControllerVoCommonResponseKotlinUnitToJSON,
+    CommonResponseGroupVOFromJSON,
+    CommonResponseGroupVOToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponsePageResultGroupPageVOFromJSON,
+    CommonResponsePageResultGroupPageVOToJSON,
+    GroupInsertRequestFromJSON,
+    GroupInsertRequestToJSON,
+    GroupPatchRequestFromJSON,
+    GroupPatchRequestToJSON,
 } from '../models/index';
 
 export interface ApiGroupIdDeleteRequest {
@@ -44,7 +44,7 @@ export interface ApiGroupIdGetRequest {
 
 export interface ApiGroupIdPatchRequest {
     id: number;
-    ioSakurasouControllerRequestGroupPatchRequest: IoSakurasouControllerRequestGroupPatchRequest;
+    groupPatchRequest: GroupPatchRequest;
 }
 
 export interface ApiGroupPageGetRequest {
@@ -55,7 +55,7 @@ export interface ApiGroupPageGetRequest {
 }
 
 export interface ApiGroupPostRequest {
-    ioSakurasouControllerRequestGroupInsertRequest: IoSakurasouControllerRequestGroupInsertRequest;
+    groupInsertRequest: GroupInsertRequest;
 }
 
 /**
@@ -65,7 +65,7 @@ export class GroupApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiGroupIdDeleteRaw(requestParameters: ApiGroupIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiGroupIdDeleteRaw(requestParameters: ApiGroupIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -92,19 +92,19 @@ export class GroupApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiGroupIdDelete(requestParameters: ApiGroupIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiGroupIdDelete(requestParameters: ApiGroupIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiGroupIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiGroupIdGetRaw(requestParameters: ApiGroupIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVO>> {
+    async apiGroupIdGetRaw(requestParameters: ApiGroupIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseGroupVO>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -131,19 +131,19 @@ export class GroupApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseGroupVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiGroupIdGet(requestParameters: ApiGroupIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoGroupVO> {
+    async apiGroupIdGet(requestParameters: ApiGroupIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseGroupVO> {
         const response = await this.apiGroupIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiGroupIdPatchRaw(requestParameters: ApiGroupIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
+    async apiGroupIdPatchRaw(requestParameters: ApiGroupIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -151,10 +151,10 @@ export class GroupApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['ioSakurasouControllerRequestGroupPatchRequest'] == null) {
+        if (requestParameters['groupPatchRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestGroupPatchRequest',
-                'Required parameter "ioSakurasouControllerRequestGroupPatchRequest" was null or undefined when calling apiGroupIdPatch().'
+                'groupPatchRequest',
+                'Required parameter "groupPatchRequest" was null or undefined when calling apiGroupIdPatch().'
             );
         }
 
@@ -177,22 +177,22 @@ export class GroupApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestGroupPatchRequestToJSON(requestParameters['ioSakurasouControllerRequestGroupPatchRequest']),
+            body: GroupPatchRequestToJSON(requestParameters['groupPatchRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiGroupIdPatch(requestParameters: ApiGroupIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiGroupIdPatch(requestParameters: ApiGroupIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiGroupIdPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiGroupPageGetRaw(requestParameters: ApiGroupPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVO>> {
+    async apiGroupPageGetRaw(requestParameters: ApiGroupPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponsePageResultGroupPageVO>> {
         if (requestParameters['page'] == null) {
             throw new runtime.RequiredError(
                 'page',
@@ -242,23 +242,23 @@ export class GroupApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponsePageResultGroupPageVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiGroupPageGet(requestParameters: ApiGroupPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseIoSakurasouControllerVoPageResultIoSakurasouControllerVoGroupPageVO> {
+    async apiGroupPageGet(requestParameters: ApiGroupPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponsePageResultGroupPageVO> {
         const response = await this.apiGroupPageGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiGroupPostRaw(requestParameters: ApiGroupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IoSakurasouControllerVoCommonResponseKotlinUnit>> {
-        if (requestParameters['ioSakurasouControllerRequestGroupInsertRequest'] == null) {
+    async apiGroupPostRaw(requestParameters: ApiGroupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
+        if (requestParameters['groupInsertRequest'] == null) {
             throw new runtime.RequiredError(
-                'ioSakurasouControllerRequestGroupInsertRequest',
-                'Required parameter "ioSakurasouControllerRequestGroupInsertRequest" was null or undefined when calling apiGroupPost().'
+                'groupInsertRequest',
+                'Required parameter "groupInsertRequest" was null or undefined when calling apiGroupPost().'
             );
         }
 
@@ -281,15 +281,15 @@ export class GroupApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IoSakurasouControllerRequestGroupInsertRequestToJSON(requestParameters['ioSakurasouControllerRequestGroupInsertRequest']),
+            body: GroupInsertRequestToJSON(requestParameters['groupInsertRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IoSakurasouControllerVoCommonResponseKotlinUnitFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiGroupPost(requestParameters: ApiGroupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IoSakurasouControllerVoCommonResponseKotlinUnit> {
+    async apiGroupPost(requestParameters: ApiGroupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiGroupPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

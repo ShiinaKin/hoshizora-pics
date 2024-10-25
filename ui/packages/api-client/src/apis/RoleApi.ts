@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  IoSakurasouControllerVoRoleVO,
+  CommonResponseKotlinCollectionsListRoleVO,
 } from '../models/index';
 import {
-    IoSakurasouControllerVoRoleVOFromJSON,
-    IoSakurasouControllerVoRoleVOToJSON,
+    CommonResponseKotlinCollectionsListRoleVOFromJSON,
+    CommonResponseKotlinCollectionsListRoleVOToJSON,
 } from '../models/index';
 
 /**
@@ -29,7 +29,7 @@ export class RoleApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoleAllGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IoSakurasouControllerVoRoleVO>>> {
+    async apiRoleAllGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinCollectionsListRoleVO>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -49,19 +49,19 @@ export class RoleApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IoSakurasouControllerVoRoleVOFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinCollectionsListRoleVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoleAllGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IoSakurasouControllerVoRoleVO>> {
+    async apiRoleAllGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinCollectionsListRoleVO> {
         const response = await this.apiRoleAllGetRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRoleSelfGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IoSakurasouControllerVoRoleVO>>> {
+    async apiRoleSelfGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinCollectionsListRoleVO>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -81,12 +81,12 @@ export class RoleApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IoSakurasouControllerVoRoleVOFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinCollectionsListRoleVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoleSelfGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IoSakurasouControllerVoRoleVO>> {
+    async apiRoleSelfGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinCollectionsListRoleVO> {
         const response = await this.apiRoleSelfGetRaw(initOverrides);
         return await response.value();
     }
