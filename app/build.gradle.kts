@@ -10,6 +10,7 @@ val mySQLVersion: String by project
 val sqliteVersion: String by project
 
 val swaggerParserVersion: String by project
+val schemaKeneratorVersion: String by project
 val swaggerUIVersion: String by project
 
 val awsS3Version: String by project
@@ -68,6 +69,9 @@ dependencies {
     implementation("io.ktor:ktor-client-cio")
 
     implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
+    implementation("io.github.smiley4:schema-kenerator-core:$schemaKeneratorVersion")
+    implementation("io.github.smiley4:schema-kenerator-reflection:$schemaKeneratorVersion")
+    implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
     implementation("io.sakurasou.ktor:ktor-simple-cache-jvm:0.4.7")
