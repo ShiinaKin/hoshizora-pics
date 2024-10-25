@@ -1,0 +1,3768 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "HoshizoraPics API",
+    "description" : "API for testing and demonstration purposes.",
+    "version" : "latest"
+  },
+  "externalDocs" : {
+    "url" : "/"
+  },
+  "servers" : [ {
+    "url" : "/",
+    "description" : "Server"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/api/site/init" : {
+      "post" : {
+        "tags" : [ ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SiteInitRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : { },
+        "deprecated" : false
+      }
+    },
+    "/api/user/login" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserLoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : { },
+        "deprecated" : false
+      }
+    },
+    "/api/user/signup" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : { },
+        "deprecated" : false
+      }
+    },
+    "/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@343fddd9/random" : {
+      "get" : {
+        "tags" : [ ],
+        "description" : "return random image if setting allow",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "identify resources",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "LOCAL: byte array",
+            "headers" : { }
+          },
+          "302" : {
+            "description" : "S3: redirect",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@250b5e5b/s/{imageUniqueId}" : {
+      "get" : {
+        "tags" : [ ],
+        "parameters" : [ {
+          "name" : "imageUniqueId",
+          "in" : "path",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "LOCAL: byte array",
+            "headers" : { }
+          },
+          "302" : {
+            "description" : "S3: redirect",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/image" : {
+      "post" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "properties" : { }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success, return image external id, or empty string if it is private",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.String"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/{imageId}" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "S3"
+                  }, {
+                    "description" : "Local"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/{imageId}/info" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_ImageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/{imageId}/thumbnail" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "S3"
+                  }, {
+                    "description" : "Local"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/page" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_ImagePageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/manage/{imageId}" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "S3"
+                  }, {
+                    "description" : "Local"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageManagePatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/manage/{imageId}/info" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_ImageManageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/manage/{imageId}/thumbnail" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "S3"
+                  }, {
+                    "description" : "Local"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/manage/page" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_ImagePageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album" : {
+      "post" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlbumSelfInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album/{albumId}" : {
+      "get" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_AlbumVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlbumSelfPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album/page" : {
+      "get" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_AlbumPageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album/manage" : {
+      "post" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlbumManageInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "album not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album/manage/{albumId}" : {
+      "get" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "album not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_AlbumVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "album not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "albumId",
+          "in" : "path",
+          "description" : "album id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlbumManagePatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "album not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/album/manage/page" : {
+      "get" : {
+        "tags" : [ "Album" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "album not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_AlbumPageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/strategy" : {
+      "post" : {
+        "tags" : [ "Strategy" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "`config` need a extra field `type`, same to strategyType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "config" : {
+                    "description" : "io/sakurasou/model/strategy/StrategyConfig.kt",
+                    "oneOf" : [ {
+                      "description" : "Local strategy configuration",
+                      "properties" : {
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestLocalStrategyConfig"
+                    }, {
+                      "description" : "S3 strategy configuration",
+                      "properties" : {
+                        "endpoint" : { },
+                        "bucketName" : { },
+                        "region" : { },
+                        "accessKey" : { },
+                        "secretKey" : { },
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "publicUrl" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestS3StrategyConfig"
+                    } ]
+                  },
+                  "name" : { }
+                },
+                "title" : "StrategyInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/strategy/{id}" : {
+      "get" : {
+        "tags" : [ "Strategy" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "strategy id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "strategy not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_StrategyVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Strategy" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "strategy id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "strategy not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Strategy" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "strategy id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "`config` need a extra field `type`, same to strategyType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "config" : {
+                    "anyOf" : [ {
+                      "description" : "Local strategy configuration",
+                      "properties" : {
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestLocalStrategyConfig"
+                    }, {
+                      "description" : "S3 strategy configuration",
+                      "properties" : {
+                        "endpoint" : { },
+                        "bucketName" : { },
+                        "region" : { },
+                        "accessKey" : { },
+                        "secretKey" : { },
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "publicUrl" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestS3StrategyConfig"
+                    } ],
+                    "description" : "io/sakurasou/model/strategy/StrategyConfig.kt",
+                    "required" : [ "false" ]
+                  },
+                  "name" : {
+                    "required" : [ "false" ]
+                  }
+                },
+                "title" : "StrategyPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "strategy not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/strategy/page" : {
+      "get" : {
+        "tags" : [ "Strategy" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_StrategyPageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/setting" : {
+      "get" : {
+        "tags" : [ "Setting" ],
+        "description" : "get all settings",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.Map_kotlin.String-SettingVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/setting/site" : {
+      "patch" : {
+        "tags" : [ "Setting" ],
+        "description" : "site setting",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SiteSettingPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/setting/system" : {
+      "patch" : {
+        "tags" : [ "Setting" ],
+        "description" : "system setting",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StrategySettingPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/self" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "parameters" : [ ],
+        "responses" : {
+          "404" : {
+            "description" : "user not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_UserVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "User" ],
+        "description" : "modify self",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserSelfPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "user not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/manage" : {
+      "post" : {
+        "tags" : [ "User" ],
+        "description" : "admin manual add user",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserManageInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/manage/{id}" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "user not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_UserVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "User" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "user not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "User" ],
+        "description" : "modify any user",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserManagePatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "user not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/manage/page" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_UserManageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/ban/{id}" : {
+      "patch" : {
+        "tags" : [ "User" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/user/unban/{id}" : {
+      "patch" : {
+        "tags" : [ "User" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/group" : {
+      "post" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GroupInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "group name conflict",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/group/{id}" : {
+      "get" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "group id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "group not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_GroupVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "group id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "group not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "group id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GroupPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "group not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/group/page" : {
+      "get" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_GroupPageVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "page or pageSize wrong",
+            "headers" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/role/all" : {
+      "get" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.List_RoleVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/role/self" : {
+      "get" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.List_RoleVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "SiteInitRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "siteDescription" : {
+            "type" : "string"
+          },
+          "siteExternalUrl" : {
+            "type" : "string"
+          },
+          "siteSubtitle" : {
+            "type" : "string"
+          },
+          "siteTitle" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "password", "siteDescription", "siteExternalUrl", "siteSubtitle", "siteTitle", "username" ]
+      },
+      "UserLoginRequest" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "password", "username" ]
+      },
+      "UserInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "password", "username" ]
+      },
+      "CommonResponse_kotlin.String" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : [ "null", "string" ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "CommonResponse_kotlin.Unit" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : "null"
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "ImageInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "albumId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : [ "null", "string" ]
+          },
+          "isPrivate" : {
+            "type" : [ "null", "boolean" ]
+          }
+        }
+      },
+      "ImageVO" : {
+        "type" : "object",
+        "properties" : {
+          "albumId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "albumName" : {
+            "type" : "string"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "height" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isPrivate" : {
+            "type" : "boolean"
+          },
+          "md5" : {
+            "type" : "string"
+          },
+          "mimeType" : {
+            "type" : "string"
+          },
+          "originName" : {
+            "type" : "string"
+          },
+          "ownerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "ownerName" : {
+            "type" : "string"
+          },
+          "sha256" : {
+            "type" : "string"
+          },
+          "size" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "width" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "albumId", "albumName", "createTime", "displayName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
+      },
+      "kotlinx.datetime.LocalDateTime" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDate"
+          },
+          "dayOfMonth" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "dayOfWeek" : {
+            "$ref" : "#/components/schemas/java.time.DayOfWeek"
+          },
+          "dayOfYear" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "hour" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "minute" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "month" : {
+            "$ref" : "#/components/schemas/java.time.Month"
+          },
+          "monthNumber" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "nanosecond" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "second" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "time" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalTime"
+          },
+          "year" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "date", "dayOfMonth", "dayOfWeek", "dayOfYear", "hour", "minute", "month", "monthNumber", "nanosecond", "second", "time", "year" ]
+      },
+      "kotlinx.datetime.LocalDate" : {
+        "type" : "object",
+        "properties" : {
+          "dayOfMonth" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "dayOfWeek" : {
+            "$ref" : "#/components/schemas/java.time.DayOfWeek"
+          },
+          "dayOfYear" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "month" : {
+            "$ref" : "#/components/schemas/java.time.Month"
+          },
+          "monthNumber" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "year" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "dayOfMonth", "dayOfWeek", "dayOfYear", "month", "monthNumber", "year" ]
+      },
+      "java.time.DayOfWeek" : {
+        "type" : "string",
+        "enum" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" ]
+      },
+      "java.time.Month" : {
+        "type" : "string",
+        "enum" : [ "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ]
+      },
+      "kotlinx.datetime.LocalTime" : {
+        "type" : "object",
+        "properties" : {
+          "hour" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "minute" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "nanosecond" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "second" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "hour", "minute", "nanosecond", "second" ]
+      },
+      "CommonResponse_ImageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/ImageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_ImagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ImagePageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "ImagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isPrivate" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "createTime", "displayName", "id", "isPrivate" ]
+      },
+      "CommonResponse_PageResult_ImagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_ImagePageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "ImageManagePatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "albumId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : [ "null", "string" ]
+          },
+          "isPrivate" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "userId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          }
+        }
+      },
+      "ImageManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "albumId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "albumName" : {
+            "type" : "string"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "groupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "groupName" : {
+            "type" : "string"
+          },
+          "height" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isPrivate" : {
+            "type" : "boolean"
+          },
+          "md5" : {
+            "type" : "string"
+          },
+          "mimeType" : {
+            "type" : "string"
+          },
+          "originName" : {
+            "type" : "string"
+          },
+          "ownerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "ownerName" : {
+            "type" : "string"
+          },
+          "sha256" : {
+            "type" : "string"
+          },
+          "size" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "width" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "albumId", "albumName", "createTime", "displayName", "groupId", "groupName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
+      },
+      "CommonResponse_ImageManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/ImageManageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "AlbumSelfInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "description", "name" ]
+      },
+      "AlbumSelfPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
+      "AlbumVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isUncategorized" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "id", "imageCount", "isUncategorized", "name" ]
+      },
+      "CommonResponse_AlbumVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/AlbumVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_AlbumPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AlbumPageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "AlbumPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isUncategorized" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "imageCount", "isUncategorized", "name" ]
+      },
+      "CommonResponse_PageResult_AlbumPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_AlbumPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "AlbumManageInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "description", "name", "userId" ]
+      },
+      "AlbumManagePatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : [ "null", "string" ]
+          },
+          "userId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          }
+        }
+      },
+      "StrategyVO" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "$ref" : "#/components/schemas/StrategyConfigSealed"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          }
+        },
+        "required" : [ "config", "createTime", "id", "name", "type" ]
+      },
+      "StrategyConfigSealed" : {
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/LocalStrategy"
+        }, {
+          "$ref" : "#/components/schemas/S3Strategy"
+        } ]
+      },
+      "LocalStrategy" : {
+        "type" : "object",
+        "properties" : {
+          "thumbnailFolder" : {
+            "type" : "string"
+          },
+          "uploadFolder" : {
+            "type" : "string"
+          },
+          "strategyType" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          }
+        },
+        "required" : [ "strategyType", "thumbnailFolder", "uploadFolder" ]
+      },
+      "StrategyTypeEnum" : {
+        "type" : "string",
+        "enum" : [ "LOCAL", "S3" ]
+      },
+      "S3Strategy" : {
+        "type" : "object",
+        "properties" : {
+          "accessKey" : {
+            "type" : "string"
+          },
+          "bucketName" : {
+            "type" : "string"
+          },
+          "endpoint" : {
+            "type" : "string"
+          },
+          "publicUrl" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "secretKey" : {
+            "type" : "string"
+          },
+          "thumbnailFolder" : {
+            "type" : "string"
+          },
+          "uploadFolder" : {
+            "type" : "string"
+          },
+          "strategyType" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          }
+        },
+        "required" : [ "accessKey", "bucketName", "endpoint", "publicUrl", "region", "secretKey", "strategyType", "thumbnailFolder", "uploadFolder" ]
+      },
+      "CommonResponse_StrategyVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/StrategyVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_StrategyPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StrategyPageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "StrategyPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          }
+        },
+        "required" : [ "id", "name", "type" ]
+      },
+      "CommonResponse_PageResult_StrategyPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_StrategyPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "SettingVO" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "$ref" : "#/components/schemas/SettingConfigSealed"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "config", "name" ]
+      },
+      "SettingConfigSealed" : {
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/SiteSetting"
+        }, {
+          "$ref" : "#/components/schemas/SystemSetting"
+        }, {
+          "$ref" : "#/components/schemas/SystemStatus"
+        } ]
+      },
+      "SiteSetting" : {
+        "type" : "object",
+        "properties" : {
+          "homePageRandomPicDisplay" : {
+            "type" : "boolean"
+          },
+          "siteDescription" : {
+            "type" : "string"
+          },
+          "siteExternalUrl" : {
+            "type" : "string"
+          },
+          "siteKeyword" : {
+            "type" : "string"
+          },
+          "siteSubtitle" : {
+            "type" : "string"
+          },
+          "siteTitle" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "homePageRandomPicDisplay", "siteDescription", "siteExternalUrl", "siteKeyword", "siteSubtitle", "siteTitle" ]
+      },
+      "SystemSetting" : {
+        "type" : "object",
+        "properties" : {
+          "allowRandomFetch" : {
+            "type" : "boolean"
+          },
+          "allowSignup" : {
+            "type" : "boolean"
+          },
+          "defaultGroupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "allowRandomFetch", "allowSignup", "defaultGroupId" ]
+      },
+      "SystemStatus" : {
+        "type" : "object",
+        "properties" : {
+          "isInit" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "isInit" ]
+      },
+      "CommonResponse_kotlin.collections.Map_kotlin.String-SettingVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : [ "null", "object" ],
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/SettingVO"
+            }
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "SiteSettingPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "homePageRandomPicDisplay" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "siteDescription" : {
+            "type" : [ "null", "string" ]
+          },
+          "siteExternalUrl" : {
+            "type" : [ "null", "string" ]
+          },
+          "siteKeyword" : {
+            "type" : [ "null", "string" ]
+          },
+          "siteSubtitle" : {
+            "type" : [ "null", "string" ]
+          },
+          "siteTitle" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
+      "StrategySettingPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "allowedImageTypes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "allowedImageTypes" ]
+      },
+      "UserSelfPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "defaultAlbumId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : [ "null", "string" ]
+          },
+          "isDefaultImagePrivate" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "password" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
+      "UserVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "email" : {
+            "type" : [ "null", "string" ]
+          },
+          "groupName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isBanned" : {
+            "type" : "boolean"
+          },
+          "isDefaultImagePrivate" : {
+            "type" : "boolean"
+          },
+          "totalImageSize" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
+      },
+      "CommonResponse_UserVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/UserVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "UserManageInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "groupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isDefaultImagePrivate" : {
+            "type" : "boolean"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "groupId", "isDefaultImagePrivate", "password", "username" ]
+      },
+      "UserManagePatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "defaultAlbumId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : [ "null", "string" ]
+          },
+          "groupId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          },
+          "isDefaultImagePrivate" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "password" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
+      "PageResult_UserManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UserManageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "UserManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "groupName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isBanned" : {
+            "type" : "boolean"
+          },
+          "totalImageSize" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "groupName", "id", "imageCount", "isBanned", "totalImageSize", "username" ]
+      },
+      "CommonResponse_PageResult_UserManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_UserManageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "GroupInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "name", "roles", "strategyId" ]
+      },
+      "GroupConfigUpdatePatch" : {
+        "type" : "object",
+        "properties" : {
+          "groupStrategyConfig" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/GroupStrategyConfig"
+            } ]
+          }
+        }
+      },
+      "GroupStrategyConfig" : {
+        "type" : "object",
+        "properties" : {
+          "allowedImageTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageTypeEnum"
+            },
+            "uniqueItems" : true
+          },
+          "fileNamingRule" : {
+            "type" : "string"
+          },
+          "imageAutoTransformTarget" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/ImageTypeEnum"
+            } ]
+          },
+          "imageQuality" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "maxSize" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pathNamingRule" : {
+            "type" : "string"
+          },
+          "singleFileMaxSize" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "allowedImageTypes", "fileNamingRule", "imageQuality", "maxSize", "pathNamingRule", "singleFileMaxSize" ]
+      },
+      "ImageTypeEnum" : {
+        "type" : "string",
+        "enum" : [ "JPEG", "JPG", "PNG", "GIF", "TIF", "BMP", "ICO", "PSD", "WEBP" ]
+      },
+      "GroupPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/GroupConfigUpdatePatch"
+            } ]
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : [ "null", "string" ]
+          },
+          "roles" : {
+            "type" : [ "null", "array" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "strategyId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
+          }
+        }
+      },
+      "GroupVO" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "groupConfig" : {
+            "$ref" : "#/components/schemas/GroupConfig"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "groupConfig", "id", "name", "roles", "strategyId" ]
+      },
+      "GroupConfig" : {
+        "type" : "object",
+        "properties" : {
+          "groupStrategyConfig" : {
+            "$ref" : "#/components/schemas/GroupStrategyConfig"
+          }
+        },
+        "required" : [ "groupStrategyConfig" ]
+      },
+      "CommonResponse_GroupVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/GroupVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_GroupPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GroupPageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "GroupPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalImageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalImageSize" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "id", "name", "strategyId", "totalImageCount", "totalImageSize" ]
+      },
+      "CommonResponse_PageResult_GroupPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_GroupPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "RoleVO" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PermissionVO"
+            }
+          }
+        },
+        "required" : [ "name", "permissions" ]
+      },
+      "PermissionVO" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "CommonResponse_kotlin.collections.List_RoleVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : [ "null", "array" ],
+            "items" : {
+              "$ref" : "#/components/schemas/RoleVO"
+            }
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      }
+    },
+    "examples" : { },
+    "securitySchemes" : {
+      "JWT" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "Bearer"
+      }
+    }
+  }
+}
