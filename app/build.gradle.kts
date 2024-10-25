@@ -1,11 +1,23 @@
 val logbackVersion: String by project
-val exposedVersion: String by project
+val kotlinLoggingVersion: String by project
+
 val ktorSimpleCacheVersion: String by project
+
+val exposedVersion: String by project
 val hikariVersion: String by project
 val postgresVersion: String by project
 val mySQLVersion: String by project
 val sqliteVersion: String by project
+
+val swaggerParserVersion: String by project
+val swaggerUIVersion: String by project
+
+val awsS3Version: String by project
+
+val commonsCodecVersion: String by project
+
 val mockkVersion: String by project
+
 val version: String by project
 
 plugins {
@@ -52,8 +64,8 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers-jvm")
     implementation("io.ktor:ktor-server-forwarded-header-jvm")
 
-    implementation("io.swagger.parser.v3:swagger-parser:2.1.21")
-    implementation("io.github.smiley4:ktor-swagger-ui:3.5.0")
+    implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
+    implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
     // implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
     implementation("io.sakurasou.simple-cache:ktor-simple-cache-jvm:0.4.5")
@@ -70,23 +82,23 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
 
-    implementation("commons-codec:commons-codec:1.17.1")
+    implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("at.favre.lib:bcrypt:0.10.2")
 
     implementation("net.coobird:thumbnailator:0.4.20")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
 
-    implementation("software.amazon.awssdk:s3:2.28.21")
+    implementation("software.amazon.awssdk:s3:$awsS3Version")
 
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-config-yaml")
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-    testImplementation("io.mockk:mockk:${mockkVersion}")
+    testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("io.ktor:ktor-client-content-negotiation")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
