@@ -24,8 +24,10 @@ import kotlin.time.Duration.Companion.hours
  */
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
-    cacheOutput(6.hours, listOf("id"), true) { route("random") { randomFetchImage(commonController) } }
-    cacheOutput { route("s") { anonymousGetImage(commonController) } }
+    route({ tags("common") }) {
+        cacheOutput(6.hours, listOf("id"), true) { route("random") { randomFetchImage(commonController) } }
+        cacheOutput { route("s") { anonymousGetImage(commonController) } }
+    }
 }
 
 fun Route.siteInitRoute() {

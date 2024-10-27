@@ -3,6 +3,7 @@ package io.sakurasou.config
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
+import io.sakurasou.controller.*
 import io.sakurasou.di.InstanceCenter.albumService
 import io.sakurasou.di.InstanceCenter.authService
 import io.sakurasou.di.InstanceCenter.commonService
@@ -12,7 +13,6 @@ import io.sakurasou.di.InstanceCenter.roleService
 import io.sakurasou.di.InstanceCenter.settingService
 import io.sakurasou.di.InstanceCenter.strategyService
 import io.sakurasou.di.InstanceCenter.userService
-import io.sakurasou.controller.*
 import io.sakurasou.plugins.SiteInitCheckPlugin
 
 /**
@@ -22,7 +22,10 @@ import io.sakurasou.plugins.SiteInitCheckPlugin
 
 fun Route.apiRoute() {
     route("api") {
-        siteInitRoute()
+        route({ tags("common") }) {
+            siteInitRoute()
+            commonSiteSettingRoute()
+        }
         route {
             install(SiteInitCheckPlugin)
             authRoute(authService, userService)
