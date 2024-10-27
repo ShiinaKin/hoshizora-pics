@@ -1,9 +1,11 @@
 package io.sakurasou
 
+import io.ktor.http.*
 import io.ktor.server.application.*
-import io.sakurasou.di.InstanceCenter
+import io.ktor.server.plugins.cors.routing.*
 import io.sakurasou.config.configureDatabase
 import io.sakurasou.config.configureJwt
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.plugins.*
 
 fun main(args: Array<String>) {
@@ -34,6 +36,15 @@ fun Application.mainModule() {
     configureRouting()
 
     if (developmentMode) {
+        install(CORS) {
+            allowMethod(HttpMethod.Options)
+            allowMethod(HttpMethod.Put)
+            allowMethod(HttpMethod.Delete)
+            allowMethod(HttpMethod.Patch)
+            allowMethod(HttpMethod.Post)
+            allowHeader(HttpHeaders.Authorization)
+            anyHost()
+        }
         swaggerModule()
         generateOpenApiJson()
     }
