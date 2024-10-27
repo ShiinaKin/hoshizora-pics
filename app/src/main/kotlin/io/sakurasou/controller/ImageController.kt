@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.*
 import io.sakurasou.constant.*
 import io.sakurasou.controller.request.ImageManagePatchRequest
 import io.sakurasou.controller.request.ImagePatchRequest
@@ -22,6 +23,7 @@ import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.image.ImageService
 import io.swagger.v3.oas.models.media.Schema
+import kotlinx.io.readByteArray
 
 /**
  * @author ShiinaKin
@@ -96,7 +98,7 @@ private fun Route.imageSelfUpload(controller: ImageController) {
                         }
                         val fileName = part.originalFileName as String
                         val mimeType = part.contentType!!.toString()
-                        val bytes = part.streamProvider().readBytes()
+                        val bytes = part.provider().readRemaining().readByteArray()
                         val contentLength = bytes.size.toLong()
 
                         imageRawFile = ImageRawFile(
