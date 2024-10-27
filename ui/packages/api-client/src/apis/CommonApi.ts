@@ -15,9 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
+  CommonResponseCommonSiteSetting,
   SiteInitRequest,
 } from '../models/index';
 import {
+    CommonResponseCommonSiteSettingFromJSON,
+    CommonResponseCommonSiteSettingToJSON,
     SiteInitRequestFromJSON,
     SiteInitRequestToJSON,
 } from '../models/index';
@@ -29,7 +32,7 @@ export interface ApiSiteInitPostRequest {
 /**
  * 
  */
-export class DefaultApi extends runtime.BaseAPI {
+export class CommonApi extends runtime.BaseAPI {
 
     /**
      */
@@ -62,6 +65,32 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async apiSiteInitPost(requestParameters: ApiSiteInitPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.apiSiteInitPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * fetch common site setting
+     */
+    async apiSiteSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseCommonSiteSetting>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/site/setting`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseCommonSiteSettingFromJSON(jsonValue));
+    }
+
+    /**
+     * fetch common site setting
+     */
+    async apiSiteSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseCommonSiteSetting> {
+        const response = await this.apiSiteSettingGetRaw(initOverrides);
+        return await response.value();
     }
 
 }

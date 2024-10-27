@@ -2,7 +2,7 @@
 /* eslint-disable */
 export * from './AlbumApi';
 export * from './AuthApi';
-export * from './DefaultApi';
+export * from './CommonApi';
 export * from './GroupApi';
 export * from './ImageApi';
 export * from './RoleApi';

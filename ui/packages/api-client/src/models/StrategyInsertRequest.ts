@@ -18,7 +18,6 @@ import {
     StrategyInsertRequestConfigFromJSON,
     StrategyInsertRequestConfigFromJSONTyped,
     StrategyInsertRequestConfigToJSON,
-    StrategyInsertRequestConfigToJSONTyped,
 } from './StrategyInsertRequestConfig';
 
 /**

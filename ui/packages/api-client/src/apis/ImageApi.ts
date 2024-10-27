@@ -20,6 +20,7 @@ import type {
   CommonResponseKotlinString,
   CommonResponseKotlinUnit,
   CommonResponsePageResultImagePageVO,
+  ImageFileVO,
   ImageInsertRequest,
   ImageManagePatchRequest,
 } from '../models/index';
@@ -34,6 +35,8 @@ import {
     CommonResponseKotlinUnitToJSON,
     CommonResponsePageResultImagePageVOFromJSON,
     CommonResponsePageResultImagePageVOToJSON,
+    ImageFileVOFromJSON,
+    ImageFileVOToJSON,
     ImageInsertRequestFromJSON,
     ImageInsertRequestToJSON,
     ImageManagePatchRequestFromJSON,
@@ -142,7 +145,7 @@ export class ImageApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageImageIdGetRaw(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
+    async apiImageImageIdGetRaw(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageFileVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -169,12 +172,12 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImageFileVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdGet(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
+    async apiImageImageIdGet(requestParameters: ApiImageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageFileVO> {
         const response = await this.apiImageImageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -269,7 +272,7 @@ export class ImageApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageImageIdThumbnailGetRaw(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
+    async apiImageImageIdThumbnailGetRaw(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageFileVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -296,12 +299,12 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImageFileVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageImageIdThumbnailGet(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
+    async apiImageImageIdThumbnailGet(requestParameters: ApiImageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageFileVO> {
         const response = await this.apiImageImageIdThumbnailGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -347,7 +350,7 @@ export class ImageApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageManageImageIdGetRaw(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
+    async apiImageManageImageIdGetRaw(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageFileVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -374,12 +377,12 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImageFileVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdGet(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
+    async apiImageManageImageIdGet(requestParameters: ApiImageManageImageIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageFileVO> {
         const response = await this.apiImageManageImageIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -474,7 +477,7 @@ export class ImageApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiImageManageImageIdThumbnailGetRaw(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<>> {
+    async apiImageManageImageIdThumbnailGetRaw(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageFileVO>> {
         if (requestParameters['imageId'] == null) {
             throw new runtime.RequiredError(
                 'imageId',
@@ -501,12 +504,12 @@ export class ImageApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImageFileVOFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiImageManageImageIdThumbnailGet(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<> {
+    async apiImageManageImageIdThumbnailGet(requestParameters: ApiImageManageImageIdThumbnailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageFileVO> {
         const response = await this.apiImageManageImageIdThumbnailGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

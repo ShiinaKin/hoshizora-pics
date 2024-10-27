@@ -9,14 +9,14 @@
     "url" : "/"
   },
   "servers" : [ {
-    "url" : "/",
+    "url" : "localhost:8080",
     "description" : "Server"
   } ],
   "tags" : [ ],
   "paths" : {
     "/api/site/init" : {
       "post" : {
-        "tags" : [ ],
+        "tags" : [ "common" ],
         "parameters" : [ ],
         "requestBody" : {
           "content" : {
@@ -29,6 +29,27 @@
           "required" : true
         },
         "responses" : { },
+        "deprecated" : false
+      }
+    },
+    "/api/site/setting" : {
+      "get" : {
+        "tags" : [ "common" ],
+        "description" : "fetch common site setting",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "CommonSiteSetting",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_CommonSiteSetting"
+                }
+              }
+            }
+          }
+        },
         "deprecated" : false
       }
     },
@@ -123,11 +144,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "oneOf" : [ {
-                    "description" : "S3"
-                  }, {
-                    "description" : "Local"
-                  } ]
+                  "$ref" : "#/components/schemas/ImageFileVO"
                 }
               }
             }
@@ -269,11 +286,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "oneOf" : [ {
-                    "description" : "S3"
-                  }, {
-                    "description" : "Local"
-                  } ]
+                  "$ref" : "#/components/schemas/ImageFileVO"
                 }
               }
             }
@@ -387,11 +400,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "oneOf" : [ {
-                    "description" : "S3"
-                  }, {
-                    "description" : "Local"
-                  } ]
+                  "$ref" : "#/components/schemas/ImageFileVO"
                 }
               }
             }
@@ -577,11 +586,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "oneOf" : [ {
-                    "description" : "S3"
-                  }, {
-                    "description" : "Local"
-                  } ]
+                  "$ref" : "#/components/schemas/ImageFileVO"
                 }
               }
             }
@@ -1478,7 +1483,15 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.Map_kotlin.String-SettingVO"
+                  "properties" : {
+                    "code" : { },
+                    "message" : { },
+                    "data" : {
+                      "additionalProperties" : { }
+                    },
+                    "isSuccessful" : { }
+                  },
+                  "title" : "CommonResponseSettingVOMap"
                 }
               }
             }
@@ -2278,6 +2291,44 @@
         },
         "required" : [ "email", "password", "siteDescription", "siteExternalUrl", "siteSubtitle", "siteTitle", "username" ]
       },
+      "CommonSiteSetting" : {
+        "type" : "object",
+        "properties" : {
+          "isSiteInit" : {
+            "type" : "boolean"
+          },
+          "siteSubTitle" : {
+            "type" : "string"
+          },
+          "siteTitle" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "isSiteInit", "siteSubTitle", "siteTitle" ]
+      },
+      "CommonResponse_CommonSiteSetting" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/CommonSiteSetting"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
       "UserLoginRequest" : {
         "type" : "object",
         "properties" : {
@@ -2551,6 +2602,31 @@
           }
         },
         "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "kotlin.ByteArray" : {
+        "type" : "object",
+        "properties" : {
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "size" ]
+      },
+      "ImageFileVO" : {
+        "type" : "object",
+        "properties" : {
+          "bytes" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/kotlin.ByteArray"
+            } ]
+          },
+          "url" : {
+            "type" : [ "null", "string" ]
+          }
+        }
       },
       "PageResult_ImagePageVO" : {
         "type" : "object",
@@ -3069,98 +3145,6 @@
             }, {
               "$ref" : "#/components/schemas/PageResult_StrategyPageVO"
             } ]
-          },
-          "isSuccessful" : {
-            "type" : "boolean"
-          },
-          "message" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "code", "isSuccessful", "message" ]
-      },
-      "SettingVO" : {
-        "type" : "object",
-        "properties" : {
-          "config" : {
-            "$ref" : "#/components/schemas/SettingConfigSealed"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "config", "name" ]
-      },
-      "SettingConfigSealed" : {
-        "anyOf" : [ {
-          "$ref" : "#/components/schemas/SiteSetting"
-        }, {
-          "$ref" : "#/components/schemas/SystemSetting"
-        }, {
-          "$ref" : "#/components/schemas/SystemStatus"
-        } ]
-      },
-      "SiteSetting" : {
-        "type" : "object",
-        "properties" : {
-          "homePageRandomPicDisplay" : {
-            "type" : "boolean"
-          },
-          "siteDescription" : {
-            "type" : "string"
-          },
-          "siteExternalUrl" : {
-            "type" : "string"
-          },
-          "siteKeyword" : {
-            "type" : "string"
-          },
-          "siteSubtitle" : {
-            "type" : "string"
-          },
-          "siteTitle" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "homePageRandomPicDisplay", "siteDescription", "siteExternalUrl", "siteKeyword", "siteSubtitle", "siteTitle" ]
-      },
-      "SystemSetting" : {
-        "type" : "object",
-        "properties" : {
-          "allowRandomFetch" : {
-            "type" : "boolean"
-          },
-          "allowSignup" : {
-            "type" : "boolean"
-          },
-          "defaultGroupId" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        },
-        "required" : [ "allowRandomFetch", "allowSignup", "defaultGroupId" ]
-      },
-      "SystemStatus" : {
-        "type" : "object",
-        "properties" : {
-          "isInit" : {
-            "type" : "boolean"
-          }
-        },
-        "required" : [ "isInit" ]
-      },
-      "CommonResponse_kotlin.collections.Map_kotlin.String-SettingVO" : {
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "data" : {
-            "type" : [ "null", "object" ],
-            "additionalProperties" : {
-              "$ref" : "#/components/schemas/SettingVO"
-            }
           },
           "isSuccessful" : {
             "type" : "boolean"

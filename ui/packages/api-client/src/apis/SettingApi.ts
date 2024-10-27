@@ -15,16 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
-  CommonResponseKotlinCollectionsMapKotlinStringSettingVO,
   CommonResponseKotlinUnit,
+  CommonResponseSettingVOMap,
   SiteSettingPatchRequest,
   StrategySettingPatchRequest,
 } from '../models/index';
 import {
-    CommonResponseKotlinCollectionsMapKotlinStringSettingVOFromJSON,
-    CommonResponseKotlinCollectionsMapKotlinStringSettingVOToJSON,
     CommonResponseKotlinUnitFromJSON,
     CommonResponseKotlinUnitToJSON,
+    CommonResponseSettingVOMapFromJSON,
+    CommonResponseSettingVOMapToJSON,
     SiteSettingPatchRequestFromJSON,
     SiteSettingPatchRequestToJSON,
     StrategySettingPatchRequestFromJSON,
@@ -47,7 +47,7 @@ export class SettingApi extends runtime.BaseAPI {
     /**
      * get all settings
      */
-    async apiSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinCollectionsMapKotlinStringSettingVO>> {
+    async apiSettingGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseSettingVOMap>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -67,13 +67,13 @@ export class SettingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinCollectionsMapKotlinStringSettingVOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseSettingVOMapFromJSON(jsonValue));
     }
 
     /**
      * get all settings
      */
-    async apiSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinCollectionsMapKotlinStringSettingVO> {
+    async apiSettingGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseSettingVOMap> {
         const response = await this.apiSettingGetRaw(initOverrides);
         return await response.value();
     }
