@@ -13,8 +13,7 @@ import io.sakurasou.di.InstanceCenter.settingService
 import io.sakurasou.di.InstanceCenter.strategyService
 import io.sakurasou.di.InstanceCenter.userService
 import io.sakurasou.controller.*
-import io.sakurasou.exception.controller.status.SiteNotInitializationException
-import io.sakurasou.extension.isSiteNotInitialized
+import io.sakurasou.plugins.SiteInitCheckPlugin
 
 /**
  * @author ShiinaKin
@@ -25,9 +24,7 @@ fun Route.apiRoute() {
     route("api") {
         siteInitRoute()
         route {
-            intercept(ApplicationCallPipeline.Setup) {
-                if (isSiteNotInitialized()) throw SiteNotInitializationException()
-            }
+            install(SiteInitCheckPlugin)
             authRoute(authService, userService)
             commonRoute(commonService)
             authenticate("auth-jwt") {
