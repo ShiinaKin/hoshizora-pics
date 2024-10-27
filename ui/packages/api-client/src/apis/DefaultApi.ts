@@ -22,14 +22,6 @@ import {
     SiteInitRequestToJSON,
 } from '../models/index';
 
-export interface ApiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGetRequest {
-    imageUniqueId: string;
-}
-
-export interface ApiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGetRequest {
-    id?: string;
-}
-
 export interface ApiSiteInitPostRequest {
     siteInitRequest: SiteInitRequest;
 }
@@ -38,65 +30,6 @@ export interface ApiSiteInitPostRequest {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
-
-    /**
-     */
-    async apiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGetRaw(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['imageUniqueId'] == null) {
-            throw new runtime.RequiredError(
-                'imageUniqueId',
-                'Required parameter "imageUniqueId" was null or undefined when calling apiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@250b5e5b/s/{imageUniqueId}`.replace(`{${"imageUniqueId"}}`, encodeURIComponent(String(requestParameters['imageUniqueId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGet(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiComUcasoftKtorSimpleCacheCacheOutputSelector250b5e5bSImageUniqueIdGetRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * return random image if setting allow
-     */
-    async apiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGetRaw(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['id'] != null) {
-            queryParameters['id'] = requestParameters['id'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@343fddd9/random`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * return random image if setting allow
-     */
-    async apiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGet(requestParameters: ApiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiComUcasoftKtorSimpleCacheCacheOutputSelector343fddd9RandomGetRaw(requestParameters, initOverrides);
-    }
 
     /**
      */
