@@ -1,7 +1,7 @@
 package io.sakurasou.model.common
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.sakurasou.config.InstanceCenter
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.constant.*
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups

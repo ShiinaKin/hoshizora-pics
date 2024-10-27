@@ -3,7 +3,7 @@ package io.sakurasou.extension
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import io.sakurasou.config.InstanceCenter
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.exception.ServiceThrowable

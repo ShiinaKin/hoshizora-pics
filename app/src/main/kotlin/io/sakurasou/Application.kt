@@ -1,7 +1,7 @@
 package io.sakurasou
 
 import io.ktor.server.application.*
-import io.sakurasou.config.InstanceCenter
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.config.configureDatabase
 import io.sakurasou.config.configureJwt
 import io.sakurasou.plugins.*

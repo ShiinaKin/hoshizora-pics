@@ -4,7 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.util.*
-import io.sakurasou.config.InstanceCenter
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.exception.controller.access.PrincipalNotFoundException
 import io.sakurasou.exception.controller.status.UnauthorizedAccessException
 import io.sakurasou.extension.Principal

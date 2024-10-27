@@ -1,4 +1,4 @@
-package io.sakurasou.config
+package io.sakurasou.di
 
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
@@ -65,8 +65,6 @@ object InstanceCenter {
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
     lateinit var roleService: RoleService
-    // lateinit var permissionService: UserService
-    // lateinit var relationService: UserService
 
     lateinit var systemStatus: SystemStatus
     lateinit var rolePermissions: Map<String, Set<String>>

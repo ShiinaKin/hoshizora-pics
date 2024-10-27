@@ -5,11 +5,10 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.sakurasou.config.InstanceCenter.commonService
+import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
