@@ -1,5 +1,6 @@
 package io.sakurasou.controller
 
+import io.github.smiley4.ktorswaggerui.data.ref
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.patch
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
@@ -18,6 +19,7 @@ import io.sakurasou.controller.vo.SettingVO
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.setting.SettingService
+import io.swagger.v3.oas.models.media.Schema
 
 /**
  * @author Shiina Kin
@@ -51,7 +53,20 @@ private fun Route.fetchAllSetting(controller: SettingController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<CommonResponse<Map<String, SettingVO>>> { }
+                    body(Schema<CommonResponse<Map<String, SettingVO>>>().apply {
+                        title = "CommonResponseSettingVOMap"
+                        type = "object"
+                        addProperty("code", Schema<Int>().apply { type = "integer" })
+                        addProperty("message", Schema<String>().apply { type = "string" })
+                        addProperty("data", Schema<Map<String, SettingVO>>().apply {
+                            type = "object"
+                            additionalProperties = Schema<SettingVO>().apply {
+                                type = "object"
+                                ref("#/components/schemas/SettingVO")
+                            }
+                        })
+                        addProperty("isSuccessful", Schema<Boolean>().apply { type = "boolean" })
+                    })
                 }
             }
         }) {
