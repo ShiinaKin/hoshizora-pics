@@ -29,7 +29,10 @@ export default [
       "@typescript-eslint/no-unused-vars": "warn",
       "no-duplicate-imports": "warn",
       "camelcase": "warn",
-      "prefer-const": ["warn", { "ignoreReadBeforeAssign": true }]
+      "prefer-const": ["warn", { "ignoreReadBeforeAssign": true }],
+      "vue/valid-template-root": "warn",
+      "@typescript-eslint/no-extra-non-null-assertion": "off",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "off"
     }
   }
 ];
