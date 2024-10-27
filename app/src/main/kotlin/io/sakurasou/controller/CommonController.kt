@@ -8,8 +8,10 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.controller.request.SiteInitRequest
+import io.sakurasou.controller.vo.CommonResponse
+import io.sakurasou.controller.vo.CommonSiteSetting
+import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
@@ -38,6 +40,22 @@ fun Route.siteInitRoute() {
         val siteInitRequest = call.receive<SiteInitRequest>()
         commonController.handleInit(siteInitRequest)
         call.success()
+    }
+}
+
+fun Route.commonSiteSettingRoute() {
+    val commonController = CommonController(commonService)
+    get("site/setting", {
+        description = "fetch common site setting"
+        response {
+            HttpStatusCode.OK to {
+                description = "CommonSiteSetting"
+                body<CommonResponse<CommonSiteSetting>> { }
+            }
+        }
+    }) {
+        val siteSetting: CommonSiteSetting = commonController.fetchCommonSiteSetting()
+        call.success(siteSetting)
     }
 }
 
@@ -97,6 +115,11 @@ class CommonController(
 ) {
     suspend fun handleInit(siteInitRequest: SiteInitRequest) {
         commonService.initSite(siteInitRequest)
+    }
+
+    suspend fun fetchCommonSiteSetting(): CommonSiteSetting {
+        val siteSetting = commonService.fetchCommonSiteSetting()
+        return siteSetting
     }
 
     suspend fun handleRandomFetchImage(): ImageFileDTO {

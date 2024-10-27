@@ -3,6 +3,7 @@ package io.sakurasou.service.common
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.sakurasou.di.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
+import io.sakurasou.controller.vo.CommonSiteSetting
 import io.sakurasou.exception.controller.access.RandomFetchAllowedException
 import io.sakurasou.exception.controller.status.SiteRepeatedInitializationException
 import io.sakurasou.exception.service.image.ImageAccessDeniedException
@@ -78,6 +79,16 @@ class CommonServiceImpl(
             settingService.updateSystemStatus(systemStatus)
         }
         InstanceCenter.systemStatus = systemStatus
+    }
+
+    override suspend fun fetchCommonSiteSetting(): CommonSiteSetting {
+        val systemStatus = settingService.getSystemStatus()
+        val siteSetting = settingService.getSiteSetting()
+        return CommonSiteSetting(
+            isSiteInit = systemStatus.isInit,
+            siteTitle = siteSetting.siteTitle,
+            siteSubTitle = siteSetting.siteSubtitle
+        )
     }
 
     override suspend fun fetchImage(imageUniqueName: String): ImageFileDTO {

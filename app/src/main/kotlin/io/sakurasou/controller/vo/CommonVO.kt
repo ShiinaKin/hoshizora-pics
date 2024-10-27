@@ -37,3 +37,11 @@ data class CommonResponse<T>(
         }
     }
 }
+
+@Serializable
+@Name("CommonSiteSetting")
+data class CommonSiteSetting(
+    val isSiteInit: Boolean,
+    val siteTitle: String,
+    val siteSubTitle: String,
+)
