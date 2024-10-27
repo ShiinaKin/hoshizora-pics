@@ -68,60 +68,6 @@
         "deprecated" : false
       }
     },
-    "/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@343fddd9/random" : {
-      "get" : {
-        "tags" : [ ],
-        "description" : "return random image if setting allow",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "identify resources",
-          "required" : false,
-          "deprecated" : false,
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "LOCAL: byte array",
-            "headers" : { }
-          },
-          "302" : {
-            "description" : "S3: redirect",
-            "headers" : { }
-          }
-        },
-        "deprecated" : false
-      }
-    },
-    "/api/com.ucasoft.ktor.simpleCache.CacheOutputSelector@250b5e5b/s/{imageUniqueId}" : {
-      "get" : {
-        "tags" : [ ],
-        "parameters" : [ {
-          "name" : "imageUniqueId",
-          "in" : "path",
-          "required" : true,
-          "deprecated" : false,
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "LOCAL: byte array",
-            "headers" : { }
-          },
-          "302" : {
-            "description" : "S3: redirect",
-            "headers" : { }
-          }
-        },
-        "deprecated" : false
-      }
-    },
     "/api/image" : {
       "post" : {
         "tags" : [ "Image" ],

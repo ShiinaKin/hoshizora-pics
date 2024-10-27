@@ -43,6 +43,7 @@ fun Route.siteInitRoute() {
 
 private fun Route.randomFetchImage(commonController: CommonController) {
     get({
+        hidden = true
         description = "return random image if setting allow"
         request {
             queryParameter<String>("id") {
@@ -67,6 +68,7 @@ private fun Route.randomFetchImage(commonController: CommonController) {
 
 private fun Route.anonymousGetImage(commonController: CommonController) {
     get("{imageUniqueId}", {
+        hidden = true
         request {
             pathParameter<String>("imageUniqueId") {
                 required = true
