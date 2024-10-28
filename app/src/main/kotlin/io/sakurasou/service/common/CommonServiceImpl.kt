@@ -84,10 +84,12 @@ class CommonServiceImpl(
     override suspend fun fetchCommonSiteSetting(): CommonSiteSetting {
         val systemStatus = settingService.getSystemStatus()
         val siteSetting = settingService.getSiteSetting()
+        val systemSetting = settingService.getSystemSetting()
         return CommonSiteSetting(
             isSiteInit = systemStatus.isInit,
             siteTitle = siteSetting.siteTitle,
-            siteSubTitle = siteSetting.siteSubtitle
+            siteSubTitle = siteSetting.siteSubtitle,
+            siteAllowSignup = systemSetting.allowSignup,
         )
     }
 

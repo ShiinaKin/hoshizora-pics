@@ -44,4 +44,5 @@ data class CommonSiteSetting(
     val isSiteInit: Boolean,
     val siteTitle: String,
     val siteSubTitle: String,
+    val siteAllowSignup: Boolean,
 )
