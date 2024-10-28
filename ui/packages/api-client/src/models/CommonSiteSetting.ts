@@ -27,6 +27,12 @@ export interface CommonSiteSetting {
     isSiteInit: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof CommonSiteSetting
+     */
+    siteAllowSignup: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof CommonSiteSetting
      */
@@ -44,6 +50,7 @@ export interface CommonSiteSetting {
  */
 export function instanceOfCommonSiteSetting(value: object): value is CommonSiteSetting {
     if (!('isSiteInit' in value) || value['isSiteInit'] === undefined) return false;
+    if (!('siteAllowSignup' in value) || value['siteAllowSignup'] === undefined) return false;
     if (!('siteSubTitle' in value) || value['siteSubTitle'] === undefined) return false;
     if (!('siteTitle' in value) || value['siteTitle'] === undefined) return false;
     return true;
@@ -60,6 +67,7 @@ export function CommonSiteSettingFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'isSiteInit': json['isSiteInit'],
+        'siteAllowSignup': json['siteAllowSignup'],
         'siteSubTitle': json['siteSubTitle'],
         'siteTitle': json['siteTitle'],
     };
@@ -77,6 +85,7 @@ export function CommonSiteSettingFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'isSiteInit': value['isSiteInit'],
+        'siteAllowSignup': value['siteAllowSignup'],
         'siteSubTitle': value['siteSubTitle'],
         'siteTitle': value['siteTitle'],
     };

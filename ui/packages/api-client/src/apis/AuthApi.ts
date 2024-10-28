@@ -15,10 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
+  CommonResponseKotlinUnit,
+  CommonResponseLoginResponse,
   UserInsertRequest,
   UserLoginRequest,
 } from '../models/index';
 import {
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
+    CommonResponseLoginResponseFromJSON,
+    CommonResponseLoginResponseToJSON,
     UserInsertRequestFromJSON,
     UserInsertRequestToJSON,
     UserLoginRequestFromJSON,
@@ -40,7 +46,7 @@ export class AuthApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserLoginPostRaw(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiUserLoginPostRaw(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseLoginResponse>> {
         if (requestParameters['userLoginRequest'] == null) {
             throw new runtime.RequiredError(
                 'userLoginRequest',
@@ -62,18 +68,19 @@ export class AuthApi extends runtime.BaseAPI {
             body: UserLoginRequestToJSON(requestParameters['userLoginRequest']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseLoginResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserLoginPost(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiUserLoginPostRaw(requestParameters, initOverrides);
+    async apiUserLoginPost(requestParameters: ApiUserLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseLoginResponse> {
+        const response = await this.apiUserLoginPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
      */
-    async apiUserSignupPostRaw(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiUserSignupPostRaw(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['userInsertRequest'] == null) {
             throw new runtime.RequiredError(
                 'userInsertRequest',
@@ -95,13 +102,14 @@ export class AuthApi extends runtime.BaseAPI {
             body: UserInsertRequestToJSON(requestParameters['userInsertRequest']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserSignupPost(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiUserSignupPostRaw(requestParameters, initOverrides);
+    async apiUserSignupPost(requestParameters: ApiUserSignupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
+        const response = await this.apiUserSignupPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

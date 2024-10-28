@@ -78,7 +78,26 @@
           },
           "required" : true
         },
-        "responses" : { },
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "code" : { },
+                    "message" : { },
+                    "data" : {
+                      "additionalProperties" : { }
+                    },
+                    "isSuccessful" : { }
+                  },
+                  "title" : "CommonResponseLoginResponse"
+                }
+              }
+            }
+          }
+        },
         "deprecated" : false
       }
     },
@@ -96,7 +115,18 @@
           },
           "required" : true
         },
-        "responses" : { },
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
         "deprecated" : false
       }
     },
@@ -2327,6 +2357,9 @@
           "isSiteInit" : {
             "type" : "boolean"
           },
+          "siteAllowSignup" : {
+            "type" : "boolean"
+          },
           "siteSubTitle" : {
             "type" : "string"
           },
@@ -2334,7 +2367,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "isSiteInit", "siteSubTitle", "siteTitle" ]
+        "required" : [ "isSiteInit", "siteAllowSignup", "siteSubTitle", "siteTitle" ]
       },
       "CommonResponse_CommonSiteSetting" : {
         "type" : "object",

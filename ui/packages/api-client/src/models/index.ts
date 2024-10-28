@@ -14,6 +14,7 @@ export * from './CommonResponseImageVO';
 export * from './CommonResponseKotlinCollectionsListRoleVO';
 export * from './CommonResponseKotlinString';
 export * from './CommonResponseKotlinUnit';
+export * from './CommonResponseLoginResponse';
 export * from './CommonResponsePageResultAlbumPageVO';
 export * from './CommonResponsePageResultGroupPageVO';
 export * from './CommonResponsePageResultImagePageVO';
