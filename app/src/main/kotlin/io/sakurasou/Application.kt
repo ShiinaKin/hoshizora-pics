@@ -42,7 +42,10 @@ fun Application.mainModule() {
             allowMethod(HttpMethod.Delete)
             allowMethod(HttpMethod.Patch)
             allowMethod(HttpMethod.Post)
+            allowHeader(HttpHeaders.AccessControlAllowOrigin)
+            allowHeader(HttpHeaders.ContentType)
             allowHeader(HttpHeaders.Authorization)
+            allowCredentials = true
             anyHost()
         }
         swaggerModule()
