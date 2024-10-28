@@ -539,13 +539,16 @@ class UserServiceTest {
             isBanned = false,
             createTime = now,
             imageCount = imageCountAndTotalSizeDTO.count,
-            totalImageSize = imageCountAndTotalSizeDTO.totalSize,
+            albumCount = 1,
+            totalImageSize = imageCountAndTotalSizeDTO.totalSize / 1024 / 1024.0,
+            allSize = group.config.groupStrategyConfig.maxSize / 1024 / 1024.0
         )
 
         coEvery { DatabaseSingleton.dbQuery<UserVO>(any()) } coAnswers {
             this.arg<suspend () -> UserVO>(0).invoke()
         }
         every { userDao.findUserById(userId) } returns user
+        every { albumDao.countAlbumByUserId(userId) } returns 1L
         every { groupDao.findGroupById(user.groupId) } returns group
         every { imageDao.getImageCountAndTotalSizeOfUser(userId) } returns imageCountAndTotalSizeDTO
 
