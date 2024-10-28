@@ -16,11 +16,14 @@
 import * as runtime from '../runtime';
 import type {
   CommonResponseCommonSiteSetting,
+  CommonResponseKotlinUnit,
   SiteInitRequest,
 } from '../models/index';
 import {
     CommonResponseCommonSiteSettingFromJSON,
     CommonResponseCommonSiteSettingToJSON,
+    CommonResponseKotlinUnitFromJSON,
+    CommonResponseKotlinUnitToJSON,
     SiteInitRequestFromJSON,
     SiteInitRequestToJSON,
 } from '../models/index';
@@ -36,7 +39,7 @@ export class CommonApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSiteInitPostRaw(requestParameters: ApiSiteInitPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiSiteInitPostRaw(requestParameters: ApiSiteInitPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseKotlinUnit>> {
         if (requestParameters['siteInitRequest'] == null) {
             throw new runtime.RequiredError(
                 'siteInitRequest',
@@ -58,13 +61,14 @@ export class CommonApi extends runtime.BaseAPI {
             body: SiteInitRequestToJSON(requestParameters['siteInitRequest']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseKotlinUnitFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiSiteInitPost(requestParameters: ApiSiteInitPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiSiteInitPostRaw(requestParameters, initOverrides);
+    async apiSiteInitPost(requestParameters: ApiSiteInitPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
+        const response = await this.apiSiteInitPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

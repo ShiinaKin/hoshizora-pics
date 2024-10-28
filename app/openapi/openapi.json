@@ -28,7 +28,18 @@
           },
           "required" : true
         },
-        "responses" : { },
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
         "deprecated" : false
       }
     },
@@ -2291,6 +2302,25 @@
         },
         "required" : [ "email", "password", "siteDescription", "siteExternalUrl", "siteSubtitle", "siteTitle", "username" ]
       },
+      "CommonResponse_kotlin.Unit" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : "null"
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
       "CommonSiteSetting" : {
         "type" : "object",
         "properties" : {
@@ -2365,25 +2395,6 @@
           },
           "data" : {
             "type" : [ "null", "string" ]
-          },
-          "isSuccessful" : {
-            "type" : "boolean"
-          },
-          "message" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "code", "isSuccessful", "message" ]
-      },
-      "CommonResponse_kotlin.Unit" : {
-        "type" : "object",
-        "properties" : {
-          "code" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "data" : {
-            "type" : "null"
           },
           "isSuccessful" : {
             "type" : "boolean"
