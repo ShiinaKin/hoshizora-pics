@@ -1,12 +1,22 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const useCounterStore = defineStore("counter", () => {
-  const count = ref(0);
-  const doubleCount = computed(() => count.value * 2);
-  function increment() {
-    count.value++;
-  }
+export const useCommonStore = defineStore("common", () => {
+  const title = ref("HoshizoraPics");
+  const setTitle = (newTitle: string) => {
+    title.value = newTitle;
+  };
 
-  return { count, doubleCount, increment };
+  const subTitle = ref("A simple pic management");
+  const setSubTitle = (newTitle: string) => {
+    subTitle.value = newTitle;
+  };
+
+  const allowSignup = ref(false);
+  const setAllowSignup = (newAllowSignup: boolean) => {
+    allowSignup.value = newAllowSignup;
+  };
+
+  return { title, setTitle, subTitle, setSubTitle, allowSignup, setAllowSignup };
+});
 });
