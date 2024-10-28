@@ -15,7 +15,7 @@ dependencies {
 
 frontend {
     nodeVersion.set("20.18.0")
-    assembleScript.set("run build")
+    assembleScript.set("pnpm run build-packages && pnpm run build")
     checkScript.set("run lint")
     verboseModeEnabled.set(true)
 }
