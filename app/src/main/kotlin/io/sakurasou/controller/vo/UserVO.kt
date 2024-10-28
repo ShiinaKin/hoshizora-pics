@@ -19,7 +19,9 @@ data class UserVO(
     val isBanned: Boolean,
     val createTime: LocalDateTime,
     val imageCount: Long,
-    val totalImageSize: Long
+    val albumCount: Long,
+    val totalImageSize: Double,
+    val allSize: Double
 )
 
 @Serializable
@@ -31,5 +33,5 @@ data class UserPageVO(
     val isBanned: Boolean,
     val createTime: LocalDateTime,
     val imageCount: Long,
-    val totalImageSize: Long
+    val totalImageSize: Double
 )

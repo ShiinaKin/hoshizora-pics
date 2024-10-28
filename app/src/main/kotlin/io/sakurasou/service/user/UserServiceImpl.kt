@@ -203,6 +203,7 @@ class UserServiceImpl(
         return dbQuery {
             val user = userDao.findUserById(id) ?: throw UserNotFoundException()
             val group = groupDao.findGroupById(user.groupId)!!
+            val albumCount = albumDao.countAlbumByUserId(id)
             val (count, totalSize) = imageDao.getImageCountAndTotalSizeOfUser(id)
             UserVO(
                 id = user.id,
@@ -213,7 +214,9 @@ class UserServiceImpl(
                 isBanned = user.isBanned,
                 createTime = user.createTime,
                 imageCount = count,
-                totalImageSize = totalSize
+                albumCount = albumCount,
+                totalImageSize = totalSize / 1024 / 1024.0,
+                allSize = group.config.groupStrategyConfig.maxSize / 1024 / 1024.0,
             )
         }
     }
