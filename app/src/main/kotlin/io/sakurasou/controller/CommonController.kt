@@ -38,6 +38,11 @@ fun Route.siteInitRoute() {
                 required = true
             }
         }
+        response {
+            HttpStatusCode.OK to {
+                body<CommonResponse<Unit>> { }
+            }
+        }
     }) {
         val siteInitRequest = call.receive<SiteInitRequest>()
         commonController.handleInit(siteInitRequest)
