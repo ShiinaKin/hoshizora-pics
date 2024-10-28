@@ -1,3 +1,7 @@
+/* eslint-disable camelcase */
+
+import "@/assets/base.css";
+
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { createI18n } from "vue-i18n";
@@ -5,8 +9,16 @@ import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import router from "./router";
 
+import zh_cn from "./locales/zh_cn.yaml";
+import en_us from "./locales/en_us.yaml";
+
 const i18n = createI18n({
-  // something vue-i18n options here ...
+  locale: "zh_cn",
+  fallbackLocale: "en_us",
+  messages: {
+    zh_cn,
+    en_us
+  }
 });
 
 const app = createApp(App);
