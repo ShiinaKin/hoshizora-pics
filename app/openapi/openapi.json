@@ -3255,6 +3255,14 @@
       "UserVO" : {
         "type" : "object",
         "properties" : {
+          "albumCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "allSize" : {
+            "type" : "number",
+            "format" : "double"
+          },
           "createTime" : {
             "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
           },
@@ -3279,14 +3287,14 @@
             "type" : "boolean"
           },
           "totalImageSize" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "number",
+            "format" : "double"
           },
           "username" : {
             "type" : "string"
           }
         },
-        "required" : [ "createTime", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
+        "required" : [ "albumCount", "allSize", "createTime", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
       },
       "CommonResponse_UserVO" : {
         "type" : "object",
@@ -3404,8 +3412,8 @@
             "type" : "boolean"
           },
           "totalImageSize" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "number",
+            "format" : "double"
           },
           "username" : {
             "type" : "string"

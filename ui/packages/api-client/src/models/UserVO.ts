@@ -29,6 +29,18 @@ import {
 export interface UserVO {
     /**
      * 
+     * @type {number}
+     * @memberof UserVO
+     */
+    albumCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserVO
+     */
+    allSize: number;
+    /**
+     * 
      * @type {KotlinxDatetimeLocalDateTime}
      * @memberof UserVO
      */
@@ -87,6 +99,8 @@ export interface UserVO {
  * Check if a given object implements the UserVO interface.
  */
 export function instanceOfUserVO(value: object): value is UserVO {
+    if (!('albumCount' in value) || value['albumCount'] === undefined) return false;
+    if (!('allSize' in value) || value['allSize'] === undefined) return false;
     if (!('createTime' in value) || value['createTime'] === undefined) return false;
     if (!('groupName' in value) || value['groupName'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
@@ -108,6 +122,8 @@ export function UserVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): Us
     }
     return {
         
+        'albumCount': json['albumCount'],
+        'allSize': json['allSize'],
         'createTime': KotlinxDatetimeLocalDateTimeFromJSON(json['createTime']),
         'email': json['email'] == null ? undefined : json['email'],
         'groupName': json['groupName'],
@@ -131,6 +147,8 @@ export function UserVOFromJSONTyped(json: any, ignoreDiscriminator: boolean): Us
 
     return {
         
+        'albumCount': value['albumCount'],
+        'allSize': value['allSize'],
         'createTime': KotlinxDatetimeLocalDateTimeToJSON(value['createTime']),
         'email': value['email'],
         'groupName': value['groupName'],
