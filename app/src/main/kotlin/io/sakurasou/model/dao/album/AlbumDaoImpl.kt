@@ -69,6 +69,13 @@ class AlbumDaoImpl : AlbumDao {
             .firstOrNull() ?: throw MissingUserDefaultAlbumException(userId)
     }
 
+    override fun countAlbumByUserId(id: Long): Long {
+        return Albums.select(Albums.id.count())
+            .where { Albums.userId eq id }
+            .map { it[Albums.id.count()] }
+            .first()
+    }
+
     override fun listAlbumByUserId(userId: Long): List<Album> {
         return Albums.selectAll()
             .where { Albums.userId eq userId }

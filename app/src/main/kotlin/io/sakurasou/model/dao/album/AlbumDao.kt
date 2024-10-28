@@ -19,6 +19,7 @@ interface AlbumDao: PaginationDao {
     fun updateAlbumById(updateDTO: AlbumUpdateDTO): Int
     fun findAlbumById(albumId: Long): Album?
     fun findDefaultAlbumByUserId(userId: Long): Album
+    fun countAlbumByUserId(id: Long): Long
     fun listAlbumByUserId(userId: Long): List<Album>
     fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO>
 }
