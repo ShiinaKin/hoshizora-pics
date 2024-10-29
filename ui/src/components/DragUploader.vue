@@ -42,11 +42,7 @@ const onFileSelected = (event: Event) => {
 };
 
 const handleFiles = (files: FileList) => {
-  const fileArray = Array.from(files).map((file) => ({
-    name: file.name,
-    size: file.size,
-    type: file.type
-  }));
+  const fileArray = Array.from(files);
   emit("filesAdded", fileArray);
 };
 </script>
