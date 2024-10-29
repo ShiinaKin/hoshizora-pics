@@ -12,10 +12,8 @@ import io.sakurasou.constant.GROUP_WRITE
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
 import io.sakurasou.controller.request.PageRequest
-import io.sakurasou.controller.vo.CommonResponse
-import io.sakurasou.controller.vo.GroupPageVO
-import io.sakurasou.controller.vo.GroupVO
-import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.controller.vo.*
+import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
 import io.sakurasou.extension.success
@@ -52,6 +50,7 @@ fun Route.groupRoute(groupService: GroupService) {
             groupFetch(controller)
         }
         groupPage(controller)
+        groupFetchGroupAllowedImageType(controller)
     }
 }
 
@@ -176,6 +175,26 @@ private fun Route.groupPage(controller: GroupController) {
     }
 }
 
+private fun Route.groupFetchGroupAllowedImageType(controller: GroupController) {
+    route {
+        install(AuthorizationPlugin) {
+            permission = GROUP_READ_SINGLE
+        }
+        get("type", {
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<GroupAllowedImageType>> { }
+                }
+            }
+        }) {
+            val groupId = call.getPrincipal().groupId
+            val groupVO = controller.handleFetchGroupAllowedImageType(groupId)
+            call.success(groupVO)
+        }
+    }
+}
+
 class GroupController(
     private val groupService: GroupService
 ) {
@@ -193,6 +212,13 @@ class GroupController(
 
     suspend fun handleFetchGroup(id: Long): GroupVO {
         return groupService.fetchGroup(id)
+    }
+
+    suspend fun handleFetchGroupAllowedImageType(id: Long): GroupAllowedImageType {
+        val groupVO = groupService.fetchGroup(id)
+        return GroupAllowedImageType(
+            allowedImageTypes = groupVO.groupConfig.groupStrategyConfig.allowedImageTypes.map { it.name }.toSet()
+        )
     }
 
     suspend fun handlePageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {

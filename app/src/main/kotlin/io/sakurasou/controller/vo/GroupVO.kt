@@ -28,3 +28,9 @@ data class GroupPageVO(
     val totalImageCount: Long,
     val totalImageSize: Double
 )
+
+@Serializable
+@Name("GroupAllowedImageType")
+data class GroupAllowedImageType(
+    val allowedImageTypes: Set<String>
+)
