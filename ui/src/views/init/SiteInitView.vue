@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { Icon } from "@iconify/vue";
 import { CommonApi, type SiteInitRequest } from "api-client";
+import { Icon } from "@iconify/vue";
+import ErrorMessage from "@/components/ErrorMessage.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -20,7 +21,7 @@ const siteInitForm = ref<SiteInitRequest>({
   email: ""
 });
 
-const showErrorAlert = ref(false);
+const errorAlertRef = ref();
 const errorMessage = ref("");
 
 function handleSubmit() {
@@ -35,10 +36,7 @@ function handleSubmit() {
     .catch((error) => {
       console.error(error);
       errorMessage.value = error.message || "An error occurred";
-      showErrorAlert.value = true;
-      setTimeout(() => {
-        showErrorAlert.value = false;
-      }, 5000);
+      errorAlertRef.value.showError();
     });
 }
 </script>
@@ -208,28 +206,8 @@ function handleSubmit() {
         </button>
       </div>
     </form>
-  </div>
 
-  <div
-    v-if="showErrorAlert"
-    role="alert"
-    class="fixed top-4 right-4 z-50 rounded border-s-4 border-red-500 bg-red-50 p-4"
-  >
-    <div class="flex items-center gap-2 text-red-800">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-        <path
-          fill-rule="evenodd"
-          d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
-
-      <strong class="block font-medium"> Something went wrong </strong>
-    </div>
-
-    <p class="mt-2 text-sm text-red-700">
-      {{ errorMessage }}
-    </p>
+    <ErrorMessage ref="errorAlertRef" :error-message="errorMessage" />
   </div>
 </template>
 
