@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CommonResponseGroupAllowedImageType,
   CommonResponseGroupVO,
   CommonResponseKotlinUnit,
   CommonResponsePageResultGroupPageVO,
@@ -22,6 +23,8 @@ import type {
   GroupPatchRequest,
 } from '../models/index';
 import {
+    CommonResponseGroupAllowedImageTypeFromJSON,
+    CommonResponseGroupAllowedImageTypeToJSON,
     CommonResponseGroupVOFromJSON,
     CommonResponseGroupVOToJSON,
     CommonResponseKotlinUnitFromJSON,
@@ -291,6 +294,38 @@ export class GroupApi extends runtime.BaseAPI {
      */
     async apiGroupPost(requestParameters: ApiGroupPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseKotlinUnit> {
         const response = await this.apiGroupPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiGroupTypeGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonResponseGroupAllowedImageType>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("JWT", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/group/type`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CommonResponseGroupAllowedImageTypeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiGroupTypeGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonResponseGroupAllowedImageType> {
+        const response = await this.apiGroupTypeGetRaw(initOverrides);
         return await response.value();
     }
 

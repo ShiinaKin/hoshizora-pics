@@ -2256,6 +2256,29 @@
         } ]
       }
     },
+    "/api/group/type" : {
+      "get" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_GroupAllowedImageType"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
     "/api/role/all" : {
       "get" : {
         "tags" : [ "Role" ],
@@ -3674,6 +3697,42 @@
               "type" : "null"
             }, {
               "$ref" : "#/components/schemas/PageResult_GroupPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "GroupAllowedImageType" : {
+        "type" : "object",
+        "properties" : {
+          "allowedImageTypes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          }
+        },
+        "required" : [ "allowedImageTypes" ]
+      },
+      "CommonResponse_GroupAllowedImageType" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/GroupAllowedImageType"
             } ]
           },
           "isSuccessful" : {
