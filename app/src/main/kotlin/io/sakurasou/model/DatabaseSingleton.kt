@@ -21,7 +21,7 @@ object DatabaseSingleton {
             this.password = password
             maximumPoolSize = 5
             isReadOnly = false
-            transactionIsolation = "TRANSACTION_SERIALIZABLE"
+            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         }
         val dataSource = HikariDataSource(hikariConfig)
 
