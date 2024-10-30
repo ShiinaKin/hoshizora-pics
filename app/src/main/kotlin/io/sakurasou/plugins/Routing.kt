@@ -9,6 +9,8 @@ import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import io.sakurasou.config.apiRoute
 import io.sakurasou.config.exceptionHandler
+import io.sakurasou.controller.commonRoute
+import io.sakurasou.di.InstanceCenter.commonService
 
 fun Application.configureRouting() {
     install(Resources)
@@ -16,6 +18,10 @@ fun Application.configureRouting() {
     install(AutoHeadResponse)
     routing {
         apiRoute()
+        route {
+            install(SiteInitCheckPlugin)
+            commonRoute(commonService)
+        }
         route({ hidden = true }) {
             staticResources("", "static")
         }

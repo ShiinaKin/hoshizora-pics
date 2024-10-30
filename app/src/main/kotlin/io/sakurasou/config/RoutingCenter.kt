@@ -29,7 +29,6 @@ fun Route.apiRoute() {
         route {
             install(SiteInitCheckPlugin)
             authRoute(authService, userService)
-            commonRoute(commonService)
             authenticate("auth-jwt") {
                 imageRoute(imageService)
                 albumRoute(albumService)
