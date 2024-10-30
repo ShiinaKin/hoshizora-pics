@@ -30,6 +30,9 @@ import io.sakurasou.model.strategy.S3Strategy
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.util.ImageUtils
 import io.sakurasou.util.PlaceholderUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -140,7 +143,10 @@ class ImageServiceImpl(
 
                 imageDao.saveImage(imageInsertDTO)
 
-                ImageUtils.createAndUploadThumbnail(strategy, subFolder, storageFileName, image)
+                // TODO use a mq to do this
+                CoroutineScope(Dispatchers.IO).launch {
+                    ImageUtils.createAndUploadThumbnail(strategy, subFolder, storageFileName, image)
+                }
 
                 if (user.isDefaultImagePrivate) ""
                 else when (strategy.config) {
