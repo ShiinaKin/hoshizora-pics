@@ -40,3 +40,8 @@ message:
 #  dragUploader
   dragUploaderUsageTip: "点击或拖拽文件到此处上传"
   dragUploaderAllowedFileTypeTip: "支持的文件类型："
+#  imageUploadView
+  imageUploadTitle: "上传图片"
+  imageUploadDescription: "在下方选择图片文件，然后在上传列表进行操作"
+  imageUploadUploadList: "上传列表"
+  imageUploadUploadAllButton: "上传全部"
