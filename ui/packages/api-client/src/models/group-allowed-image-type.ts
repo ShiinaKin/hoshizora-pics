@@ -13,6 +13,18 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface GroupAllowedImageType
+ */
+export interface GroupAllowedImageType {
+    /**
+     * 
+     * @type {Set<string>}
+     * @memberof GroupAllowedImageType
+     */
+    'allowedImageTypes': Set<string>;
+}
+

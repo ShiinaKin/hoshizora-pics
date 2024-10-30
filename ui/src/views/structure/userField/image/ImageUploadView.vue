@@ -13,7 +13,13 @@ const token = localStorage.getItem("token");
 const errorAlertRef = ref();
 const errorMessage = ref("");
 
-const configuration = new Configuration({ headers: { Authorization: `Bearer ${token}` } });
+const configuration = new Configuration({
+  baseOptions: {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+});
 const imageApi = new ImageApi(configuration);
 const groupApi = new GroupApi(configuration);
 
@@ -21,9 +27,10 @@ const allowedImageTypes = ref<Set<string>>(new Set<string>());
 
 groupApi
   .apiGroupTypeGet()
-  .then((resp) => {
+  .then((response) => {
+    const resp = response.data;
     if (resp.isSuccessful) {
-      allowedImageTypes.value = resp.data!!.allowedImageTypes;
+      allowedImageTypes.value = new Set(resp.data!!.allowedImageTypes);
     }
   })
   .catch((error) => {
@@ -57,8 +64,9 @@ function handleSingleFileUpload(uploadFile: UploadFile) {
   const formData = new FormData();
   formData.append("image", uploadFile.file, uploadFile.file.name);
   imageApi
-    .apiImagePost({ body: formData })
-    .then((resp) => {
+    .apiImagePost({ data: formData })
+    .then((response) => {
+      const resp = response.data;
       if (resp.isSuccessful) {
         uploadFile.status = "success";
         if (resp.data !== "") uploadFile.externalUrl = resp.data as string;
@@ -157,7 +165,10 @@ function handleCopy(url: string) {
     <div v-if="fileList.length > 0" class="w-2/3 bg-white p-4 rounded-xl flex-2 flex-grow">
       <div class="flex">
         <h2>{{ t("message.imageUploadUploadList") }}</h2>
-        <button @click="handleAllFileUpload" class="ml-auto py-1 px-2 flex items-center gap-1 border rounded-xl hover:text-sky-700">
+        <button
+          @click="handleAllFileUpload"
+          class="ml-auto py-1 px-2 flex items-center gap-1 border rounded-xl hover:text-sky-700"
+        >
           <span class="text-sm">{{ t("message.imageUploadUploadAllButton") }}</span>
           <Icon icon="mdi:upload-multiple" class="size-5" />
         </button>

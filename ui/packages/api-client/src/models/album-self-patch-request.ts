@@ -13,6 +13,24 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface AlbumSelfPatchRequest
+ */
+export interface AlbumSelfPatchRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof AlbumSelfPatchRequest
+     */
+    'description'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlbumSelfPatchRequest
+     */
+    'name'?: string | null;
+}
+

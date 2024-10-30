@@ -129,6 +129,9 @@ importers:
       '@openapitools/openapi-generator-cli':
         specifier: ^2.14.1
         version: 2.14.1
+      axios:
+        specifier: ^1.7.7
+        version: 1.7.7
       unbuild:
         specifier: 3.0.0-rc.11
         version: 3.0.0-rc.11(typescript@5.6.3)(vue-tsc@2.1.6(typescript@5.6.3))

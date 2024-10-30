@@ -13,6 +13,24 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface PermissionVO
+ */
+export interface PermissionVO {
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionVO
+     */
+    'description'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionVO
+     */
+    'name': string;
+}
+

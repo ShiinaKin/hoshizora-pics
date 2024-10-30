@@ -13,6 +13,24 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface AlbumSelfInsertRequest
+ */
+export interface AlbumSelfInsertRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof AlbumSelfInsertRequest
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlbumSelfInsertRequest
+     */
+    'name': string;
+}
+

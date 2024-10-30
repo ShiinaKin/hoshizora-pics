@@ -13,6 +13,18 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface StrategySettingPatchRequest
+ */
+export interface StrategySettingPatchRequest {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof StrategySettingPatchRequest
+     */
+    'allowedImageTypes': Array<string>;
+}
+

@@ -13,6 +13,26 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const ImageTypeEnum = {
+    Jpeg: 'JPEG',
+    Jpg: 'JPG',
+    Png: 'PNG',
+    Gif: 'GIF',
+    Tif: 'TIF',
+    Bmp: 'BMP',
+    Ico: 'ICO',
+    Psd: 'PSD',
+    Webp: 'WEBP'
+} as const;
+
+export type ImageTypeEnum = typeof ImageTypeEnum[keyof typeof ImageTypeEnum];
+
+
+

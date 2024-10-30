@@ -13,6 +13,18 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface KotlinByteArray
+ */
+export interface KotlinByteArray {
+    /**
+     * 
+     * @type {number}
+     * @memberof KotlinByteArray
+     */
+    'size': number;
+}
+

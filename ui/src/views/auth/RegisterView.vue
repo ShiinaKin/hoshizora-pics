@@ -26,7 +26,8 @@ function handleSubmit() {
   const userRegisterRequest = userRegisterForm.value;
   authApi
     .apiUserSignupPost({ userInsertRequest: userRegisterRequest })
-    .then((resp) => {
+    .then((response) => {
+      const resp = response.data;
       if (resp.isSuccessful) {
         router.push({ name: "login" });
       } else {

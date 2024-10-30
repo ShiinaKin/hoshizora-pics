@@ -28,9 +28,10 @@ function handleSubmit() {
   const siteInitRequest = siteInitForm.value;
   commonApi
     .apiSiteInitPost({ siteInitRequest })
-    .then((resp) => {
+    .then((response) => {
+      const resp = response.data;
       if (resp.isSuccessful) {
-        router.push("/");
+        router.push({ name: "login" });
       }
     })
     .catch((error) => {

@@ -13,6 +13,24 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface UserLoginRequest
+ */
+export interface UserLoginRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserLoginRequest
+     */
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserLoginRequest
+     */
+    'username': string;
+}
+

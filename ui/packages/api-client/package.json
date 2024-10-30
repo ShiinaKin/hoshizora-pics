@@ -6,7 +6,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
-    "generate": "openapi-generator-cli generate -i ../../../app/openapi/openapi.json -g typescript-fetch -c ./.openapi_config.yaml -o ./src --skip-validate-spec"
+    "generate": "openapi-generator-cli generate -i ../../../app/openapi/openapi.json -g typescript-axios -c ./.openapi_config.yaml -o ./src --skip-validate-spec"
   },
   "keywords": [],
   "exports": {
@@ -32,6 +32,7 @@
   ],
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.14.1",
-    "unbuild": "3.0.0-rc.11"
+    "unbuild": "3.0.0-rc.11",
+    "axios": "^1.7.7"
   }
 }

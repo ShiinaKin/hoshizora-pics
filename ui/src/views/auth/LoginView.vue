@@ -23,10 +23,10 @@ const errorMessage = ref("");
 
 function handleSubmit() {
   const userLoginRequest = userLoginForm.value;
-  console.log(userLoginRequest);
   authApi
     .apiUserLoginPost({ userLoginRequest })
-    .then((resp) => {
+    .then((response) => {
+      const resp = response.data;
       if (resp.isSuccessful) {
         const token = resp.data!!.token;
         localStorage.setItem("token", token!!);

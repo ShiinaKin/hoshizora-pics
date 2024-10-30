@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const StrategyTypeEnum = {
+    Local: 'LOCAL',
+    S3: 'S3'
+} as const;
+
+export type StrategyTypeEnum = typeof StrategyTypeEnum[keyof typeof StrategyTypeEnum];
+
+
+
