@@ -22,6 +22,7 @@ const router = createRouter({
           name: "register",
           component: () => import("@/views/auth/RegisterView.vue")
         }
+      ]
     },
     {
       path: "/:pathMatch(.*)",
@@ -33,5 +34,19 @@ const router = createRouter({
 
 export default router;
 
+import axios from "axios";
 
+axios.interceptors.response.use(
+  (response) => {
+    const resp = response.data;
+    if (resp?.code === "401") router.push({ name: "login" });
+    return response;
+  },
+  (error) => {
+    if (error.status === 401) {
+      router.push({ name: "login" });
+    } else {
+      Promise.reject(error);
+    }
   }
+);
