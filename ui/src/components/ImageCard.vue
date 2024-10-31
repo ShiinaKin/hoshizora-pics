@@ -23,16 +23,18 @@ const handleSelect = () => {
 
 <template>
   <div
-    class="relative h-72 bg-cover bg-center group cursor-pointer rounded-md hover:ring-2 ring-blue-500"
+    class="relative h-72 bg-cover bg-center group cursor-pointer rounded-2xl hover:ring-2 ring-blue-500"
     :class="isSelected ? 'ring-2' : ''"
     @click="handleSelect"
   >
-    <img :src="imageSrc" :alt="imageName" :key="imageSrc" class="object-contain rounded-md h-72" />
+    <img :src="imageSrc" :alt="imageName" :key="imageSrc" class="object-contain rounded-2xl h-72" />
 
-    <div class="absolute bottom-2 flex items-center justify-evenly w-full gap-2">
+    <div class="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black via-black to-transparent opacity-30 rounded-b-2xl"></div>
+
+    <div class="absolute left-2 bottom-2 flex items-center justify-start w-full gap-2">
       <img :src="authorAvatarUrl" alt="Author Avatar" class="size-8 rounded-full" />
 
-      <div class="text-left text-gray-600">
+      <div class="text-left text-gray-100">
         <p class="text-sm">{{ imageName }}</p>
         <p class="text-xs">{{ uploadTime }}</p>
       </div>
