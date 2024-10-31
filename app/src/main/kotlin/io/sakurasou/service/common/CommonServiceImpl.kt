@@ -63,7 +63,6 @@ class CommonServiceImpl(
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
             siteDescription = siteInitRequest.siteDescription,
-            siteKeyword = oldSiteSetting.siteKeyword,
             homePageRandomPicDisplay = oldSiteSetting.homePageRandomPicDisplay
         )
 

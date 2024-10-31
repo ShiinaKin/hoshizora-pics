@@ -13,7 +13,6 @@ data class SiteSetting(
     val siteExternalUrl: String,
     val siteTitle: String,
     val siteSubtitle: String,
-    val siteKeyword: String,
     val siteDescription: String,
     val homePageRandomPicDisplay: Boolean
 ) : SettingConfig()

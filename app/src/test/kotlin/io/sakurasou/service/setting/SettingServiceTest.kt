@@ -70,7 +70,6 @@ class SettingServiceTest {
             siteTitle = "Title",
             siteSubtitle = "Subtitle",
             siteDescription = "Description",
-            siteKeyword = "Keyword",
             homePageRandomPicDisplay = false
         )
 
@@ -85,7 +84,6 @@ class SettingServiceTest {
                         siteTitle = "Title",
                         siteSubtitle = "Subtitle",
                         siteDescription = "Description",
-                        siteKeyword = "Keyword",
                         homePageRandomPicDisplay = false
                     ),
                     createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),

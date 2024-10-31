@@ -84,7 +84,6 @@ class SettingServiceImpl(
                 siteTitle = siteSettingPatch.siteTitle ?: oldSiteSetting.siteTitle,
                 siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
                 siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription,
-                siteKeyword = siteSettingPatch.siteKeyword ?: oldSiteSetting.siteKeyword,
                 homePageRandomPicDisplay = siteSettingPatch.homePageRandomPicDisplay
                     ?: oldSiteSetting.homePageRandomPicDisplay
             )

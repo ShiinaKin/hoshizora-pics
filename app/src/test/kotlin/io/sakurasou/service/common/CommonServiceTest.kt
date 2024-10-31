@@ -96,7 +96,6 @@ class CommonServiceTest {
             siteExternalUrl = "http://localhost:8080",
             siteTitle = "oldTitle",
             siteSubtitle = "oldSubtitle",
-            siteKeyword = "oldDescription",
             siteDescription = "oldKeyword",
             homePageRandomPicDisplay = true
         )
@@ -105,7 +104,6 @@ class CommonServiceTest {
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
             siteDescription = siteInitRequest.siteDescription,
-            siteKeyword = oldSiteSetting.siteKeyword,
             homePageRandomPicDisplay = oldSiteSetting.homePageRandomPicDisplay
         )
         val systemStatus = SystemStatus(isInit = true)

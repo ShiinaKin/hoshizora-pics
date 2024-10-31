@@ -218,7 +218,6 @@ private fun initSetting() {
         siteExternalUrl = "http://localhost:8080",
         siteTitle = "HoshizoraPics",
         siteSubtitle = "A simple pic management",
-        siteKeyword = "pic, management",
         siteDescription = "A simple pic management",
         homePageRandomPicDisplay = false
     )
