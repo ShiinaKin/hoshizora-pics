@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.logging.*
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.album.AlbumDaoImpl
@@ -78,6 +79,7 @@ object InstanceCenter {
     fun initClient(timeout: Long = 30000, proxyAddress: String) {
         client = HttpClient(CIO) {
             install(HttpTimeout) { requestTimeoutMillis = timeout }
+            install(Logging)
             if (proxyAddress != "disabled")
                 engine { proxy = ProxyBuilder.http(proxyAddress) }
         }

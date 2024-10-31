@@ -71,6 +71,7 @@ dependencies {
 
     implementation("io.ktor:ktor-client-core")
     implementation("io.ktor:ktor-client-cio")
+    implementation("io.ktor:ktor-client-logging")
 
     implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
     implementation("io.github.smiley4:schema-kenerator-core:$schemaKeneratorVersion")
