@@ -149,10 +149,7 @@ class ImageServiceImpl(
                 }
 
                 if (user.isDefaultImagePrivate) ""
-                else when (strategy.config) {
-                    is LocalStrategy -> "${siteSetting.siteExternalUrl}/s/$uniqueName"
-                    is S3Strategy -> "${strategy.config.publicUrl}/$relativePath"
-                }
+                else "${siteSetting.siteExternalUrl}/s/$uniqueName"
             }
         }.onFailure {
             if (it is ServiceThrowable) throw ImageInsertFailedException(it)
