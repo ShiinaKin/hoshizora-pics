@@ -12,12 +12,18 @@ export const useCommonStore = defineStore("common", () => {
     subTitle.value = newTitle;
   };
 
+  const siteDescription = ref("A site for managing pictures");
+
+  const setSiteDescription = (newSiteDescription: string) => {
+    siteDescription.value = newSiteDescription;
+  };
+
   const allowSignup = ref(false);
   const setAllowSignup = (newAllowSignup: boolean) => {
     allowSignup.value = newAllowSignup;
   };
 
-  return { title, setTitle, subTitle, setSubTitle, allowSignup, setAllowSignup };
+  return { title, setTitle, subTitle, setSubTitle, allowSignup, setAllowSignup, siteDescription, setSiteDescription };
 });
 
 export const useUserFieldStore = defineStore("userField", () => {

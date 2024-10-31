@@ -31,7 +31,8 @@ onMounted(() => {
 
         if (!commonSiteSetting.isSiteInit!!) router.push({ name: "siteInit" });
         if (!token) router.push({ name: "login" });
-        if (route.name === "siteInit") router.push({ name: "overview" });
+        const arr = ["home", "login", "register", "siteInit"];
+        if (arr.includes(route.name as string)) router.push({ name: "overview" });
       }
     })
     .catch((error) => {
