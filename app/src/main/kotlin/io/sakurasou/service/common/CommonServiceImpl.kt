@@ -88,6 +88,7 @@ class CommonServiceImpl(
             isSiteInit = systemStatus.isInit,
             siteTitle = siteSetting.siteTitle,
             siteSubTitle = siteSetting.siteSubtitle,
+            siteDescription = siteSetting.siteDescription,
             siteAllowSignup = systemSetting.allowSignup,
         )
     }
