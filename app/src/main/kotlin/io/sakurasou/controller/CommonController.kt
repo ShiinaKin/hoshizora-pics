@@ -4,6 +4,8 @@ import com.ucasoft.ktor.simpleCache.cacheOutput
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -11,6 +13,7 @@ import io.ktor.server.routing.*
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.CommonSiteSetting
+import io.sakurasou.di.InstanceCenter.client
 import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
@@ -26,6 +29,7 @@ fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route({ tags("common") }) {
         cacheOutput(6.hours, listOf("id"), true) { route("random") { randomFetchImage(commonController) } }
+        // TODO fix cache
         cacheOutput { route("s") { anonymousGetImage(commonController) } }
     }
 }
@@ -78,16 +82,14 @@ private fun Route.randomFetchImage(commonController: CommonController) {
         }
         response {
             HttpStatusCode.OK to {
-                description = "LOCAL: byte array"
-            }
-            HttpStatusCode.Found to {
-                description = "S3: redirect"
+                description = "success"
+                body<ByteArray> { }
             }
         }
     }) {
         val fileDTO = commonController.handleRandomFetchImage()
         if (fileDTO.bytes != null) call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
-        else call.respondRedirect(fileDTO.url!!)
+        else call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
     }
 }
 
@@ -101,10 +103,8 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
         }
         response {
             HttpStatusCode.OK to {
-                description = "LOCAL: byte array"
-            }
-            HttpStatusCode.Found to {
-                description = "S3: redirect"
+                description = "success"
+                body<ByteArray> { }
             }
         }
     }) {
@@ -113,7 +113,7 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
 
         val fileDTO = commonController.handleFetchImage(imageUniqueName)
         if (fileDTO.bytes != null) call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
-        else call.respondRedirect(fileDTO.url!!)
+        else call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
     }
 }
 
