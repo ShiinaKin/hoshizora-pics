@@ -22,6 +22,11 @@ fun Application.mainModule() {
     val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
+    val clientTimeout = environment.config.property("client.timeout").getString().toLong()
+    val clientProxyAddress = environment.config.property("client.proxy.address").getString()
+
+    InstanceCenter.initClient(clientTimeout, clientProxyAddress)
+
     InstanceCenter.initDao()
     InstanceCenter.initService()
     configureDatabase()

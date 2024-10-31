@@ -1,5 +1,9 @@
 package io.sakurasou.di
 
+import io.ktor.client.*
+import io.ktor.client.engine.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.album.AlbumDaoImpl
@@ -45,6 +49,8 @@ import kotlinx.coroutines.runBlocking
  * 2024/9/12 11:48
  */
 object InstanceCenter {
+    lateinit var client: HttpClient
+
     lateinit var userDao: UserDao
     lateinit var imageDao: ImageDao
     lateinit var albumDao: AlbumDao
@@ -68,6 +74,14 @@ object InstanceCenter {
 
     lateinit var systemStatus: SystemStatus
     lateinit var rolePermissions: Map<String, Set<String>>
+
+    fun initClient(timeout: Long = 30000, proxyAddress: String) {
+        client = HttpClient(CIO) {
+            install(HttpTimeout) { requestTimeoutMillis = timeout }
+            if (proxyAddress != "disabled")
+                engine { proxy = ProxyBuilder.http(proxyAddress) }
+        }
+    }
 
     fun initDao() {
         userDao = UserDaoImpl()

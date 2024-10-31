@@ -10,10 +10,14 @@ ktor:
       password: $DATABASE_PASSWORD
     cache:
       redis:
-        host: "$REDIS_HOST:disable"
+        host: "$REDIS_HOST:disabled"
         port: "$REDIS_PORT:6379"
   deployment:
     port: 8080
+client:
+  timeout: "$CLIENT_TIMEOUT:30000"
+  proxy:
+    address: "$CLIENT_PROXY_ADDRESS:disabled"
 io:
   ktor:
     development: "$DEVELOPMENT:false"
