@@ -37,6 +37,12 @@ export interface CommonSiteSetting {
      * @type {string}
      * @memberof CommonSiteSetting
      */
+    'siteDescription': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CommonSiteSetting
+     */
     'siteSubTitle': string;
     /**
      * 

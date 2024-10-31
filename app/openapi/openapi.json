@@ -2383,6 +2383,9 @@
           "siteAllowSignup" : {
             "type" : "boolean"
           },
+          "siteDescription" : {
+            "type" : "string"
+          },
           "siteSubTitle" : {
             "type" : "string"
           },
@@ -2390,7 +2393,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "isSiteInit", "siteAllowSignup", "siteSubTitle", "siteTitle" ]
+        "required" : [ "isSiteInit", "siteAllowSignup", "siteDescription", "siteSubTitle", "siteTitle" ]
       },
       "CommonResponse_CommonSiteSetting" : {
         "type" : "object",
