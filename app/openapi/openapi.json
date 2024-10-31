@@ -185,7 +185,12 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ImageFileVO"
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -327,7 +332,12 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ImageFileVO"
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -441,7 +451,12 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ImageFileVO"
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -627,7 +642,12 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ImageFileVO"
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -2672,31 +2692,6 @@
           }
         },
         "required" : [ "code", "isSuccessful", "message" ]
-      },
-      "kotlin.ByteArray" : {
-        "type" : "object",
-        "properties" : {
-          "size" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [ "size" ]
-      },
-      "ImageFileVO" : {
-        "type" : "object",
-        "properties" : {
-          "bytes" : {
-            "oneOf" : [ {
-              "type" : "null"
-            }, {
-              "$ref" : "#/components/schemas/kotlin.ByteArray"
-            } ]
-          },
-          "url" : {
-            "type" : [ "null", "string" ]
-          }
-        }
       },
       "PageResult_ImagePageVO" : {
         "type" : "object",

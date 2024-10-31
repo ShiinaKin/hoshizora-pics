@@ -32,8 +32,6 @@ import type { CommonResponseKotlinUnit } from '../models';
 // @ts-ignore
 import type { CommonResponsePageResultImagePageVO } from '../models';
 // @ts-ignore
-import type { ImageFileVO } from '../models';
-// @ts-ignore
 import type { ImageInsertRequest } from '../models';
 // @ts-ignore
 import type { ImageManagePatchRequest } from '../models';
@@ -600,7 +598,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageFileVO>> {
+        async apiImageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageImageIdGet']?.[localVarOperationServerIndex]?.url;
@@ -637,7 +635,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageImageIdThumbnailGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageFileVO>> {
+        async apiImageImageIdThumbnailGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdThumbnailGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageImageIdThumbnailGet']?.[localVarOperationServerIndex]?.url;
@@ -661,7 +659,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageManageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageFileVO>> {
+        async apiImageManageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManageImageIdGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManageImageIdGet']?.[localVarOperationServerIndex]?.url;
@@ -698,7 +696,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageManageImageIdThumbnailGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageFileVO>> {
+        async apiImageManageImageIdThumbnailGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManageImageIdThumbnailGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManageImageIdThumbnailGet']?.[localVarOperationServerIndex]?.url;
@@ -770,7 +768,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageImageIdGet(requestParameters: ImageApiApiImageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageFileVO> {
+        apiImageImageIdGet(requestParameters: ImageApiApiImageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
             return localVarFp.apiImageImageIdGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -797,7 +795,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageImageIdThumbnailGet(requestParameters: ImageApiApiImageImageIdThumbnailGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageFileVO> {
+        apiImageImageIdThumbnailGet(requestParameters: ImageApiApiImageImageIdThumbnailGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
             return localVarFp.apiImageImageIdThumbnailGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -815,7 +813,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManageImageIdGet(requestParameters: ImageApiApiImageManageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageFileVO> {
+        apiImageManageImageIdGet(requestParameters: ImageApiApiImageManageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
             return localVarFp.apiImageManageImageIdGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -842,7 +840,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManageImageIdThumbnailGet(requestParameters: ImageApiApiImageManageImageIdThumbnailGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageFileVO> {
+        apiImageManageImageIdThumbnailGet(requestParameters: ImageApiApiImageManageImageIdThumbnailGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
             return localVarFp.apiImageManageImageIdThumbnailGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
