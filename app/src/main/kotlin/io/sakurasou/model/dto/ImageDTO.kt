@@ -1,8 +1,6 @@
 package io.sakurasou.model.dto
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.Serializable
 
 /**
  * @author ShiinaKin
@@ -42,8 +40,6 @@ data class ImageUpdateDTO(
     val isPrivate: Boolean
 )
 
-@Serializable
-@Name("ImageFileVO")
 data class ImageFileDTO(
     val bytes: ByteArray? = null,
     val url: String? = null

@@ -5,6 +5,7 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
 import io.sakurasou.constant.*
@@ -21,6 +22,7 @@ import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.image.ImageService
+import io.swagger.v3.oas.models.media.Schema
 import kotlinx.io.readByteArray
 
 /**
@@ -203,14 +205,28 @@ private fun Route.imageSelfFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ImageFileDTO> { }
+                    body(Schema<Any>().apply {
+                        oneOf(
+                            listOf(
+                                Schema<String>().apply {
+                                    type = "string"
+                                    description = "S3"
+                                },
+                                Schema<ByteArray>().apply {
+                                    type = "byteArray"
+                                    description = "Local"
+                                }
+                            )
+                        )
+                    })
                 }
             }
         }) {
             val userId = call.getPrincipal().id
             val imageId = call.imageId()
             val imageFileDTO = controller.handleSelfFileFetch(userId, imageId)
-            call.success(imageFileDTO)
+            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            else call.respondRedirect(imageFileDTO.url!!)
         }
     }
 }
@@ -224,14 +240,28 @@ private fun Route.imageSelfThumbnailFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ImageFileDTO> { }
+                    body(Schema<Any>().apply {
+                        oneOf(
+                            listOf(
+                                Schema<String>().apply {
+                                    type = "string"
+                                    description = "S3"
+                                },
+                                Schema<ByteArray>().apply {
+                                    type = "byteArray"
+                                    description = "Local"
+                                }
+                            )
+                        )
+                    })
                 }
             }
         }) {
             val userId = call.getPrincipal().id
             val imageId = call.imageId()
             val imageFileDTO = controller.handleSelfThumbnailFileFetch(userId, imageId)
-            call.success(imageFileDTO)
+            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            else call.respondRedirect(imageFileDTO.url!!)
         }
     }
 }
@@ -366,13 +396,27 @@ private fun Route.imageManageFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ImageFileDTO> { }
+                    body(Schema<Any>().apply {
+                        oneOf(
+                            listOf(
+                                Schema<String>().apply {
+                                    type = "string"
+                                    description = "S3"
+                                },
+                                Schema<ByteArray>().apply {
+                                    type = "byteArray"
+                                    description = "Local"
+                                }
+                            )
+                        )
+                    })
                 }
             }
         }) {
             val imageId = call.imageId()
             val imageFileDTO = controller.handleManageFileFetch(imageId)
-            call.success(imageFileDTO)
+            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            else call.respondRedirect(imageFileDTO.url!!)
         }
     }
 }
@@ -386,13 +430,27 @@ private fun Route.imageManageThumbnailFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ImageFileDTO> { }
+                    body(Schema<Any>().apply {
+                        oneOf(
+                            listOf(
+                                Schema<String>().apply {
+                                    type = "string"
+                                    description = "S3"
+                                },
+                                Schema<ByteArray>().apply {
+                                    type = "byteArray"
+                                    description = "Local"
+                                }
+                            )
+                        )
+                    })
                 }
             }
         }) {
             val imageId = call.imageId()
             val imageFileDTO = controller.handleManageThumbnailFileFetch(imageId)
-            call.success(imageFileDTO)
+            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            else call.respondRedirect(imageFileDTO.url!!)
         }
     }
 }
