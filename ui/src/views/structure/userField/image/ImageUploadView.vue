@@ -3,15 +3,14 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { Configuration, ImageApi, GroupApi } from "api-client";
 import { Icon } from "@iconify/vue";
-import ErrorMessage from "@/components/ErrorMessage.vue";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 import DrugUpLoader from "@/components/DragUploader.vue";
 
 const { t } = useI18n();
+const toast = useToast();
 
 const token = localStorage.getItem("token");
-
-const errorAlertRef = ref();
-const errorMessage = ref("");
 
 const configuration = new Configuration({
   baseOptions: {
@@ -34,8 +33,8 @@ groupApi
     }
   })
   .catch((error) => {
-    errorMessage.value = error.message || "An error occurred";
-    errorAlertRef.value.showError();
+    console.error(error);
+    toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
   });
 
 interface UploadFile {
@@ -72,13 +71,12 @@ function handleSingleFileUpload(uploadFile: UploadFile) {
         if (resp.data !== "") uploadFile.externalUrl = resp.data as string;
       } else {
         uploadFile.status = "error";
-        uploadFile.errorMessage = resp.message || "An error occurred";
+        toast.add({ severity: "warn", summary: "Login Failed", detail: resp.message, life: 3000 });
       }
     })
     .catch((error) => {
       uploadFile.status = "error";
-      errorMessage.value = error.message || "An error occurred";
-      errorAlertRef.value.showError();
+      toast.add({ severity: "warn", summary: "Login Failed", detail: error.message, life: 3000 });
     });
 }
 
@@ -283,7 +281,7 @@ function handleCopy(url: string) {
         </li>
       </ul>
     </div>
-    <ErrorMessage ref="errorAlertRef" :error-message="errorMessage" />
+    <Toast />
   </div>
 </template>
 

@@ -4,10 +4,12 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { CommonApi, type SiteInitRequest } from "api-client";
 import { Icon } from "@iconify/vue";
-import ErrorMessage from "@/components/ErrorMessage.vue";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const router = useRouter();
+const toast = useToast();
 
 const commonApi = new CommonApi();
 
@@ -21,9 +23,6 @@ const siteInitForm = ref<SiteInitRequest>({
   email: ""
 });
 
-const errorAlertRef = ref();
-const errorMessage = ref("");
-
 function handleSubmit() {
   const siteInitRequest = siteInitForm.value;
   commonApi
@@ -36,8 +35,7 @@ function handleSubmit() {
     })
     .catch((error) => {
       console.error(error);
-      errorMessage.value = error.message || "An error occurred";
-      errorAlertRef.value.showError();
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 </script>
@@ -208,7 +206,7 @@ function handleSubmit() {
       </div>
     </form>
 
-    <ErrorMessage ref="errorAlertRef" :error-message="errorMessage" />
+    <Toast />
   </div>
 </template>
 

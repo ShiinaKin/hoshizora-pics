@@ -5,11 +5,13 @@ import { useI18n } from "vue-i18n";
 import { useCommonStore } from "@/stores/counter";
 import { Icon } from "@iconify/vue";
 import { AuthApi, type UserLoginRequest } from "api-client";
-import ErrorMessage from "@/components/ErrorMessage.vue";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const commonStore = useCommonStore();
 const router = useRouter();
+const toast = useToast();
 
 const authApi = new AuthApi();
 
@@ -17,9 +19,6 @@ const userLoginForm = ref<UserLoginRequest>({
   password: "",
   username: ""
 });
-
-const errorAlertRef = ref();
-const errorMessage = ref("");
 
 function handleSubmit() {
   const userLoginRequest = userLoginForm.value;
@@ -32,14 +31,12 @@ function handleSubmit() {
         localStorage.setItem("token", token!!);
         router.push({ name: "userField" });
       } else {
-        errorMessage.value = resp.message || "An error occurred";
-        errorAlertRef.value.showError();
+        toast.add({ severity: "warn", summary: "Login Failed", detail: resp.message, life: 3000 });
       }
     })
     .catch((error) => {
       console.error(error);
-      errorMessage.value = error.message || "An error occurred";
-      errorAlertRef.value.showError();
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 </script>
@@ -109,7 +106,7 @@ function handleSubmit() {
         </p>
       </form>
     </div>
-    <ErrorMessage ref="errorAlertRef" :error-message="errorMessage" />
+    <Toast />
   </div>
 </template>
 
