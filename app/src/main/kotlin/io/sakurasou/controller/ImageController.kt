@@ -249,6 +249,12 @@ private fun Route.imageSelfPage(controller: ImageController) {
         }
         get("page", {
             pageRequest()
+            request {
+                queryParameter<Boolean>("private") {
+                    description = "isPrivate"
+                    required = false
+                }
+            }
             response {
                 HttpStatusCode.OK to {
                     description = "success"
@@ -263,6 +269,10 @@ private fun Route.imageSelfPage(controller: ImageController) {
         }) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
+            call.parameters["private"]?.let {
+                if (it == "true") pageRequest.additionalCondition = mapOf("isPrivate" to "true")
+                else pageRequest.additionalCondition = mapOf("isPrivate" to "false")
+            }
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
         }
@@ -425,6 +435,10 @@ private fun Route.imageManagePage(controller: ImageController) {
             }
         }) {
             val pageRequest = call.pageRequest()
+            call.parameters["public"]?.let {
+                if (it == "true") pageRequest.additionalCondition = mapOf("isPrivate" to "true")
+                else pageRequest.additionalCondition = mapOf("isPrivate" to "false")
+            }
             val pageResult = controller.handleManagePage(pageRequest)
             call.success(pageResult)
         }

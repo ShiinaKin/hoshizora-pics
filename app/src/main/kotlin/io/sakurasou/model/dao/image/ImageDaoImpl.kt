@@ -9,7 +9,6 @@ import io.sakurasou.model.dto.ImageCountAndTotalSizeDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.dto.ImageUpdateDTO
 import io.sakurasou.model.entity.Image
-import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -120,7 +119,15 @@ class ImageDaoImpl : ImageDao {
     }
 
     override fun pagination(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
-        val query = { query: Query -> query.adjustWhere { Images.userId eq userId } }
+        val query = { query: Query ->
+            query.adjustWhere { Images.userId eq userId }
+                .also {
+                    pageRequest.additionalCondition?.let { map ->
+                        if (map["isPrivate"] == "true") it.andWhere { Images.isPrivate eq true }
+                        else if (map["isPrivate"] == "false") it.andWhere { Images.isPrivate eq false }
+                    }
+                }
+        }
         return fetchPage(Images, pageRequest, query) {
             ImagePageVO(
                 it[Images.id].value,
@@ -135,6 +142,12 @@ class ImageDaoImpl : ImageDao {
         val query = { query: Query ->
             query.adjustColumnSet { join(Users, JoinType.INNER) { Users.id eq Images.userId } }
                 .adjustSelect { select(Images.fields + Users.name) }
+                .also {
+                    pageRequest.additionalCondition?.let { map ->
+                        if (map["isPrivate"] == "true") it.andWhere { Images.isPrivate eq true }
+                        else if (map["isPrivate"] == "false") it.andWhere { Images.isPrivate eq false }
+                    }
+                }
         }
         return fetchPage(Images, pageRequest, query) {
             ImageManagePageVO(
