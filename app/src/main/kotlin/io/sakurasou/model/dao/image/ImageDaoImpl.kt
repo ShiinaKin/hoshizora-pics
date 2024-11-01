@@ -123,8 +123,12 @@ class ImageDaoImpl : ImageDao {
             query.adjustWhere { Images.userId eq userId }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
-                        if (map["isPrivate"] == "true") it.andWhere { Images.isPrivate eq true }
-                        else if (map["isPrivate"] == "false") it.andWhere { Images.isPrivate eq false }
+                        map["isPrivate"]?.let { isPrivate ->
+                            it.andWhere { Images.isPrivate eq isPrivate.toBoolean() }
+                        }
+                        map["search"]?.let { searchContent ->
+                            it.andWhere { Images.displayName like "%$searchContent%" }
+                        }
                     }
                 }
         }
@@ -144,8 +148,12 @@ class ImageDaoImpl : ImageDao {
                 .adjustSelect { select(Images.fields + Users.name) }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
-                        if (map["isPrivate"] == "true") it.andWhere { Images.isPrivate eq true }
-                        else if (map["isPrivate"] == "false") it.andWhere { Images.isPrivate eq false }
+                        map["isPrivate"]?.let { isPrivate ->
+                            it.andWhere { Images.isPrivate eq isPrivate.toBoolean() }
+                        }
+                        map["search"]?.let { searchContent ->
+                            it.andWhere { Images.displayName like "%$searchContent%" }
+                        }
                     }
                 }
         }

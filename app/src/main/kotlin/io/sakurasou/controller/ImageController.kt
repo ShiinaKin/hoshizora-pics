@@ -254,6 +254,10 @@ private fun Route.imageSelfPage(controller: ImageController) {
                     description = "isPrivate"
                     required = false
                 }
+                queryParameter<String>("search") {
+                    description = "search content"
+                    required = false
+                }
             }
             response {
                 HttpStatusCode.OK to {
@@ -269,10 +273,17 @@ private fun Route.imageSelfPage(controller: ImageController) {
         }) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
-            call.parameters["private"]?.let {
-                if (it == "true") pageRequest.additionalCondition = mapOf("isPrivate" to "true")
-                else pageRequest.additionalCondition = mapOf("isPrivate" to "false")
+
+            val isPrivatePair = call.parameters["private"]?.toBoolean()?.let {
+                if (it) "isPrivate" to "true"
+                else "isPrivate" to "false"
             }
+            val searchPair = call.parameters["search"]?.let { "search" to it }
+            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
+                isPrivatePair?.let { put(it.first, it.second) }
+                searchPair?.let { put(it.first, it.second) }
+            }
+
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
         }
