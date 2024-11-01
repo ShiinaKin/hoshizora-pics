@@ -40,6 +40,7 @@ object Images : LongIdTable() {
 
     val columnMap = mapOf(
         "name" to displayName,
-        "createTime" to createTime
+        "createTime" to createTime,
+        "size" to size
     )
 }
