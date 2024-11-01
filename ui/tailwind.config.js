@@ -1,6 +1,5 @@
 /** @type {import("tailwindcss").Config} */
-import tailwindcssAnimate from "tailwindcss-animate";
-import tailwindForms from "@tailwindcss/forms";
+import primeUI from "tailwindcss-primeui";
 
 export default {
   darkMode: ["class"],
@@ -15,5 +14,5 @@ export default {
       colors: {}
     }
   },
-  plugins: [tailwindcssAnimate, tailwindForms]
+  plugins: [primeUI]
 };
