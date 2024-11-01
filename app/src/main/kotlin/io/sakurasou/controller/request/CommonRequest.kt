@@ -13,7 +13,8 @@ data class PageRequest(
     val page: Long,
     val pageSize: Int,
     val order: String? = null,
-    val orderBy: String? = null
+    val orderBy: String? = null,
+    var additionalCondition: Map<String, String>? = null
 )
 
 @Serializable
