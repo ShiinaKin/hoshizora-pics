@@ -32,9 +32,9 @@ import type { CommonResponseKotlinUnit } from '../models';
 // @ts-ignore
 import type { CommonResponsePageResultImagePageVO } from '../models';
 // @ts-ignore
-import type { ImageInsertRequest } from '../models';
-// @ts-ignore
 import type { ImageManagePatchRequest } from '../models';
+// @ts-ignore
+import type { ImagePatchRequest } from '../models';
 /**
  * ImageApi - axios parameter creator
  * @export
@@ -155,15 +155,15 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {number} imageId image id
-         * @param {ImageInsertRequest} imageInsertRequest 
+         * @param {ImagePatchRequest} imagePatchRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageImageIdPatch: async (imageId: number, imageInsertRequest: ImageInsertRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiImageImageIdPatch: async (imageId: number, imagePatchRequest: ImagePatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'imageId' is not null or undefined
             assertParamExists('apiImageImageIdPatch', 'imageId', imageId)
-            // verify required parameter 'imageInsertRequest' is not null or undefined
-            assertParamExists('apiImageImageIdPatch', 'imageInsertRequest', imageInsertRequest)
+            // verify required parameter 'imagePatchRequest' is not null or undefined
+            assertParamExists('apiImageImageIdPatch', 'imagePatchRequest', imagePatchRequest)
             const localVarPath = `/api/image/{imageId}`
                 .replace(`{${"imageId"}}`, encodeURIComponent(String(imageId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -188,7 +188,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(imageInsertRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(imagePatchRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -486,10 +486,12 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {boolean} [_private] isPrivate
+         * @param {string} [search] search content
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiImagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, _private?: boolean, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'page' is not null or undefined
             assertParamExists('apiImagePageGet', 'page', page)
             // verify required parameter 'pageSize' is not null or undefined
@@ -524,6 +526,14 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orderBy !== undefined) {
                 localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (_private !== undefined) {
+                localVarQueryParameter['private'] = _private;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -619,12 +629,12 @@ export const ImageApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} imageId image id
-         * @param {ImageInsertRequest} imageInsertRequest 
+         * @param {ImagePatchRequest} imagePatchRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageImageIdPatch(imageId: number, imageInsertRequest: ImageInsertRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdPatch(imageId, imageInsertRequest, options);
+        async apiImageImageIdPatch(imageId: number, imagePatchRequest: ImagePatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdPatch(imageId, imagePatchRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageImageIdPatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -723,11 +733,13 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {boolean} [_private] isPrivate
+         * @param {string} [search] search content
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImagePageVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImagePageGet(page, pageSize, order, orderBy, options);
+        async apiImagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, _private?: boolean, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImagePageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImagePageGet(page, pageSize, order, orderBy, _private, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImagePageGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -787,7 +799,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiImageImageIdPatch(requestParameters: ImageApiApiImageImageIdPatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
-            return localVarFp.apiImageImageIdPatch(requestParameters.imageId, requestParameters.imageInsertRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.apiImageImageIdPatch(requestParameters.imageId, requestParameters.imagePatchRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -859,7 +871,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiImagePageGet(requestParameters: ImageApiApiImagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultImagePageVO> {
-            return localVarFp.apiImagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
+            return localVarFp.apiImagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters._private, requestParameters.search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -929,10 +941,10 @@ export interface ImageApiApiImageImageIdPatchRequest {
 
     /**
      * 
-     * @type {ImageInsertRequest}
+     * @type {ImagePatchRequest}
      * @memberof ImageApiApiImageImageIdPatch
      */
-    readonly imageInsertRequest: ImageInsertRequest
+    readonly imagePatchRequest: ImagePatchRequest
 }
 
 /**
@@ -1094,6 +1106,20 @@ export interface ImageApiApiImagePageGetRequest {
      * @memberof ImageApiApiImagePageGet
      */
     readonly orderBy?: string
+
+    /**
+     * isPrivate
+     * @type {boolean}
+     * @memberof ImageApiApiImagePageGet
+     */
+    readonly _private?: boolean
+
+    /**
+     * search content
+     * @type {string}
+     * @memberof ImageApiApiImagePageGet
+     */
+    readonly search?: string
 }
 
 /**
@@ -1144,7 +1170,7 @@ export class ImageApi extends BaseAPI {
      * @memberof ImageApi
      */
     public apiImageImageIdPatch(requestParameters: ImageApiApiImageImageIdPatchRequest, options?: RawAxiosRequestConfig) {
-        return ImageApiFp(this.configuration).apiImageImageIdPatch(requestParameters.imageId, requestParameters.imageInsertRequest, options).then((request) => request(this.axios, this.basePath));
+        return ImageApiFp(this.configuration).apiImageImageIdPatch(requestParameters.imageId, requestParameters.imagePatchRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1232,7 +1258,7 @@ export class ImageApi extends BaseAPI {
      * @memberof ImageApi
      */
     public apiImagePageGet(requestParameters: ImageApiApiImagePageGetRequest, options?: RawAxiosRequestConfig) {
-        return ImageApiFp(this.configuration).apiImagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
+        return ImageApiFp(this.configuration).apiImagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters._private, requestParameters.search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

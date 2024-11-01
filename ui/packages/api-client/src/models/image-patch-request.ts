@@ -17,31 +17,31 @@
 /**
  * 
  * @export
- * @interface ImageInsertRequest
+ * @interface ImagePatchRequest
  */
-export interface ImageInsertRequest {
+export interface ImagePatchRequest {
     /**
      * 
      * @type {number}
-     * @memberof ImageInsertRequest
+     * @memberof ImagePatchRequest
      */
     'albumId'?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof ImageInsertRequest
+     * @memberof ImagePatchRequest
      */
     'description'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ImageInsertRequest
+     * @memberof ImagePatchRequest
      */
     'displayName'?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof ImageInsertRequest
+     * @memberof ImagePatchRequest
      */
     'isPrivate'?: boolean | null;
 }

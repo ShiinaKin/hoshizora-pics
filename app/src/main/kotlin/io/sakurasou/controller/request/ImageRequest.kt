@@ -37,7 +37,7 @@ data class ImageRawFile(
 }
 
 @Serializable
-@Name("ImageInsertRequest")
+@Name("ImagePatchRequest")
 data class ImagePatchRequest(
     val albumId: Long? = null,
     val displayName: String? = null,

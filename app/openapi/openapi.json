@@ -251,7 +251,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/ImageInsertRequest"
+                "$ref" : "#/components/schemas/ImagePatchRequest"
               }
             }
           },
@@ -388,6 +388,26 @@
           "name" : "orderBy",
           "in" : "query",
           "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "private",
+          "in" : "query",
+          "description" : "isPrivate",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search content",
           "required" : false,
           "deprecated" : false,
           "explode" : false,
@@ -2484,7 +2504,7 @@
         },
         "required" : [ "code", "isSuccessful", "message" ]
       },
-      "ImageInsertRequest" : {
+      "ImagePatchRequest" : {
         "type" : "object",
         "properties" : {
           "albumId" : {
