@@ -724,6 +724,26 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "private",
+          "in" : "query",
+          "description" : "isPrivate",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search content",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "404" : {

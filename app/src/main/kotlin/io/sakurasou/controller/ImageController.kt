@@ -433,6 +433,16 @@ private fun Route.imageManagePage(controller: ImageController) {
         }
         get("page", {
             pageRequest()
+            request {
+                queryParameter<Boolean>("private") {
+                    description = "isPrivate"
+                    required = false
+                }
+                queryParameter<String>("search") {
+                    description = "search content"
+                    required = false
+                }
+            }
             response {
                 HttpStatusCode.OK to {
                     description = "success"

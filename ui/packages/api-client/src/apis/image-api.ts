@@ -429,10 +429,12 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {boolean} [_private] isPrivate
+         * @param {string} [search] search content
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiImageManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, _private?: boolean, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'page' is not null or undefined
             assertParamExists('apiImageManagePageGet', 'page', page)
             // verify required parameter 'pageSize' is not null or undefined
@@ -467,6 +469,14 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orderBy !== undefined) {
                 localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (_private !== undefined) {
+                localVarQueryParameter['private'] = _private;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -718,11 +728,13 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {boolean} [_private] isPrivate
+         * @param {string} [search] search content
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImagePageVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManagePageGet(page, pageSize, order, orderBy, options);
+        async apiImageManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, _private?: boolean, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImagePageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManagePageGet(page, pageSize, order, orderBy, _private, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManagePageGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -862,7 +874,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiImageManagePageGet(requestParameters: ImageApiApiImageManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultImagePageVO> {
-            return localVarFp.apiImageManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
+            return localVarFp.apiImageManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters._private, requestParameters.search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1071,6 +1083,20 @@ export interface ImageApiApiImageManagePageGetRequest {
      * @memberof ImageApiApiImageManagePageGet
      */
     readonly orderBy?: string
+
+    /**
+     * isPrivate
+     * @type {boolean}
+     * @memberof ImageApiApiImageManagePageGet
+     */
+    readonly _private?: boolean
+
+    /**
+     * search content
+     * @type {string}
+     * @memberof ImageApiApiImageManagePageGet
+     */
+    readonly search?: string
 }
 
 /**
@@ -1247,7 +1273,7 @@ export class ImageApi extends BaseAPI {
      * @memberof ImageApi
      */
     public apiImageManagePageGet(requestParameters: ImageApiApiImageManagePageGetRequest, options?: RawAxiosRequestConfig) {
-        return ImageApiFp(this.configuration).apiImageManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
+        return ImageApiFp(this.configuration).apiImageManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters._private, requestParameters.search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
