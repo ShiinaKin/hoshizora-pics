@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineEmits, defineProps } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Icon } from "@iconify/vue";
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, defineExpose } from "vue";
+import { ref } from "vue";
 
 const { errorMessage, messageTitle = "Something went wrong" } = defineProps<{
   errorMessage: string;
