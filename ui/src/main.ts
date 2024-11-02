@@ -10,7 +10,10 @@ import App from "./App.vue";
 import router from "./router";
 
 import PrimeVue from "primevue/config";
-import ToastService from 'primevue/toastservice';
+import ToastService from "primevue/toastservice";
+
+import "viewerjs/dist/viewer.css";
+import VueViewer from "v-viewer";
 
 import zh_cn from "./locales/zh_cn.yaml";
 import en_us from "./locales/en_us.yaml";
@@ -32,6 +35,7 @@ app.use(i18n);
 app.use(PrimeVue, {
   theme: "none"
 });
+app.use(VueViewer);
 app.use(ToastService);
 
 app.mount("#app");
