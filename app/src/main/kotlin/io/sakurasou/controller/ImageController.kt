@@ -279,7 +279,7 @@ private fun Route.imageSelfPage(controller: ImageController) {
             val pageRequest = call.pageRequest()
 
             val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
-            val isPrivatePair = call.parameters["private"]?.toBoolean()?.let {
+            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let {
                 if (it) "isPrivate" to "true"
                 else "isPrivate" to "false"
             }
@@ -472,7 +472,7 @@ private fun Route.imageManagePage(controller: ImageController) {
             val pageRequest = call.pageRequest()
             val userId = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
             val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
-            val isPrivatePair = call.parameters["private"]?.toBoolean()?.let {
+            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let {
                 if (it) "isPrivate" to "true"
                 else "isPrivate" to "false"
             }
