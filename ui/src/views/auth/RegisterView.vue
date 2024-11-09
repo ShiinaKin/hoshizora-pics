@@ -46,7 +46,6 @@ function handleSubmit() {
       <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">{{ commonStore.title }}</h1>
 
       <form
-        action="#"
         @submit.prevent="handleSubmit"
         class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
       >
