@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
 
 /**
  * 
@@ -20,6 +23,12 @@
  * @interface AlbumPageVO
  */
 export interface AlbumPageVO {
+    /**
+     * 
+     * @type {KotlinxDatetimeLocalDateTime}
+     * @memberof AlbumPageVO
+     */
+    'createTime': KotlinxDatetimeLocalDateTime;
     /**
      * 
      * @type {number}
@@ -32,6 +41,12 @@ export interface AlbumPageVO {
      * @memberof AlbumPageVO
      */
     'imageCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AlbumPageVO
+     */
+    'isDefault': boolean;
     /**
      * 
      * @type {boolean}

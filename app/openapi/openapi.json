@@ -395,7 +395,18 @@
             "type" : "string"
           }
         }, {
-          "name" : "private",
+          "name" : "albumId",
+          "in" : "query",
+          "description" : "albumId",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "isPrivate",
           "in" : "query",
           "description" : "isPrivate",
           "required" : false,
@@ -725,7 +736,29 @@
             "type" : "string"
           }
         }, {
-          "name" : "private",
+          "name" : "userId",
+          "in" : "query",
+          "description" : "albumId",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "albumId",
+          "in" : "query",
+          "description" : "albumId",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "isPrivate",
           "in" : "query",
           "description" : "isPrivate",
           "required" : false,
@@ -2919,13 +2952,13 @@
         "type" : "object",
         "properties" : {
           "description" : {
-            "type" : "string"
+            "type" : [ "null", "string" ]
           },
           "name" : {
             "type" : "string"
           }
         },
-        "required" : [ "description", "name" ]
+        "required" : [ "name" ]
       },
       "AlbumSelfPatchRequest" : {
         "type" : "object",
@@ -2955,6 +2988,9 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "isDefault" : {
+            "type" : "boolean"
+          },
           "isUncategorized" : {
             "type" : "boolean"
           },
@@ -2962,7 +2998,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "createTime", "id", "imageCount", "isUncategorized", "name" ]
+        "required" : [ "createTime", "id", "imageCount", "isDefault", "isUncategorized", "name" ]
       },
       "CommonResponse_AlbumVO" : {
         "type" : "object",
@@ -3018,6 +3054,9 @@
       "AlbumPageVO" : {
         "type" : "object",
         "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
           "id" : {
             "type" : "integer",
             "format" : "int64"
@@ -3026,6 +3065,9 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "isDefault" : {
+            "type" : "boolean"
+          },
           "isUncategorized" : {
             "type" : "boolean"
           },
@@ -3033,7 +3075,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "id", "imageCount", "isUncategorized", "name" ]
+        "required" : [ "createTime", "id", "imageCount", "isDefault", "isUncategorized", "name" ]
       },
       "CommonResponse_PageResult_AlbumPageVO" : {
         "type" : "object",
@@ -3062,7 +3104,7 @@
         "type" : "object",
         "properties" : {
           "description" : {
-            "type" : "string"
+            "type" : [ "null", "string" ]
           },
           "name" : {
             "type" : "string"
@@ -3072,7 +3114,7 @@
             "format" : "int64"
           }
         },
-        "required" : [ "description", "name", "userId" ]
+        "required" : [ "name", "userId" ]
       },
       "AlbumManagePatchRequest" : {
         "type" : "object",

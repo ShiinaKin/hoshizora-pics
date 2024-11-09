@@ -25,7 +25,7 @@ export interface AlbumSelfInsertRequest {
      * @type {string}
      * @memberof AlbumSelfInsertRequest
      */
-    'description': string;
+    'description'?: string | null;
     /**
      * 
      * @type {string}

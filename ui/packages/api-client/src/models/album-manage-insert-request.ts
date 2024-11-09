@@ -25,7 +25,7 @@ export interface AlbumManageInsertRequest {
      * @type {string}
      * @memberof AlbumManageInsertRequest
      */
-    'description': string;
+    'description'?: string | null;
     /**
      * 
      * @type {string}

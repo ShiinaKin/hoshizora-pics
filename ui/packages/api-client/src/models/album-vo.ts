@@ -52,6 +52,12 @@ export interface AlbumVO {
      * @type {boolean}
      * @memberof AlbumVO
      */
+    'isDefault': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AlbumVO
+     */
     'isUncategorized': boolean;
     /**
      * 
