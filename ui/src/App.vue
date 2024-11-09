@@ -29,7 +29,7 @@ onMounted(() => {
           metaDescription.setAttribute("content", commonStore.subTitle);
         }
 
-        if (!commonSiteSetting.isSiteInit!!) router.push({ name: "siteInit" });
+        if (!commonSiteSetting.isSiteInit!) router.push({ name: "siteInit" });
         if (!token) router.push({ name: "login" });
         const arr = ["home", "login", "register", "siteInit"];
         if (arr.includes(route.name as string)) router.push({ name: "overview" });

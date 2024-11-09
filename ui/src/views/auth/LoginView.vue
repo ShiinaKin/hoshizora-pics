@@ -27,8 +27,8 @@ function handleSubmit() {
     .then((response) => {
       const resp = response.data;
       if (resp.isSuccessful) {
-        const token = resp.data!!.token;
-        localStorage.setItem("token", token!!);
+        const token = resp.data!.token;
+        localStorage.setItem("token", token!);
         router.push({ name: "userField" });
       } else {
         toast.add({ severity: "warn", summary: "Login Failed", detail: resp.message, life: 3000 });
