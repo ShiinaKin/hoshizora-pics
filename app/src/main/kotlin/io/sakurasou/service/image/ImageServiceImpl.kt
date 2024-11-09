@@ -353,10 +353,38 @@ class ImageServiceImpl(
     }
 
     override suspend fun pageSelfImage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
-        return dbQuery { imageDao.pagination(userId, pageRequest) }
+        val siteExternalUrl = settingService.getSiteSetting().siteExternalUrl
+        return dbQuery { imageDao.pagination(userId, pageRequest) }.let {
+            it.copy(
+                data = it.data.map { image ->
+                    ImagePageVO(
+                        id = image.id,
+                        displayName = image.displayName,
+                        isPrivate = image.isPrivate,
+                        externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
+                        createTime = image.createTime
+                    )
+                }
+            )
+        }
     }
 
     override suspend fun pageImage(pageRequest: PageRequest): PageResult<ImageManagePageVO> {
-        return dbQuery { imageDao.paginationForManage(pageRequest) }
+        val siteExternalUrl = settingService.getSiteSetting().siteExternalUrl
+        return dbQuery { imageDao.paginationForManage(pageRequest) }.let {
+            it.copy(
+                data = it.data.map { image ->
+                    ImageManagePageVO(
+                        id = image.id,
+                        displayName = image.displayName,
+                        userId = image.userId,
+                        userName = image.userName,
+                        isPrivate = image.isPrivate,
+                        externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
+                        createTime = image.createTime
+                    )
+                }
+            )
+        }
     }
 }

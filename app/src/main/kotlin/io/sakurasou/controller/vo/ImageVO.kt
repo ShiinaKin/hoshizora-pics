@@ -58,6 +58,7 @@ data class ImagePageVO(
     val id: Long,
     val displayName: String,
     val isPrivate: Boolean,
+    val externalUrl: String,
     val createTime: LocalDateTime
 )
 
@@ -69,5 +70,6 @@ data class ImageManagePageVO(
     val userId: Long,
     val userName: String,
     val isPrivate: Boolean,
+    val externalUrl: String,
     val createTime: LocalDateTime
 )

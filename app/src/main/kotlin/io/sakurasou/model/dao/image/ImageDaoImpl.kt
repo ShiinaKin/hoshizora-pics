@@ -136,10 +136,12 @@ class ImageDaoImpl : ImageDao {
                 }
         }
         return fetchPage(Images, pageRequest, query) {
+            val isPrivate = it[Images.isPrivate]
             ImagePageVO(
                 it[Images.id].value,
                 it[Images.displayName],
-                it[Images.isPrivate],
+                isPrivate,
+                if (isPrivate) "" else it[Images.uniqueName],
                 it[Images.createTime]
             )
         }
@@ -167,12 +169,14 @@ class ImageDaoImpl : ImageDao {
                 }
         }
         return fetchPage(Images, pageRequest, query) {
+            val isPrivate = it[Images.isPrivate]
             ImageManagePageVO(
                 it[Images.id].value,
                 it[Images.displayName],
                 it[Images.userId],
                 it[Users.name],
-                it[Images.isPrivate],
+                isPrivate,
+                if (isPrivate) "" else it[Images.uniqueName],
                 it[Images.createTime]
             )
         }
