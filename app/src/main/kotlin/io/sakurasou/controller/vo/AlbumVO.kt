@@ -16,6 +16,7 @@ data class AlbumVO(
     val description: String? = null,
     val imageCount: Long,
     val isUncategorized: Boolean,
+    val isDefault: Boolean,
     val createTime: LocalDateTime
 )
 
@@ -25,5 +26,7 @@ data class AlbumPageVO(
     val id: Long,
     val name: String,
     val imageCount: Long,
-    val isUncategorized: Boolean
+    val isUncategorized: Boolean,
+    val isDefault: Boolean,
+    val createTime: LocalDateTime
 )

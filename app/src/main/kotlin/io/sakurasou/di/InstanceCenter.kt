@@ -103,8 +103,8 @@ object InstanceCenter {
 
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, relationDao)
-        albumService = AlbumServiceImpl(albumDao, imageDao)
 
+        albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
 
         userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)

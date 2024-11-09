@@ -5,6 +5,7 @@ import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.dao.MissingUserDefaultAlbumException
 import io.sakurasou.model.dao.image.Images
+import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.dto.AlbumInsertDTO
 import io.sakurasou.model.dto.AlbumUpdateDTO
 import io.sakurasou.model.entity.Album
@@ -84,9 +85,13 @@ class AlbumDaoImpl : AlbumDao {
 
     override fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO> {
         val customWhereCond: (Query) -> Query = {
-            val query = it.adjustColumnSet { join(Images, JoinType.INNER) { Images.albumId eq Albums.id } }
-                .adjustSelect { select(Albums.fields + Images.id.count()) }
-                .groupBy(Albums.id, Albums.name, Albums.createTime)
+            val query = it
+                .adjustColumnSet {
+                    leftJoin(Images) { Images.albumId eq Albums.id }
+                        .innerJoin(Users) { Albums.userId eq Users.id }
+                }
+                .adjustSelect { select(Albums.fields + Users.defaultAlbumId + Images.id.count()) }
+                .groupBy(Albums.id, Albums.name, Albums.createTime, Users.defaultAlbumId)
             userId?.let { query.andWhere { Albums.userId eq userId } }
             query
         }
@@ -95,7 +100,9 @@ class AlbumDaoImpl : AlbumDao {
                 row[Albums.id].value,
                 row[Albums.name],
                 row[Images.id.count()],
-                row[Albums.isUncategorized]
+                row[Albums.isUncategorized],
+                row[Users.defaultAlbumId] == row[Albums.id].value,
+                row[Albums.createTime]
             )
         }
     }

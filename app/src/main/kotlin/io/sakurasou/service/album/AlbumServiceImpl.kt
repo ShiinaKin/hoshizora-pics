@@ -5,9 +5,11 @@ import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.AlbumVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.service.album.*
+import io.sakurasou.exception.service.user.UserNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.image.ImageDao
+import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.AlbumInsertDTO
 import io.sakurasou.model.dto.AlbumUpdateDTO
 import kotlinx.datetime.Clock
@@ -19,6 +21,7 @@ import kotlinx.datetime.toLocalDateTime
  * 2024/9/13 14:48
  */
 class AlbumServiceImpl(
+    private val userDao: UserDao,
     private val albumDao: AlbumDao,
     private val imageDao: ImageDao
 ) : AlbumService {
@@ -142,6 +145,7 @@ class AlbumServiceImpl(
     override suspend fun fetchSelf(userId: Long, albumId: Long): AlbumVO {
         return dbQuery {
             val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
+            val user = userDao.findUserById(userId) ?: throw UserNotFoundException()
             if (album.userId != userId) throw AlbumAccessDeniedException()
 
             val imageCount = imageDao.countImageByAlbumId(albumId)
@@ -152,6 +156,7 @@ class AlbumServiceImpl(
                 description = album.description,
                 imageCount = imageCount,
                 isUncategorized = album.isUncategorized,
+                isDefault = user.defaultAlbumId == album.id,
                 createTime = album.createTime
             )
         }
@@ -160,6 +165,7 @@ class AlbumServiceImpl(
     override suspend fun fetchAlbum(albumId: Long): AlbumVO {
         return dbQuery {
             val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
+            val user = userDao.findUserById(album.userId) ?: throw UserNotFoundException()
             val imageCount = imageDao.countImageByAlbumId(albumId)
 
             AlbumVO(
@@ -168,6 +174,7 @@ class AlbumServiceImpl(
                 description = album.description,
                 imageCount = imageCount,
                 isUncategorized = album.isUncategorized,
+                isDefault = user.defaultAlbumId == album.id,
                 createTime = album.createTime
             )
         }
