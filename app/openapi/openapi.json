@@ -2803,6 +2803,9 @@
           "displayName" : {
             "type" : "string"
           },
+          "externalUrl" : {
+            "type" : "string"
+          },
           "id" : {
             "type" : "integer",
             "format" : "int64"
@@ -2811,7 +2814,7 @@
             "type" : "boolean"
           }
         },
-        "required" : [ "createTime", "displayName", "id", "isPrivate" ]
+        "required" : [ "createTime", "displayName", "externalUrl", "id", "isPrivate" ]
       },
       "CommonResponse_PageResult_ImagePageVO" : {
         "type" : "object",

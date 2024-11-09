@@ -37,6 +37,12 @@ export interface ImagePageVO {
     'displayName': string;
     /**
      * 
+     * @type {string}
+     * @memberof ImagePageVO
+     */
+    'externalUrl': string;
+    /**
+     * 
      * @type {number}
      * @memberof ImagePageVO
      */
