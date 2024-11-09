@@ -11,9 +11,11 @@ import io.sakurasou.exception.service.album.AlbumUpdateFailedException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.image.ImageDao
+import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.AlbumInsertDTO
 import io.sakurasou.model.dto.AlbumUpdateDTO
 import io.sakurasou.model.entity.Album
+import io.sakurasou.model.entity.User
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.*
 import kotlin.test.BeforeTest
@@ -26,6 +28,7 @@ import kotlin.test.assertFailsWith
  * 2024/9/13 21:47
  */
 class AlbumServiceTest {
+    private lateinit var userDao: UserDao
     private lateinit var albumDao: AlbumDao
     private lateinit var imageDao: ImageDao
     private lateinit var albumService: AlbumServiceImpl
@@ -36,9 +39,10 @@ class AlbumServiceTest {
     fun setUp() {
         mockkObject(DatabaseSingleton)
         mockkObject(Clock.System)
+        userDao = mockk()
         albumDao = mockk()
         imageDao = mockk()
-        albumService = AlbumServiceImpl(albumDao, imageDao)
+        albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
         now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -205,12 +209,25 @@ class AlbumServiceTest {
             isUncategorized = false,
             createTime = now
         )
+        val user = User(
+            id = userId,
+            name = "testUser",
+            password = "testPassword",
+            email = "test@example.com",
+            groupId = 1,
+            isDefaultImagePrivate = true,
+            defaultAlbumId = albumId,
+            isBanned = false,
+            createTime = now,
+            updateTime = now
+        )
         val expected = AlbumVO(
             id = albumId,
             name = "My Album",
             description = "Test Album",
             imageCount = 0,
             isUncategorized = false,
+            isDefault = true,
             createTime = album.createTime
         )
 
@@ -218,6 +235,7 @@ class AlbumServiceTest {
             this.arg<suspend () -> AlbumVO>(0).invoke()
         }
         every { albumDao.findAlbumById(albumId) } returns album
+        every { userDao.findUserById(userId) } returns user
         every { imageDao.countImageByAlbumId(albumId) } returns 0
 
         val result = albumService.fetchSelf(userId, albumId)
@@ -238,11 +256,24 @@ class AlbumServiceTest {
             isUncategorized = false,
             createTime = now
         )
+        val user = User(
+            id = userId,
+            name = "testUser",
+            password = "testPassword",
+            email = "test@example.com",
+            groupId = 1,
+            isDefaultImagePrivate = true,
+            defaultAlbumId = albumId,
+            isBanned = false,
+            createTime = now,
+            updateTime = now
+        )
 
         coEvery { DatabaseSingleton.dbQuery<Album>(any()) } coAnswers {
             this.arg<suspend () -> Album>(0).invoke()
         }
         every { albumDao.findAlbumById(albumId) } returns album
+        every { userDao.findUserById(userId) } returns user
 
         assertFailsWith<AlbumAccessDeniedException> {
             albumService.fetchSelf(userId, albumId)
