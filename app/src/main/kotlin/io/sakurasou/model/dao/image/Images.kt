@@ -39,6 +39,8 @@ object Images : LongIdTable() {
     }
 
     val columnMap = mapOf(
+        "userId" to userId,
+        "albumId" to albumId,
         "name" to displayName,
         "createTime" to createTime,
         "size" to size

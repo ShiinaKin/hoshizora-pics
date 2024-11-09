@@ -123,6 +123,9 @@ class ImageDaoImpl : ImageDao {
             query.adjustWhere { Images.userId eq userId }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
+                        map["albumId"]?.let { albumId ->
+                            it.andWhere { Images.albumId eq albumId.toLong() }
+                        }
                         map["isPrivate"]?.let { isPrivate ->
                             it.andWhere { Images.isPrivate eq isPrivate.toBoolean() }
                         }
@@ -148,6 +151,12 @@ class ImageDaoImpl : ImageDao {
                 .adjustSelect { select(Images.fields + Users.name) }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
+                        map["userId"]?.let { userId ->
+                            it.andWhere { Images.userId eq userId.toLong() }
+                        }
+                        map["albumId"]?.let { albumId ->
+                            it.andWhere { Images.albumId eq albumId.toLong() }
+                        }
                         map["isPrivate"]?.let { isPrivate ->
                             it.andWhere { Images.isPrivate eq isPrivate.toBoolean() }
                         }
