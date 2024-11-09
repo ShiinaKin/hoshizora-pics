@@ -6,6 +6,13 @@ import { Icon } from "@iconify/vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import DrugUpLoader from "@/components/DragUploader.vue";
+import {
+  transToDirect,
+  transToMarkdown,
+  transToMarkdownWithLink,
+  transToHTML,
+  transToBBCode
+} from "@/utils/URLFormatUtils";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -29,7 +36,7 @@ groupApi
   .then((response) => {
     const resp = response.data;
     if (resp.isSuccessful) {
-      allowedImageTypes.value = new Set(resp.data!!.allowedImageTypes);
+      allowedImageTypes.value = new Set(resp.data!.allowedImageTypes);
     }
   })
   .catch((error) => {
@@ -88,29 +95,34 @@ const displayUrl = computed<string[]>(() => {
     case "markdown":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
-        const url = uploadFile.externalUrl!!;
-        return `![${fileName}](${url})`;
+        const url = uploadFile.externalUrl!;
+        return transToMarkdown(url, fileName);
       });
     case "markdownWithLink":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
-        const url = uploadFile.externalUrl!!;
-        return `[![${fileName}](${url})](${url})`;
+        const url = uploadFile.externalUrl!;
+        return transToMarkdownWithLink(url, fileName);
       });
     case "html":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
-        const url = uploadFile.externalUrl!!;
-        return `<img src="${url}" alt="${fileName}" />`;
+        const url = uploadFile.externalUrl!;
+        return transToHTML(url, fileName);
       });
     case "bbcode":
       return succeedPublicFileList.value.map((uploadFile) => {
-        const url = uploadFile.externalUrl!!;
-        return `[img]${url}[/img]`;
+        const fileName = uploadFile.file.name;
+        const url = uploadFile.externalUrl!;
+        return transToBBCode(url, fileName);
       });
     case "direct":
     default:
-      return succeedPublicFileList.value.map((uploadFile) => uploadFile.externalUrl!!);
+      return succeedPublicFileList.value.map((uploadFile) => {
+        const fileName = uploadFile.file.name;
+        const url = uploadFile.externalUrl!;
+        return transToDirect(url, fileName);
+      });
   }
 });
 
