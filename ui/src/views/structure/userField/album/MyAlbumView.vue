@@ -295,7 +295,7 @@ async function fetchUserAlbum(albumId: number) {
       <Column sortable field="imageCount" :header="t('message.myAlbumTableImageCount')"></Column>
       <Column field="isUncategorized" :header="t('message.myAlbumTableIsUncategorized')"></Column>
       <Column field="isDefault" :header="t('message.myAlbumTableIsDefault')"></Column>
-      <Column sortable field="createTime" :header="t('message.myAlbumTableIsDefault')">
+      <Column sortable field="createTime" :header="t('message.myAlbumTableCreateTime')">
         <template #body="{ data }">
           {{ dayjs(String(data.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
         </template>
