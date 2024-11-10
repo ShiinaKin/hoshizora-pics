@@ -5,7 +5,6 @@ import { useI18n } from "vue-i18n";
 import { useCommonStore } from "@/stores/counter";
 import { Icon } from "@iconify/vue";
 import { AuthApi, type UserLoginRequest } from "api-client";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
@@ -105,7 +104,6 @@ function handleSubmit() {
         </p>
       </form>
     </div>
-    <Toast />
   </div>
 </template>
 

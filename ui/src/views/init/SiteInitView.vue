@@ -4,7 +4,6 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { CommonApi, type SiteInitRequest } from "api-client";
 import { Icon } from "@iconify/vue";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
@@ -205,8 +204,6 @@ function handleSubmit() {
         </button>
       </div>
     </form>
-
-    <Toast />
   </div>
 </template>
 

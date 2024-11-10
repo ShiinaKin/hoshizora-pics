@@ -3,7 +3,6 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { Configuration, ImageApi, GroupApi } from "api-client";
 import { Icon } from "@iconify/vue";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import DrugUpLoader from "@/components/DragUploader.vue";
 import {
@@ -293,7 +292,6 @@ function handleCopy(url: string) {
         </li>
       </ul>
     </div>
-    <Toast />
   </div>
 </template>
 

@@ -3,6 +3,7 @@ import { onMounted } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/counter";
 import { CommonApi } from "api-client";
+import Toast from "primevue/toast";
 
 const route = useRoute();
 const router = useRouter();
@@ -42,6 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Toast />
   <RouterView />
 </template>
 
