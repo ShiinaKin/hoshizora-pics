@@ -37,6 +37,16 @@ message:
   registerEmailRequirements: "请输入正确的邮箱地址。"
   registerSubmitButton: "注册"
   registerLoginButton: "登录"
+#  userField
+  userMenuOverview: "概览"
+  userMenuUploadImage: "上传图片"
+  userMenuMyImage: "我的图片"
+  userMenuMyAlbum: "我的相册"
+  userMenuAccount: "我的账户"
+  userMenuProfile: "我的资料"
+  userMenuAdminField: "管理后台"
+  userMenuLogout: "退出登录"
+  userMenuLogoutSuccess: "登出成功"
 #  dragUploader
   dragUploaderUsageTip: "点击或拖拽文件到此处上传"
   dragUploaderAllowedFileTypeTip: "支持的文件类型："
