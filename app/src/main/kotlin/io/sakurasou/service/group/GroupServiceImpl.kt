@@ -65,6 +65,7 @@ class GroupServiceImpl(
         dbQuery {
             runCatching {
                 val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+                if (oldGroup.name == "admin") throw GroupUpdateFailedException(null, "Cannot update admin group name")
 
                 val groupUpdateDTO = GroupUpdateDTO(
                     id = id,
