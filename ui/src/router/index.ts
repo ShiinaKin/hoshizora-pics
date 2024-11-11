@@ -25,6 +25,39 @@ const router = createRouter({
       ]
     },
     {
+      path: "/user",
+      name: "userField",
+      component: () => import("@/views/structure/userField/UserField.vue"),
+      redirect: { name: "overview" },
+      children: [
+        {
+          path: "overview",
+          name: "overview",
+          component: () => import("@/views/structure/userField/common/OverviewView.vue")
+        },
+        {
+          path: "upload",
+          name: "imageUpload",
+          component: () => import("@/views/structure/userField/image/ImageUploadView.vue")
+        },
+        {
+          path: "images",
+          name: "myImage",
+          component: () => import("@/views/structure/userField/image/MyImageView.vue")
+        },
+        {
+          path: "albums",
+          name: "myAlbum",
+          component: () => import("@/views/structure/userField/album/MyAlbumView.vue")
+        },
+        {
+          path: "profile",
+          name: "profile",
+          component: () => import("@/views/structure/userField/user/UserProfileView.vue")
+        }
+      ]
+    },
+    {
       path: "/:pathMatch(.*)",
       name: "notFound",
       component: () => import("@/views/error/NotFoundView.vue")
