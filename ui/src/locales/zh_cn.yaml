@@ -114,6 +114,7 @@ message:
   myAlbumTableOpsTitle: "操作"
   myAlbumTableOpsDetail: "查看"
   myAlbumTableOpsEdit: "编辑"
+  myAlbumTableOpsSettingAsDefault: "设为默认"
   myAlbumTableOpsDelete: "删除"
   myAlbumCreateDialogTitle: "创建相册"
   myAlbumCreateDialogAlbumName: "相册名"

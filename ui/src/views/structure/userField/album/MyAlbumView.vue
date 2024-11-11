@@ -7,7 +7,8 @@ import {
   type AlbumApiApiAlbumPageGetRequest,
   type AlbumPageVO,
   type AlbumVO,
-  type AlbumSelfInsertRequest
+  type AlbumSelfInsertRequest,
+  type AlbumSelfPatchRequest
 } from "api-client";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -129,6 +130,22 @@ function handleFetchAlbumDetail(albumId: number) {
   });
 }
 
+function handleSettingAsDefault(albumId: number) {
+  const patchRequest: AlbumSelfPatchRequest = {
+    isDefault: true
+  };
+  patchAlbum(albumId, patchRequest);
+}
+
+const handleEditAlbum = handleSubmit((values) => {
+  const patchRequest: AlbumSelfPatchRequest = {
+    name: values.patchAlbumName || albumDetail.value!.name,
+    description: values.patchAlbumDesc || albumDetail.value!.description
+  };
+  patchAlbum(curAlbumId.value, patchRequest);
+  albumEditDialog.value = false;
+});
+
 function showAlbumDeleteDialog(albumId: number) {
   curAlbumId.value = albumId;
   albumDeleteDialog.value = true;
@@ -230,14 +247,11 @@ function deleteAlbum(albumId: number) {
   albumDeleteDialog.value = false;
 }
 
-const editAlbum = handleSubmit((values) => {
+function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
   albumApi
     .apiAlbumAlbumIdPatch({
-      albumId: curAlbumId.value,
-      albumSelfPatchRequest: {
-        name: values.patchAlbumName,
-        description: values.patchAlbumDesc
-      }
+      albumId: albumId,
+      albumSelfPatchRequest: patchRequest
     })
     .then((response) => {
       const resp = response.data;
@@ -267,8 +281,7 @@ const editAlbum = handleSubmit((values) => {
         life: 3000
       });
     });
-  albumEditDialog.value = false;
-});
+}
 
 async function fetchUserAlbum(albumId: number) {
   return albumApi
@@ -319,16 +332,19 @@ async function fetchUserAlbum(albumId: number) {
           {{ dayjs(String(data.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
         </template>
       </Column>
-      <Column :header="t('message.myAlbumTableOpsTitle')" class="w-64">
+      <Column :header="t('message.myAlbumTableOpsTitle')" class="w-72">
         <template #body="{ data }">
           <div class="flex gap-0.5 text-sm">
-            <Button @click="handleFetchAlbumDetail(data.id)" severity="secondary">
+            <Button @click="handleFetchAlbumDetail(data.id)" severity="secondary" size="small">
               {{ t("message.myAlbumTableOpsDetail") }}
             </Button>
-            <Button @click="showAlbumEditDialog(data.id)" severity="info">
+            <Button @click="handleSettingAsDefault(data.id)" size="small" :disabled="data.isDefault">
+              {{ t("message.myAlbumTableOpsSettingAsDefault") }}
+            </Button>
+            <Button @click="showAlbumEditDialog(data.id)" severity="info" size="small">
               {{ t("message.myAlbumTableOpsEdit") }}
             </Button>
-            <Button @click="showAlbumDeleteDialog(data.id)" severity="danger">
+            <Button @click="showAlbumDeleteDialog(data.id)" severity="danger" size="small">
               {{ t("message.myAlbumTableOpsDelete") }}
             </Button>
           </div>
@@ -363,7 +379,7 @@ async function fetchUserAlbum(albumId: number) {
     </Dialog>
     <!--      edit-->
     <Dialog v-model:visible="albumEditDialog" modal :header="t('message.myAlbumEditDialogTitle')">
-      <form @submit="editAlbum">
+      <form @submit="handleEditAlbum">
         <div class="flex flex-col gap-4 m-4 w-96">
           <div class="flex flex-col gap-2 w-full">
             <IftaLabel variant="on">
