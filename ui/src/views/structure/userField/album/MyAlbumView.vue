@@ -345,7 +345,7 @@ async function fetchUserAlbum(albumId: number) {
     <!--      edit-->
     <Dialog v-model:visible="albumEditDialog" modal :header="t('message.myAlbumEditDialogTitle')">
       <form @submit="editAlbum">
-        <div class="flex flex-col gap-4 m-4 min-w-96">
+        <div class="flex flex-col gap-4 m-4 w-96">
           <div class="flex flex-col gap-2 w-full">
             <IftaLabel variant="on">
               <InputText
@@ -356,7 +356,7 @@ async function fetchUserAlbum(albumId: number) {
                 @blur="handleBlur('name')"
               />
               <label for="editAlbumName">{{ t("message.myAlbumEditDialogAlbumName") }}</label>
-              <span class="text-red-500 text-sm w-fit">{{ errors.patchAlbumName }}</span>
+              <p class="text-red-500 text-sm">{{ errors.patchAlbumName }}</p>
             </IftaLabel>
 
             <IftaLabel variant="on">
@@ -368,7 +368,7 @@ async function fetchUserAlbum(albumId: number) {
                 @blur="handleBlur('description')"
               />
               <label for="editAlbumDesc">{{ t("message.myAlbumEditDialogAlbumDesc") }}</label>
-              <span class="text-red-500 text-sm w-fit">{{ errors.patchAlbumDesc }}</span>
+              <p class="text-red-500 text-sm">{{ errors.patchAlbumDesc }}</p>
             </IftaLabel>
           </div>
           <div class="flex justify-end gap-2">
