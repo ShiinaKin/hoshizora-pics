@@ -26,7 +26,8 @@ data class AlbumManageInsertRequest(
 @Name("AlbumSelfPatchRequest")
 data class AlbumSelfPatchRequest(
     val name: String? = null,
-    val description: String? = null
+    val description: String? = null,
+    val isDefault: Boolean? = null
 )
 
 @Serializable
@@ -34,5 +35,6 @@ data class AlbumSelfPatchRequest(
 data class AlbumManagePatchRequest(
     val userId: Long? = null,
     val name: String? = null,
-    val description: String? = null
+    val description: String? = null,
+    val isDefault: Boolean? = null
 )

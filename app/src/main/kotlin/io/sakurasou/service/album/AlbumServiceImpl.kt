@@ -107,8 +107,12 @@ class AlbumServiceImpl(
                     description = selfPatchRequest.description ?: album.description,
                 )
 
-                val influenceRowCnt = albumDao.updateAlbumById(albumUpdateDTO)
-                if (influenceRowCnt < 1) throw AlbumNotFoundException()
+                albumDao.updateAlbumById(albumUpdateDTO)
+
+                // this field is strange to be updated here, cause `defaultAlbumId` is a field of user
+                if (selfPatchRequest.isDefault == true) {
+                    userDao.updateUserDefaultAlbumId(userId, album.id)
+                }
             }
         }.onFailure {
             when (it) {
@@ -131,8 +135,11 @@ class AlbumServiceImpl(
                     description = managePatchRequest.description ?: album.description,
                 )
 
-                val influenceRowCnt = albumDao.updateAlbumById(albumUpdateDTO)
-                if (influenceRowCnt < 1) throw AlbumNotFoundException()
+                albumDao.updateAlbumById(albumUpdateDTO)
+
+                if (managePatchRequest.isDefault == true) {
+                    userDao.updateUserDefaultAlbumId(album.userId, album.id)
+                }
             }
         }.onFailure {
             when (it) {
