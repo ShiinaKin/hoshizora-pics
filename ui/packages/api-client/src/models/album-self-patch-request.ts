@@ -28,6 +28,12 @@ export interface AlbumSelfPatchRequest {
     'description'?: string | null;
     /**
      * 
+     * @type {boolean}
+     * @memberof AlbumSelfPatchRequest
+     */
+    'isDefault'?: boolean | null;
+    /**
+     * 
      * @type {string}
      * @memberof AlbumSelfPatchRequest
      */

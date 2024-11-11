@@ -28,6 +28,12 @@ export interface AlbumManagePatchRequest {
     'description'?: string | null;
     /**
      * 
+     * @type {boolean}
+     * @memberof AlbumManagePatchRequest
+     */
+    'isDefault'?: boolean | null;
+    /**
+     * 
      * @type {string}
      * @memberof AlbumManagePatchRequest
      */

@@ -2969,6 +2969,9 @@
           "description" : {
             "type" : [ "null", "string" ]
           },
+          "isDefault" : {
+            "type" : [ "null", "boolean" ]
+          },
           "name" : {
             "type" : [ "null", "string" ]
           }
@@ -3124,6 +3127,9 @@
         "properties" : {
           "description" : {
             "type" : [ "null", "string" ]
+          },
+          "isDefault" : {
+            "type" : [ "null", "boolean" ]
           },
           "name" : {
             "type" : [ "null", "string" ]
