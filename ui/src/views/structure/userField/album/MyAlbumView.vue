@@ -65,20 +65,39 @@ const albumEditDialog = ref(false);
 const albumDeleteDialog = ref(false);
 
 const albumEditValidationSchema = toTypedSchema(
-  yup.object({
-    patchAlbumName: yup
-      .string()
-      .trim()
-      .test("not-both-empty", t("message.myAlbumEditDialogValidationFailedMessage"), function (value) {
-        return !((!value || value === "") && (!this.parent.patchAlbumDesc || this.parent.patchAlbumDesc === ""));
-      }),
-    patchAlbumDesc: yup
-      .string()
-      .trim()
-      .test("not-both-empty", t("message.myAlbumEditDialogValidationFailedMessage"), function (value) {
-        return !((!value || value === "") && (!this.parent.patchAlbumName || this.parent.patchAlbumName === ""));
-      })
-  })
+  yup
+    .object({
+      patchAlbumName: yup
+        .string()
+        .trim()
+        .test("not-both-empty", t("message.myAlbumEditDialogValidationFailedMessage"), (value) => {
+          return (
+            // afterMount, dont show error
+            (value === undefined && patchAlbumDesc.value === undefined) ||
+            // self is not empty
+            (value !== undefined && value !== "") ||
+            // self is empty, but another is not empty
+            ((value === undefined || value === "") && patchAlbumDesc.value !== undefined && patchAlbumDesc.value !== "")
+          );
+        }),
+      patchAlbumDesc: yup
+        .string()
+        .trim()
+        .test("not-both-empty", t("message.myAlbumEditDialogValidationFailedMessage"), (value) => {
+          return (
+            (value === undefined && patchAlbumName.value === undefined) ||
+            (value !== undefined && value !== "") ||
+            ((value === undefined || value === "") && patchAlbumName.value !== undefined && patchAlbumName.value !== "")
+          );
+        })
+    })
+    .test("not-both-empty", t("message.myAlbumEditDialogValidationFailedMessage"), (values) => {
+      return (
+        // afterMount, dont show error and disable submit button
+        (values.patchAlbumName !== undefined && values.patchAlbumName !== "") ||
+        (values.patchAlbumDesc !== undefined && values.patchAlbumDesc !== "")
+      );
+    })
 );
 
 const { handleSubmit, errors, meta, validate } = useForm({
@@ -388,7 +407,7 @@ async function fetchUserAlbum(albumId: number) {
       v-model:visible="albumDeleteDialog"
       modal
       :header="t('message.myAlbumDeleteConfirmDialogTitle')"
-      class="min-w-72"
+      class="w-72"
     >
       <div class="flex flex-col gap-4 mb-4">
         <h2 class="text-lg">{{ t("message.myAlbumDeleteConfirmDialogWarningTitle") }}</h2>
@@ -410,12 +429,7 @@ async function fetchUserAlbum(albumId: number) {
       </div>
     </Dialog>
     <!--      detail-->
-    <Dialog
-      v-model:visible="albumDetailDialog"
-      modal
-      :header="t('message.myImageDialogImageDetailTitle')"
-      class="min-w-96"
-    >
+    <Dialog v-model:visible="albumDetailDialog" modal :header="t('message.myImageDialogImageDetailTitle')" class="w-96">
       <div class="flow-root">
         <dl class="-my-3 divide-y divide-gray-100 text-sm">
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
