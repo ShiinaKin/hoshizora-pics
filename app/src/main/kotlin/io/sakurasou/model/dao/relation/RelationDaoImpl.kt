@@ -1,6 +1,8 @@
 package io.sakurasou.model.dao.relation
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.deleteWhere
 
 /**
  * @author ShiinaKin
@@ -21,6 +23,17 @@ class RelationDaoImpl : RelationDao {
         }
     }
 
+    override fun batchInsertPATToPermissions(patId: Long, permissionNames: List<String>) {
+        PersonalAccessTokenPermissions.batchInsert(permissionNames) {
+            this[PersonalAccessTokenPermissions.tokenId] = patId
+            this[PersonalAccessTokenPermissions.permission] = it
+        }
+    }
+
+    override fun deletePATToPermissionsByPATId(patId: Long) {
+        PersonalAccessTokenPermissions.deleteWhere { tokenId eq patId }
+    }
+
     override fun listRoleByGroupId(groupId: Long): List<String> {
         return GroupRoles.select(GroupRoles.roleName)
             .where { GroupRoles.groupId eq groupId }
@@ -31,5 +44,11 @@ class RelationDaoImpl : RelationDao {
         return RolePermissions.select(RolePermissions.permissionName)
             .where { RolePermissions.roleName eq role }
             .map { it[RolePermissions.permissionName] }
+    }
+
+    override fun listPermissionByPATId(patId: Long): List<String> {
+        return PersonalAccessTokenPermissions.select(PersonalAccessTokenPermissions.permission)
+            .where { PersonalAccessTokenPermissions.tokenId eq patId }
+            .map { it[PersonalAccessTokenPermissions.permission] }
     }
 }
