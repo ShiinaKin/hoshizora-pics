@@ -10,7 +10,11 @@ import kotlinx.serialization.Serializable
  * 2024/9/12 11:51
  */
 @Serializable
-data class Principal(val id: Long, val groupId: Long, val username: String, val roles: List<String>)
+data class Principal(
+    val id: Long,
+    val groupId: Long,
+    val username: String,
+)
 
 fun ApplicationCall.getPrincipal(): Principal {
     return attributes.getOrNull(AttributeKey("principal")) ?: throw PrincipalNotFoundException()
