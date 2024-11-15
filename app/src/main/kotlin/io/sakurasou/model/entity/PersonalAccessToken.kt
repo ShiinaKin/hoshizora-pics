@@ -9,7 +9,6 @@ import kotlinx.datetime.LocalDateTime
 data class PersonalAccessToken(
     val id: Long,
     val userId: Long,
-    val token: String,
     val name: String,
     val description: String?,
     val createTime: LocalDateTime,

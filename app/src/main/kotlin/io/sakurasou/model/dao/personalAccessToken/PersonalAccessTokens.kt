@@ -10,8 +10,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
  */
 object PersonalAccessTokens: LongIdTable("personal_access_tokens") {
     val userId = long("user_id")
-    val token = char("token", 60)
-    val name = varchar("name", 255).uniqueIndex()
+    val name = varchar("name", 255)
     val description = varchar("description", 255).nullable()
     val createTime = datetime("create_time")
     val expireTime = datetime("expire_time")
