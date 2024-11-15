@@ -21,6 +21,7 @@ import io.sakurasou.exception.controller.param.UnsupportedFileTypeException
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.plugins.AuthorizationPlugin
@@ -248,7 +249,7 @@ private fun Route.imageSelfPage(controller: ImageController) {
             permission = IMAGE_READ_SELF_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             request {
                 queryParameter<Long>("albumId") {
                     description = "albumId"
@@ -438,7 +439,7 @@ private fun Route.imageManagePage(controller: ImageController) {
             permission = IMAGE_READ_ALL_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             request {
                 queryParameter<Long>("userId") {
                     description = "albumId"

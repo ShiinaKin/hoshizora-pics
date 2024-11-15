@@ -2,7 +2,6 @@ package io.sakurasou.controller
 
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.GROUP_DELETE
@@ -16,6 +15,7 @@ import io.sakurasou.controller.vo.*
 import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.group.GroupService
@@ -155,7 +155,7 @@ private fun Route.groupPage(controller: GroupController) {
             permission = GROUP_READ_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             response {
                 HttpStatusCode.OK to {
                     description = "success"

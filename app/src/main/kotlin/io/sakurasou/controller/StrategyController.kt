@@ -17,6 +17,7 @@ import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.controller.vo.StrategyVO
 import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
@@ -289,7 +290,7 @@ private fun Route.pageStrategies(controller: StrategyController) {
             permission = STRATEGY_READ_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             response {
                 HttpStatusCode.OK to {
                     description = "success"

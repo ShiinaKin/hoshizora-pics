@@ -29,7 +29,7 @@ fun ApplicationCall.id(): Long {
     return parameters["id"]?.toLong() ?: throw WrongParameterException()
 }
 
-fun OpenApiRoute.pageRequest() {
+fun OpenApiRoute.pageRequestSpec() {
     request {
         queryParameter<Int>("page") {
             description = "page"

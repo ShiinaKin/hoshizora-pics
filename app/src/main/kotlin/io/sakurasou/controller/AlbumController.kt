@@ -17,8 +17,8 @@ import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.getPrincipal
-import io.sakurasou.extension.id
 import io.sakurasou.extension.pageRequest
+import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.album.AlbumService
@@ -159,7 +159,7 @@ private fun Route.albumSelfPage(controller: AlbumController) {
             permission = ALBUM_READ_SELF_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             response {
                 HttpStatusCode.OK to {
                     description = "success"
@@ -305,7 +305,7 @@ private fun Route.albumManagePage(controller: AlbumController) {
             permission = ALBUM_READ_ALL_ALL
         }
         get("page", {
-            pageRequest()
+            pageRequestSpec()
             response {
                 HttpStatusCode.OK to {
                     description = "success"
