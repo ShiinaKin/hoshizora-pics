@@ -7,7 +7,9 @@ import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dao.permission.Permissions
+import io.sakurasou.model.dao.personalAccessToken.PersonalAccessTokens
 import io.sakurasou.model.dao.relation.GroupRoles
+import io.sakurasou.model.dao.relation.PersonalAccessTokenPermissions
 import io.sakurasou.model.dao.relation.RolePermissions
 import io.sakurasou.model.dao.role.Roles
 import io.sakurasou.model.dao.setting.Settings
@@ -43,6 +45,8 @@ fun init() {
     SchemaUtils.create(Permissions)
     SchemaUtils.create(GroupRoles)
     SchemaUtils.create(RolePermissions)
+    SchemaUtils.create(PersonalAccessTokens)
+    SchemaUtils.create(PersonalAccessTokenPermissions)
     initStrategy()
     initSetting()
     initPermission()
@@ -52,7 +56,7 @@ fun init() {
 }
 
 private fun isFirstRunning(): Boolean {
-    return SchemaUtils.listTables().size == 10
+    return SchemaUtils.listTables().size == 12
 }
 
 private val userOpsPermissions = listOf(

@@ -15,7 +15,7 @@ data class Image(
     val albumId: Long,
     val uniqueName: String,
     val displayName: String,
-    val description: String? = null,
+    val description: String?,
     val path: String,
     val strategyId: Long,
     val originName: String,
