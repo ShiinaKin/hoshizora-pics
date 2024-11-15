@@ -70,7 +70,7 @@ private fun Route.fetchAllRolesAndPermissionsOfUser(controller: RoleController) 
             }
         }) {
             val principal = call.getPrincipal()
-            val rolesWithPermissions = controller.handleListAllRolesWithPermissionsOfUser(principal.roles)
+            val rolesWithPermissions = controller.handleListAllRolesWithPermissionsOfUser(principal.groupId)
             call.success(rolesWithPermissions)
         }
     }
@@ -83,7 +83,7 @@ class RoleController(
         return roleService.listRolesWithPermissions()
     }
 
-    suspend fun handleListAllRolesWithPermissionsOfUser(roles: List<String>): List<RoleVO> {
-        return roleService.listRolesWithPermissionsOfUser(roles)
+    suspend fun handleListAllRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> {
+        return roleService.listRolesWithPermissionsOfUser(groupId)
     }
 }

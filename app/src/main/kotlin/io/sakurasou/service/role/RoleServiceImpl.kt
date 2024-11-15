@@ -40,8 +40,9 @@ class RoleServiceImpl(
         }
     }
 
-    override suspend fun listRolesWithPermissionsOfUser(roleNames: List<String>): List<RoleVO> {
+    override suspend fun listRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> {
         return dbQuery {
+            val roleNames = relationDao.listRoleByGroupId(groupId)
             roleNames.map { roleName ->
                 val role = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
                 val permissionNames = relationDao.listPermissionByRole(roleName)
