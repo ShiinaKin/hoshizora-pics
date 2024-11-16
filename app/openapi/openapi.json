@@ -4071,7 +4071,7 @@
             "type" : [ "null", "string" ]
           },
           "expireTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "name" : {
             "type" : "string"
@@ -4140,11 +4140,14 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "isExpired" : {
+            "type" : "boolean"
+          },
           "name" : {
             "type" : "string"
           }
         },
-        "required" : [ "createTime", "expireTime", "id", "name" ]
+        "required" : [ "createTime", "expireTime", "id", "isExpired", "name" ]
       },
       "CommonResponse_PageResult_PersonalAccessTokenPageVO" : {
         "type" : "object",

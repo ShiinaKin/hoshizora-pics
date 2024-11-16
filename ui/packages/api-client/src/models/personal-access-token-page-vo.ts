@@ -49,6 +49,12 @@ export interface PersonalAccessTokenPageVO {
     'id': number;
     /**
      * 
+     * @type {boolean}
+     * @memberof PersonalAccessTokenPageVO
+     */
+    'isExpired': boolean;
+    /**
+     * 
      * @type {string}
      * @memberof PersonalAccessTokenPageVO
      */

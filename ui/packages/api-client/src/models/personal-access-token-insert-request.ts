@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
 
 /**
  * 
@@ -31,10 +28,10 @@ export interface PersonalAccessTokenInsertRequest {
     'description'?: string | null;
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof PersonalAccessTokenInsertRequest
      */
-    'expireTime': KotlinxDatetimeLocalDateTime;
+    'expireTime': string;
     /**
      * 
      * @type {string}
