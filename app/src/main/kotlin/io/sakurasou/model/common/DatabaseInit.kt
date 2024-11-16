@@ -121,6 +121,11 @@ private val albumOpsPermissions = listOf(
     ALBUM_DELETE_ALL
 )
 
+private val personalAccessTokenOpsPermissions = listOf(
+    PERSONAL_ACCESS_TOKEN_READ_SELF,
+    PERSONAL_ACCESS_TOKEN_WRITE_SELF
+)
+
 private fun initPermission() {
     val allPermissions = listOf(
         userOpsPermissions,
@@ -130,7 +135,8 @@ private fun initPermission() {
         settingOpsPermissions,
         strategyOpsPermissions,
         imageOpsPermissions,
-        albumOpsPermissions
+        albumOpsPermissions,
+        personalAccessTokenOpsPermissions
     )
         .flatten()
         .map { PermissionInsertDTO(it, null) }
@@ -187,7 +193,8 @@ private fun initRelation() {
         roleOpsPermissions,
         strategyOpsPermissions,
         imageOpsPermissions,
-        albumOpsPermissions
+        albumOpsPermissions,
+        personalAccessTokenOpsPermissions
     ).flatten()
     val userPermissions = listOf(
         USER_READ_SELF,
@@ -200,7 +207,9 @@ private fun initRelation() {
         ALBUM_READ_SELF_SINGLE,
         ALBUM_READ_SELF_ALL,
         ALBUM_WRITE_SELF,
-        ALBUM_DELETE_SELF
+        ALBUM_DELETE_SELF,
+        PERSONAL_ACCESS_TOKEN_READ_SELF,
+        PERSONAL_ACCESS_TOKEN_WRITE_SELF
     )
 
     InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
