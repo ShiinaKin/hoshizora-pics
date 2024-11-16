@@ -57,6 +57,7 @@ function handleSubmit() {
             <input
               id="username"
               type="text"
+              autocomplete="username"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
               :placeholder="t('message.registerUsernamePlaceholder')"
               v-model="userRegisterForm.username"
@@ -78,6 +79,7 @@ function handleSubmit() {
             <input
               id="password"
               type="password"
+              autocomplete="new-password"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
               :placeholder="t('message.registerPasswordPlaceholder')"
               v-model="userRegisterForm.password"

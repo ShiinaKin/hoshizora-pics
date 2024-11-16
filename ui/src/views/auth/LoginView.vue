@@ -58,6 +58,7 @@ function handleSubmit() {
             <input
               id="username"
               type="text"
+              autocomplete="username"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
               :placeholder="t('message.loginUsernamePlaceholder')"
               v-model="userLoginForm.username"
@@ -79,6 +80,7 @@ function handleSubmit() {
             <input
               id="password"
               type="password"
+              autocomplete="current-password"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
               :placeholder="t('message.loginPasswordPlaceholder')"
               v-model="userLoginForm.password"
