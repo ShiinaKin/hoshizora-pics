@@ -83,9 +83,7 @@ class SettingServiceImpl(
                 siteExternalUrl = siteSettingPatch.siteExternalUrl ?: oldSiteSetting.siteExternalUrl,
                 siteTitle = siteSettingPatch.siteTitle ?: oldSiteSetting.siteTitle,
                 siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
-                siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription,
-                homePageRandomPicDisplay = siteSettingPatch.homePageRandomPicDisplay
-                    ?: oldSiteSetting.homePageRandomPicDisplay
+                siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription
             )
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             val settingUpdateDTO = SettingUpdateDTO(

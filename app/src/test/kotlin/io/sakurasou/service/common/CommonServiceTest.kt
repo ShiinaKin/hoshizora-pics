@@ -60,7 +60,7 @@ class CommonServiceTest {
             siteDescription = "Test Description",
             siteExternalUrl = "http://localhost:8080"
         )
-        coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = true)
+        coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = true, version = "1.0.0")
 
         assertFailsWith<SiteRepeatedInitializationException> {
             commonService.initSite(siteInitRequest)
@@ -96,20 +96,18 @@ class CommonServiceTest {
             siteExternalUrl = "http://localhost:8080",
             siteTitle = "oldTitle",
             siteSubtitle = "oldSubtitle",
-            siteDescription = "oldKeyword",
-            homePageRandomPicDisplay = true
+            siteDescription = "oldKeyword"
         )
         val siteSettingConfig = SiteSetting(
             siteExternalUrl = siteInitRequest.siteExternalUrl,
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
-            siteDescription = siteInitRequest.siteDescription,
-            homePageRandomPicDisplay = oldSiteSetting.homePageRandomPicDisplay
+            siteDescription = siteInitRequest.siteDescription
         )
-        val systemStatus = SystemStatus(isInit = true)
+        val systemStatus = SystemStatus(isInit = true, version = "1.0.0")
 
         every { Clock.System.now() } returns instant
-        coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = false)
+        coEvery { settingService.getSystemStatus() } returns SystemStatus(isInit = false, version = "1.0.0")
         coEvery { settingService.getSiteSetting() } returns oldSiteSetting
         every { BCrypt.withDefaults().hashToString(12, siteInitRequest.password.toCharArray()) } returns encodedPassword
         every { userDao.saveUser(userInsertDTO) } returns 1

@@ -69,8 +69,7 @@ class SettingServiceTest {
             siteExternalUrl = "http://localhost:8080",
             siteTitle = "Title",
             siteSubtitle = "Subtitle",
-            siteDescription = "Description",
-            homePageRandomPicDisplay = false
+            siteDescription = "Description"
         )
 
         coEvery { DatabaseSingleton.dbQuery<SiteSetting>(any()) } coAnswers {
@@ -83,8 +82,7 @@ class SettingServiceTest {
                         siteExternalUrl = "http://localhost:8080",
                         siteTitle = "Title",
                         siteSubtitle = "Subtitle",
-                        siteDescription = "Description",
-                        homePageRandomPicDisplay = false
+                        siteDescription = "Description"
                     ),
                     createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),
                     updateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())

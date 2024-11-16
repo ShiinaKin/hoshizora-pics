@@ -14,8 +14,7 @@ data class SiteSettingPatchRequest(
     val siteTitle: String? = null,
     val siteSubtitle: String? = null,
     val siteKeyword: String? = null,
-    val siteDescription: String? = null,
-    val homePageRandomPicDisplay: Boolean? = null
+    val siteDescription: String? = null
 )
 
 @Serializable
