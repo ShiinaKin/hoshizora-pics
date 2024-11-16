@@ -14,6 +14,8 @@ import io.sakurasou.model.dao.image.ImageDao
 import io.sakurasou.model.dao.image.ImageDaoImpl
 import io.sakurasou.model.dao.permission.PermissionDao
 import io.sakurasou.model.dao.permission.PermissionDaoImpl
+import io.sakurasou.model.dao.personalAccessToken.PersonalAccessTokenDao
+import io.sakurasou.model.dao.personalAccessToken.PersonalAccessTokenDaoImpl
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.relation.RelationDaoImpl
 import io.sakurasou.model.dao.role.RoleDao
@@ -35,6 +37,8 @@ import io.sakurasou.service.group.GroupService
 import io.sakurasou.service.group.GroupServiceImpl
 import io.sakurasou.service.image.ImageService
 import io.sakurasou.service.image.ImageServiceImpl
+import io.sakurasou.service.personalAccessToken.PersonalAccessTokenService
+import io.sakurasou.service.personalAccessToken.PersonalAccessTokenServiceImpl
 import io.sakurasou.service.role.RoleService
 import io.sakurasou.service.role.RoleServiceImpl
 import io.sakurasou.service.setting.SettingService
@@ -58,6 +62,7 @@ object InstanceCenter {
     lateinit var strategyDao: StrategyDao
     lateinit var settingDao: SettingDao
     lateinit var groupDao: GroupDao
+    lateinit var personalAccessTokenDao: PersonalAccessTokenDao
     lateinit var roleDao: RoleDao
     lateinit var permissionDao: PermissionDao
     lateinit var relationDao: RelationDao
@@ -72,6 +77,7 @@ object InstanceCenter {
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
     lateinit var roleService: RoleService
+    lateinit var personalAccessTokenService: PersonalAccessTokenService
 
     lateinit var systemStatus: SystemStatus
     lateinit var rolePermissions: Map<String, Set<String>>
@@ -92,6 +98,7 @@ object InstanceCenter {
         strategyDao = StrategyDaoImpl()
         settingDao = SettingDaoImpl()
         groupDao = GroupDaoImpl()
+        personalAccessTokenDao = PersonalAccessTokenDaoImpl()
         roleDao = RoleDaoImpl()
         permissionDao = PermissionDaoImpl()
         relationDao = RelationDaoImpl()
@@ -106,6 +113,8 @@ object InstanceCenter {
 
         albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
+
+        personalAccessTokenService = PersonalAccessTokenServiceImpl(personalAccessTokenDao, userDao, groupDao, relationDao)
 
         userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)
         commonService = CommonServiceImpl(userDao, albumDao, strategyDao, imageDao, settingService)
