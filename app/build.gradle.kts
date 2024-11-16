@@ -123,8 +123,16 @@ tasks.register<Copy>("copyFrontendBuildResults") {
     into(backendStaticResourceDir)
 }
 
+tasks.register("updateVersion") {
+    val yamlFile = file("src/main/resources/application.yaml")
+    val contents = yamlFile.readText()
+    val regex = Regex("^version:\\s*.+$", RegexOption.MULTILINE)
+    val newContents = contents.replace(regex, "version: $version")
+    yamlFile.writeText(newContents)
+}
+
 tasks.named("processResources") {
-    dependsOn("copyFrontendBuildResults")
+    dependsOn("copyFrontendBuildResults", "updateVersion")
 }
 
 tasks.register<Delete>("cleanStaticResources") {
