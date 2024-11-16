@@ -62,12 +62,12 @@ class CommonServiceImpl(
             siteExternalUrl = siteInitRequest.siteExternalUrl,
             siteTitle = siteInitRequest.siteTitle,
             siteSubtitle = siteInitRequest.siteSubtitle,
-            siteDescription = siteInitRequest.siteDescription,
-            homePageRandomPicDisplay = oldSiteSetting.homePageRandomPicDisplay
+            siteDescription = siteInitRequest.siteDescription
         )
 
         val systemStatus = SystemStatus(
-            isInit = true
+            isInit = true,
+            version = status.version
         )
 
         dbQuery {

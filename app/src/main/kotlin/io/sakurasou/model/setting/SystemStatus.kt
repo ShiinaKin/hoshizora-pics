@@ -10,5 +10,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Name("SystemStatus")
 data class SystemStatus(
-    val isInit: Boolean
+    val isInit: Boolean,
+    val version: String,
 ) : SettingConfig()
