@@ -22,12 +22,6 @@
 export interface SiteSettingPatchRequest {
     /**
      * 
-     * @type {boolean}
-     * @memberof SiteSettingPatchRequest
-     */
-    'homePageRandomPicDisplay'?: boolean | null;
-    /**
-     * 
      * @type {string}
      * @memberof SiteSettingPatchRequest
      */

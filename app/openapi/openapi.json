@@ -2417,6 +2417,188 @@
           "JWT" : [ ]
         } ]
       }
+    },
+    "/api/personal-access-token" : {
+      "post" : {
+        "tags" : [ "PersonalAccessToken" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "Personal Access Token Insert Request",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PersonalAccessTokenInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.String"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/personal-access-token/{patId}" : {
+      "delete" : {
+        "tags" : [ "PersonalAccessToken" ],
+        "parameters" : [ {
+          "name" : "patId",
+          "in" : "path",
+          "description" : "Personal Access Token ID",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "PersonalAccessToken" ],
+        "parameters" : [ {
+          "name" : "patId",
+          "in" : "path",
+          "description" : "Personal Access Token ID",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Personal Access Token Patch Request",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PersonalAccessTokenPatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/personal-access-token/page" : {
+      "get" : {
+        "tags" : [ "PersonalAccessToken" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "isExpired",
+          "in" : "query",
+          "description" : "Whether the token is expired",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_PersonalAccessTokenPageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
     }
   },
   "components" : {
@@ -3314,9 +3496,6 @@
       "SiteSettingPatchRequest" : {
         "type" : "object",
         "properties" : {
-          "homePageRandomPicDisplay" : {
-            "type" : [ "null", "boolean" ]
-          },
           "siteDescription" : {
             "type" : [ "null", "string" ]
           },
@@ -3875,6 +4054,111 @@
             "items" : {
               "$ref" : "#/components/schemas/RoleVO"
             }
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PersonalAccessTokenInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "expireTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "expireTime", "name", "permissions" ]
+      },
+      "PersonalAccessTokenPatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
+      "PageResult_PersonalAccessTokenPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PersonalAccessTokenPageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "PersonalAccessTokenPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "expireTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "expireTime", "id", "name" ]
+      },
+      "CommonResponse_PageResult_PersonalAccessTokenPageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_PersonalAccessTokenPageVO"
+            } ]
           },
           "isSuccessful" : {
             "type" : "boolean"
