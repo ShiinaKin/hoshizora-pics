@@ -30,10 +30,12 @@ onMounted(() => {
           metaDescription.setAttribute("content", commonStore.subTitle);
         }
 
-        if (!commonSiteSetting.isSiteInit!) router.push({ name: "siteInit" });
-        if (!token) router.push({ name: "login" });
         const arr = ["home", "login", "register", "siteInit"];
-        if (arr.includes(route.name as string)) router.push({ name: "overview" });
+
+        if (!commonSiteSetting.isSiteInit!) router.push({ name: "siteInit" });
+        else if (!token) router.push({ name: "login" });
+        else if (arr.includes(route.name as string)) router.push({ name: "overview" });
+        else router.push({ name: "notFound" });
       }
     })
     .catch((error) => {
