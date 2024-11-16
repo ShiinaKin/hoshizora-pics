@@ -77,6 +77,7 @@ class RoleServiceTest {
 
     @Test
     fun `list assign roles with permissions should be same as expected`(): Unit = runBlocking {
+        val groupId = 1L
         val role1 = Role("role1", null)
         val permission1 = Permission("permission1", "description1")
         val permission2 = Permission("permission2", null)
@@ -88,6 +89,7 @@ class RoleServiceTest {
         )
 
         every { roleDao.findRoleByName(role1.name) } returns role1
+        every { relationDao.listRoleByGroupId(groupId) } returns listOf(role1.name)
         every { relationDao.listPermissionByRole(role1.name) } returns listOf(permission1.name, permission2.name)
         every { permissionDao.findPermissionByName(permission1.name) } returns permission1
         every { permissionDao.findPermissionByName(permission2.name) } returns permission2
@@ -95,7 +97,7 @@ class RoleServiceTest {
             this.arg<suspend () -> List<RoleVO>>(0).invoke()
         }
 
-        val rolesWithPermissions = roleService.listRolesWithPermissionsOfUser(listOf(role1.name))
+        val rolesWithPermissions = roleService.listRolesWithPermissionsOfUser(groupId)
 
         assertEquals(expected, rolesWithPermissions)
     }
