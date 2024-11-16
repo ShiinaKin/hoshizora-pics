@@ -20,6 +20,7 @@
     "api-generate": "pnpm --filter \"./packages/api-client\" generate"
   },
   "dependencies": {
+    "@primevue/forms": "^4.2.2",
     "@vee-validate/yup": "^4.14.7",
     "api-client": "workspace:*",
     "class-variance-authority": "^0.7.0",
