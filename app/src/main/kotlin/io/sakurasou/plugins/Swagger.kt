@@ -6,6 +6,8 @@ import io.github.smiley4.ktorswaggerui.data.AuthScheme
 import io.github.smiley4.ktorswaggerui.data.AuthType
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
+import io.github.smiley4.schemakenerator.core.data.PrimitiveTypeData
+import io.github.smiley4.schemakenerator.core.data.TypeId
 import io.github.smiley4.schemakenerator.core.handleNameAnnotation
 import io.github.smiley4.schemakenerator.reflection.processReflection
 import io.github.smiley4.schemakenerator.swagger.compileReferencingRoot
@@ -17,13 +19,16 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import io.sakurasou.controller.request.PersonalAccessTokenInsertRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import org.apache.commons.io.FileUtils
 import java.nio.file.Files
 import kotlin.io.path.Path
+import kotlin.reflect.full.starProjectedType
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -46,11 +51,27 @@ fun Application.configureSwagger(baseUrl: String) {
         }
         schemas {
             generator = { type ->
-                type
-                    .processReflection()
-                    .handleNameAnnotation()
-                    .generateSwaggerSchema()
-                    .compileReferencingRoot()
+                if (type == PersonalAccessTokenInsertRequest::class.starProjectedType) {
+                    // https://github.com/SMILEY4/schema-kenerator/wiki/Custom-Type-Processing
+                    type.processReflection {
+                        customProcessor<LocalDateTime> {
+                            PrimitiveTypeData(
+                                id = TypeId.build(String::class.qualifiedName!!),
+                                simpleName = String::class.simpleName!!,
+                                qualifiedName = String::class.qualifiedName!!,
+                            )
+                        }
+                    }
+                        .handleNameAnnotation()
+                        .generateSwaggerSchema()
+                        .compileReferencingRoot()
+                } else {
+                    type
+                        .processReflection()
+                        .handleNameAnnotation()
+                        .generateSwaggerSchema()
+                        .compileReferencingRoot()
+                }
             }
         }
         security {
