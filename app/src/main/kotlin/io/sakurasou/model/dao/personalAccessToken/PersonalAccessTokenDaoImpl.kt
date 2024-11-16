@@ -68,12 +68,14 @@ class PersonalAccessTokenDaoImpl : PersonalAccessTokenDao {
                 }
         }
         return fetchPage(PersonalAccessTokens, pageRequest, query) { resultRow ->
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             PersonalAccessTokenPageVO(
                 id = resultRow[PersonalAccessTokens.id].value,
                 name = resultRow[PersonalAccessTokens.name],
                 description = resultRow[PersonalAccessTokens.description],
                 createTime = resultRow[PersonalAccessTokens.createTime],
-                expireTime = resultRow[PersonalAccessTokens.expireTime]
+                expireTime = resultRow[PersonalAccessTokens.expireTime],
+                isExpired = resultRow[PersonalAccessTokens.expireTime] <= now
             )
         }
     }
