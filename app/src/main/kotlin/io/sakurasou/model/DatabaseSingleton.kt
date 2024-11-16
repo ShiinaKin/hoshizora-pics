@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * 2024/9/5 14:33
  */
 object DatabaseSingleton {
-    fun init(jdbcURL: String, driverClassName: String, username: String, password: String) {
+    fun init(jdbcURL: String, driverClassName: String, username: String, password: String, version: String) {
         val hikariConfig = HikariConfig().apply {
             jdbcUrl = jdbcURL
             this.driverClassName = driverClassName
@@ -28,7 +28,7 @@ object DatabaseSingleton {
         val database = Database.connect(dataSource)
 
         transaction(database) {
-            init()
+            init(version)
         }
     }
 

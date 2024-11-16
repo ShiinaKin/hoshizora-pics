@@ -1,8 +1,8 @@
 package io.sakurasou.model.common
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.sakurasou.di.InstanceCenter
 import io.sakurasou.constant.*
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
@@ -33,7 +33,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
  */
 private val logger = KotlinLogging.logger {}
 
-fun init() {
+fun init(version: String) {
     if (isFirstRunning()) return
     SchemaUtils.create(Images)
     SchemaUtils.create(Albums)
@@ -48,7 +48,7 @@ fun init() {
     SchemaUtils.create(PersonalAccessTokens)
     SchemaUtils.create(PersonalAccessTokenPermissions)
     initStrategy()
-    initSetting()
+    initSetting(version)
     initPermission()
     initRole()
     initGroup()
@@ -226,13 +226,12 @@ private fun initRelation() {
     logger.info { "group-role relation init success" }
 }
 
-private fun initSetting() {
+private fun initSetting(version: String) {
     val siteSettingConfig = SiteSetting(
         siteExternalUrl = "http://localhost:8080",
         siteTitle = "HoshizoraPics",
         siteSubtitle = "A simple pic management",
-        siteDescription = "A simple pic management",
-        homePageRandomPicDisplay = false
+        siteDescription = "A simple pic management"
     )
     val systemSettingConfig = SystemSetting(
         defaultGroupId = 2,
@@ -240,7 +239,8 @@ private fun initSetting() {
         allowRandomFetch = false
     )
     val systemStatus = SystemStatus(
-        isInit = false
+        isInit = false,
+        version = version
     )
 
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
