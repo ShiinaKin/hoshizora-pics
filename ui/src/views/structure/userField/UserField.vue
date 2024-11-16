@@ -126,6 +126,18 @@ function handleLogout() {
                   </button>
                 </li>
 
+                <li>
+                  <button
+                    @click="router.push({ name: 'myPersonalAccessToken' })"
+                    :class="isActive('myPersonalAccessToken') ? activeCSS : inactiveCSS"
+                  >
+                    <div class="flex items-center gap-1">
+                      <Icon icon="mdi:account-key" class="size-5" />
+                      <span>{{ t("message.userMenuMyAccessToken") }}</span>
+                    </div>
+                  </button>
+                </li>
+
                 <li v-if="isAdmin">
                   <button @click="router.push({ name: 'adminField' })" :class="inactiveCSS">
                     <div class="flex items-center gap-1">

@@ -44,6 +44,7 @@ message:
   userMenuMyAlbum: "我的相册"
   userMenuAccount: "我的账户"
   userMenuProfile: "我的资料"
+  userMenuMyAccessToken: "我的令牌"
   userMenuAdminField: "管理后台"
   userMenuLogout: "退出登录"
   userMenuLogoutSuccess: "登出成功"
