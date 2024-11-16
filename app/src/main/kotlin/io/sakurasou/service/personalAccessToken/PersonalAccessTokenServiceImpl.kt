@@ -84,7 +84,7 @@ class PersonalAccessTokenServiceImpl(
                 personalAccessTokenDao.findPATById(patId) ?: throw PersonalAccessTokenNotFoundException()
             if (personalAccessToken.userId != userId) throw PersonalAccessTokenAccessDeniedException()
             val updateDTO = PersonalAccessTokenUpdateDTO(
-                id = userId,
+                id = patId,
                 name = updateRequest.name ?: personalAccessToken.name,
                 description = updateRequest.description ?: personalAccessToken.description,
             )
