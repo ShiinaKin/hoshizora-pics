@@ -352,7 +352,7 @@ async function fetchUserAlbum(albumId: number) {
       </Column>
     </DataTable>
     <!--      create-->
-    <Dialog v-model:visible="albumCreateDialog" modal :header="t('message.myAlbumCreateDialogTitle')" class="min-w-96">
+    <Dialog v-model:visible="albumCreateDialog" modal :header="t('message.myAlbumCreateDialogTitle')" class="w-96">
       <form @submit.prevent="createAlbum">
         <div class="flex flex-col gap-4 m-4">
           <div class="flex flex-col gap-2 w-full">
