@@ -54,6 +54,11 @@ const router = createRouter({
           path: "profile",
           name: "profile",
           component: () => import("@/views/structure/userField/user/UserProfileView.vue")
+        },
+        {
+          path: "pat",
+          name: "myPersonalAccessToken",
+          component: () => import("@/views/structure/userField/pat/MyPersonalAccessTokenView.vue")
         }
       ]
     },
