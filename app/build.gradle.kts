@@ -1,3 +1,6 @@
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 val logbackVersion: String by project
 val kotlinLoggingVersion: String by project
 
@@ -124,15 +127,32 @@ tasks.register<Copy>("copyFrontendBuildResults") {
 }
 
 tasks.register("updateVersion") {
-    val yamlFile = file("src/main/resources/application.yaml")
-    val contents = yamlFile.readText()
-    val regex = Regex("^version:\\s*.+$", RegexOption.MULTILINE)
-    val newContents = contents.replace(regex, "version: $version")
-    yamlFile.writeText(newContents)
+    doLast {
+        val yamlFile = file("src/main/resources/application.yaml")
+        val contents = yamlFile.readText()
+        val regex = Regex("^version:\\s*.+$", RegexOption.MULTILINE)
+        val newContents = contents.replace(regex, "version: $version")
+        yamlFile.writeText(newContents)
+    }
+}
+
+tasks.register("generateBuildRecord") {
+    group = "build"
+    doLast {
+        val buildTime = LocalDateTime.now(ZoneId.of("UTC")).toString()
+        val commitId = getCheckedOutGitCommitHash()
+        val buildRecord = """
+            buildTime=$buildTime
+            commitId=$commitId
+            version=$version
+        """.trimIndent()
+        val file = file("src/main/resources/buildRecord.properties")
+        file.writeText(buildRecord)
+    }
 }
 
 tasks.named("processResources") {
-    dependsOn("copyFrontendBuildResults", "updateVersion")
+    dependsOn("copyFrontendBuildResults", "updateVersion", "generateBuildRecord")
 }
 
 tasks.register<Delete>("cleanStaticResources") {
@@ -142,4 +162,24 @@ tasks.register<Delete>("cleanStaticResources") {
 
 tasks.named("clean") {
     dependsOn("cleanStaticResources")
+}
+
+// https://gist.github.com/JonasGroeger/7620911
+private fun getCheckedOutGitCommitHash(): String {
+    val gitFolder = "${rootProject.projectDir}/.git"
+    val takeFromHash = 12
+
+    // '.git/HEAD' contains either
+    //      in case of detached head: the currently checked out commit hash
+    //      otherwise: a reference to a file containing the current commit hash
+    val head = File(gitFolder, "HEAD").readText().split(":") // .git/HEAD
+    val isCommit = head.size == 1 // e5a7c79edabbf7dd39888442df081b1c9d8e88fd
+    // val isRef = head.size > 1     // ref: refs/heads/master
+
+    return if (isCommit) {
+        head[0].trim().take(takeFromHash) // e5a7c79edabb
+    } else {
+        val refHead = File(gitFolder, head[1].trim()) // .git/refs/heads/master
+        refHead.readText().trim().take(takeFromHash)
+    }
 }
