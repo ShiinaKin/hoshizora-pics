@@ -43,11 +43,11 @@ function handleSubmit() {
   <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-lg text-center">
       <h1 class="text-2xl font-bold sm:text-3xl">
-        {{ t("message.siteInitTitle") }}
+        {{ t("siteInitView.siteInitTitle") }}
       </h1>
 
       <p class="mt-4 text-gray-500">
-        {{ t("message.siteInitDesc") }}
+        {{ t("siteInitView.siteInitDesc") }}
       </p>
     </div>
 
@@ -60,10 +60,10 @@ function handleSubmit() {
             id="siteTitle"
             type="text"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitSiteTitlePlaceholder')"
+            :placeholder="t('siteInitView.siteInitSiteTitlePlaceholder')"
             pattern="\S+.*"
             v-model="siteInitForm.siteTitle"
-            :title="t('message.siteInitSiteTitleRequirements')"
+            :title="t('siteInitView.siteInitSiteTitleRequirements')"
             required
           />
 
@@ -81,9 +81,9 @@ function handleSubmit() {
             id="siteSubTitle"
             type="text"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitSiteSubtitlePlaceholder')"
+            :placeholder="t('siteInitView.siteInitSiteSubtitlePlaceholder')"
             v-model="siteInitForm.siteSubtitle"
-            :title="t('message.siteInitSiteSubtitleRequirements')"
+            :title="t('siteInitView.siteInitSiteSubtitleRequirements')"
             required
           />
 
@@ -101,9 +101,9 @@ function handleSubmit() {
             id="siteDescription"
             type="text"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitSiteDescriptionPlaceholder')"
+            :placeholder="t('siteInitView.siteInitSiteDescriptionPlaceholder')"
             v-model="siteInitForm.siteDescription"
-            :title="t('message.siteInitSiteDescriptionRequirements')"
+            :title="t('siteInitView.siteInitSiteDescriptionRequirements')"
             required
           />
 
@@ -121,9 +121,9 @@ function handleSubmit() {
             id="siteExternalUrl"
             type="url"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitSiteExternalUrlPlaceholder')"
+            :placeholder="t('siteInitView.siteInitSiteExternalUrlPlaceholder')"
             v-model="siteInitForm.siteExternalUrl"
-            :title="t('message.siteInitSiteExternalUrlRequirements')"
+            :title="t('siteInitView.siteInitSiteExternalUrlRequirements')"
             required
           />
 
@@ -142,10 +142,10 @@ function handleSubmit() {
             type="text"
             autocomplete="username"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitUsernamePlaceholder')"
+            :placeholder="t('siteInitView.siteInitUsernamePlaceholder')"
             v-model="siteInitForm.username"
             pattern="^[a-zA-Z0-9]{4,20}$"
-            :title="t('message.siteInitUsernameRequirements')"
+            :title="t('siteInitView.siteInitUsernameRequirements')"
             required
           />
 
@@ -164,10 +164,10 @@ function handleSubmit() {
             type="password"
             autocomplete="new-password"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitPasswordPlaceholder')"
+            :placeholder="t('siteInitView.siteInitPasswordPlaceholder')"
             v-model="siteInitForm.password"
             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$"
-            :title="t('message.siteInitPasswordRequirements')"
+            :title="t('siteInitView.siteInitPasswordRequirements')"
             required
           />
 
@@ -185,9 +185,9 @@ function handleSubmit() {
             id="email"
             type="email"
             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-            :placeholder="t('message.siteInitEmailPlaceholder')"
+            :placeholder="t('siteInitView.siteInitEmailPlaceholder')"
             v-model="siteInitForm.email"
-            :title="t('message.siteInitEmailRequirements')"
+            :title="t('siteInitView.siteInitEmailRequirements')"
             required
           />
 
@@ -202,7 +202,7 @@ function handleSubmit() {
           type="submit"
           class="w-1/2 inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
         >
-          {{ t("message.siteInitSubmitButton") }}
+          {{ t("siteInitView.siteInitSubmitButton") }}
         </button>
       </div>
     </form>

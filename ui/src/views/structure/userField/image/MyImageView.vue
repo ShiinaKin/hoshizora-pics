@@ -177,7 +177,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         })
@@ -200,7 +200,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("message.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
               life: 3000
             });
             return;
@@ -209,7 +209,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         }
@@ -223,7 +223,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("message.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
               life: 3000
             });
             return;
@@ -232,7 +232,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         }
@@ -246,7 +246,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("message.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
               life: 3000
             });
             return;
@@ -255,7 +255,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         }
@@ -269,7 +269,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("message.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
               life: 3000
             });
             return;
@@ -278,7 +278,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         }
@@ -292,7 +292,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("message.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
               life: 3000
             });
             return;
@@ -301,7 +301,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("message.myImageDialogImageCopySuccessMessage"),
+            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
             life: 3000
           });
         }
@@ -504,7 +504,7 @@ function handleSingleImageChangeAlbumDialogSubmit() {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: t("message.myImageDialogImageChangeAlbumWarningMessage"),
+      detail: t("myImageView.myImageDialogImageChangeAlbumWarningMessage"),
       life: 3000
     });
     return;
@@ -521,7 +521,7 @@ function handleMultiImageChangeAlbumDialogSubmit() {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: t("message.myImageDialogImageChangeAlbumWarningMessage"),
+      detail: t("myImageView.myImageDialogImageChangeAlbumWarningMessage"),
       life: 3000
     });
     return;
@@ -555,13 +555,13 @@ async function handleSingleChangeAlbum(imageId: number, albumId: number): Promis
         toast.add({
           severity: "success",
           summary: "Success",
-          detail: t("message.myImageDialogImageChangeAlbumSuccessMessage"),
+          detail: t("myImageView.myImageDialogImageChangeAlbumSuccessMessage"),
           life: 3000
         });
       } else {
         toast.add({
           severity: "warn",
-          summary: t("message.myImageDialogImageChangeAlbumFailedTitle"),
+          summary: t("myImageView.myImageDialogImageChangeAlbumFailedTitle"),
           detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
           life: 3000
         });
@@ -587,14 +587,14 @@ function handleSingleChangeVisibility(isPrivate: boolean) {
         toast.add({
           severity: "success",
           summary: "Success",
-          detail: t("message.myImageDialogImageChangeVisibleSuccessMessage"),
+          detail: t("myImageView.myImageDialogImageChangeVisibleSuccessMessage"),
           life: 3000
         });
         pageUserImage(pageRequest.value);
       } else {
         toast.add({
           severity: "warn",
-          summary: t("message.myImageDialogImageChangeVisibleFailedTitle"),
+          summary: t("myImageView.myImageDialogImageChangeVisibleFailedTitle"),
           detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
           life: 3000
         });
@@ -622,13 +622,13 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
             toast.add({
               severity: "success",
               summary: "Success",
-              detail: t("message.myImageDialogImageChangeVisibleSuccessMessage"),
+              detail: t("myImageView.myImageDialogImageChangeVisibleSuccessMessage"),
               life: 3000
             });
           } else {
             toast.add({
               severity: "warn",
-              summary: t("message.myImageDialogImageChangeVisibleFailedTitle"),
+              summary: t("myImageView.myImageDialogImageChangeVisibleFailedTitle"),
               detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
               life: 3000
             });
@@ -661,14 +661,14 @@ function handleRenameImage() {
         toast.add({
           severity: "success",
           summary: "Success",
-          detail: t("message.myImageDialogImageRenameSuccessMessage"),
+          detail: t("myImageView.myImageDialogImageRenameSuccessMessage"),
           life: 3000
         });
         pageUserImage(pageRequest.value);
       } else {
         toast.add({
           severity: "warn",
-          summary: t("message.myImageDialogImageRenameFailedTitle"),
+          summary: t("myImageView.myImageDialogImageRenameFailedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -691,14 +691,14 @@ function handleDeleteSingleImage() {
         toast.add({
           severity: "success",
           summary: "Success",
-          detail: t("message.myImageDialogImageDeleteConfirmSuccessTitle"),
+          detail: t("myImageView.myImageDialogImageDeleteConfirmSuccessTitle"),
           life: 3000
         });
         pageUserImage(pageRequest.value);
       } else {
         toast.add({
           severity: "warn",
-          summary: t("message.myImageDialogImageDeleteConfirmFailedTitle"),
+          summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -709,7 +709,7 @@ function handleDeleteSingleImage() {
       console.error(e);
       toast.add({
         severity: "error",
-        summary: t("message.myImageDialogImageDeleteConfirmFailedTitle"),
+        summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
         detail: e.message,
         life: 3000
       });
@@ -727,13 +727,13 @@ function handleDeleteMultiImage() {
             toast.add({
               severity: "success",
               summary: "Success",
-              detail: t("message.myImageDialogImageDeleteConfirmSuccessTitle"),
+              detail: t("myImageView.myImageDialogImageDeleteConfirmSuccessTitle"),
               life: 3000
             });
           } else {
             toast.add({
               severity: "warn",
-              summary: t("message.myImageDialogImageDeleteConfirmFailedTitle"),
+              summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
               detail: resp.message,
               life: 3000
             });
@@ -875,12 +875,12 @@ function fetchThumbnails() {
           @click="handleShowAlbumDrawer"
         >
           <Icon icon="mdi:image-album" />
-          {{ t("message.myImageFilterAlbumButton") }}
+          {{ t("myImageView.myImageFilterAlbumButton") }}
         </button>
         <Drawer v-model:visible="showAlbumDrawer" position="right" class="bg-gray-100">
           <template #header>
             <div class="flex items-center gap-2 text-lg">
-              <span class="font-bold">{{ t("message.myImageFilterAlbumTitle") }}</span>
+              <span class="font-bold">{{ t("myImageView.myImageFilterAlbumTitle") }}</span>
               <Icon
                 icon="mdi:restart"
                 class="hover:cursor-pointer size-5"
@@ -959,7 +959,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:sort-clock-ascending-outline" />
-                {{ t("message.myImageFilterUploadTimeASC") }}
+                {{ t("myImageView.myImageFilterUploadTimeASC") }}
               </span>
             </button>
             <button
@@ -976,7 +976,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:sort-clock-descending-outline" />
-                {{ t("message.myImageFilterUploadTimeDESC") }}
+                {{ t("myImageView.myImageFilterUploadTimeDESC") }}
               </span>
             </button>
             <button
@@ -993,7 +993,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:sort-ascending" />
-                {{ t("message.myImageFilterFileSizeASC") }}
+                {{ t("myImageView.myImageFilterFileSizeASC") }}
               </span>
             </button>
             <button
@@ -1010,7 +1010,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:sort-descending" />
-                {{ t("message.myImageFilterFileSizeDESC") }}
+                {{ t("myImageView.myImageFilterFileSizeDESC") }}
               </span>
             </button>
           </div>
@@ -1031,7 +1031,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:visibility-outline" />
-                {{ t("message.myImageFilterPublicVisible") }}
+                {{ t("myImageView.myImageFilterPublicVisible") }}
               </span>
             </button>
             <button
@@ -1047,7 +1047,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:visibility-off-outline" />
-                {{ t("message.myImageFilterPrivateVisible") }}
+                {{ t("myImageView.myImageFilterPrivateVisible") }}
               </span>
             </button>
             <button
@@ -1063,7 +1063,7 @@ function fetchThumbnails() {
             >
               <span class="flex gap-2 justify-center items-center">
                 <Icon icon="mdi:visibility" />
-                {{ t("message.myImageFilterAllVisible") }}
+                {{ t("myImageView.myImageFilterAllVisible") }}
               </span>
             </button>
           </div>
@@ -1118,7 +1118,7 @@ function fetchThumbnails() {
       <Dialog
         v-model:visible="showImageChangeAlbumDialog"
         modal
-        :header="t('message.myImageDialogImageRenameTitle')"
+        :header="t('myImageView.myImageDialogImageRenameTitle')"
         class="min-w-96 z-99"
       >
         <div class="flex flex-col gap-4">
@@ -1139,25 +1139,25 @@ function fetchThumbnails() {
               v-model:selection="selectedAlbum"
               tableStyle="min-width: 50rem"
             >
-              <Column field="id" :header="t('message.myImageDialogImageChangeAlbumTableAlbumId')"></Column>
-              <Column field="name" :header="t('message.myImageDialogImageChangeAlbumTableAlbumName')"></Column>
-              <Column field="imageCount" :header="t('message.myImageDialogImageChangeAlbumTableImageCount')"></Column>
+              <Column field="id" :header="t('myImageView.myImageDialogImageChangeAlbumTableAlbumId')"></Column>
+              <Column field="name" :header="t('myImageView.myImageDialogImageChangeAlbumTableAlbumName')"></Column>
+              <Column field="imageCount" :header="t('myImageView.myImageDialogImageChangeAlbumTableImageCount')"></Column>
               <Column
                 field="isUncategorized"
-                :header="t('message.myImageDialogImageChangeAlbumTableIsUncategorized')"
+                :header="t('myImageView.myImageDialogImageChangeAlbumTableIsUncategorized')"
               ></Column>
             </DataTable>
           </div>
           <div class="flex justify-end gap-2">
             <Button
               type="button"
-              :label="t('message.myImageDialogImageChangeAlbumCancelButton')"
+              :label="t('myImageView.myImageDialogImageChangeAlbumCancelButton')"
               severity="secondary"
               @click="showImageChangeAlbumDialog = false"
             />
             <Button
               type="button"
-              :label="t('message.myImageDialogImageChangeAlbumSubmitButton')"
+              :label="t('myImageView.myImageDialogImageChangeAlbumSubmitButton')"
               @click="
                 isSingleImageChangeAlbum
                   ? handleSingleImageChangeAlbumDialogSubmit()
@@ -1171,60 +1171,60 @@ function fetchThumbnails() {
       <Dialog
         v-model:visible="showImageDetailDialog"
         modal
-        :header="t('message.myImageDialogImageDetailTitle')"
+        :header="t('myImageView.myImageDialogImageDetailTitle')"
         class="min-w-96"
       >
         <div class="flow-root">
           <dl class="-my-3 divide-y divide-gray-100 text-sm">
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageName") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageName") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.displayName }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageRawName") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageRawName") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.originName }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageType") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageType") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.mimeType }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageAlbumName") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageAlbumName") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.albumName }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageOwnerName") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageOwnerName") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.ownerName }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageSize") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageSize") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.width }} * {{ imageInfo?.height }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageFileSize") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageFileSize") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.size }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageUploadTime") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageUploadTime") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">
                 {{ dayjs(String(imageInfo?.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
               </dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageIsPublic") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageIsPublic") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.isPrivate }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">{{ t("message.myImageDialogImageDetailImageDesc") }}</dt>
+              <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageDesc") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.description }}</dd>
             </div>
 
@@ -1244,28 +1244,28 @@ function fetchThumbnails() {
       <Dialog
         v-model:visible="showImageRenameDialog"
         modal
-        :header="t('message.myImageDialogImageRenameTitle')"
+        :header="t('myImageView.myImageDialogImageRenameTitle')"
         class="min-w-96"
       >
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-2">
-            <label for="oldImageName">{{ t("message.myImageDialogImageRenameOldImageName") }}</label>
+            <label for="oldImageName">{{ t("myImageView.myImageDialogImageRenameOldImageName") }}</label>
             <InputText id="oldImageName" :placeholder="imageList[curRightClickImageIdx].displayName" disabled />
           </div>
           <FloatLabel variant="on">
             <InputText id="newImageName" v-model="newImageName" class="w-full" />
-            <label for="newImageName">{{ t("message.myImageDialogImageRenameNewImageName") }}</label>
+            <label for="newImageName">{{ t("myImageView.myImageDialogImageRenameNewImageName") }}</label>
           </FloatLabel>
           <div class="flex justify-end gap-2">
             <Button
               type="button"
-              :label="t('message.myImageDialogImageRenameCancelButton')"
+              :label="t('myImageView.myImageDialogImageRenameCancelButton')"
               severity="secondary"
               @click="showImageRenameDialog = false"
             />
             <Button
               type="button"
-              :label="t('message.myImageDialogImageRenameSubmitButton')"
+              :label="t('myImageView.myImageDialogImageRenameSubmitButton')"
               @click="handleRenameImage"
             />
           </div>
@@ -1275,23 +1275,23 @@ function fetchThumbnails() {
       <Dialog
         v-model:visible="showImageDeleteConfirmDialog"
         modal
-        :header="t('message.myImageDialogImageDeleteConfirmTitle')"
+        :header="t('myImageView.myImageDialogImageDeleteConfirmTitle')"
         class="min-w-72"
       >
         <div class="flex flex-col gap-4 mb-4">
-          <h2 class="text-lg">{{ t("message.myImageDialogImageDeleteConfirmWarningTitle") }}</h2>
-          <p class="text-sm">{{ t("message.myImageDialogImageDeleteConfirmWarningContent") }}</p>
+          <h2 class="text-lg">{{ t("myImageView.myImageDialogImageDeleteConfirmWarningTitle") }}</h2>
+          <p class="text-sm">{{ t("myImageView.myImageDialogImageDeleteConfirmWarningContent") }}</p>
         </div>
         <div class="flex justify-end gap-2">
           <Button
             type="button"
-            :label="t('message.myImageDialogImageDeleteConfirmCancelButton')"
+            :label="t('myImageView.myImageDialogImageDeleteConfirmCancelButton')"
             severity="secondary"
             @click="showImageDeleteConfirmDialog = false"
           ></Button>
           <Button
             type="button"
-            :label="t('message.myImageDialogImageDeleteConfirmSubmitButton')"
+            :label="t('myImageView.myImageDialogImageDeleteConfirmSubmitButton')"
             severity="danger"
             @click="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
           ></Button>

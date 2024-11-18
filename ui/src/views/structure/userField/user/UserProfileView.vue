@@ -36,17 +36,17 @@ const userEditValidationSchema = toTypedSchema(
   yup
     .object({
       patchEmail: yup.string().trim()
-        .email(t("message.profileEditFormEmailValidationFailedMessage"))
+        .email(t("myProfileView.profileEditFormEmailValidationFailedMessage"))
         .nullable(),
       patchPassword: yup
         .string()
         .trim()
-        .test("password", t("message.profileEditFormPasswordValidationFailedMessage"), (value) => {
+        .test("password", t("myProfileView.profileEditFormPasswordValidationFailedMessage"), (value) => {
           return (value === undefined || value === "" || passwordRegExp.test(value));
         }),
       patchIsDefaultImagePrivate: yup.boolean()
     })
-    .test("at-least-one-field", t("message.profileEditFormValidationFailedMessage"), (values) => {
+    .test("at-least-one-field", t("myProfileView.profileEditFormValidationFailedMessage"), (values) => {
       return (
         values.patchEmail !== undefined && values.patchEmail !== "" ||
         values.patchPassword !== undefined && passwordRegExp.test(values.patchPassword) ||
@@ -129,7 +129,7 @@ const editUser = handleSubmit((values) => {
 <template>
   <div class="w-full flex flex-col gap-4 bg-gray-100 p-8">
     <div class="flex justify-between items-center bg-white rounded-2xl p-4">
-      <h2>{{ t("message.profileTitle") }}</h2>
+      <h2>{{ t("myProfileView.profileTitle") }}</h2>
 
       <div class="ml-auto">
         <button
@@ -137,7 +137,7 @@ const editUser = handleSubmit((values) => {
           @click="showProfileEditDialog"
         >
           <Icon icon="mdi:account-edit-outline" />
-          {{ t("message.profileUpdateButton") }}
+          {{ t("myProfileView.profileUpdateButton") }}
         </button>
       </div>
     </div>
@@ -146,78 +146,78 @@ const editUser = handleSubmit((values) => {
       <div class="flow-root">
         <dl class="-my-3 divide-y divide-gray-100 text-sm">
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            {{ t("message.profileUserId") }}
+            {{ t("myProfileView.profileUserId") }}
             <dd class="text-gray-700 sm:col-span-2">{{ userVO?.id }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileUsername") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileUsername") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ userVO?.username }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileEmail") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileEmail") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ userVO?.email }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileCreateTime") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileCreateTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ dayjs(String(userVO?.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileBanStatus") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileBanStatus") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userVO?.isBanned ? t("message.profileBanStatusBanned") : t("message.profileBanStatusNormal") }}
+              {{ userVO?.isBanned ? t("myProfileView.profileBanStatusBanned") : t("myProfileView.profileBanStatusNormal") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileUserGroupName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileUserGroupName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ userVO?.groupName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileImageCount") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileImageCount") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userVO?.imageCount }} {{ t("message.profileImageCountUnit") }}
+              {{ userVO?.imageCount }} {{ t("myProfileView.profileImageCountUnit") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileAlbumCount") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileAlbumCount") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userVO?.albumCount }} {{ t("message.profileAlbumCountUnit") }}
+              {{ userVO?.albumCount }} {{ t("myProfileView.profileAlbumCountUnit") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileUsedSpace") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileUsedSpace") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ userVO?.totalImageSize.toFixed(2) }}
-              {{ t("message.profileSpaceSizeUnit") }}
+              {{ t("myProfileView.profileSpaceSizeUnit") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileUsableSpace") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileUsableSpace") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ userVO?.allSize.toFixed(2) }}
-              {{ t("message.profileSpaceSizeUnit") }}
+              {{ t("myProfileView.profileSpaceSizeUnit") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("message.profileIsDefaultImagePrivate") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myProfileView.profileIsDefaultImagePrivate") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{
                 userVO?.isDefaultImagePrivate
-                  ? t("message.profileIsDefaultImagePrivateTrue")
-                  : t("message.profileIsDefaultImagePrivateFalse")
+                  ? t("myProfileView.profileIsDefaultImagePrivateTrue")
+                  : t("myProfileView.profileIsDefaultImagePrivateFalse")
               }}
             </dd>
           </div>
@@ -226,7 +226,7 @@ const editUser = handleSubmit((values) => {
       <Divider />
     </div>
 
-    <Dialog v-model:visible="profileEditDialog" modal :header="t('message.profileEditDialogTitle')">
+    <Dialog v-model:visible="profileEditDialog" modal :header="t('myProfileView.profileEditDialogTitle')">
       <form @submit="editUser">
         <div class="flex flex-col gap-4 m-4 w-96">
           <div class="flex flex-col gap-4 w-full">
@@ -238,7 +238,7 @@ const editUser = handleSubmit((values) => {
                 class="w-full"
                 @blur="handleBlur('email')"
               />
-              <label for="editUserEmail">{{ t("message.profileEditFormEmail") }}</label>
+              <label for="editUserEmail">{{ t("myProfileView.profileEditFormEmail") }}</label>
               <p class="text-red-500 text-sm">{{ errors.patchEmail }}</p>
             </IftaLabel>
 
@@ -246,19 +246,19 @@ const editUser = handleSubmit((values) => {
               <InputText
                 id="editUserPassword"
                 v-model="patchPassword"
-                :placeholder="t('message.profileEditFormPasswordPlaceholder')"
+                :placeholder="t('myProfileView.profileEditFormPasswordPlaceholder')"
                 class="w-full"
                 type="password"
                 @blur="handleBlur('password')"
               />
-              <label for="editUserPassword">{{ t("message.profileEditFormPasswordPlaceholder") }}</label>
+              <label for="editUserPassword">{{ t("myProfileView.profileEditFormPasswordPlaceholder") }}</label>
               <p class="text-red-500 text-sm">{{ errors.patchPassword }}</p>
             </IftaLabel>
 
             <div>
               <div class="w-full flex items-center px-2 gap-4">
                 <label for="editDefaultImageVisible" class="text-sm"
-                  >{{ t("message.profileEditFormIsDefaultImagePrivate") }}:
+                  >{{ t("myProfileView.profileEditFormIsDefaultImagePrivate") }}:
                 </label>
                 <ToggleSwitch
                   id="editDefaultImageVisible"
@@ -272,11 +272,11 @@ const editUser = handleSubmit((values) => {
           <div class="flex justify-end gap-2">
             <Button
               type="button"
-              :label="t('message.profileEditFormCancelButton')"
+              :label="t('myProfileView.profileEditFormCancelButton')"
               severity="secondary"
               @click="profileEditDialog = false"
             />
-            <Button type="submit" :label="t('message.profileEditFormSubmitButton')" :disabled="!meta.valid" />
+            <Button type="submit" :label="t('myProfileView.profileEditFormSubmitButton')" :disabled="!meta.valid" />
           </div>
         </div>
       </form>

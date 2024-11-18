@@ -45,7 +45,7 @@ const inactiveCSS =
 
 function handleLogout() {
   localStorage.removeItem("token");
-  toast.add({ severity: "success", summary: "Success", detail: t("message.userMenuLogoutSuccess"), life: 3000 });
+  toast.add({ severity: "success", summary: "Success", detail: t("userField.userMenuLogoutSuccess"), life: 3000 });
   router.push({ name: "login" });
 }
 </script>
@@ -63,7 +63,7 @@ function handleLogout() {
             <button @click="router.push({ name: 'overview' })" :class="isActive('overview') ? activeCSS : inactiveCSS">
               <div class="flex items-center gap-1">
                 <Icon icon="mdi:home" class="size-5" />
-                <span>{{ t("message.userMenuOverview") }}</span>
+                <span>{{ t("userField.userMenuOverview") }}</span>
               </div>
             </button>
           </li>
@@ -75,7 +75,7 @@ function handleLogout() {
             >
               <div class="flex items-center gap-1">
                 <Icon icon="mdi:upload" class="size-5" />
-                <span>{{ t("message.userMenuUploadImage") }}</span>
+                <span>{{ t("userField.userMenuUploadImage") }}</span>
               </div>
             </button>
           </li>
@@ -84,7 +84,7 @@ function handleLogout() {
             <button @click="router.push({ name: 'myImage' })" :class="isActive('myImage') ? activeCSS : inactiveCSS">
               <div class="flex items-center gap-1">
                 <Icon icon="mdi:image" class="size-5" />
-                <span>{{ t("message.userMenuMyImage") }}</span>
+                <span>{{ t("userField.userMenuMyImage") }}</span>
               </div>
             </button>
           </li>
@@ -93,7 +93,7 @@ function handleLogout() {
             <button @click="router.push({ name: 'myAlbum' })" :class="isActive('myAlbum') ? activeCSS : inactiveCSS">
               <div class="flex items-center gap-1">
                 <Icon icon="mdi:image-album" class="size-5" />
-                <span>{{ t("message.userMenuMyAlbum") }}</span>
+                <span>{{ t("userField.userMenuMyAlbum") }}</span>
               </div>
             </button>
           </li>
@@ -105,7 +105,7 @@ function handleLogout() {
               >
                 <span class="flex items-center gap-1 text-sm font-medium">
                   <Icon icon="mdi:account" class="size-5" />
-                  <span>{{ t("message.userMenuAccount") }}</span>
+                  <span>{{ t("userField.userMenuAccount") }}</span>
                 </span>
 
                 <span class="shrink-0 transition duration-300 group-open:-rotate-180">
@@ -121,7 +121,7 @@ function handleLogout() {
                   >
                     <div class="flex items-center gap-1">
                       <Icon icon="mdi:account-details" class="size-5" />
-                      <span>{{ t("message.userMenuProfile") }}</span>
+                      <span>{{ t("userField.userMenuProfile") }}</span>
                     </div>
                   </button>
                 </li>
@@ -133,7 +133,7 @@ function handleLogout() {
                   >
                     <div class="flex items-center gap-1">
                       <Icon icon="mdi:account-key" class="size-5" />
-                      <span>{{ t("message.userMenuMyAccessToken") }}</span>
+                      <span>{{ t("userField.userMenuMyAccessToken") }}</span>
                     </div>
                   </button>
                 </li>
@@ -142,7 +142,7 @@ function handleLogout() {
                   <button @click="router.push({ name: 'adminField' })" :class="inactiveCSS">
                     <div class="flex items-center gap-1">
                       <Icon icon="mdi:controller-outline" class="size-5" />
-                      <span>{{ t("message.userMenuAdminField") }}</span>
+                      <span>{{ t("userField.userMenuAdminField") }}</span>
                     </div>
                   </button>
                 </li>
@@ -154,7 +154,7 @@ function handleLogout() {
                   >
                     <div class="flex items-center gap-1">
                       <Icon icon="mdi:logout-variant" class="size-5" />
-                      <span>{{ t("message.userMenuLogout") }}</span>
+                      <span>{{ t("userField.userMenuLogout") }}</span>
                     </div>
                   </button>
                 </li>

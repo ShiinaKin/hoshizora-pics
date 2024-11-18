@@ -49,7 +49,7 @@ function handleSubmit() {
         @submit.prevent="handleSubmit"
         class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
       >
-        <p class="text-center text-lg font-medium">{{ t("message.loginTitle") }}</p>
+        <p class="text-center text-lg font-medium">{{ t("loginView.loginTitle") }}</p>
 
         <div>
           <label for="username" class="sr-only">Username</label>
@@ -60,10 +60,10 @@ function handleSubmit() {
               type="text"
               autocomplete="username"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-              :placeholder="t('message.loginUsernamePlaceholder')"
+              :placeholder="t('loginView.loginUsernamePlaceholder')"
               v-model="userLoginForm.username"
               pattern="^[a-zA-Z0-9]{4,20}$"
-              :title="t('message.loginUsernameRequirements')"
+              :title="t('loginView.loginUsernameRequirements')"
               required
             />
 
@@ -82,10 +82,10 @@ function handleSubmit() {
               type="password"
               autocomplete="current-password"
               class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-              :placeholder="t('message.loginPasswordPlaceholder')"
+              :placeholder="t('loginView.loginPasswordPlaceholder')"
               v-model="userLoginForm.password"
               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$"
-              :title="t('message.loginPasswordRequirements')"
+              :title="t('loginView.loginPasswordRequirements')"
               required
             />
 
@@ -96,12 +96,12 @@ function handleSubmit() {
         </div>
 
         <button type="submit" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white">
-          {{ t("message.loginSubmitButton") }}
+          {{ t("loginView.loginSubmitButton") }}
         </button>
 
         <p v-if="commonStore.allowSignup" class="text-center text-sm text-gray-500">
           <a class="underline" href="#" @click="router.push({ name: 'register' })">{{
-            t("message.loginSignupButton")
+            t("loginView.loginSignupButton")
           }}</a>
         </p>
       </form>

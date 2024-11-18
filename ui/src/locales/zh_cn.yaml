@@ -1,5 +1,4 @@
-message:
-#  siteInitView
+siteInitView:
   siteInitTitle: "站点初始化"
   siteInitDesc: "这是系统初始化后的首次访问，请先初始化站点"
   siteInitSubmitButton: "提交"
@@ -19,7 +18,7 @@ message:
   siteInitPasswordRequirements: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
   siteInitEmailPlaceholder: "请输入邮箱"
   siteInitEmailRequirements: "请输入正确的邮箱地址。"
-#  loginView
+loginView:
   loginTitle: "登录"
   loginUsernamePlaceholder: "请输入用户名"
   loginUsernameRequirements: "用户名必须是4-20个字符，只能包含字母和数字。"
@@ -27,7 +26,7 @@ message:
   loginPasswordRequirements: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
   loginSubmitButton: "登录"
   loginSignupButton: "注册"
-#  registerView
+registerView:
   registerTitle: "注册"
   registerUsernamePlaceholder: "请输入用户名"
   registerUsernameRequirements: "用户名必须是4-20个字符，只能包含字母和数字。"
@@ -37,7 +36,7 @@ message:
   registerEmailRequirements: "请输入正确的邮箱地址。"
   registerSubmitButton: "注册"
   registerLoginButton: "登录"
-#  userField
+userField:
   userMenuOverview: "概览"
   userMenuUploadImage: "上传图片"
   userMenuMyImage: "我的图片"
@@ -48,7 +47,7 @@ message:
   userMenuAdminField: "管理后台"
   userMenuLogout: "退出登录"
   userMenuLogoutSuccess: "登出成功"
-#  userOverviewView
+userOverviewView:
   userOverviewImageCount: "图片数量"
   userOverviewAlbumCount: "相册数量"
   userOverviewUsedSpace: "已用空间"
@@ -57,15 +56,15 @@ message:
   userOverviewImageCountUnit: "张"
   userOverviewAlbumCountUnit: "个"
   userOverviewUsableSpaceTip: "总空间 - 已用空间"
-#  dragUploader
+dragUploader:
   dragUploaderUsageTip: "点击或拖拽文件到此处上传"
   dragUploaderAllowedFileTypeTip: "支持的文件类型："
-#  imageUploadView
+imageUploadView:
   imageUploadTitle: "上传图片"
   imageUploadDescription: "在下方选择图片文件，然后在上传列表进行操作"
   imageUploadUploadList: "上传列表"
   imageUploadUploadAllButton: "上传全部"
-# myImageView
+myImageView:
   myImageFilterUploadTimeASC: "上传时间升序"
   myImageFilterUploadTimeDESC: "上传时间降序"
   myImageFilterFileSizeASC: "文件大小升序"
@@ -113,7 +112,7 @@ message:
   myImageDialogImageChangeAlbumWarningMessage: "请选择相册"
   myImageDialogImageChangeAlbumSuccessMessage: "修改相册成功"
   myImageDialogImageChangeAlbumFailedTitle: "修改相册失败"
-# myAlbumView
+myAlbumView:
   myAlbumCreateButton: "创建相册"
   myAlbumTableAlbumId: "相册ID"
   myAlbumTableAlbumName: "相册名"
@@ -154,7 +153,7 @@ message:
   myAlbumDetailDialogAlbumIsUncategorized: "是否为未分类"
   myAlbumDetailDialogAlbumIsDefault: "是否默认"
   myAlbumDetailDialogAlbumCreateTime: "创建时间"
-# profileView
+myProfileView:
   profileTitle: "我的资料"
   profileUpdateButton: "修改资料"
   profileEditDialogTitle: "修改资料"
@@ -184,7 +183,7 @@ message:
   profileIsDefaultImagePrivate: "默认私密"
   profileIsDefaultImagePrivateTrue: "是"
   profileIsDefaultImagePrivateFalse: "否"
-#  patView
+myPatView:
   myPATCreateButton: "创建令牌"
   myPATTablePATId: "令牌ID"
   myPATTablePATName: "令牌名"

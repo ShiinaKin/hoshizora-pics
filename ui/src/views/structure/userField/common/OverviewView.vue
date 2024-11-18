@@ -51,10 +51,10 @@ userApi
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("message.userOverviewImageCount") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewImageCount") }}</h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ imageCount }} {{ t("message.userOverviewImageCountUnit") }}
+              {{ imageCount }} {{ t("userOverviewView.userOverviewImageCountUnit") }}
             </p>
           </div>
         </div>
@@ -66,10 +66,10 @@ userApi
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("message.userOverviewAlbumCount") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewAlbumCount") }}</h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ albumCount }} {{ t("message.userOverviewAlbumCountUnit") }}
+              {{ albumCount }} {{ t("userOverviewView.userOverviewAlbumCountUnit") }}
             </p>
           </div>
         </div>
@@ -81,10 +81,10 @@ userApi
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("message.userOverviewUsedSpace") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewUsedSpace") }}</h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ usedSpace.toFixed(2) }} {{ t("message.userOverviewSpaceSizeUnit") }}
+              {{ usedSpace.toFixed(2) }} {{ t("userOverviewView.userOverviewSpaceSizeUnit") }}
             </p>
           </div>
         </div>
@@ -96,17 +96,17 @@ userApi
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("message.userOverviewUsableSpace") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewUsableSpace") }}</h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ usableSpace.toFixed(2) }} {{ t("message.userOverviewSpaceSizeUnit") }}
+              {{ usableSpace.toFixed(2) }} {{ t("userOverviewView.userOverviewSpaceSizeUnit") }}
             </p>
           </div>
         </div>
 
         <dl class="mt-6 flex gap-4 sm:gap-6 items-center justify-center">
           <div class="flex flex-col">
-            <dd class="text-xs text-gray-500">{{ t("message.userOverviewUsableSpaceTip") }}</dd>
+            <dd class="text-xs text-gray-500">{{ t("userOverviewView.userOverviewUsableSpaceTip") }}</dd>
           </div>
         </dl>
       </div>

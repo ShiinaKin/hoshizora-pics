@@ -164,8 +164,8 @@ function handleCopy(url: string) {
   <div class="flex flex-col w-full h-screen p-8 items-center gap-4 bg-gray-100">
     <div class="w-2/3 bg-white p-4 rounded-xl">
       <div>
-        <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ t("message.imageUploadTitle") }}</div>
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ t("message.imageUploadDescription") }}</div>
+        <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ t("imageUploadView.imageUploadTitle") }}</div>
+        <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ t("imageUploadView.imageUploadDescription") }}</div>
       </div>
       <div class="my-2"></div>
       <DrugUpLoader @files-added="handleFilesAdded" :allowed-image-types="Array.from(allowedImageTypes).join(', ')" />
@@ -173,12 +173,12 @@ function handleCopy(url: string) {
 
     <div v-if="fileList.length > 0" class="w-2/3 bg-white p-4 rounded-xl flex-2 flex-grow">
       <div class="flex">
-        <h2>{{ t("message.imageUploadUploadList") }}</h2>
+        <h2>{{ t("imageUploadView.imageUploadUploadList") }}</h2>
         <button
           @click="handleAllFileUpload"
           class="ml-auto py-1 px-2 flex items-center gap-1 border rounded-xl hover:text-sky-700"
         >
-          <span class="text-sm">{{ t("message.imageUploadUploadAllButton") }}</span>
+          <span class="text-sm">{{ t("imageUploadView.imageUploadUploadAllButton") }}</span>
           <Icon icon="mdi:upload-multiple" class="size-5" />
         </button>
       </div>
