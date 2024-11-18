@@ -17,7 +17,6 @@ import FloatLabel from "primevue/floatlabel";
 import IftaLabel from "primevue/iftalabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Paginator from "primevue/paginator";
 import Dialog from "primevue/dialog";
 import DatePicker from "primevue/datepicker";
 import Message from "primevue/message";
@@ -26,6 +25,7 @@ import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
+import BottomPaginator from "@/components/BottomPaginator.vue";
 import { Form, type FormSubmitEvent } from "@primevue/forms";
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import { useToast } from "primevue/usetoast";
@@ -364,7 +364,7 @@ async function fetchSelfRoles(): Promise<void> {
           {{ dayjs(String(data.expireTime)).format("YYYY/MM/DD HH:mm:ss") }}
         </template>
       </Column>
-      <Column :header="t('message.myPATTableOpsTitle')" class="w-72">
+      <Column :header="t('message.myPATTableOpsTitle')" class="w-48">
         <template #body="{ data }">
           <div class="flex gap-0.5 text-sm">
             <Button @click="showPATEditDialog(data)" severity="info" size="small">
@@ -535,23 +535,13 @@ async function fetchSelfRoles(): Promise<void> {
       </div>
     </Dialog>
 
-    <div class="rounded-2xl bg-white dark:bg-gray-800">
-      <div class="flex justify-between items-center px-6">
-        <Paginator
-          @page="(it) => (page = it.page + 1)"
-          v-model:rows="pageSize"
-          :totalRecords="totalRecord"
-          :rowsPerPageOptions="[20, 30, 40]"
-        />
-        <div class="text-gray-500 dark:text-gray-400">
-          <span class="font-medium text-gray-700 dark:text-gray-100">
-            {{ (curPage - 1) * pageSize + 1 }} -
-            {{ Math.min(curPage * pageSize, totalRecord) }}
-          </span>
-          of {{ totalRecord }} records
-        </div>
-      </div>
-    </div>
+    <BottomPaginator
+      v-model:page="page"
+      v-model:page-size="pageSize"
+      :row-options="[10, 15, 20, 25, 30]"
+      :cur-page="curPage"
+      :total-record="totalRecord"
+    />
   </div>
 </template>
 

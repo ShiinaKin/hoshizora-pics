@@ -14,6 +14,7 @@ import {
 import { useUserFieldStore } from "@/stores/counter";
 import { Icon } from "@iconify/vue";
 import ImageCard from "@/components/ImageCard.vue";
+import BottomPaginator from "@/components/BottomPaginator.vue";
 import { api as viewerApi } from "v-viewer";
 import Button from "primevue/button";
 import FloatLabel from "primevue/floatlabel";
@@ -1298,22 +1299,13 @@ function fetchThumbnails() {
       </Dialog>
     </div>
 
-    <div class="rounded-2xl bg-white dark:bg-gray-800">
-      <div class="flex justify-between items-center px-6">
-        <Paginator
-          @page="(it) => (page = it.page + 1)"
-          v-model:rows="pageSize"
-          :totalRecords="totalRecord"
-          :rowsPerPageOptions="[10, 15, 20, 25, 30]"
-        />
-        <div class="text-gray-500 dark:text-gray-400">
-          <span class="font-medium text-gray-700 dark:text-gray-100">
-            {{ (curPage - 1) * pageSize + 1 }} - {{ Math.min(curPage * pageSize, totalRecord) }}
-          </span>
-          of {{ totalRecord }} records
-        </div>
-      </div>
-    </div>
+    <BottomPaginator
+      v-model:page="page"
+      v-model:page-size="pageSize"
+      :row-options="[10, 15, 20, 25, 30]"
+      :cur-page="curPage"
+      :total-record="totalRecord"
+    />
   </div>
 </template>
 

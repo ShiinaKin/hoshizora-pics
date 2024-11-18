@@ -16,7 +16,6 @@ import FloatLabel from "primevue/floatlabel";
 import IftaLabel from "primevue/iftalabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Paginator from "primevue/paginator";
 import Dialog from "primevue/dialog";
 import { useToast } from "primevue/usetoast";
 import { useField, useForm } from "vee-validate";
@@ -24,6 +23,7 @@ import { toTypedSchema } from "@vee-validate/yup";
 import * as yup from "yup";
 import { Icon } from "@iconify/vue";
 import dayjs from "dayjs";
+import BottomPaginator from "@/components/BottomPaginator.vue";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -483,23 +483,13 @@ async function fetchUserAlbum(albumId: number) {
       </div>
     </Dialog>
 
-    <div class="rounded-2xl bg-white dark:bg-gray-800">
-      <div class="flex justify-between items-center px-6">
-        <Paginator
-          @page="(it) => (albumPage = it.page + 1)"
-          v-model:rows="albumPageSize"
-          :totalRecords="albumTotalRecord"
-          :rowsPerPageOptions="[20, 30, 40]"
-        />
-        <div class="text-gray-500 dark:text-gray-400">
-          <span class="font-medium text-gray-700 dark:text-gray-100">
-            {{ (albumCurPage - 1) * albumPageSize + 1 }} -
-            {{ Math.min(albumCurPage * albumPageSize, albumTotalRecord) }}
-          </span>
-          of {{ albumTotalRecord }} records
-        </div>
-      </div>
-    </div>
+    <BottomPaginator
+      v-model:page="albumPage"
+      v-model:page-size="albumPageSize"
+      :row-options="[10, 15, 20, 25, 30]"
+      :cur-page="albumCurPage"
+      :total-record="albumTotalRecord"
+    />
   </div>
 </template>
 
