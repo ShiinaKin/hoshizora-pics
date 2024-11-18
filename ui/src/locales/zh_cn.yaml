@@ -147,6 +147,7 @@ myAlbumView:
   myAlbumEditDialogSuccessTitle: "修改成功"
   myAlbumEditDialogFailedTitle: "修改失败"
   myAlbumEditDialogValidationFailedMessage: "相册名和描述不能同时为空"
+  myAlbumDetailDialogTitle: "相册详情"
   myAlbumDetailDialogAlbumName: "相册名"
   myAlbumDetailDialogAlbumDesc: "相册描述"
   myAlbumDetailDialogAlbumImageCount: "图片数量"
