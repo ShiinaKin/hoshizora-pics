@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import io.sakurasou.constant.SETTING_READ
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.SystemOverviewVO
+import io.sakurasou.controller.vo.SystemStatisticsVO
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.system.SystemService
@@ -25,7 +26,25 @@ fun Route.systemRoute(systemService: SystemService) {
         install(AuthorizationPlugin) {
             permission = SETTING_READ
         }
+        systemStatistics(controller)
         systemOverview(controller)
+    }
+}
+
+private fun Route.systemStatistics(controller: SystemController) {
+    route {
+        get("statistics", {
+            response {
+                HttpStatusCode.OK to {
+                    body<CommonResponse<SystemStatisticsVO>> {
+                        description = "system statistics"
+                    }
+                }
+            }
+        }) {
+            val systemStatisticsVO = controller.handleSystemStatistics()
+            call.success(systemStatisticsVO)
+        }
     }
 }
 
@@ -49,6 +68,11 @@ private fun Route.systemOverview(controller: SystemController) {
 class SystemController(
     private val systemService: SystemService
 ) {
+    suspend fun handleSystemStatistics(): SystemStatisticsVO {
+        val systemStatisticsVO = systemService.fetchSystemStatistics()
+        return systemStatisticsVO
+    }
+
     suspend fun handleSystemOverview(): SystemOverviewVO {
         val systemOverviewVO = systemService.fetchSystemOverview()
         return systemOverviewVO

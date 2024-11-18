@@ -108,7 +108,6 @@ object InstanceCenter {
     }
 
     fun initService() {
-        systemService = SystemServiceImpl()
         settingService = SettingServiceImpl(settingDao)
         strategyService = StrategyServiceImpl(strategyDao)
 
@@ -117,6 +116,7 @@ object InstanceCenter {
 
         albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
+        systemService = SystemServiceImpl(imageDao, albumDao, userDao)
 
         personalAccessTokenService = PersonalAccessTokenServiceImpl(personalAccessTokenDao, userDao, groupDao, relationDao)
 

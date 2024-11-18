@@ -24,6 +24,7 @@ interface ImageDao : PaginationDao {
     fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int
     fun updateAlbumIdByAlbumId(oldAlbumId: Long, newAlbumId: Long): Int
 
+    fun getImageCountAndTotalSize(): ImageCountAndTotalSizeDTO
     fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO
     fun findImageById(imageId: Long): Image?
     fun findImageByUniqueName(imageUniqueName: String): Image?

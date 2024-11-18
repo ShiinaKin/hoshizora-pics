@@ -70,6 +70,18 @@ class ImageDaoImpl : ImageDao {
         }
     }
 
+    override fun getImageCountAndTotalSize(): ImageCountAndTotalSizeDTO {
+        return Images
+            .select(Images.id.count(), Images.size.sum())
+            .first()
+            .let {
+                ImageCountAndTotalSizeDTO(
+                    count = it[Images.id.count()],
+                    totalSize = it[Images.size.sum()] ?: 0
+                )
+            }
+    }
+
     override fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO {
         return Images
             .select(Images.id.count(), Images.size.sum())

@@ -84,6 +84,10 @@ class UserDaoImpl : UserDao {
             .firstOrNull()
     }
 
+    override fun countUser(): Long {
+        return Users.select(Users.id).count()
+    }
+
     override fun pagination(pageRequest: PageRequest): PageResult<UserPageVO> {
         val page = pageRequest.page
         val pageSize = pageRequest.pageSize
