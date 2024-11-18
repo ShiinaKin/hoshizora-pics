@@ -28,11 +28,11 @@ const router = createRouter({
       path: "/user",
       name: "userField",
       component: () => import("@/views/structure/userField/UserField.vue"),
-      redirect: { name: "overview" },
+      redirect: { name: "userOverview" },
       children: [
         {
           path: "overview",
-          name: "overview",
+          name: "userOverview",
           component: () => import("@/views/structure/userField/common/OverviewView.vue")
         },
         {

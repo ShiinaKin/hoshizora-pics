@@ -60,7 +60,7 @@ function handleLogout() {
 
         <ul class="mt-6 space-y-1">
           <li>
-            <button @click="router.push({ name: 'overview' })" :class="isActive('overview') ? activeCSS : inactiveCSS">
+            <button @click="router.push({ name: 'userOverview' })" :class="isActive('userOverview') ? activeCSS : inactiveCSS">
               <div class="flex items-center gap-1">
                 <Icon icon="mdi:home" class="size-5" />
                 <span>{{ t("userField.userMenuOverview") }}</span>
