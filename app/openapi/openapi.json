@@ -2600,6 +2600,28 @@
         } ]
       }
     },
+    "/api/system/statistics" : {
+      "get" : {
+        "tags" : [ "system" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_SystemStatisticsVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
     "/api/system/overview" : {
       "get" : {
         "tags" : [ "system" ],
@@ -4183,6 +4205,51 @@
               "type" : "null"
             }, {
               "$ref" : "#/components/schemas/PageResult_PersonalAccessTokenPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "SystemStatisticsVO" : {
+        "type" : "object",
+        "properties" : {
+          "totalAlbumCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalImageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalUsedSpace" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "totalUserCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "totalAlbumCount", "totalImageCount", "totalUsedSpace", "totalUserCount" ]
+      },
+      "CommonResponse_SystemStatisticsVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/SystemStatisticsVO"
             } ]
           },
           "isSuccessful" : {
