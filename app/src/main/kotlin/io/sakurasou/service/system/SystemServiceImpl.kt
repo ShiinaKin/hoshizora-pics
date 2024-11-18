@@ -46,7 +46,7 @@ class SystemServiceImpl(
             version = buildRecord["version"] as String
         )
 
-        val javaVersion = System.getProperty("java.version")
+        val javaVersion = System.getProperty("java.vm.vendor") + " " + System.getProperty("java.runtime.version")
         val databaseVersion = dbQuery {
             TransactionManager.current().exec("SELECT VERSION()") { resultSet ->
                 resultSet.next()
