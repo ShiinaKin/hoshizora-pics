@@ -2599,6 +2599,28 @@
           "JWT" : [ ]
         } ]
       }
+    },
+    "/api/system/overview" : {
+      "get" : {
+        "tags" : [ "system" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_SystemOverviewVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
     }
   },
   "components" : {
@@ -4161,6 +4183,77 @@
               "type" : "null"
             }, {
               "$ref" : "#/components/schemas/PageResult_PersonalAccessTokenPageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "SystemOverviewVO" : {
+        "type" : "object",
+        "properties" : {
+          "hoshizoraStatus" : {
+            "$ref" : "#/components/schemas/HoshizoraStatusVO"
+          },
+          "systemStatus" : {
+            "$ref" : "#/components/schemas/SystemStatusVO"
+          }
+        },
+        "required" : [ "hoshizoraStatus", "systemStatus" ]
+      },
+      "HoshizoraStatusVO" : {
+        "type" : "object",
+        "properties" : {
+          "buildTime" : {
+            "type" : "string"
+          },
+          "commitId" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "buildTime", "commitId", "version" ]
+      },
+      "SystemStatusVO" : {
+        "type" : "object",
+        "properties" : {
+          "databaseVersion" : {
+            "type" : "string"
+          },
+          "javaVersion" : {
+            "type" : "string"
+          },
+          "operatingSystem" : {
+            "type" : "string"
+          },
+          "serverLanguage" : {
+            "type" : "string"
+          },
+          "serverTimeZone" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "databaseVersion", "javaVersion", "operatingSystem", "serverLanguage", "serverTimeZone" ]
+      },
+      "CommonResponse_SystemOverviewVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/SystemOverviewVO"
             } ]
           },
           "isSuccessful" : {

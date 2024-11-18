@@ -23,5 +23,6 @@ export * from './apis/personal-access-token-api';
 export * from './apis/role-api';
 export * from './apis/setting-api';
 export * from './apis/strategy-api';
+export * from './apis/system-api';
 export * from './apis/user-api';
 
