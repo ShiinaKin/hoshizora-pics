@@ -6,13 +6,13 @@ import io.ktor.server.routing.*
 import io.sakurasou.controller.*
 import io.sakurasou.di.InstanceCenter.albumService
 import io.sakurasou.di.InstanceCenter.authService
-import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.di.InstanceCenter.groupService
 import io.sakurasou.di.InstanceCenter.imageService
 import io.sakurasou.di.InstanceCenter.personalAccessTokenService
 import io.sakurasou.di.InstanceCenter.roleService
 import io.sakurasou.di.InstanceCenter.settingService
 import io.sakurasou.di.InstanceCenter.strategyService
+import io.sakurasou.di.InstanceCenter.systemService
 import io.sakurasou.di.InstanceCenter.userService
 import io.sakurasou.plugins.SiteInitCheckPlugin
 
@@ -39,6 +39,7 @@ fun Route.apiRoute() {
                 groupRoute(groupService)
                 roleRoute(roleService)
                 personalAccessTokenRoute(personalAccessTokenService)
+                systemRoute(systemService)
             }
         }
     }

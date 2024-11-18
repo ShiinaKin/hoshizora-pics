@@ -14,3 +14,28 @@ data class SettingVO(
     val name: String,
     val config: SettingConfig
 )
+
+@Serializable
+@Name("SystemOverviewVO")
+data class SystemOverviewVO(
+    val hoshizoraStatus: HoshizoraStatusVO,
+    val systemStatus: SystemStatusVO
+)
+
+@Serializable
+@Name("HoshizoraStatusVO")
+data class HoshizoraStatusVO(
+    val version: String,
+    val buildTime: String,
+    val commitId: String
+)
+
+@Serializable
+@Name("SystemStatusVO")
+data class SystemStatusVO(
+    val javaVersion: String,
+    val databaseVersion: String,
+    val operatingSystem: String,
+    val serverTimeZone: String,
+    val serverLanguage: String
+)

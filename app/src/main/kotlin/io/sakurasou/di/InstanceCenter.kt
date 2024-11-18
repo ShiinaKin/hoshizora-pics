@@ -45,6 +45,8 @@ import io.sakurasou.service.setting.SettingService
 import io.sakurasou.service.setting.SettingServiceImpl
 import io.sakurasou.service.strategy.StrategyService
 import io.sakurasou.service.strategy.StrategyServiceImpl
+import io.sakurasou.service.system.SystemService
+import io.sakurasou.service.system.SystemServiceImpl
 import io.sakurasou.service.user.UserService
 import io.sakurasou.service.user.UserServiceImpl
 import kotlinx.coroutines.runBlocking
@@ -79,6 +81,7 @@ object InstanceCenter {
     lateinit var roleService: RoleService
     lateinit var personalAccessTokenService: PersonalAccessTokenService
 
+    lateinit var systemService: SystemService
     lateinit var systemStatus: SystemStatus
     lateinit var rolePermissions: Map<String, Set<String>>
 
@@ -105,6 +108,7 @@ object InstanceCenter {
     }
 
     fun initService() {
+        systemService = SystemServiceImpl()
         settingService = SettingServiceImpl(settingDao)
         strategyService = StrategyServiceImpl(strategyDao)
 
