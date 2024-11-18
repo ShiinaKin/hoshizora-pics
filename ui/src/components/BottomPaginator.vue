@@ -25,10 +25,8 @@ const paginatorPT = {
     root: {
       class: "p-select-sm p-inputfield-sm"
     },
-    pt: {
-      listContainer: {
-        class: 'text-sm'
-      }
+    listContainer: {
+      class: "text-sm"
     }
   }
 };
@@ -56,6 +54,4 @@ const paginatorPT = {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
