@@ -280,10 +280,7 @@ private fun Route.imageSelfPage(controller: ImageController) {
             val pageRequest = call.pageRequest()
 
             val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
-            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let {
-                if (it) "isPrivate" to "true"
-                else "isPrivate" to "false"
-            }
+            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
             pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
                 albumId?.let { put(it.first, it.second) }
@@ -473,10 +470,7 @@ private fun Route.imageManagePage(controller: ImageController) {
             val pageRequest = call.pageRequest()
             val userId = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
             val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
-            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let {
-                if (it) "isPrivate" to "true"
-                else "isPrivate" to "false"
-            }
+            val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
             pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
                 userId?.let { put(it.first, it.second) }
