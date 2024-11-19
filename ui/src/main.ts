@@ -18,6 +18,9 @@ import VueViewer from "v-viewer";
 import zh_cn from "./locales/zh_cn.yaml";
 import en_us from "./locales/en_us.yaml";
 
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
 const i18n = createI18n({
   locale: "zh_cn",
   fallbackLocale: "en_us",
@@ -26,6 +29,8 @@ const i18n = createI18n({
     en_us
   }
 });
+
+dayjs.extend(utc);
 
 const app = createApp(App);
 
@@ -37,5 +42,7 @@ app.use(PrimeVue, {
 });
 app.use(VueViewer);
 app.use(ToastService);
+
+app.provide("dayjs", dayjs);
 
 app.mount("#app");
