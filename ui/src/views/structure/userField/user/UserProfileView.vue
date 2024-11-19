@@ -18,6 +18,7 @@ import { Icon } from "@iconify/vue";
 import Dialog from "primevue/dialog";
 import IftaLabel from "primevue/iftalabel";
 import InputText from "primevue/inputtext";
+import Toolbar from 'primevue/toolbar';
 import dayjs from "dayjs";
 
 const userFieldStore = useUserFieldStore();
@@ -128,10 +129,11 @@ const editUser = handleSubmit((values) => {
 
 <template>
   <div class="w-full flex flex-col gap-4 bg-gray-100 p-8">
-    <div class="flex justify-between items-center bg-white rounded-2xl p-4">
-      <h2>{{ t("myProfileView.profileTitle") }}</h2>
-
-      <div class="ml-auto">
+    <Toolbar class="rounded-2xl border-none text-sm px-6">
+      <template #start>
+        <h2 class="text-lg">{{ t("myProfileView.profileTitle") }}</h2>
+      </template>
+      <template #end>
         <button
           class="flex items-center gap-1 border p-1.5 rounded-md shadow-sm text-gray-800 hover:bg-gray-50 text-sm"
           @click="showProfileEditDialog"
@@ -139,8 +141,8 @@ const editUser = handleSubmit((values) => {
           <Icon icon="mdi:account-edit-outline" />
           {{ t("myProfileView.profileUpdateButton") }}
         </button>
-      </div>
-    </div>
+      </template>
+    </Toolbar>
 
     <div class="w-full p-4 flex-grow bg-white rounded-2xl overflow-y-auto">
       <div class="flow-root">

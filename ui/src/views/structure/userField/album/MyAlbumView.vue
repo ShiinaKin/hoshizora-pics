@@ -16,6 +16,7 @@ import FloatLabel from "primevue/floatlabel";
 import IftaLabel from "primevue/iftalabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
+import Toolbar from 'primevue/toolbar';
 import Dialog from "primevue/dialog";
 import { useToast } from "primevue/usetoast";
 import { useField, useForm } from "vee-validate";
@@ -303,17 +304,18 @@ async function fetchUserAlbum(albumId: number) {
 
 <template>
   <div class="w-full flex flex-col gap-4 bg-gray-100 p-8">
-    <div class="flex justify-between items-center bg-white rounded-2xl p-4">
-      <div class="ml-auto">
+    <Toolbar class="rounded-2xl border-none text-sm">
+      <template #end>
         <button
-          class="flex items-center gap-1 border p-1.5 rounded-md shadow-sm text-gray-800 hover:bg-gray-50 text-sm"
+          class="flex items-center gap-1 border p-1.5 rounded-md shadow-sm text-gray-800 hover:bg-gray-50"
           @click="showCreateAlbumDialog"
         >
           <Icon icon="mdi:image-album" />
           {{ t("myAlbumView.myAlbumCreateButton") }}
         </button>
-      </div>
-    </div>
+      </template>
+    </Toolbar>
+
     <DataTable
       class="flex-grow overflow-y-auto"
       :value="albumPageData"
