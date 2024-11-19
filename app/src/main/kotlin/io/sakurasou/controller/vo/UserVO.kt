@@ -25,7 +25,7 @@ data class UserVO(
 )
 
 @Serializable
-@Name("UserManageVO")
+@Name("UserPageVO")
 data class UserPageVO(
     val id: Long,
     val username: String,
