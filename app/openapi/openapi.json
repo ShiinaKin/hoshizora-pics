@@ -2011,7 +2011,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_PageResult_UserManageVO"
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_UserPageVO"
                 }
               }
             }
@@ -3698,13 +3698,13 @@
           }
         }
       },
-      "PageResult_UserManageVO" : {
+      "PageResult_UserPageVO" : {
         "type" : "object",
         "properties" : {
           "data" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/UserManageVO"
+              "$ref" : "#/components/schemas/UserPageVO"
             }
           },
           "page" : {
@@ -3726,7 +3726,7 @@
         },
         "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
       },
-      "UserManageVO" : {
+      "UserPageVO" : {
         "type" : "object",
         "properties" : {
           "createTime" : {
@@ -3756,7 +3756,7 @@
         },
         "required" : [ "createTime", "groupName", "id", "imageCount", "isBanned", "totalImageSize", "username" ]
       },
-      "CommonResponse_PageResult_UserManageVO" : {
+      "CommonResponse_PageResult_UserPageVO" : {
         "type" : "object",
         "properties" : {
           "code" : {
@@ -3767,7 +3767,7 @@
             "oneOf" : [ {
               "type" : "null"
             }, {
-              "$ref" : "#/components/schemas/PageResult_UserManageVO"
+              "$ref" : "#/components/schemas/PageResult_UserPageVO"
             } ]
           },
           "isSuccessful" : {

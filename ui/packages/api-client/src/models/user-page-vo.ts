@@ -20,49 +20,49 @@ import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date
 /**
  * 
  * @export
- * @interface UserManageVO
+ * @interface UserPageVO
  */
-export interface UserManageVO {
+export interface UserPageVO {
     /**
      * 
      * @type {KotlinxDatetimeLocalDateTime}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'createTime': KotlinxDatetimeLocalDateTime;
     /**
      * 
      * @type {string}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'groupName': string;
     /**
      * 
      * @type {number}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'id': number;
     /**
      * 
      * @type {number}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'imageCount': number;
     /**
      * 
      * @type {boolean}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'isBanned': boolean;
     /**
      * 
      * @type {number}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'totalImageSize': number;
     /**
      * 
      * @type {string}
-     * @memberof UserManageVO
+     * @memberof UserPageVO
      */
     'username': string;
 }

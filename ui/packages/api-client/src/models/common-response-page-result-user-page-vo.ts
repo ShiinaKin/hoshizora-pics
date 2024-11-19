@@ -15,36 +15,36 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { PageResultUserManageVO } from './page-result-user-manage-vo';
+import type { PageResultUserPageVO } from './page-result-user-page-vo';
 
 /**
  * 
  * @export
- * @interface CommonResponsePageResultUserManageVO
+ * @interface CommonResponsePageResultUserPageVO
  */
-export interface CommonResponsePageResultUserManageVO {
+export interface CommonResponsePageResultUserPageVO {
     /**
      * 
      * @type {number}
-     * @memberof CommonResponsePageResultUserManageVO
+     * @memberof CommonResponsePageResultUserPageVO
      */
     'code': number;
     /**
      * 
-     * @type {PageResultUserManageVO}
-     * @memberof CommonResponsePageResultUserManageVO
+     * @type {PageResultUserPageVO}
+     * @memberof CommonResponsePageResultUserPageVO
      */
-    'data'?: PageResultUserManageVO | null;
+    'data'?: PageResultUserPageVO | null;
     /**
      * 
      * @type {boolean}
-     * @memberof CommonResponsePageResultUserManageVO
+     * @memberof CommonResponsePageResultUserPageVO
      */
     'isSuccessful': boolean;
     /**
      * 
      * @type {string}
-     * @memberof CommonResponsePageResultUserManageVO
+     * @memberof CommonResponsePageResultUserPageVO
      */
     'message': string;
 }

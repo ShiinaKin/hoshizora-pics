@@ -15,42 +15,42 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { UserManageVO } from './user-manage-vo';
+import type { UserPageVO } from './user-page-vo';
 
 /**
  * 
  * @export
- * @interface PageResultUserManageVO
+ * @interface PageResultUserPageVO
  */
-export interface PageResultUserManageVO {
+export interface PageResultUserPageVO {
     /**
      * 
-     * @type {Array<UserManageVO>}
-     * @memberof PageResultUserManageVO
+     * @type {Array<UserPageVO>}
+     * @memberof PageResultUserPageVO
      */
-    'data': Array<UserManageVO>;
+    'data': Array<UserPageVO>;
     /**
      * 
      * @type {number}
-     * @memberof PageResultUserManageVO
+     * @memberof PageResultUserPageVO
      */
     'page': number;
     /**
      * 
      * @type {number}
-     * @memberof PageResultUserManageVO
+     * @memberof PageResultUserPageVO
      */
     'pageSize': number;
     /**
      * 
      * @type {number}
-     * @memberof PageResultUserManageVO
+     * @memberof PageResultUserPageVO
      */
     'total': number;
     /**
      * 
      * @type {number}
-     * @memberof PageResultUserManageVO
+     * @memberof PageResultUserPageVO
      */
     'totalPage': number;
 }

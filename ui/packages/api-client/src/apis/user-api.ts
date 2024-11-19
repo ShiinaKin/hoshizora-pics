@@ -24,7 +24,7 @@ import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError
 // @ts-ignore
 import type { CommonResponseKotlinUnit } from '../models';
 // @ts-ignore
-import type { CommonResponsePageResultUserManageVO } from '../models';
+import type { CommonResponsePageResultUserPageVO } from '../models';
 // @ts-ignore
 import type { CommonResponseUserVO } from '../models';
 // @ts-ignore
@@ -466,7 +466,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiUserManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultUserManageVO>> {
+        async apiUserManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultUserPageVO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserManagePageGet(page, pageSize, order, orderBy, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.apiUserManagePageGet']?.[localVarOperationServerIndex]?.url;
@@ -571,7 +571,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiUserManagePageGet(requestParameters: UserApiApiUserManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultUserManageVO> {
+        apiUserManagePageGet(requestParameters: UserApiApiUserManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultUserPageVO> {
             return localVarFp.apiUserManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
         },
         /**
