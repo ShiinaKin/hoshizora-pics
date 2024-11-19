@@ -14,6 +14,7 @@ import {
 import { useUserFieldStore } from "@/stores/counter";
 import { Icon } from "@iconify/vue";
 import ImageCard from "@/components/ImageCard.vue";
+import ContextMenu from "@/components/ContextMenu.vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import { api as viewerApi } from "v-viewer";
 import Button from "primevue/button";
@@ -24,7 +25,6 @@ import InputGroupAddon from "primevue/inputgroupaddon";
 import Toolbar from "primevue/toolbar";
 import Drawer from "primevue/drawer";
 import Popover from "primevue/popover";
-import ContextMenu from "primevue/contextmenu";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Paginator from "primevue/paginator";
@@ -35,11 +35,11 @@ import md5 from "crypto-js/md5";
 import dayjs from "dayjs";
 import { debounce } from "lodash-es";
 import {
+  transToBBCode,
   transToDirect,
-  transToMarkdown,
-  transToMarkdownWithLink,
   transToHTML,
-  transToBBCode
+  transToMarkdown,
+  transToMarkdownWithLink
 } from "@/utils/URLFormatUtils";
 import type { ImageDisplay, ImageView } from "@/types/ImageType";
 import { convertImageToBlob } from "@/utils/ImageUtils";
@@ -139,8 +139,6 @@ const showRawImage = async (dbClickImageIdx: number) => {
 
 const curRightClickImageId = ref<number>(-1);
 const curRightClickImageIdx = ref<number>(-1);
-
-const contextMenuClass = ref("text-sm rounded-xl");
 
 const singleImageContextMenuRef = ref();
 const multiImageContextMenuRef = ref();
@@ -877,24 +875,8 @@ function fetchThumbnails() {
         @handleUnselect="(imageId) => selectedImageIds.splice(selectedImageIds.indexOf(imageId), 1)"
         @contextmenu="handleImageRightClick($event, imageDisplay.id, idx)"
       />
-      <ContextMenu :class="contextMenuClass" ref="singleImageContextMenuRef" :model="singleImageContextMenuItems">
-        <template #item="{ item, props }">
-          <a class="flex items-center overflow-hidden" v-bind="props.action">
-            <Icon :icon="item.icon as string" class="size-4" />
-            <span class="ml-2">{{ item.label }}</span>
-            <Icon v-if="item.items" icon="mdi:keyboard-arrow-right" class="ml-auto"></Icon>
-          </a>
-        </template>
-      </ContextMenu>
-      <ContextMenu :class="contextMenuClass" ref="multiImageContextMenuRef" :model="multiImageContextMenuItems">
-        <template #item="{ item, props }">
-          <a class="flex items-center overflow-hidden" v-bind="props.action">
-            <Icon :icon="item.icon as string" class="size-4" />
-            <span class="ml-2">{{ item.label }}</span>
-            <Icon v-if="item.items" icon="mdi:keyboard-arrow-right" class="ml-auto"></Icon>
-          </a>
-        </template>
-      </ContextMenu>
+      <ContextMenu ref="singleImageContextMenuRef" :menu-items="singleImageContextMenuItems" />
+      <ContextMenu ref="multiImageContextMenuRef" :menu-items="multiImageContextMenuItems" />
     </div>
 
     <BottomPaginator
