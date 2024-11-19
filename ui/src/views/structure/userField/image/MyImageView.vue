@@ -21,7 +21,7 @@ import FloatLabel from "primevue/floatlabel";
 import InputText from "primevue/inputtext";
 import InputGroup from "primevue/inputgroup";
 import InputGroupAddon from "primevue/inputgroupaddon";
-import Toolbar from 'primevue/toolbar';
+import Toolbar from "primevue/toolbar";
 import Drawer from "primevue/drawer";
 import Popover from "primevue/popover";
 import ContextMenu from "primevue/contextmenu";
@@ -41,6 +41,8 @@ import {
   transToHTML,
   transToBBCode
 } from "@/utils/URLFormatUtils";
+import type { ImageDisplay, ImageView } from "@/types/ImageType";
+import { convertImageToBlob } from "@/utils/ImageUtils";
 
 const userFieldStore = useUserFieldStore();
 const { t } = useI18n();
@@ -89,15 +91,6 @@ watchEffect(() => {
   debouncePageUserImage(pageReq);
 });
 
-interface ImageDisplay {
-  id: number;
-  displayName: string;
-  isPrivate: boolean;
-  createTime: string;
-  thumbnailUrl: string;
-  externalUrl?: string;
-}
-
 const curPage = ref(1);
 const totalRecord = ref(1);
 const totalPage = ref(1);
@@ -113,13 +106,6 @@ const activeVisibleFilter = ref("all");
 const activeFilterClass = ref("bg-gray-200  hover:bg-gray-200");
 
 const imageRawUrlMap = ref<Map<number, string>>(new Map<number, string>());
-
-interface ImageView {
-  imageId: number;
-  src: string;
-  alt: string;
-  "data-source": string;
-}
 
 const imageViewerList = ref<ImageView[]>([]);
 const showRawImageLoadingDialog = ref(false);
@@ -392,37 +378,6 @@ const multiImageContextMenuItems = ref<MenuItem[]>([
     }
   }
 ]);
-
-const convertImageToBlob = (imageBlob: Blob): Promise<Blob> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        reject(new Error("Failed to get canvas context"));
-        return;
-      }
-
-      ctx.drawImage(img, 0, 0);
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          resolve(blob);
-        } else {
-          reject(new Error("Failed to convert image to blob"));
-        }
-      }, "image/png");
-    };
-    img.onerror = () => {
-      reject(new Error("Failed to load image"));
-    };
-    img.src = URL.createObjectURL(imageBlob);
-  });
-};
 
 const showImageDetailDialog = ref(false);
 const showImageChangeAlbumDialog = ref(false);
@@ -911,69 +866,69 @@ function fetchThumbnails() {
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeFilter === 'createTimeASC' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  orderBy = 'createTime';
-                  order = 'ASC';
-                  activeFilter = 'createTimeASC';
-                  filterRef.hide();
-                }
-              "
+                  () => {
+                    orderBy = 'createTime';
+                    order = 'ASC';
+                    activeFilter = 'createTimeASC';
+                    filterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:sort-clock-ascending-outline" />
-                {{ t("myImageView.myImageFilterUploadTimeASC") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:sort-clock-ascending-outline" />
+                  {{ t("myImageView.myImageFilterUploadTimeASC") }}
+                </span>
               </button>
               <button
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeFilter === 'createTimeDESC' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  orderBy = 'createTime';
-                  order = 'DESC';
-                  activeFilter = 'createTimeDESC';
-                  filterRef.hide();
-                }
-              "
+                  () => {
+                    orderBy = 'createTime';
+                    order = 'DESC';
+                    activeFilter = 'createTimeDESC';
+                    filterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:sort-clock-descending-outline" />
-                {{ t("myImageView.myImageFilterUploadTimeDESC") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:sort-clock-descending-outline" />
+                  {{ t("myImageView.myImageFilterUploadTimeDESC") }}
+                </span>
               </button>
               <button
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeFilter === 'sizeASC' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  orderBy = 'size';
-                  order = 'ASC';
-                  activeFilter = 'sizeASC';
-                  filterRef.hide();
-                }
-              "
+                  () => {
+                    orderBy = 'size';
+                    order = 'ASC';
+                    activeFilter = 'sizeASC';
+                    filterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:sort-ascending" />
-                {{ t("myImageView.myImageFilterFileSizeASC") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:sort-ascending" />
+                  {{ t("myImageView.myImageFilterFileSizeASC") }}
+                </span>
               </button>
               <button
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeFilter === 'sizeDESC' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  orderBy = 'size';
-                  order = 'DESC';
-                  activeFilter = 'sizeDESC';
-                  filterRef.hide();
-                }
-              "
+                  () => {
+                    orderBy = 'size';
+                    order = 'DESC';
+                    activeFilter = 'sizeDESC';
+                    filterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:sort-descending" />
-                {{ t("myImageView.myImageFilterFileSizeDESC") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:sort-descending" />
+                  {{ t("myImageView.myImageFilterFileSizeDESC") }}
+                </span>
               </button>
             </div>
           </Popover>
@@ -984,49 +939,49 @@ function fetchThumbnails() {
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeVisibleFilter === 'public' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  isPrivate = false;
-                  activeVisibleFilter = 'public';
-                  visibleFilterRef.hide();
-                }
-              "
+                  () => {
+                    isPrivate = false;
+                    activeVisibleFilter = 'public';
+                    visibleFilterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:visibility-outline" />
-                {{ t("myImageView.myImageFilterPublicVisible") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:visibility-outline" />
+                  {{ t("myImageView.myImageFilterPublicVisible") }}
+                </span>
               </button>
               <button
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeVisibleFilter === 'private' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  isPrivate = true;
-                  activeVisibleFilter = 'private';
-                  visibleFilterRef.hide();
-                }
-              "
+                  () => {
+                    isPrivate = true;
+                    activeVisibleFilter = 'private';
+                    visibleFilterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:visibility-off-outline" />
-                {{ t("myImageView.myImageFilterPrivateVisible") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:visibility-off-outline" />
+                  {{ t("myImageView.myImageFilterPrivateVisible") }}
+                </span>
               </button>
               <button
                 class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
                 :class="activeVisibleFilter === 'all' ? activeFilterClass : ''"
                 @click="
-                () => {
-                  isPrivate = undefined;
-                  activeVisibleFilter = 'all';
-                  visibleFilterRef.hide();
-                }
-              "
+                  () => {
+                    isPrivate = undefined;
+                    activeVisibleFilter = 'all';
+                    visibleFilterRef.hide();
+                  }
+                "
               >
-              <span class="flex gap-2 justify-center items-center">
-                <Icon icon="mdi:visibility" />
-                {{ t("myImageView.myImageFilterAllVisible") }}
-              </span>
+                <span class="flex gap-2 justify-center items-center">
+                  <Icon icon="mdi:visibility" />
+                  {{ t("myImageView.myImageFilterAllVisible") }}
+                </span>
               </button>
             </div>
           </Popover>
@@ -1080,12 +1035,7 @@ function fetchThumbnails() {
       <template #header>
         <div class="flex items-center gap-2 text-lg">
           <span class="font-bold">{{ t("myImageView.myImageFilterAlbumTitle") }}</span>
-          <Icon
-            icon="mdi:restart"
-            class="hover:cursor-pointer size-5"
-            title="Reset"
-            @click="handleAlbumFilterReset"
-          />
+          <Icon icon="mdi:restart" class="hover:cursor-pointer size-5" title="Reset" @click="handleAlbumFilterReset" />
         </div>
       </template>
       <div class="h-full flex flex-col">
@@ -1096,10 +1046,10 @@ function fetchThumbnails() {
             @click="handleAlbumFilterSelect(album.id)"
             class="p-2 flex items-center justify-between rounded-xl"
             :class="
-                  albumId === album.id
-                    ? 'bg-sky-300 hover:cursor-default'
-                    : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
-                "
+              albumId === album.id
+                ? 'bg-sky-300 hover:cursor-default'
+                : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
+            "
           >
             <span>{{ album.id }}.</span>
             <span>{{ album.name }}</span>
@@ -1170,10 +1120,10 @@ function fetchThumbnails() {
             type="button"
             :label="t('myImageView.myImageDialogImageChangeAlbumSubmitButton')"
             @click="
-                isSingleImageChangeAlbum
-                  ? handleSingleImageChangeAlbumDialogSubmit()
-                  : handleMultiImageChangeAlbumDialogSubmit()
-              "
+              isSingleImageChangeAlbum
+                ? handleSingleImageChangeAlbumDialogSubmit()
+                : handleMultiImageChangeAlbumDialogSubmit()
+            "
           />
         </div>
       </div>
