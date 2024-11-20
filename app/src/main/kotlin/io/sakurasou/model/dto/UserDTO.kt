@@ -10,7 +10,7 @@ data class UserInsertDTO(
     val groupId: Long,
     val username: String,
     val password: String,
-    val email: String?,
+    val email: String,
     val isDefaultImagePrivate: Boolean,
     val defaultAlbumId: Long?,
     val isBanned: Boolean,
@@ -21,7 +21,7 @@ data class UserInsertDTO(
 data class UserSelfUpdateDTO(
     val id: Long,
     val password: String,
-    val email: String?,
+    val email: String,
     val isDefaultImagePrivate: Boolean,
     val defaultAlbumId: Long?,
     val updateTime: LocalDateTime
@@ -31,7 +31,7 @@ data class UserManageUpdateDTO(
     val id: Long,
     val groupId: Long,
     val password: String,
-    val email: String?,
+    val email: String,
     val isDefaultImagePrivate: Boolean,
     val defaultAlbumId: Long?,
     val updateTime: LocalDateTime

@@ -13,7 +13,7 @@ data class User(
     val groupId: Long,
     val name: String,
     val password: String,
-    val email: String?,
+    val email: String,
     val isDefaultImagePrivate: Boolean,
     val defaultAlbumId: Long,
     val isBanned: Boolean,
