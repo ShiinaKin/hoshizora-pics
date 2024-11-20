@@ -44,6 +44,7 @@ import {
 import type { ImageDisplay, ImageView } from "@/types/ImageType";
 import { convertImageToBlob } from "@/utils/ImageUtils";
 import LoadingDialog from "@/components/LoadingDialog.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
 const userFieldStore = useUserFieldStore();
 const { t } = useI18n();
@@ -1211,31 +1212,16 @@ function fetchThumbnails() {
       </div>
     </Dialog>
     <!--delete confirm-->
-    <Dialog
+    <ConfirmDialog
       v-model:visible="showImageDeleteConfirmDialog"
-      modal
       :header="t('myImageView.myImageDialogImageDeleteConfirmTitle')"
-      class="min-w-72"
-    >
-      <div class="flex flex-col gap-4 mb-4">
-        <h2 class="text-lg">{{ t("myImageView.myImageDialogImageDeleteConfirmWarningTitle") }}</h2>
-        <p class="text-sm">{{ t("myImageView.myImageDialogImageDeleteConfirmWarningContent") }}</p>
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          :label="t('myImageView.myImageDialogImageDeleteConfirmCancelButton')"
-          severity="secondary"
-          @click="showImageDeleteConfirmDialog = false"
-        ></Button>
-        <Button
-          type="button"
-          :label="t('myImageView.myImageDialogImageDeleteConfirmSubmitButton')"
-          severity="danger"
-          @click="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
-        ></Button>
-      </div>
-    </Dialog>
+      :main-content="t('myImageView.myImageDialogImageDeleteConfirmWarningMainContent')"
+      :sub-content="t('myImageView.myImageDialogImageDeleteConfirmWarningSubContent')"
+      :cancel-btn-msg="t('myImageView.myImageDialogImageDeleteConfirmCancelButton')"
+      :submit-btn-msg="t('myImageView.myImageDialogImageDeleteConfirmSubmitButton')"
+      @cancel="showImageDeleteConfirmDialog = false"
+      @confirm="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
+    />
   </div>
 </template>
 
