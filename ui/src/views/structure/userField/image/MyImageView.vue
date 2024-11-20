@@ -43,6 +43,7 @@ import {
 } from "@/utils/URLFormatUtils";
 import type { ImageDisplay, ImageView } from "@/types/ImageType";
 import { convertImageToBlob } from "@/utils/ImageUtils";
+import LoadingDialog from "@/components/LoadingDialog.vue";
 
 const userFieldStore = useUserFieldStore();
 const { t } = useI18n();
@@ -890,7 +891,7 @@ function fetchThumbnails() {
       :total-record="totalRecord"
     />
 
-    <!--    filterRef-->
+    <!--imageFilterRef-->
     <Popover ref="filterRef">
       <div class="w-40 flex flex-col">
         <button
@@ -963,7 +964,7 @@ function fetchThumbnails() {
         </button>
       </div>
     </Popover>
-    <!--    visibleFilterRef-->
+    <!--visibleFilterRef-->
     <Popover ref="visibleFilterRef">
       <div class="w-24 flex flex-col">
         <button
@@ -1050,18 +1051,9 @@ function fetchThumbnails() {
         />
       </div>
     </Drawer>
-    <!--      raw image loading-->
-    <Dialog
-      id="rawImageLoadingDialog"
-      v-model:visible="showRawImageLoadingDialog"
-      modal
-      class="bg-white bg-opacity-50 border-none"
-    >
-      <div class="flex justify-center items-center px-56 py-48">
-        <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    </Dialog>
-    <!--      change album-->
+    <!--loading-->
+    <LoadingDialog v-model:visible="showRawImageLoadingDialog" />
+    <!--change album-->
     <Dialog
       v-model:visible="showImageChangeAlbumDialog"
       modal
@@ -1114,7 +1106,7 @@ function fetchThumbnails() {
         </div>
       </div>
     </Dialog>
-    <!--      detail-->
+    <!--detail-->
     <Dialog
       v-model:visible="showImageDetailDialog"
       modal
@@ -1187,7 +1179,7 @@ function fetchThumbnails() {
         </dl>
       </div>
     </Dialog>
-    <!--      rename-->
+    <!--rename-->
     <Dialog
       v-model:visible="showImageRenameDialog"
       modal
@@ -1218,7 +1210,7 @@ function fetchThumbnails() {
         </div>
       </div>
     </Dialog>
-    <!--      delete confirm-->
+    <!--delete confirm-->
     <Dialog
       v-model:visible="showImageDeleteConfirmDialog"
       modal
