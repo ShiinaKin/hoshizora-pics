@@ -877,9 +877,8 @@ async function fetchThumbnails() {
         :authorAvatarUrl="imageDisplay.userAvatarUrl"
         :imageName="imageDisplay.displayName"
         :uploadTime="imageDisplay.createTime"
+        v-model:selected-ids="selectedImageIds"
         @dblclick="showRawImage(idx)"
-        @handleSelect="(imageId) => selectedImageIds.push(imageId)"
-        @handleUnselect="(imageId) => selectedImageIds.splice(selectedImageIds.indexOf(imageId), 1)"
         @contextmenu="handleImageRightClick($event, imageDisplay.id, idx)"
       />
       <ContextMenu ref="singleImageContextMenuRef" :menu-items="singleImageContextMenuItems" />

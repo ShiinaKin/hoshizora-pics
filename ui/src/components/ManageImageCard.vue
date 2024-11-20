@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
 import { Icon } from "@iconify/vue";
 
-const emits = defineEmits(["handleSelect", "handleUnselect"]);
 const { imageId, imageSrc, isPrivate, authorAvatarUrl, username, imageName, uploadTime } = defineProps([
   "imageId",
   "imageSrc",
@@ -13,13 +12,13 @@ const { imageId, imageSrc, isPrivate, authorAvatarUrl, username, imageName, uplo
   "uploadTime"
 ]);
 
-const isSelected = ref(false);
+const selectedIds = defineModel<Array<number>>("selectedIds", { default: [] });
+
+const isSelected = computed(() => selectedIds.value.includes(imageId));
 
 const handleSelect = () => {
-  if (isSelected.value) emits("handleUnselect", imageId);
-  else emits("handleSelect", imageId);
-
-  isSelected.value = !isSelected.value;
+  if (isSelected.value) selectedIds.value.splice(selectedIds.value.indexOf(imageId), 1);
+  else selectedIds.value.push(imageId);
 };
 </script>
 
