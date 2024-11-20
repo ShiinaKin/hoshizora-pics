@@ -69,6 +69,7 @@ data class ImageManagePageVO(
     val displayName: String,
     val userId: Long,
     val userName: String,
+    val userEmail: String,
     val isPrivate: Boolean,
     val externalUrl: String,
     val createTime: LocalDateTime

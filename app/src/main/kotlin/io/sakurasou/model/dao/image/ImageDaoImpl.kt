@@ -162,7 +162,7 @@ class ImageDaoImpl : ImageDao {
     override fun paginationForManage(pageRequest: PageRequest): PageResult<ImageManagePageVO> {
         val query = { query: Query ->
             query.adjustColumnSet { join(Users, JoinType.INNER) { Users.id eq Images.userId } }
-                .adjustSelect { select(Images.fields + Users.name) }
+                .adjustSelect { select(Images.fields + Users.name + Users.email) }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
                         map["userId"]?.let { userId ->
@@ -187,6 +187,7 @@ class ImageDaoImpl : ImageDao {
                 it[Images.displayName],
                 it[Images.userId],
                 it[Users.name],
+                it[Users.email],
                 isPrivate,
                 if (isPrivate) "" else it[Images.uniqueName],
                 it[Images.createTime]
