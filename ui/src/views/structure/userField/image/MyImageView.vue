@@ -864,7 +864,7 @@ function fetchThumbnails() {
       </template>
     </Toolbar>
 
-    <div class="flex-grow p-1 flex flex-wrap content-start justify-start gap-4 overflow-y-auto">
+    <div class="flex-grow p-1 flex flex-wrap content-start justify-start gap-4 overflow-x-hidden overflow-y-auto">
       <ImageCard
         v-for="(imageDisplay, idx) in imageDisplayList"
         :key="idx"
