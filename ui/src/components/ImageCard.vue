@@ -3,9 +3,10 @@ import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 
 const emits = defineEmits(["handleSelect", "handleUnselect"]);
-const { imageId, imageSrc, authorAvatarUrl, imageName, uploadTime } = defineProps([
+const { imageId, imageSrc, isPrivate, authorAvatarUrl, imageName, uploadTime } = defineProps([
   "imageId",
   "imageSrc",
+  "isPrivate",
   "authorAvatarUrl",
   "imageName",
   "uploadTime"
@@ -27,9 +28,11 @@ const handleSelect = () => {
     :class="isSelected ? 'ring-2' : ''"
     @click="handleSelect"
   >
-    <img :src="imageSrc" :alt="imageName" :key="imageSrc" class="object-contain rounded-2xl h-72" />
+    <img :src="imageSrc" :alt="imageName" :key="imageSrc" class="object-contain rounded-2xl h-full" />
 
-    <div class="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black via-black to-transparent opacity-30 rounded-b-2xl"></div>
+    <div
+      class="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black via-black to-transparent opacity-30 rounded-b-2xl"
+    ></div>
 
     <div class="absolute left-2 bottom-2 flex items-center justify-start w-full gap-2">
       <img :src="authorAvatarUrl" alt="Author Avatar" class="size-8 rounded-full" />
@@ -45,6 +48,11 @@ const handleSelect = () => {
       :class="isSelected ? 'border-2 border-blue-500' : ''"
     >
       <Icon v-if="isSelected" icon="mdi:check" fill="currentColor" class="w-4 h-4 text-blue-500" />
+    </div>
+
+    <div class="absolute top-2 left-2 text-gray-400">
+      <Icon v-if="isPrivate" icon="mdi:visibility-off-outline" class="size-6" />
+      <Icon v-else icon="mdi:visibility-outline" class="size-6" />
     </div>
   </div>
 </template>

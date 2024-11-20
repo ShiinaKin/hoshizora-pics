@@ -808,6 +808,8 @@ function fetchThumbnails() {
           displayName: imagePageVO.displayName,
           isPrivate: imagePageVO.isPrivate,
           createTime: dayjs(String(imagePageVO.createTime)).format("YYYY/MM/DD HH:mm:ss"),
+          username: userFieldStore.username,
+          userAvatarUrl: avatarUrl.value,
           thumbnailUrl: url,
           externalUrl: imagePageVO.externalUrl === "" ? undefined : imagePageVO.externalUrl
         });
@@ -867,7 +869,8 @@ function fetchThumbnails() {
         :key="idx"
         :imageId="imageDisplay.id"
         :imageSrc="imageDisplay.thumbnailUrl"
-        :authorAvatarUrl="avatarUrl"
+        :isPrivate="imageDisplay.isPrivate"
+        :authorAvatarUrl="imageDisplay.userAvatarUrl"
         :imageName="imageDisplay.displayName"
         :uploadTime="imageDisplay.createTime"
         @dblclick="showRawImage(idx)"

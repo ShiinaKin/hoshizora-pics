@@ -3,6 +3,8 @@ interface ImageDisplay {
   displayName: string;
   isPrivate: boolean;
   createTime: string;
+  username: string;
+  userAvatarUrl: string;
   thumbnailUrl: string;
   externalUrl?: string;
 }
