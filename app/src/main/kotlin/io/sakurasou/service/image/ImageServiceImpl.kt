@@ -378,7 +378,7 @@ class ImageServiceImpl(
                         id = image.id,
                         displayName = image.displayName,
                         userId = image.userId,
-                        userName = image.userName,
+                        username = image.username,
                         userEmail = image.userEmail,
                         isPrivate = image.isPrivate,
                         externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",

@@ -68,7 +68,7 @@ data class ImageManagePageVO(
     val id: Long,
     val displayName: String,
     val userId: Long,
-    val userName: String,
+    val username: String,
     val userEmail: String,
     val isPrivate: Boolean,
     val externalUrl: String,
