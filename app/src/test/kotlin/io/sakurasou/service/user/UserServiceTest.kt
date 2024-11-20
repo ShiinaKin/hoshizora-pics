@@ -259,7 +259,7 @@ class UserServiceTest {
         val exceptedUpdateDTO = UserSelfUpdateDTO(
             id = userId,
             password = encodedPassword,
-            email = patchRequest.email,
+            email = patchRequest.email ?: oldUserInfo.email,
             isDefaultImagePrivate = true,
             defaultAlbumId = patchRequest.defaultAlbumId,
             updateTime = now
@@ -377,7 +377,7 @@ class UserServiceTest {
             id = userId,
             groupId = 2,
             password = encodedPassword,
-            email = patchRequest.email,
+            email = patchRequest.email ?: oldUserInfo.email,
             isDefaultImagePrivate = true,
             defaultAlbumId = patchRequest.defaultAlbumId,
             updateTime = now
