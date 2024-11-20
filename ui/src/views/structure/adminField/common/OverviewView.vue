@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Configuration, SystemApi, type SystemStatisticsVO, type SystemOverviewVO } from "api-client";
 import Divider from "primevue/divider";
 import { Icon } from "@iconify/vue";
 import { useToast } from "primevue/usetoast";
-import type { Dayjs } from "dayjs";
+import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 
 const { t } = useI18n();
 const token = localStorage.getItem("token");
 const toast = useToast();
-const dayjs = inject("dayjs") as (date?: string | number | Date) => Dayjs;
 
 const configuration = new Configuration({ baseOptions: { headers: { Authorization: `Bearer ${token}` } } });
 const systemApi = new SystemApi(configuration);
@@ -152,7 +151,7 @@ function fetchSystemOverview() {
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
               <dt class="font-medium text-gray-900">构建时间</dt>
               <dd class="text-gray-700 sm:col-span-2">
-                {{ dayjs(systemOverview?.hoshizoraStatus?.buildTime).utc(true).local().format("YYYY/MM/DD HH:mm:ss") }}
+                {{ formatUTCStringToLocale(systemOverview?.hoshizoraStatus?.buildTime) }}
               </dd>
             </div>
 

@@ -32,7 +32,6 @@ import Dialog from "primevue/dialog";
 import { useToast } from "primevue/usetoast";
 import type { MenuItem } from "primevue/menuitem";
 import md5 from "crypto-js/md5";
-import dayjs from "dayjs";
 import { debounce } from "lodash-es";
 import {
   transToBBCode,
@@ -45,6 +44,7 @@ import type { ImageDisplay, ImageView } from "@/types/ImageType";
 import { convertImageToBlob } from "@/utils/ImageUtils";
 import LoadingDialog from "@/components/LoadingDialog.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 
 const userFieldStore = useUserFieldStore();
 const { t } = useI18n();
@@ -809,7 +809,7 @@ function fetchThumbnails() {
           id: imagePageVO.id,
           displayName: imagePageVO.displayName,
           isPrivate: imagePageVO.isPrivate,
-          createTime: dayjs(String(imagePageVO.createTime)).format("YYYY/MM/DD HH:mm:ss"),
+          createTime: formatUTCStringToLocale(imagePageVO.createTime),
           username: userFieldStore.username,
           userAvatarUrl: avatarUrl.value,
           thumbnailUrl: url,
@@ -1107,7 +1107,7 @@ function fetchThumbnails() {
         </div>
       </div>
     </Dialog>
-    <!--detail-->
+    <!--image detail-->
     <Dialog
       v-model:visible="showImageDetailDialog"
       modal
@@ -1154,7 +1154,7 @@ function fetchThumbnails() {
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900">{{ t("myImageView.myImageDialogImageDetailImageUploadTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ dayjs(String(imageInfo?.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
+              {{ formatUTCStringToLocale(imageInfo?.createTime) }}
             </dd>
           </div>
 
@@ -1180,7 +1180,7 @@ function fetchThumbnails() {
         </dl>
       </div>
     </Dialog>
-    <!--rename-->
+    <!--image rename-->
     <Dialog
       v-model:visible="showImageRenameDialog"
       modal
@@ -1211,7 +1211,7 @@ function fetchThumbnails() {
         </div>
       </div>
     </Dialog>
-    <!--delete confirm-->
+    <!--image delete confirm-->
     <ConfirmDialog
       v-model:visible="showImageDeleteConfirmDialog"
       :header="t('myImageView.myImageDialogImageDeleteConfirmTitle')"

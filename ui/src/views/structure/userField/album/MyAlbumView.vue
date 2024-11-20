@@ -23,8 +23,8 @@ import { useField, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/yup";
 import * as yup from "yup";
 import { Icon } from "@iconify/vue";
-import dayjs from "dayjs";
 import BottomPaginator from "@/components/BottomPaginator.vue";
+import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -331,7 +331,7 @@ async function fetchUserAlbum(albumId: number) {
       <Column field="isDefault" :header="t('myAlbumView.myAlbumTableIsDefault')"></Column>
       <Column sortable field="createTime" :header="t('myAlbumView.myAlbumTableCreateTime')">
         <template #body="{ data }">
-          {{ dayjs(String(data.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
+          {{ formatUTCStringToLocale(data.createTime) }}
         </template>
       </Column>
       <Column :header="t('myAlbumView.myAlbumTableOpsTitle')" class="w-72">
@@ -478,7 +478,7 @@ async function fetchUserAlbum(albumId: number) {
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumCreateTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ dayjs(String(albumDetail?.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
+              {{ formatUTCStringToLocale(albumDetail?.createTime) }}
             </dd>
           </div>
         </dl>

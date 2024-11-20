@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, reactive, watchEffect } from "vue";
+import { computed, ref, reactive, watchEffect, inject } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   Configuration,
@@ -31,10 +31,12 @@ import { yupResolver } from "@primevue/forms/resolvers/yup";
 import { useToast } from "primevue/usetoast";
 import * as yup from "yup";
 import { Icon } from "@iconify/vue";
-import dayjs from "dayjs";
+import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
+import type { Dayjs } from "dayjs";
 
 const { t } = useI18n();
 const toast = useToast();
+const dayjs = inject("dayjs") as (date?: string | number | Date) => Dayjs;
 
 const token = localStorage.getItem("token");
 
@@ -168,7 +170,7 @@ const onCreateFormSubmit = ({ valid, values }: FormSubmitEvent) => {
   const insertRequest: PersonalAccessTokenInsertRequest = {
     name: values.name!,
     description: values.description || undefined,
-    expireTime: dayjs(values.expireTime!).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+    expireTime: dayjs(values.expireTime!).utc().format("YYYY-MM-DDTHH:mm:ss.SSS"),
     permissions: values.permissions
   };
   createPAT(insertRequest).then((isSuccessful: boolean) => {
@@ -356,12 +358,12 @@ async function fetchSelfRoles(): Promise<void> {
       <Column field="name" :header="t('myPatView.myPATTablePATName')"></Column>
       <Column sortable field="createTime" :header="t('myPatView.myPATTableCreateTime')">
         <template #body="{ data }">
-          {{ dayjs(String(data.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
+          {{ formatUTCStringToLocale(data.createTime) }}
         </template>
       </Column>
       <Column sortable field="expireTime" :header="t('myPatView.myPATTableExpireTime')">
         <template #body="{ data }">
-          {{ dayjs(String(data.expireTime)).format("YYYY/MM/DD HH:mm:ss") }}
+          {{ formatUTCStringToLocale(data.expireTime) }}
         </template>
       </Column>
       <Column :header="t('myPatView.myPATTableOpsTitle')" class="w-48">

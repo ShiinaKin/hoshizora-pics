@@ -19,7 +19,7 @@ import Dialog from "primevue/dialog";
 import IftaLabel from "primevue/iftalabel";
 import InputText from "primevue/inputtext";
 import Toolbar from 'primevue/toolbar';
-import dayjs from "dayjs";
+import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 
 const userFieldStore = useUserFieldStore();
 const { t } = useI18n();
@@ -167,7 +167,7 @@ const editUser = handleSubmit((values) => {
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900">{{ t("myProfileView.profileCreateTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ dayjs(String(userVO?.createTime)).format("YYYY/MM/DD HH:mm:ss") }}
+              {{ formatUTCStringToLocale(userVO?.createTime) }}
             </dd>
           </div>
 
