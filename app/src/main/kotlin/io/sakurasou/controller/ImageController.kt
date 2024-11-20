@@ -458,7 +458,7 @@ private fun Route.imageManagePage(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<CommonResponse<PageResult<ImagePageVO>>> {
+                    body<CommonResponse<PageResult<ImageManagePageVO>>> {
                         description = "page result"
                     }
                 }
