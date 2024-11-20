@@ -3,6 +3,7 @@ package io.sakurasou.model.dao.user
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
+import io.sakurasou.model.dao.common.PaginationDao
 import io.sakurasou.model.dto.UserInsertDTO
 import io.sakurasou.model.dto.UserManageUpdateDTO
 import io.sakurasou.model.dto.UserSelfUpdateDTO
@@ -12,7 +13,7 @@ import io.sakurasou.model.entity.User
  * @author ShiinaKin
  * 2024/9/7 14:06
  */
-interface UserDao {
+interface UserDao : PaginationDao {
     fun saveUser(user: UserInsertDTO): Long
 
     fun deleteUserById(id: Long): Int

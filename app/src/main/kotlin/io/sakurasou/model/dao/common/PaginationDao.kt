@@ -7,6 +7,7 @@ import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dao.strategy.Strategies
+import io.sakurasou.model.dao.user.Users
 import org.jetbrains.exposed.sql.*
 
 /**
@@ -53,6 +54,7 @@ interface PaginationDao {
         return when (table) {
             Images -> Images.columnMap[columnName]
             Albums -> Albums.columnMap[columnName]
+            Users -> Users.columnMap[columnName]
             Groups -> Groups.columnMap[columnName]
             Strategies -> Strategies.columnMap[columnName]
             else -> null

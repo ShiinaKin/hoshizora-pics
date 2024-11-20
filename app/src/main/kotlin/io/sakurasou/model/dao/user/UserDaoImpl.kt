@@ -3,7 +3,6 @@ package io.sakurasou.model.dao.user
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
-import io.sakurasou.exception.controller.param.PagingParameterWrongException
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dto.UserInsertDTO
@@ -89,29 +88,26 @@ class UserDaoImpl : UserDao {
     }
 
     override fun pagination(pageRequest: PageRequest): PageResult<UserPageVO> {
-        val page = pageRequest.page
-        val pageSize = pageRequest.pageSize
-
-        val offset = (page - 1) * pageSize
-
-        val totalRecords: Long = Users.selectAll().count()
-        val query = Users
-            .join(Groups, JoinType.INNER, Users.groupId, Groups.id)
-            .join(Images, JoinType.LEFT, Users.id, Images.userId)
-            .select(
-                Users.id, Users.name, Users.isBanned, Users.createTime,
-                Groups.name, Images.id.count(), Images.size.sum()
-            )
-            .groupBy(Users.id, Users.name, Users.isBanned, Groups.name)
-            .limit(pageSize)
-            .offset(offset)
-
-        val finalQuery = pageRequest.orderBy?.let {
-            val sortOrder = SortOrder.valueOf(pageRequest.order?.uppercase() ?: "DESC")
-            setPageQueryCondition(query, it, sortOrder)
-        } ?: query.orderBy(Users.createTime, SortOrder.ASC)
-
-        val data = finalQuery.map {
+        val query = { query: Query ->
+            query
+                .adjustColumnSet {
+                    innerJoin(Groups) { Users.groupId eq Groups.id }
+                        .leftJoin(Images) { Users.id eq Images.userId }
+                }
+                .adjustSelect { select(Users.fields + Groups.name + Images.id.count() + Images.size.sum()) }
+                .groupBy(Users.id, Users.name, Users.isBanned, Groups.name)
+                .also {
+                    pageRequest.additionalCondition?.let { map ->
+                        map["isBanned"]?.let { isBanned ->
+                            it.andWhere { Users.isBanned eq isBanned.toBoolean() }
+                        }
+                        map["usernameSearch"]?.let { usernameSearch ->
+                            it.andWhere { Users.name like "%$usernameSearch%" }
+                        }
+                    }
+                }
+        }
+        return fetchPage(Users, pageRequest, query) {
             UserPageVO(
                 id = it[Users.id].value,
                 username = it[Users.name],
@@ -119,37 +115,11 @@ class UserDaoImpl : UserDao {
                 isBanned = it[Users.isBanned],
                 createTime = it[Users.createTime],
                 imageCount = it[Images.id.count()],
-                totalImageSize = it[Images.size.sum()]?.let { size -> size / 1024 / 1024.0 } ?: 0.0
+                totalImageSize = it[Images.size.sum()]?.let { size ->
+                    if (size != 0L) size / 1024 / 1024.0 else 0.0
+                } ?: 0.0
             )
-        }.toList()
-
-        val pageResult = PageResult(
-            page = page,
-            pageSize = pageSize,
-            total = totalRecords,
-            totalPage = (totalRecords + pageSize - 1) / pageSize,
-            data = data
-        )
-        return pageResult
-    }
-
-    private val columnMap: Map<String, Column<*>> = mapOf(
-        "id" to Users.id,
-        "name" to Users.name,
-        "isBanned" to Users.isBanned,
-        "groupName" to Groups.name,
-        "createTime" to Users.createTime
-    )
-
-    private fun setPageQueryCondition(query: Query, columnName: String, order: SortOrder): Query {
-        val column = columnMap[columnName] ?: run {
-            when (columnName) {
-                "imageCount" -> Images.id.count()
-                "totalImageSize" -> Images.size.sum()
-                else -> throw PagingParameterWrongException("Column $columnName not found in user pagination params")
-            }
         }
-        return query.orderBy(column, order)
     }
 
     private fun toUser(row: ResultRow) = User(
