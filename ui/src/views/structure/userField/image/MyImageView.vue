@@ -795,9 +795,8 @@ async function fetchImageBlob(imageId: number): Promise<Blob | void> {
     });
 }
 
-function fetchThumbnails() {
-  imageDisplayList.value = [];
-  imageList.value.forEach((imagePageVO) => {
+async function fetchThumbnails() {
+  const promises = imageList.value.map((imagePageVO) =>
     imageApi
       .apiImageImageIdThumbnailGet({ imageId: imagePageVO.id }, { responseType: "arraybuffer" })
       .then((response) => {
@@ -805,7 +804,7 @@ function fetchThumbnails() {
         const blob = new Blob([uIntArr], { type: "image/*" });
         const url = URL.createObjectURL(blob);
 
-        imageDisplayList.value.push({
+        return {
           id: imagePageVO.id,
           displayName: imagePageVO.displayName,
           isPrivate: imagePageVO.isPrivate,
@@ -814,13 +813,16 @@ function fetchThumbnails() {
           userAvatarUrl: avatarUrl.value,
           thumbnailUrl: url,
           externalUrl: imagePageVO.externalUrl === "" ? undefined : imagePageVO.externalUrl
-        });
+        };
       })
       .catch((error) => {
         console.error(error);
         toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
-      });
-  });
+        return null;
+      })
+  );
+  const results = await Promise.all(promises);
+  imageDisplayList.value = results.filter(item => item !== null);
 }
 </script>
 
