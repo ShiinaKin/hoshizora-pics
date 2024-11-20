@@ -19,7 +19,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import io.sakurasou.controller.request.PersonalAccessTokenInsertRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,7 +27,6 @@ import kotlinx.datetime.LocalDateTime
 import org.apache.commons.io.FileUtils
 import java.nio.file.Files
 import kotlin.io.path.Path
-import kotlin.reflect.full.starProjectedType
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -51,9 +49,8 @@ fun Application.configureSwagger(baseUrl: String) {
         }
         schemas {
             generator = { type ->
-                if (type == PersonalAccessTokenInsertRequest::class.starProjectedType) {
-                    // https://github.com/SMILEY4/schema-kenerator/wiki/Custom-Type-Processing
-                    type.processReflection {
+                type
+                    .processReflection {
                         customProcessor<LocalDateTime> {
                             PrimitiveTypeData(
                                 id = TypeId.build(String::class.qualifiedName!!),
@@ -62,16 +59,9 @@ fun Application.configureSwagger(baseUrl: String) {
                             )
                         }
                     }
-                        .handleNameAnnotation()
-                        .generateSwaggerSchema()
-                        .compileReferencingRoot()
-                } else {
-                    type
-                        .processReflection()
-                        .handleNameAnnotation()
-                        .generateSwaggerSchema()
-                        .compileReferencingRoot()
-                }
+                    .handleNameAnnotation()
+                    .generateSwaggerSchema()
+                    .compileReferencingRoot()
             }
         }
         security {
