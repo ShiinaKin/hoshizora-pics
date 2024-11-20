@@ -796,7 +796,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_PageResult_ImagePageVO"
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_ImageManagePageVO"
                 }
               }
             }
@@ -2003,6 +2003,26 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "isBanned",
+          "in" : "query",
+          "description" : "is banned",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "usernameSearch",
+          "in" : "query",
+          "description" : "search username",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -3166,6 +3186,89 @@
               "type" : "null"
             }, {
               "$ref" : "#/components/schemas/ImageManageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_ImageManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageManagePageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "ImageManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "externalUrl" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isPrivate" : {
+            "type" : "boolean"
+          },
+          "userEmail" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "displayName", "externalUrl", "id", "isPrivate", "userEmail", "userId", "username" ]
+      },
+      "CommonResponse_PageResult_ImageManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_ImageManagePageVO"
             } ]
           },
           "isSuccessful" : {

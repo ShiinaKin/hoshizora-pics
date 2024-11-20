@@ -30,6 +30,8 @@ import type { CommonResponseKotlinString } from '../models';
 // @ts-ignore
 import type { CommonResponseKotlinUnit } from '../models';
 // @ts-ignore
+import type { CommonResponsePageResultImageManagePageVO } from '../models';
+// @ts-ignore
 import type { CommonResponsePageResultImagePageVO } from '../models';
 // @ts-ignore
 import type { ImageManagePatchRequest } from '../models';
@@ -750,7 +752,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, userId?: number, albumId?: number, isPrivate?: boolean, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImagePageVO>> {
+        async apiImageManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, userId?: number, albumId?: number, isPrivate?: boolean, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultImageManagePageVO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManagePageGet(page, pageSize, order, orderBy, userId, albumId, isPrivate, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManagePageGet']?.[localVarOperationServerIndex]?.url;
@@ -891,7 +893,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManagePageGet(requestParameters: ImageApiApiImageManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultImagePageVO> {
+        apiImageManagePageGet(requestParameters: ImageApiApiImageManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultImageManagePageVO> {
             return localVarFp.apiImageManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.userId, requestParameters.albumId, requestParameters.isPrivate, requestParameters.search, options).then((request) => request(axios, basePath));
         },
         /**
