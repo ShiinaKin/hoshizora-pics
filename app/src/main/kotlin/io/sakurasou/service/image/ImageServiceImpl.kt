@@ -276,6 +276,7 @@ class ImageServiceImpl(
             val user = userDao.findUserById(image.userId) ?: throw UserNotFoundException()
             val group = groupDao.findGroupById(user.groupId) ?: throw GroupNotFoundException()
             val album = albumDao.findAlbumById(image.albumId) ?: throw AlbumNotFoundException()
+            val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
             val sizeForVO = image.size / 1024.0 / 1024.0
 
@@ -285,6 +286,9 @@ class ImageServiceImpl(
                 ownerName = user.name,
                 groupId = group.id,
                 groupName = group.name,
+                strategyId = strategy.id,
+                strategyName = strategy.name,
+                strategyType = strategy.config.strategyType.name,
                 displayName = image.displayName,
                 albumId = album.id,
                 albumName = album.name,
