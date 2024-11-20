@@ -248,3 +248,40 @@ adminOverviewView:
   adminOverviewUserCountUnit: "个"
   adminOverviewFetchStatisticsFailedTitle: "获取统计信息失败"
   adminOverviewFetchSystemOverviewFailedTitle: "获取系统概览失败"
+adminImageManageView:
+  imageFilter:
+    uploadTimeASC: "上传时间升序"
+    uploadTimeDESC: "上传时间降序"
+    fileSizeASC: "文件大小升序"
+    fileSizeDESC: "文件大小降序"
+  visibleFilter:
+    publicVisible: "公开"
+    privateVisible: "私密"
+    allVisible: "全部"
+  imageDelete:
+    confirmDialog:
+      header: "确认删除"
+      mainContent: "你确定要删除图片吗？"
+      subContent: "真的会删除，而且无法找回"
+      cancelButton: "取消"
+      submitButton: "确认删除"
+    toast:
+      successTitle: "删除成功"
+      failedTitle: "删除失败"
+  imageDetail:
+    title: "图片详情"
+    imageName: "图片名称"
+    imageRawName: "图片原始名称"
+    imageType: "图片类型"
+    imageAlbumName: "所属相册"
+    imageOwnerName: "所属用户"
+    imageStrategyName: "所属存储策略"
+    imageStrategyType: "存储策略类型"
+    imageSize: "图片尺寸"
+    imageFileSize: "图片大小"
+    imageFileSizeUnit: "MB"
+    imageUploadTime: "上传时间"
+    imageIsPublic: "是否公开"
+    imageIsPublicYes: "公开"
+    imageIsPublicNo: "私密"
+    imageDesc: "图片描述"
