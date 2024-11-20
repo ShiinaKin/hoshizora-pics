@@ -127,6 +127,24 @@ export interface ImageManageVO {
      * @type {number}
      * @memberof ImageManageVO
      */
+    'strategyId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageManageVO
+     */
+    'strategyName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageManageVO
+     */
+    'strategyType': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ImageManageVO
+     */
     'width': number;
 }
 

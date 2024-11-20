@@ -3059,12 +3059,22 @@
             "type" : "number",
             "format" : "double"
           },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "strategyName" : {
+            "type" : "string"
+          },
+          "strategyType" : {
+            "type" : "string"
+          },
           "width" : {
             "type" : "integer",
             "format" : "int32"
           }
         },
-        "required" : [ "albumId", "albumName", "createTime", "displayName", "groupId", "groupName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
+        "required" : [ "albumId", "albumName", "createTime", "displayName", "groupId", "groupName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "strategyId", "strategyName", "strategyType", "width" ]
       },
       "CommonResponse_ImageManageVO" : {
         "type" : "object",
