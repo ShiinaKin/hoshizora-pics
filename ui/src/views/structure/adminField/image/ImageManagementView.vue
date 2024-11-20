@@ -31,7 +31,6 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import type { ImageDisplay, ImageView } from "@/types/ImageType";
 import { debounce } from "lodash-es";
 import md5 from "crypto-js/md5";
-import dayjs from "dayjs";
 import { convertImageToBlob } from "@/utils/ImageUtils";
 import {
   transToBBCode,

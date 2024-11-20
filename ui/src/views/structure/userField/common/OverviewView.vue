@@ -34,10 +34,13 @@ userApi
       albumCount.value = userVO.albumCount!;
       usedSpace.value = userVO.totalImageSize!;
       usableSpace.value = userVO.allSize! - userVO.totalImageSize;
+    } else {
+      toast.add({ severity: "warn", summary: t("userOverviewView.userOverviewFetchStatisticsFailedTitle"), detail: resp.message })
     }
   })
   .catch((error) => {
     console.error(error);
+    toast.add({ severity: "error", summary: "Error", detail: error.message});
   });
 </script>
 
