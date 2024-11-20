@@ -2832,7 +2832,7 @@
             "type" : "string"
           },
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "description" : {
             "type" : [ "null", "string" ]
@@ -2880,114 +2880,6 @@
           }
         },
         "required" : [ "albumId", "albumName", "createTime", "displayName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
-      },
-      "kotlinx.datetime.LocalDateTime" : {
-        "type" : "object",
-        "properties" : {
-          "date" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDate"
-          },
-          "dayOfMonth" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "dayOfWeek" : {
-            "$ref" : "#/components/schemas/java.time.DayOfWeek"
-          },
-          "dayOfYear" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "hour" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "minute" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "month" : {
-            "$ref" : "#/components/schemas/java.time.Month"
-          },
-          "monthNumber" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "nanosecond" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "second" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "time" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalTime"
-          },
-          "year" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [ "date", "dayOfMonth", "dayOfWeek", "dayOfYear", "hour", "minute", "month", "monthNumber", "nanosecond", "second", "time", "year" ]
-      },
-      "kotlinx.datetime.LocalDate" : {
-        "type" : "object",
-        "properties" : {
-          "dayOfMonth" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "dayOfWeek" : {
-            "$ref" : "#/components/schemas/java.time.DayOfWeek"
-          },
-          "dayOfYear" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "month" : {
-            "$ref" : "#/components/schemas/java.time.Month"
-          },
-          "monthNumber" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "year" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [ "dayOfMonth", "dayOfWeek", "dayOfYear", "month", "monthNumber", "year" ]
-      },
-      "java.time.DayOfWeek" : {
-        "type" : "string",
-        "enum" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" ]
-      },
-      "java.time.Month" : {
-        "type" : "string",
-        "enum" : [ "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ]
-      },
-      "kotlinx.datetime.LocalTime" : {
-        "type" : "object",
-        "properties" : {
-          "hour" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "minute" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "nanosecond" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "second" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [ "hour", "minute", "nanosecond", "second" ]
       },
       "CommonResponse_ImageVO" : {
         "type" : "object",
@@ -3044,7 +2936,7 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "displayName" : {
             "type" : "string"
@@ -3118,7 +3010,7 @@
             "type" : "string"
           },
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "description" : {
             "type" : [ "null", "string" ]
@@ -3229,7 +3121,7 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "displayName" : {
             "type" : "string"
@@ -3310,7 +3202,7 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "description" : {
             "type" : [ "null", "string" ]
@@ -3390,7 +3282,7 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "id" : {
             "type" : "integer",
@@ -3476,7 +3368,7 @@
             "$ref" : "#/components/schemas/StrategyConfigSealed"
           },
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "id" : {
             "type" : "integer",
@@ -3702,7 +3594,7 @@
             "format" : "double"
           },
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "email" : {
             "type" : [ "null", "string" ]
@@ -3833,7 +3725,7 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "groupName" : {
             "type" : "string"
@@ -4275,13 +4167,13 @@
         "type" : "object",
         "properties" : {
           "createTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "description" : {
             "type" : [ "null", "string" ]
           },
           "expireTime" : {
-            "$ref" : "#/components/schemas/kotlinx.datetime.LocalDateTime"
+            "type" : "string"
           },
           "id" : {
             "type" : "integer",

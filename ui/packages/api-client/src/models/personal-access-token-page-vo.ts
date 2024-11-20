@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
 
 /**
  * 
@@ -25,10 +22,10 @@ import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date
 export interface PersonalAccessTokenPageVO {
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof PersonalAccessTokenPageVO
      */
-    'createTime': KotlinxDatetimeLocalDateTime;
+    'createTime': string;
     /**
      * 
      * @type {string}
@@ -37,10 +34,10 @@ export interface PersonalAccessTokenPageVO {
     'description'?: string | null;
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof PersonalAccessTokenPageVO
      */
-    'expireTime': KotlinxDatetimeLocalDateTime;
+    'expireTime': string;
     /**
      * 
      * @type {number}

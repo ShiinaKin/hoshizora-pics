@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
 
 /**
  * 
@@ -37,10 +34,10 @@ export interface UserVO {
     'allSize': number;
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof UserVO
      */
-    'createTime': KotlinxDatetimeLocalDateTime;
+    'createTime': string;
     /**
      * 
      * @type {string}

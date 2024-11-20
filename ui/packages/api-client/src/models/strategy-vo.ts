@@ -15,9 +15,6 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
-// May contain unused imports in some cases
-// @ts-ignore
 import type { StrategyConfigSealed } from './strategy-config-sealed';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -37,10 +34,10 @@ export interface StrategyVO {
     'config': StrategyConfigSealed;
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof StrategyVO
      */
-    'createTime': KotlinxDatetimeLocalDateTime;
+    'createTime': string;
     /**
      * 
      * @type {number}

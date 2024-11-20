@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date-time';
 
 /**
  * 
@@ -25,10 +22,10 @@ import type { KotlinxDatetimeLocalDateTime } from './kotlinx-datetime-local-date
 export interface AlbumVO {
     /**
      * 
-     * @type {KotlinxDatetimeLocalDateTime}
+     * @type {string}
      * @memberof AlbumVO
      */
-    'createTime': KotlinxDatetimeLocalDateTime;
+    'createTime': string;
     /**
      * 
      * @type {string}
