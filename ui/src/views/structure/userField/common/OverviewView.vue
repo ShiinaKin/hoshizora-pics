@@ -35,7 +35,7 @@ userApi
       usedSpace.value = userVO.totalImageSize!;
       usableSpace.value = userVO.allSize! - userVO.totalImageSize;
     } else {
-      toast.add({ severity: "warn", summary: t("userOverviewView.userOverviewFetchStatisticsFailedTitle"), detail: resp.message })
+      toast.add({ severity: "warn", summary: t("userOverviewView.userOverviewFetchStatisticsFailedTitle"), detail: resp.message });
     }
   })
   .catch((error) => {
