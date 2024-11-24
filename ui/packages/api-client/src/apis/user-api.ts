@@ -200,11 +200,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
          * @param {boolean} [isBanned] is banned
-         * @param {string} [usernameSearch] search username
+         * @param {string} [username] search username
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiUserManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, isBanned?: boolean, usernameSearch?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiUserManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, isBanned?: boolean, username?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'page' is not null or undefined
             assertParamExists('apiUserManagePageGet', 'page', page)
             // verify required parameter 'pageSize' is not null or undefined
@@ -245,8 +245,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['isBanned'] = isBanned;
             }
 
-            if (usernameSearch !== undefined) {
-                localVarQueryParameter['usernameSearch'] = usernameSearch;
+            if (username !== undefined) {
+                localVarQueryParameter['username'] = username;
             }
 
 
@@ -474,12 +474,12 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
          * @param {boolean} [isBanned] is banned
-         * @param {string} [usernameSearch] search username
+         * @param {string} [username] search username
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiUserManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, isBanned?: boolean, usernameSearch?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultUserPageVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserManagePageGet(page, pageSize, order, orderBy, isBanned, usernameSearch, options);
+        async apiUserManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, isBanned?: boolean, username?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultUserPageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserManagePageGet(page, pageSize, order, orderBy, isBanned, username, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.apiUserManagePageGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -584,7 +584,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiUserManagePageGet(requestParameters: UserApiApiUserManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultUserPageVO> {
-            return localVarFp.apiUserManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.isBanned, requestParameters.usernameSearch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiUserManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.isBanned, requestParameters.username, options).then((request) => request(axios, basePath));
         },
         /**
          * admin manual add user
@@ -733,7 +733,7 @@ export interface UserApiApiUserManagePageGetRequest {
      * @type {string}
      * @memberof UserApiApiUserManagePageGet
      */
-    readonly usernameSearch?: string
+    readonly username?: string
 }
 
 /**
@@ -837,7 +837,7 @@ export class UserApi extends BaseAPI {
      * @memberof UserApi
      */
     public apiUserManagePageGet(requestParameters: UserApiApiUserManagePageGetRequest, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).apiUserManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.isBanned, requestParameters.usernameSearch, options).then((request) => request(this.axios, this.basePath));
+        return UserApiFp(this.configuration).apiUserManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.isBanned, requestParameters.username, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

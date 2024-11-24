@@ -235,7 +235,7 @@ private fun Route.pageUser(controller: UserController) {
                     description = "is banned"
                     required = false
                 }
-                queryParameter<String>("usernameSearch") {
+                queryParameter<String>("username") {
                     description = "search username"
                     required = false
                 }
@@ -254,7 +254,7 @@ private fun Route.pageUser(controller: UserController) {
         }) {
             val pageRequest = call.pageRequest()
             val isPrivatePair = call.parameters["isBanned"]?.toBoolean()?.let { "isBanned" to it.toString() }
-            val usernameSearchPair = call.parameters["usernameSearch"]?.let { "usernameSearch" to it }
+            val usernameSearchPair = call.parameters["username"]?.let { "username" to it }
             pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
                 isPrivatePair?.let { put(it.first, it.second) }
                 usernameSearchPair?.let { put(it.first, it.second) }

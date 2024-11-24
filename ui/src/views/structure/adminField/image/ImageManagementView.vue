@@ -80,13 +80,13 @@ const userPageSize = ref(15);
 const userOrderBy = ref("createTime");
 const userOrder = ref("DESC");
 const usernameSearchContent = ref("");
-const userPageRequest = computed<ImageApiApiImageManagePageGetRequest>(() => {
+const userPageRequest = computed<UserApiApiUserManagePageGetRequest>(() => {
   return {
     page: userPage.value,
     pageSize: userPageSize.value,
     orderBy: userOrderBy.value === "" ? undefined : userOrderBy.value,
     order: userOrder.value === "" ? undefined : userOrder.value,
-    usernameSearch: usernameSearchContent.value.trim() === "" ? undefined : usernameSearchContent.value.trim()
+    username: usernameSearchContent.value.trim() === "" ? undefined : usernameSearchContent.value.trim()
   };
 });
 const isUserPreviousPageReqTakeUsernameSearch = ref(false);
@@ -591,7 +591,7 @@ async function pageUser(pageRequest: UserApiApiUserManagePageGetRequest): Promis
     .then((response) => {
       const resp = response.data;
       if (resp.isSuccessful) {
-        isUserPreviousPageReqTakeUsernameSearch.value = pageRequest.usernameSearch !== undefined;
+        isUserPreviousPageReqTakeUsernameSearch.value = pageRequest.username !== undefined;
         const pageResult = resp.data!;
         userCurPage.value = pageResult.page;
         userTotalRecord.value = pageResult.total;
