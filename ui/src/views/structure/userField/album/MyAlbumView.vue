@@ -326,10 +326,10 @@ async function fetchUserAlbum(albumId: number) {
     >
       <Column field="id" :header="t('myAlbumView.myAlbumTableAlbumId')"></Column>
       <Column field="name" :header="t('myAlbumView.myAlbumTableAlbumName')"></Column>
-      <Column sortable field="imageCount" :header="t('myAlbumView.myAlbumTableImageCount')"></Column>
+      <Column field="imageCount" :header="t('myAlbumView.myAlbumTableImageCount')" :sortable="true"></Column>
       <Column field="isUncategorized" :header="t('myAlbumView.myAlbumTableIsUncategorized')"></Column>
       <Column field="isDefault" :header="t('myAlbumView.myAlbumTableIsDefault')"></Column>
-      <Column sortable field="createTime" :header="t('myAlbumView.myAlbumTableCreateTime')">
+      <Column field="createTime" :header="t('myAlbumView.myAlbumTableCreateTime')" :sortable="true">
         <template #body="{ data }">
           {{ formatUTCStringToLocale(data.createTime) }}
         </template>
