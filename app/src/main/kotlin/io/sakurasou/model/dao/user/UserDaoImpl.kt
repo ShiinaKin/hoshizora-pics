@@ -3,6 +3,7 @@ package io.sakurasou.model.dao.user
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
+import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dto.UserInsertDTO
@@ -92,10 +93,11 @@ class UserDaoImpl : UserDao {
             query
                 .adjustColumnSet {
                     innerJoin(Groups) { Users.groupId eq Groups.id }
+                        .leftJoin(Albums) { Users.id eq Albums.userId }
                         .leftJoin(Images) { Users.id eq Images.userId }
                 }
-                .adjustSelect { select(Users.fields + Groups.name + Images.id.count() + Images.size.sum()) }
-                .groupBy(Users.id, Users.name, Users.isBanned, Groups.name)
+                .adjustSelect { select(Users.fields + Groups.name + Albums.id.count() + Images.id.count() + Images.size.sum()) }
+                .groupBy(Users.id, Users.name, Users.isBanned, Groups.name, Users.createTime)
                 .also {
                     pageRequest.additionalCondition?.let { map ->
                         map["isBanned"]?.let { isBanned ->
@@ -115,6 +117,7 @@ class UserDaoImpl : UserDao {
                 isBanned = it[Users.isBanned],
                 createTime = it[Users.createTime],
                 imageCount = it[Images.id.count()],
+                albumCount = it[Albums.id.count()],
                 totalImageSize = it[Images.size.sum()]?.let { size ->
                     if (size != 0L) size / 1024 / 1024.0 else 0.0
                 } ?: 0.0

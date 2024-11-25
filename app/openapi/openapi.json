@@ -3778,7 +3778,7 @@
             "type" : "string"
           },
           "email" : {
-            "type" : [ "null", "string" ]
+            "type" : "string"
           },
           "groupName" : {
             "type" : "string"
@@ -3805,7 +3805,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "albumCount", "allSize", "createTime", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
+        "required" : [ "albumCount", "allSize", "createTime", "email", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
       },
       "CommonResponse_UserVO" : {
         "type" : "object",
@@ -3905,6 +3905,10 @@
       "UserPageVO" : {
         "type" : "object",
         "properties" : {
+          "albumCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
           "createTime" : {
             "type" : "string"
           },
@@ -3930,7 +3934,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "createTime", "groupName", "id", "imageCount", "isBanned", "totalImageSize", "username" ]
+        "required" : [ "albumCount", "createTime", "groupName", "id", "imageCount", "isBanned", "totalImageSize", "username" ]
       },
       "CommonResponse_PageResult_UserPageVO" : {
         "type" : "object",

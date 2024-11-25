@@ -14,7 +14,7 @@ data class UserVO(
     val id: Long,
     val username: String,
     val groupName: String,
-    val email: String?,
+    val email: String,
     val isDefaultImagePrivate: Boolean,
     val isBanned: Boolean,
     val createTime: LocalDateTime,
@@ -33,5 +33,6 @@ data class UserPageVO(
     val isBanned: Boolean,
     val createTime: LocalDateTime,
     val imageCount: Long,
+    val albumCount: Long,
     val totalImageSize: Double
 )

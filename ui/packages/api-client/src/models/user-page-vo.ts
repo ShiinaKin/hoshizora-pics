@@ -22,6 +22,12 @@
 export interface UserPageVO {
     /**
      * 
+     * @type {number}
+     * @memberof UserPageVO
+     */
+    'albumCount': number;
+    /**
+     * 
      * @type {string}
      * @memberof UserPageVO
      */

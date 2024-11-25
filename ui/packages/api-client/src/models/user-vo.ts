@@ -43,7 +43,7 @@ export interface UserVO {
      * @type {string}
      * @memberof UserVO
      */
-    'email'?: string | null;
+    'email': string;
     /**
      * 
      * @type {string}

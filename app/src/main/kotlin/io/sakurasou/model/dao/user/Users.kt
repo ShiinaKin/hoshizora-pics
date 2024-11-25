@@ -29,12 +29,9 @@ object Users : LongIdTable("users") {
     }
 
     val columnMap = mapOf(
-        "id" to Users.id,
-        "name" to Users.name,
-        "isBanned" to Users.isBanned,
-        "groupName" to Groups.name,
         "createTime" to Users.createTime,
         "imageCount" to Images.id.count(),
+        "albumCount" to Albums.id.count(),
         "totalImageSize" to Images.size.sum()
     )
 }
