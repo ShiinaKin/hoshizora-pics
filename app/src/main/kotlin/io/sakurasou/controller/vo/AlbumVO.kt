@@ -21,6 +21,20 @@ data class AlbumVO(
 )
 
 @Serializable
+@Name("AlbumManageVO")
+data class AlbumManageVO(
+    val id: Long,
+    val name: String,
+    val userId: Long,
+    val username: String,
+    val description: String? = null,
+    val imageCount: Long,
+    val isUncategorized: Boolean,
+    val isDefault: Boolean,
+    val createTime: LocalDateTime
+)
+
+@Serializable
 @Name("AlbumPageVO")
 data class AlbumPageVO(
     val id: Long,
@@ -28,5 +42,17 @@ data class AlbumPageVO(
     val imageCount: Long,
     val isUncategorized: Boolean,
     val isDefault: Boolean,
+    val createTime: LocalDateTime
+)
+
+@Serializable
+@Name("AlbumManagePageVO")
+data class AlbumManagePageVO(
+    val id: Long,
+    val name: String,
+    val userId: Long,
+    val username: String,
+    val userEmail: String,
+    val imageCount: Long,
     val createTime: LocalDateTime
 )

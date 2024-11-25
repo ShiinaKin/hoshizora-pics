@@ -1,6 +1,7 @@
 package io.sakurasou.model.dao.album
 
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.AlbumManagePageVO
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.model.dao.common.PaginationDao
@@ -26,5 +27,6 @@ interface AlbumDao: PaginationDao {
     fun countAlbumByUserId(id: Long): Long
     fun listAlbumByUserId(userId: Long): List<Album>
 
-    fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO>
+    fun pagination(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO>
+    fun paginationForManage(pageRequest: PageRequest): PageResult<AlbumManagePageVO>
 }

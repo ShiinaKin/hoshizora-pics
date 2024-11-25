@@ -11,6 +11,8 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
 import io.sakurasou.controller.request.*
+import io.sakurasou.controller.vo.AlbumManagePageVO
+import io.sakurasou.controller.vo.AlbumManageVO
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.AlbumVO
 import io.sakurasou.controller.vo.CommonResponse
@@ -160,6 +162,12 @@ private fun Route.albumSelfPage(controller: AlbumController) {
         }
         get("page", {
             pageRequestSpec()
+            request {
+                queryParameter<String>("albumName") {
+                    description = "search albumName"
+                    required = false
+                }
+            }
             response {
                 HttpStatusCode.OK to {
                     description = "success"
@@ -174,6 +182,11 @@ private fun Route.albumSelfPage(controller: AlbumController) {
         }) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
+            val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
+            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
+                albumNamePair?.let { put(it.first, it.second) }
+            }
+
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
         }
@@ -288,7 +301,7 @@ private fun Route.albumManageFetch(controller: AlbumController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<CommonResponse<AlbumVO>> { }
+                    body<CommonResponse<AlbumManageVO>> { }
                 }
             }
         }) {
@@ -306,10 +319,20 @@ private fun Route.albumManagePage(controller: AlbumController) {
         }
         get("page", {
             pageRequestSpec()
+            request {
+                queryParameter<Long>("userId") {
+                    description = "userId"
+                    required = false
+                }
+                queryParameter<String>("albumName") {
+                    description = "search albumName"
+                    required = false
+                }
+            }
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<CommonResponse<PageResult<AlbumPageVO>>> {
+                    body<CommonResponse<PageResult<AlbumManagePageVO>>> {
                         description = "page result"
                     }
                 }
@@ -319,6 +342,13 @@ private fun Route.albumManagePage(controller: AlbumController) {
             }
         }) {
             val pageRequest = call.pageRequest()
+            val userIdPair = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
+            val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
+            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
+                userIdPair?.let { put(it.first, it.second) }
+                albumNamePair?.let { put(it.first, it.second) }
+            }
+
             val pageResult = controller.handleManagePage(pageRequest)
             call.success(pageResult)
         }
@@ -364,12 +394,12 @@ class AlbumController(
         albumService.deleteAlbum(albumId)
     }
 
-    suspend fun handleManageFetch(albumId: Long): AlbumVO {
+    suspend fun handleManageFetch(albumId: Long): AlbumManageVO {
         val albumVO = albumService.fetchAlbum(albumId)
         return albumVO
     }
 
-    suspend fun handleManagePage(pageRequest: PageRequest): PageResult<AlbumPageVO> {
+    suspend fun handleManagePage(pageRequest: PageRequest): PageResult<AlbumManagePageVO> {
         val pageResult = albumService.pageAlbum(pageRequest)
         return pageResult
     }

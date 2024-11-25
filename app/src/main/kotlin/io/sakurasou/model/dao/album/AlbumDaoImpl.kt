@@ -1,6 +1,7 @@
 package io.sakurasou.model.dao.album
 
 import io.sakurasou.controller.request.PageRequest
+import io.sakurasou.controller.vo.AlbumManagePageVO
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.exception.dao.MissingUserDefaultAlbumException
@@ -86,25 +87,64 @@ class AlbumDaoImpl : AlbumDao {
             .map { toAlbum(it) }
     }
 
-    override fun pagination(userId: Long?, pageRequest: PageRequest): PageResult<AlbumPageVO> {
-        val customWhereCond: (Query) -> Query = {
-            val query = it
+    override fun pagination(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO> {
+        val query = { query: Query ->
+            query
                 .adjustColumnSet {
                     leftJoin(Images) { Images.albumId eq Albums.id }
                         .innerJoin(Users) { Albums.userId eq Users.id }
                 }
                 .adjustSelect { select(Albums.fields + Users.defaultAlbumId + Images.id.count()) }
                 .groupBy(Albums.id, Albums.name, Albums.createTime, Users.defaultAlbumId)
-            userId?.let { query.andWhere { Albums.userId eq userId } }
-            query
+                .also { it.andWhere { Albums.userId eq userId } }
+                .also {
+                    pageRequest.additionalCondition?.let { map ->
+                        map["albumName"]?.let { albumName ->
+                            it.andWhere { Albums.name like "%$albumName%" }
+                        }
+                    }
+                }
         }
-        return fetchPage(Albums, pageRequest, customWhereCond) { row ->
+        return fetchPage(Albums, pageRequest, query) { row ->
             AlbumPageVO(
                 row[Albums.id].value,
                 row[Albums.name],
                 row[Images.id.count()],
                 row[Albums.isUncategorized],
                 row[Users.defaultAlbumId] == row[Albums.id].value,
+                row[Albums.createTime]
+            )
+        }
+    }
+
+    override fun paginationForManage(pageRequest: PageRequest): PageResult<AlbumManagePageVO> {
+        val query = { query: Query ->
+            query
+                .adjustColumnSet {
+                    leftJoin(Images) { Images.albumId eq Albums.id }
+                        .innerJoin(Users) { Albums.userId eq Users.id }
+                }
+                .adjustSelect { select(Albums.fields + Users.id + Users.name + Users.email + Users.defaultAlbumId + Images.id.count()) }
+                .groupBy(Albums.id, Albums.name, Albums.createTime, Users.id, Users.name, Users.email, Users.defaultAlbumId)
+                .also {
+                    pageRequest.additionalCondition?.let { map ->
+                        map["userId"]?.let { userId ->
+                            it.andWhere { Albums.userId eq userId.toLong() }
+                        }
+                        map["albumName"]?.let { albumName ->
+                            it.andWhere { Albums.name like "%$albumName%" }
+                        }
+                    }
+                }
+        }
+        return fetchPage(Albums, pageRequest, query) { row ->
+            AlbumManagePageVO(
+                row[Albums.id].value,
+                row[Albums.name],
+                row[Users.id].value,
+                row[Users.name],
+                row[Users.email],
+                row[Images.id.count()],
                 row[Albums.createTime]
             )
         }

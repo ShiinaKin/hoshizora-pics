@@ -1,6 +1,8 @@
 package io.sakurasou.service.album
 
 import io.sakurasou.controller.request.*
+import io.sakurasou.controller.vo.AlbumManagePageVO
+import io.sakurasou.controller.vo.AlbumManageVO
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.AlbumVO
 import io.sakurasou.controller.vo.PageResult
@@ -169,19 +171,20 @@ class AlbumServiceImpl(
         }
     }
 
-    override suspend fun fetchAlbum(albumId: Long): AlbumVO {
+    override suspend fun fetchAlbum(albumId: Long): AlbumManageVO {
         return dbQuery {
             val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
             val user = userDao.findUserById(album.userId) ?: throw UserNotFoundException()
             val imageCount = imageDao.countImageByAlbumId(albumId)
 
-            AlbumVO(
+            AlbumManageVO(
                 id = album.id,
                 name = album.name,
-                description = album.description,
+                userId = user.id,
+                username = user.name,
                 imageCount = imageCount,
                 isUncategorized = album.isUncategorized,
-                isDefault = user.defaultAlbumId == album.id,
+                isDefault = album.id == user.defaultAlbumId,
                 createTime = album.createTime
             )
         }
@@ -191,7 +194,7 @@ class AlbumServiceImpl(
         return dbQuery { albumDao.pagination(userId, pageRequest) }
     }
 
-    override suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumPageVO> {
-        return dbQuery { albumDao.pagination(null, pageRequest) }
+    override suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumManagePageVO> {
+        return dbQuery { albumDao.paginationForManage(pageRequest) }
     }
 }

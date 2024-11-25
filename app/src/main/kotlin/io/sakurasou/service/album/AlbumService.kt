@@ -1,6 +1,8 @@
 package io.sakurasou.service.album
 
 import io.sakurasou.controller.request.*
+import io.sakurasou.controller.vo.AlbumManagePageVO
+import io.sakurasou.controller.vo.AlbumManageVO
 import io.sakurasou.controller.vo.AlbumPageVO
 import io.sakurasou.controller.vo.AlbumVO
 import io.sakurasou.controller.vo.PageResult
@@ -17,7 +19,7 @@ interface AlbumService {
     suspend fun patchSelf(userId: Long, albumId: Long, selfPatchRequest: AlbumSelfPatchRequest)
     suspend fun patchAlbum(albumId: Long, managePatchRequest: AlbumManagePatchRequest)
     suspend fun fetchSelf(userId: Long, albumId: Long): AlbumVO
-    suspend fun fetchAlbum(albumId: Long): AlbumVO
+    suspend fun fetchAlbum(albumId: Long): AlbumManageVO
     suspend fun pageSelf(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO>
-    suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumPageVO>
+    suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumManagePageVO>
 }
