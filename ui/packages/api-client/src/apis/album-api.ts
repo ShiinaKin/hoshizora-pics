@@ -30,9 +30,13 @@ import type { AlbumSelfInsertRequest } from '../models';
 // @ts-ignore
 import type { AlbumSelfPatchRequest } from '../models';
 // @ts-ignore
+import type { CommonResponseAlbumManageVO } from '../models';
+// @ts-ignore
 import type { CommonResponseAlbumVO } from '../models';
 // @ts-ignore
 import type { CommonResponseKotlinUnit } from '../models';
+// @ts-ignore
+import type { CommonResponsePageResultAlbumManagePageVO } from '../models';
 // @ts-ignore
 import type { CommonResponsePageResultAlbumPageVO } from '../models';
 /**
@@ -281,10 +285,12 @@ export const AlbumApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {number} [userId] userId
+         * @param {string} [albumName] search albumName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAlbumManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAlbumManagePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, userId?: number, albumName?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'page' is not null or undefined
             assertParamExists('apiAlbumManagePageGet', 'page', page)
             // verify required parameter 'pageSize' is not null or undefined
@@ -319,6 +325,14 @@ export const AlbumApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orderBy !== undefined) {
                 localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (userId !== undefined) {
+                localVarQueryParameter['userId'] = userId;
+            }
+
+            if (albumName !== undefined) {
+                localVarQueryParameter['albumName'] = albumName;
             }
 
 
@@ -377,10 +391,11 @@ export const AlbumApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {string} [albumName] search albumName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAlbumPageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAlbumPageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, albumName?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'page' is not null or undefined
             assertParamExists('apiAlbumPageGet', 'page', page)
             // verify required parameter 'pageSize' is not null or undefined
@@ -415,6 +430,10 @@ export const AlbumApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orderBy !== undefined) {
                 localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (albumName !== undefined) {
+                localVarQueryParameter['albumName'] = albumName;
             }
 
 
@@ -532,7 +551,7 @@ export const AlbumApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAlbumManageAlbumIdGet(albumId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseAlbumVO>> {
+        async apiAlbumManageAlbumIdGet(albumId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseAlbumManageVO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAlbumManageAlbumIdGet(albumId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AlbumApi.apiAlbumManageAlbumIdGet']?.[localVarOperationServerIndex]?.url;
@@ -557,11 +576,13 @@ export const AlbumApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {number} [userId] userId
+         * @param {string} [albumName] search albumName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAlbumManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultAlbumPageVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAlbumManagePageGet(page, pageSize, order, orderBy, options);
+        async apiAlbumManagePageGet(page: number, pageSize: number, order?: string, orderBy?: string, userId?: number, albumName?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultAlbumManagePageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAlbumManagePageGet(page, pageSize, order, orderBy, userId, albumName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AlbumApi.apiAlbumManagePageGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -584,11 +605,12 @@ export const AlbumApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
+         * @param {string} [albumName] search albumName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAlbumPageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultAlbumPageVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAlbumPageGet(page, pageSize, order, orderBy, options);
+        async apiAlbumPageGet(page: number, pageSize: number, order?: string, orderBy?: string, albumName?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultAlbumPageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAlbumPageGet(page, pageSize, order, orderBy, albumName, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AlbumApi.apiAlbumPageGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -657,7 +679,7 @@ export const AlbumApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAlbumManageAlbumIdGet(requestParameters: AlbumApiApiAlbumManageAlbumIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseAlbumVO> {
+        apiAlbumManageAlbumIdGet(requestParameters: AlbumApiApiAlbumManageAlbumIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseAlbumManageVO> {
             return localVarFp.apiAlbumManageAlbumIdGet(requestParameters.albumId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -675,8 +697,8 @@ export const AlbumApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAlbumManagePageGet(requestParameters: AlbumApiApiAlbumManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultAlbumPageVO> {
-            return localVarFp.apiAlbumManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
+        apiAlbumManagePageGet(requestParameters: AlbumApiApiAlbumManagePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultAlbumManagePageVO> {
+            return localVarFp.apiAlbumManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.userId, requestParameters.albumName, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -694,7 +716,7 @@ export const AlbumApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiAlbumPageGet(requestParameters: AlbumApiApiAlbumPageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultAlbumPageVO> {
-            return localVarFp.apiAlbumPageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
+            return localVarFp.apiAlbumPageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.albumName, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -839,6 +861,20 @@ export interface AlbumApiApiAlbumManagePageGetRequest {
      * @memberof AlbumApiApiAlbumManagePageGet
      */
     readonly orderBy?: string
+
+    /**
+     * userId
+     * @type {number}
+     * @memberof AlbumApiApiAlbumManagePageGet
+     */
+    readonly userId?: number
+
+    /**
+     * search albumName
+     * @type {string}
+     * @memberof AlbumApiApiAlbumManagePageGet
+     */
+    readonly albumName?: string
 }
 
 /**
@@ -888,6 +924,13 @@ export interface AlbumApiApiAlbumPageGetRequest {
      * @memberof AlbumApiApiAlbumPageGet
      */
     readonly orderBy?: string
+
+    /**
+     * search albumName
+     * @type {string}
+     * @memberof AlbumApiApiAlbumPageGet
+     */
+    readonly albumName?: string
 }
 
 /**
@@ -985,7 +1028,7 @@ export class AlbumApi extends BaseAPI {
      * @memberof AlbumApi
      */
     public apiAlbumManagePageGet(requestParameters: AlbumApiApiAlbumManagePageGetRequest, options?: RawAxiosRequestConfig) {
-        return AlbumApiFp(this.configuration).apiAlbumManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
+        return AlbumApiFp(this.configuration).apiAlbumManagePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.userId, requestParameters.albumName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1007,7 +1050,7 @@ export class AlbumApi extends BaseAPI {
      * @memberof AlbumApi
      */
     public apiAlbumPageGet(requestParameters: AlbumApiApiAlbumPageGetRequest, options?: RawAxiosRequestConfig) {
-        return AlbumApiFp(this.configuration).apiAlbumPageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
+        return AlbumApiFp(this.configuration).apiAlbumPageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, requestParameters.albumName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

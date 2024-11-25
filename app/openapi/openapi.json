@@ -738,7 +738,7 @@
         }, {
           "name" : "userId",
           "in" : "query",
-          "description" : "albumId",
+          "description" : "userId",
           "required" : false,
           "deprecated" : false,
           "explode" : false,
@@ -998,6 +998,16 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "albumName",
+          "in" : "query",
+          "description" : "search albumName",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -1099,7 +1109,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_AlbumVO"
+                  "$ref" : "#/components/schemas/CommonResponse_AlbumManageVO"
                 }
               }
             }
@@ -1252,6 +1262,27 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "albumName",
+          "in" : "query",
+          "description" : "search albumName",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "404" : {
@@ -1271,7 +1302,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_PageResult_AlbumPageVO"
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_AlbumManagePageVO"
                 }
               }
             }
@@ -2014,7 +2045,7 @@
             "type" : "boolean"
           }
         }, {
-          "name" : "usernameSearch",
+          "name" : "username",
           "in" : "query",
           "description" : "search username",
           "required" : false,
@@ -3370,6 +3401,146 @@
             "format" : "int64"
           }
         }
+      },
+      "AlbumManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "isDefault" : {
+            "type" : "boolean"
+          },
+          "isUncategorized" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "id", "imageCount", "isDefault", "isUncategorized", "name", "userId", "username" ]
+      },
+      "CommonResponse_AlbumManageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/AlbumManageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_AlbumManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AlbumManagePageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "AlbumManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "userEmail" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "createTime", "id", "imageCount", "name", "userEmail", "userId", "username" ]
+      },
+      "CommonResponse_PageResult_AlbumManagePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_AlbumManagePageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
       },
       "StrategyVO" : {
         "type" : "object",

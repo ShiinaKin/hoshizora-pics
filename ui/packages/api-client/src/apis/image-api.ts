@@ -431,7 +431,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
-         * @param {number} [userId] albumId
+         * @param {number} [userId] userId
          * @param {number} [albumId] albumId
          * @param {boolean} [isPrivate] isPrivate
          * @param {string} [search] search content
@@ -745,7 +745,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize pageSize
          * @param {string} [order] order
          * @param {string} [orderBy] orderBy
-         * @param {number} [userId] albumId
+         * @param {number} [userId] userId
          * @param {number} [albumId] albumId
          * @param {boolean} [isPrivate] isPrivate
          * @param {string} [search] search content
@@ -1105,7 +1105,7 @@ export interface ImageApiApiImageManagePageGetRequest {
     readonly orderBy?: string
 
     /**
-     * albumId
+     * userId
      * @type {number}
      * @memberof ImageApiApiImageManagePageGet
      */
