@@ -278,12 +278,11 @@ private fun Route.imageSelfPage(controller: ImageController) {
         }) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
-
-            val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
+            val albumIdPair = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
             val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
             pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                albumId?.let { put(it.first, it.second) }
+                albumIdPair?.let { put(it.first, it.second) }
                 isPrivatePair?.let { put(it.first, it.second) }
                 searchPair?.let { put(it.first, it.second) }
             }
@@ -439,7 +438,7 @@ private fun Route.imageManagePage(controller: ImageController) {
             pageRequestSpec()
             request {
                 queryParameter<Long>("userId") {
-                    description = "albumId"
+                    description = "userId"
                     required = false
                 }
                 queryParameter<Long>("albumId") {
@@ -468,13 +467,13 @@ private fun Route.imageManagePage(controller: ImageController) {
             }
         }) {
             val pageRequest = call.pageRequest()
-            val userId = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
-            val albumId = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
+            val userIdPair = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
+            val albumIdPair = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
             val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
             pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                userId?.let { put(it.first, it.second) }
-                albumId?.let { put(it.first, it.second) }
+                userIdPair?.let { put(it.first, it.second) }
+                albumIdPair?.let { put(it.first, it.second) }
                 isPrivatePair?.let { put(it.first, it.second) }
                 searchPair?.let { put(it.first, it.second) }
             }
