@@ -94,7 +94,7 @@ class UserDaoImpl : UserDao {
                     innerJoin(Groups) { Users.groupId eq Groups.id }
                         .leftJoin(Images) { Users.id eq Images.userId }
                 }
-                .adjustSelect { select(fields + Groups.name + Images.id.count() + Images.size.sum()) }
+                .adjustSelect { select(Users.fields + Groups.name + Images.id.count() + Images.size.sum()) }
                 .groupBy(Users.id, Users.name, Users.isBanned, Groups.name)
                 .also {
                     pageRequest.additionalCondition?.let { map ->
