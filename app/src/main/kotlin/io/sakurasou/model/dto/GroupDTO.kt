@@ -1,6 +1,7 @@
 package io.sakurasou.model.dto
 
 import io.sakurasou.model.group.GroupConfig
+import kotlinx.datetime.LocalDateTime
 
 /**
  * @author Shiina Kin
@@ -10,7 +11,8 @@ data class GroupInsertDTO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val config: GroupConfig
+    val config: GroupConfig,
+    val createTime: LocalDateTime
 )
 
 data class GroupUpdateDTO(

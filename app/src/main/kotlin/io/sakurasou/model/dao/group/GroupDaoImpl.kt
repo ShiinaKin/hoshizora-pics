@@ -47,7 +47,8 @@ class GroupDaoImpl : GroupDao {
                     it[Groups.name],
                     it[Groups.description],
                     it[Groups.strategyId],
-                    it[Groups.config]
+                    it[Groups.config],
+                    it[Groups.createTime]
                 )
             }
             .firstOrNull()

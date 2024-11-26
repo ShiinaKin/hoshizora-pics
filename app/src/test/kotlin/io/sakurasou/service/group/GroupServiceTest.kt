@@ -41,7 +41,7 @@ class GroupServiceTest {
         groupService = GroupServiceImpl(groupDao, relationDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
-        now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        now = instant.toLocalDateTime(TimeZone.UTC)
     }
 
     @Test
@@ -56,7 +56,8 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            config = GroupConfig(GroupStrategyConfig())
+            config = GroupConfig(GroupStrategyConfig()),
+            createTime = now
         )
         val exceptedRoles = listOf("user")
 
@@ -91,7 +92,8 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            config = GroupConfig(GroupStrategyConfig())
+            config = GroupConfig(GroupStrategyConfig()),
+            createTime = now
         )
         val patchRequest = GroupPatchRequest(
             name = "Test Group",
@@ -127,7 +129,8 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
-            config = GroupConfig(GroupStrategyConfig())
+            config = GroupConfig(GroupStrategyConfig()),
+            createTime = now
         )
         val roles = listOf("user")
 

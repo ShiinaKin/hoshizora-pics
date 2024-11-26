@@ -18,6 +18,9 @@ import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.group.GroupConfig
 import io.sakurasou.model.group.GroupStrategyConfig
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * @author Shiina Kin
@@ -34,7 +37,8 @@ class GroupServiceImpl(
             strategyId = insertRequest.strategyId,
             config = GroupConfig(
                 groupStrategyConfig = GroupStrategyConfig()
-            )
+            ),
+            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )
         val groupRoles = insertRequest.roles
 

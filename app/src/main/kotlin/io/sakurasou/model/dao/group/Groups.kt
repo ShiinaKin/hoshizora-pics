@@ -7,6 +7,7 @@ import io.sakurasou.plugins.jsonFormat
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.json.json
+import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import org.jetbrains.exposed.sql.sum
 
 /**
@@ -18,15 +19,13 @@ object Groups : LongIdTable("groups") {
     val description = varchar("description", 255).nullable()
     val strategyId = long("strategy_id")
     val config = json<GroupConfig>("config", jsonFormat)
+    val createTime = datetime("create_time")
 
     init {
         foreignKey(strategyId to Strategies.id)
     }
 
     val columnMap = mapOf(
-        "name" to name,
-        "description" to description,
-        "imageCount" to Images.id.count(),
-        "size" to Images.size.sum()
+        "createTime" to createTime,
     )
 }

@@ -173,11 +173,23 @@ private fun initGroup() {
     val adminGroupConfig = GroupConfig(
         groupStrategyConfig = GroupStrategyConfig()
     )
-    val adminGroup = GroupInsertDTO(GROUP_ADMIN, "admin group", 1, adminGroupConfig)
+    val adminGroup = GroupInsertDTO(
+        name = GROUP_ADMIN,
+        description = "admin group",
+        strategyId = 1,
+        config = adminGroupConfig,
+        createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+    )
     val userGroupConfig = GroupConfig(
         groupStrategyConfig = GroupStrategyConfig()
     )
-    val userGroup = GroupInsertDTO(GROUP_USER, "user group", 1, userGroupConfig)
+    val userGroup = GroupInsertDTO(
+        name = GROUP_USER,
+        description = "user group",
+        strategyId = 1,
+        config = userGroupConfig,
+        createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+    )
     InstanceCenter.groupDao.saveGroup(adminGroup)
     InstanceCenter.groupDao.saveGroup(userGroup)
 

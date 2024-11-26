@@ -1,6 +1,7 @@
 package io.sakurasou.model.entity
 
 import io.sakurasou.model.group.GroupConfig
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,5 +14,6 @@ data class Group(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val config: GroupConfig
+    val config: GroupConfig,
+    val createTime: LocalDateTime
 )
