@@ -313,3 +313,151 @@ adminAlbumManageView:
     albumIsDefaultYes: "是"
     albumIsDefaultNo: "否"
     albumCreateTime: "创建时间"
+adminUserManageView:
+  userFilter:
+    createTimeASC: "创建时间升序"
+    createTimeDESC: "创建时间降序"
+    imageCountASC: "图片数量升序"
+    imageCountDESC: "图片数量降序"
+    albumCountASC: "相册数量升序"
+    albumCountDESC: "相册数量降序"
+    usedSpaceASC: "已用空间升序"
+    usedSpaceDESC: "已用空间降序"
+    bannedStatus:
+      banned: "封禁"
+      normal: "正常"
+      all: "全部"
+  userTable:
+    userId: "用户ID"
+    username: "用户名"
+    userGroup: "用户组"
+    imageCount: "图片数量"
+    albumCount: "相册数量"
+    usedSpace: "已用空间"
+    createTime: "注册时间"
+    banStatus: "封禁状态"
+    banStatusNormal: "正常"
+    banStatusBanned: "封禁"
+    spaceSizeUnit: "MB"
+    opsTitle: "操作"
+    opsDetail: "查看"
+    opsEdit: "编辑"
+    opsBan: "封禁"
+    opsUnban: "解封"
+    opsDelete: "删除"
+  userDetail:
+    title: "用户详情"
+    userId: "用户ID"
+    username: "用户名"
+    userGroupName: "用户组名"
+    email: "邮箱"
+    imageCount: "图片数量"
+    albumCount: "相册数量"
+    isDefaultImagePrivate: "默认私密"
+    isDefaultImagePrivateTrue: "是"
+    isDefaultImagePrivateFalse: "否"
+    createTime: "创建时间"
+    banStatus: "封禁状态"
+    banStatusNormal: "正常"
+    banStatusBanned: "封禁"
+    usedSpace: "已用空间"
+    totalSpace: "总空间"
+    imageCountUnit: "张"
+    albumCountUnit: "个"
+    spaceSizeUnit: "MB"
+  userCreate:
+    dialog:
+      title: "创建用户"
+      form:
+        username: "用户名"
+        password: "密码"
+        email: "邮箱"
+        groupId: "用户组"
+        isDefaultImagePrivate: "默认私密"
+        submitButton: "创建"
+        cancelButton: "取消"
+        verify:
+          username:
+            required: "用户名不能为空"
+            min: "用户名必须大于等于4个字符"
+            max: "用户名必须小于等于20个字符"
+            invalid: "只能包含字母和数字"
+          password:
+            required: "密码不能为空"
+            min: "密码长度必须大于等于8个字符"
+            max: "密码长度必须小于等于32个字符"
+            invalid: "只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
+          email:
+            required: "邮箱不能为空"
+            invalid: "邮箱格式不正确"
+          groupId:
+            required: "用户组不能为空"
+          isDefaultImagePrivate:
+            required: "默认私密不能为空"
+    toast:
+      successTitle: "创建成功"
+      failedTitle: "创建失败"
+  userEdit:
+    dialog:
+      title: "创建用户"
+      form:
+        userId: "用户ID"
+        username: "用户名"
+        password: "密码"
+        email: "邮箱"
+        groupId: "用户组"
+        isDefaultImagePrivate: "默认私密"
+        submitButton: "保存"
+        cancelButton: "取消"
+        verify:
+          username:
+            required: "用户名不能为空"
+            min: "用户名必须大于等于4个字符"
+            max: "用户名必须小于等于20个字符"
+            invalid: "只能包含字母和数字"
+          password:
+            required: "密码不能为空"
+            min: "密码长度必须大于等于8个字符"
+            max: "密码长度必须小于等于32个字符"
+            invalid: "只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
+          email:
+            required: "邮箱不能为空"
+            invalid: "邮箱格式不正确"
+          groupId:
+            required: "用户组不能为空"
+          isDefaultImagePrivate:
+            required: "默认私密不能为空"
+          atLeastOneField: "请至少修改一个字段"
+    toast:
+      successTitle: "修改成功"
+      failedTitle: "修改失败"
+  userBan:
+    confirmDialog:
+      header: "确认封禁"
+      mainContent: "你确定要封禁用户吗？"
+      subContent: "封禁后用户将无法登录，用户的图片和相册不会被删除"
+      cancelButton: "取消"
+      submitButton: "确认封禁"
+    toast:
+      successTitle: "封禁成功"
+      failedTitle: "封禁失败"
+  userUnban:
+    confirmDialog:
+      header: "确认解封"
+      mainContent: "你确定要解封用户吗？"
+      subContent: "解封后用户将可以登录"
+      cancelButton: "取消"
+      submitButton: "确认解封"
+    toast:
+      successTitle: "解封成功"
+      failedTitle: "解封失败"
+  userDelete:
+    confirmDialog:
+      header: "确认删除"
+      mainContent: "你确定要删除用户吗？"
+      subContent: "真的会删除，而且无法找回，用户的图片和相册会被物理删除"
+      cancelButton: "取消"
+      submitButton: "确认删除"
+    toast:
+      successTitle: "删除成功"
+      failedTitle: "删除失败"
