@@ -65,7 +65,7 @@ class UserServiceTest {
         }
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
-        now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        now = instant.toLocalDateTime(TimeZone.UTC)
     }
 
     @Test

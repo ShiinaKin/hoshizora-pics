@@ -43,7 +43,7 @@ class UserServiceImpl(
         val rawPassword = userInsertRequest.password
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val userInsertDTO = UserInsertDTO(
             groupId = systemSetting.defaultGroupId,
             username = userInsertRequest.username,
@@ -66,7 +66,7 @@ class UserServiceImpl(
         val rawPassword = userManageInsertRequest.password
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
         val userInsertDTO = UserInsertDTO(
             groupId = userManageInsertRequest.groupId,
@@ -111,7 +111,7 @@ class UserServiceImpl(
             val encodePassword = patchRequest.password?.let {
                 BCrypt.withDefaults().hashToString(12, it.toCharArray())
             } ?: oldUserInfo.password
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
             val selfUpdateDTO = UserSelfUpdateDTO(
                 id = id,
@@ -145,7 +145,7 @@ class UserServiceImpl(
             val encodePassword = patchRequest.password?.let {
                 BCrypt.withDefaults().hashToString(12, it.toCharArray())
             } ?: oldUserInfo.password
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
             val userUpdateDTO = UserManageUpdateDTO(
                 id = id,

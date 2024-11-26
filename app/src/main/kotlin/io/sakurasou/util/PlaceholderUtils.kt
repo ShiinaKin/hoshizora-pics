@@ -42,7 +42,7 @@ object PlaceholderUtils {
     @Synchronized
     fun parsePlaceholder(namingRule: String, fileName: String, userId: Long): String {
         val instant = Clock.System.now()
-        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val localDateTime = instant.toLocalDateTime(TimeZone.UTC)
 
         // namingRule like : {yyyy}/{MM}/{dd}
         return namingRule.replace(Regex("\\{[^}]+}")) { matchResult ->

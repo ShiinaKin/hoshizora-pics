@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
  */
 class AlbumDaoImpl : AlbumDao {
     override fun initAlbumForUser(userId: Long): Long {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val uncategorizedAlbum = AlbumInsertDTO(
             userId = userId,
             name = "uncategorized",

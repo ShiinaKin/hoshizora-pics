@@ -62,7 +62,7 @@ class AuthServiceTest {
         val userLoginRequest = UserLoginRequest(username, password)
 
         val instant = Clock.System.now()
-        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = instant.toLocalDateTime(TimeZone.UTC)
         val hashedPassword = BCrypt.withDefaults().hashToString(12, "correctPassword".toCharArray())
         val user = User(
             id = 1,
@@ -93,7 +93,7 @@ class AuthServiceTest {
         val userLoginRequest = UserLoginRequest(username, password)
 
         val instant = Clock.System.now()
-        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = instant.toLocalDateTime(TimeZone.UTC)
         val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
         val user = User(
             id = 1,

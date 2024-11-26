@@ -39,7 +39,7 @@ class SettingServiceImpl(
                 allowSignup = systemSetting.allowSignup ?: oldSystemSetting.allowSignup,
                 allowRandomFetch = systemSetting.allowRandomFetch ?: oldSystemSetting.allowRandomFetch
             )
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             val settingUpdateDTO = SettingUpdateDTO(
                 name = SETTING_SYSTEM,
                 config = systemSettingConfig,
@@ -57,7 +57,7 @@ class SettingServiceImpl(
     }
 
     override suspend fun updateSiteSetting(siteSetting: SiteSetting) {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val settingUpdateDTO = SettingUpdateDTO(
             name = SETTING_SITE,
             config = siteSetting,
@@ -85,7 +85,7 @@ class SettingServiceImpl(
                 siteSubtitle = siteSettingPatch.siteSubtitle ?: oldSiteSetting.siteSubtitle,
                 siteDescription = siteSettingPatch.siteDescription ?: oldSiteSetting.siteDescription
             )
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             val settingUpdateDTO = SettingUpdateDTO(
                 name = SETTING_SITE,
                 config = siteSettingConfig,
@@ -102,7 +102,7 @@ class SettingServiceImpl(
     }
 
     override suspend fun updateSystemStatus(systemStatus: SystemStatus) {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val settingUpdateDTO = SettingUpdateDTO(
             name = SETTING_STATUS,
             config = systemStatus,

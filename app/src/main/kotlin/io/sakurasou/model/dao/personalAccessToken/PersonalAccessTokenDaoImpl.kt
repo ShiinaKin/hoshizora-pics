@@ -58,7 +58,7 @@ class PersonalAccessTokenDaoImpl : PersonalAccessTokenDao {
                 .also {
                     pageRequest.additionalCondition?.let { condition ->
                         condition["isExpired"]?.let { isExpired ->
-                            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                             query.andWhere {
                                 if (isExpired == "true") PersonalAccessTokens.expireTime lessEq now
                                 else PersonalAccessTokens.expireTime greater now
@@ -68,7 +68,7 @@ class PersonalAccessTokenDaoImpl : PersonalAccessTokenDao {
                 }
         }
         return fetchPage(PersonalAccessTokens, pageRequest, query) { resultRow ->
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             PersonalAccessTokenPageVO(
                 id = resultRow[PersonalAccessTokens.id].value,
                 name = resultRow[PersonalAccessTokens.name],

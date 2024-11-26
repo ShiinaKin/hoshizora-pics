@@ -26,7 +26,7 @@ class StrategyServiceImpl(
     private val strategyDao: StrategyDao
 ) : StrategyService {
     override suspend fun saveStrategy(insertRequest: StrategyInsertRequest) {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val strategyInsertDTO = StrategyInsertDTO(
             name = insertRequest.name,
             config = insertRequest.config,
@@ -54,7 +54,7 @@ class StrategyServiceImpl(
                 id = id,
                 name = patchRequest.name ?: oldStrategy.name,
                 config = patchRequest.config ?: oldStrategy.config,
-                updateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                updateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             )
             runCatching {
                 val influenceRowCnt = strategyDao.updateStrategyById(strategyUpdateDTO)

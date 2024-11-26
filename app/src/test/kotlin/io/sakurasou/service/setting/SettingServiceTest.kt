@@ -54,8 +54,8 @@ class SettingServiceTest {
                 Setting(
                     name = SETTING_SYSTEM,
                     config = SystemSetting(defaultGroupId = 1, allowSignup = false, allowRandomFetch = false),
-                    createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),
-                    updateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                    createTime = instant.toLocalDateTime(TimeZone.UTC),
+                    updateTime = instant.toLocalDateTime(TimeZone.UTC)
                 )
 
         val systemSetting = settingService.getSystemSetting()
@@ -84,8 +84,8 @@ class SettingServiceTest {
                         siteSubtitle = "Subtitle",
                         siteDescription = "Description"
                     ),
-                    createTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()),
-                    updateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                    createTime = instant.toLocalDateTime(TimeZone.UTC),
+                    updateTime = instant.toLocalDateTime(TimeZone.UTC)
                 )
 
         val siteSetting = settingService.getSiteSetting()

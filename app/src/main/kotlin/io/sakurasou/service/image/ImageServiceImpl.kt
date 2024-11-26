@@ -118,7 +118,7 @@ class ImageServiceImpl(
                 val relativePath =
                     ImageUtils.uploadImageAndGetRelativePath(strategy, subFolder, storageFileName, imageBytes)
 
-                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
                 val displayName = "$fileNamePrefix.$extension"
                 val imageInsertDTO = ImageInsertDTO(

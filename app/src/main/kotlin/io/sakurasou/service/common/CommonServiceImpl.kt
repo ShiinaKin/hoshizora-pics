@@ -44,7 +44,7 @@ class CommonServiceImpl(
         val rawPassword = siteInitRequest.password
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val userInsertDTO = UserInsertDTO(
             groupId = 1,
             username = siteInitRequest.username,

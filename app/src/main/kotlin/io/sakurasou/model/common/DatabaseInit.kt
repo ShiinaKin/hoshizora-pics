@@ -157,7 +157,7 @@ private fun initRole() {
 
 private fun initStrategy() {
     val localStrategyConfig = LocalStrategy("uploads", "thumbnails")
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     val strategyInsertDTO = StrategyInsertDTO(
         name = "local",
         config = localStrategyConfig,
@@ -255,7 +255,7 @@ private fun initSetting(version: String) {
         version = version
     )
 
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
     val siteSettingInsertDTO = SettingInsertDTO(SETTING_SITE, siteSettingConfig, now, now)
     val systemSettingInsertDTO = SettingInsertDTO(SETTING_SYSTEM, systemSettingConfig, now, now)

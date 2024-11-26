@@ -45,7 +45,7 @@ class AlbumServiceTest {
         albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
-        now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        now = instant.toLocalDateTime(TimeZone.UTC)
         coEvery { DatabaseSingleton.dbQuery<Unit>(any()) } coAnswers {
             this.arg<suspend () -> Unit>(0).invoke()
         }

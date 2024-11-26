@@ -4,8 +4,10 @@ import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.Coalesce
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.sql.longLiteral
 import org.jetbrains.exposed.sql.sum
 
 /**
@@ -32,6 +34,6 @@ object Users : LongIdTable("users") {
         "createTime" to Users.createTime,
         "imageCount" to Images.id.count(),
         "albumCount" to Albums.id.count(),
-        "totalImageSize" to Images.size.sum()
+        "totalImageSize" to Coalesce(Images.size.sum(), longLiteral(0))
     )
 }

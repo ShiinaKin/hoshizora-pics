@@ -96,7 +96,12 @@ class UserDaoImpl : UserDao {
                         .leftJoin(Albums) { Users.id eq Albums.userId }
                         .leftJoin(Images) { Users.id eq Images.userId }
                 }
-                .adjustSelect { select(Users.fields + Groups.name + Albums.id.count() + Images.id.count() + Images.size.sum()) }
+                .adjustSelect {
+                    select(
+                        Users.fields + Groups.name + Albums.id.count() + Images.id.count()
+                                + Coalesce(Images.size.sum(), longLiteral(0))
+                    )
+                }
                 .groupBy(Users.id, Users.name, Users.isBanned, Groups.name, Users.createTime)
                 .also {
                     pageRequest.additionalCondition?.let { map ->
@@ -118,9 +123,9 @@ class UserDaoImpl : UserDao {
                 createTime = it[Users.createTime],
                 imageCount = it[Images.id.count()],
                 albumCount = it[Albums.id.count()],
-                totalImageSize = it[Images.size.sum()]?.let { size ->
+                totalImageSize = it[Coalesce(Images.size.sum(), longLiteral(0))].let { size ->
                     if (size != 0L) size / 1024 / 1024.0 else 0.0
-                } ?: 0.0
+                }
             )
         }
     }

@@ -28,7 +28,7 @@ class AlbumServiceImpl(
     private val imageDao: ImageDao
 ) : AlbumService {
     override suspend fun saveSelf(userId: Long, selfInsertRequest: AlbumSelfInsertRequest) {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
         val albumInsertDTO = AlbumInsertDTO(
             userId = userId,
@@ -44,7 +44,7 @@ class AlbumServiceImpl(
     }
 
     override suspend fun saveAlbum(manageInsertRequest: AlbumManageInsertRequest) {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
         val albumInsertDTO = AlbumInsertDTO(
             userId = manageInsertRequest.userId,

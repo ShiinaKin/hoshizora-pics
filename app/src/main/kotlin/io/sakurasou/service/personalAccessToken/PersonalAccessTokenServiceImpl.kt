@@ -36,7 +36,7 @@ class PersonalAccessTokenServiceImpl(
         return dbQuery {
             val user = userDao.findUserById(userId) ?: throw UserNotFoundException()
 
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             if (insertRequest.expireTime < now)
                 throw PersonalAccessTokenInsertFailedException(reason = "Expire time must be later than now")
 

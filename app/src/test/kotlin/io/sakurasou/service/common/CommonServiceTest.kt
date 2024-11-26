@@ -79,7 +79,7 @@ class CommonServiceTest {
             siteExternalUrl = "http://localhost:8080"
         )
         val instant = Clock.System.now()
-        val now = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = instant.toLocalDateTime(TimeZone.UTC)
         val encodedPassword = "encodedPassword"
         val userInsertDTO = UserInsertDTO(
             groupId = 1,
