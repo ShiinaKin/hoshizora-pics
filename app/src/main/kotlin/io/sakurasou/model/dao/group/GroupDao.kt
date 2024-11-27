@@ -17,5 +17,6 @@ interface GroupDao : PaginationDao {
     fun deleteGroupById(id: Long): Int
     fun updateGroupById(groupUpdateDTO: GroupUpdateDTO): Int
     fun findGroupById(id: Long): Group?
+    fun doesGroupUsingStrategy(strategyId: Long): Boolean
     fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO>
 }

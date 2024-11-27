@@ -55,6 +55,12 @@ class GroupDaoImpl : GroupDao {
             .firstOrNull()
     }
 
+    override fun doesGroupUsingStrategy(strategyId: Long): Boolean {
+        return Groups.selectAll()
+            .where { Groups.strategyId eq strategyId }
+            .count() > 0
+    }
+
     override fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO> {
         val query = { query: Query ->
             query.adjustColumnSet { join(Images, JoinType.FULL) {Images.groupId eq Groups.id} }

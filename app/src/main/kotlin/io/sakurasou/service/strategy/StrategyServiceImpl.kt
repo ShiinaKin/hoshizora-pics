@@ -11,6 +11,7 @@ import io.sakurasou.exception.service.strategy.StrategyInsertFailedException
 import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.exception.service.strategy.StrategyUpdateFailedException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
+import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
 import io.sakurasou.model.dto.StrategyUpdateDTO
@@ -23,7 +24,8 @@ import kotlinx.datetime.toLocalDateTime
  * 2024/9/23 08:05
  */
 class StrategyServiceImpl(
-    private val strategyDao: StrategyDao
+    private val strategyDao: StrategyDao,
+    private val groupDao: GroupDao
 ) : StrategyService {
     override suspend fun saveStrategy(insertRequest: StrategyInsertRequest) {
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
@@ -39,8 +41,11 @@ class StrategyServiceImpl(
 
     override suspend fun deleteStrategy(id: Long) {
         runCatching {
-            val influenceRowCnt = dbQuery { strategyDao.deleteStrategyById(id) }
-            if (influenceRowCnt < 1) throw StrategyNotFoundException()
+            dbQuery {
+                val strategy = strategyDao.findStrategyById(id) ?: throw StrategyNotFoundException()
+                if (groupDao.doesGroupUsingStrategy(strategy.id)) StrategyDeleteFailedException(null, "Strategy is being used by Group")
+                strategyDao.deleteStrategyById(id)
+            }
         }.onFailure {
             if (it is StrategyNotFoundException) throw StrategyDeleteFailedException(it)
             else throw it

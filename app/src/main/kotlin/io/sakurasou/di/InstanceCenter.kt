@@ -111,10 +111,10 @@ object InstanceCenter {
 
     fun initService() {
         settingService = SettingServiceImpl(settingDao)
-        strategyService = StrategyServiceImpl(strategyDao)
 
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, relationDao)
+        strategyService = StrategyServiceImpl(strategyDao, groupDao)
 
         albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
         roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
@@ -139,6 +139,5 @@ object InstanceCenter {
                     it.name to relationDao.listPermissionByRole(it.name).toSet()
                 }
             }
-
     }
 }
