@@ -25,5 +25,6 @@ data class StrategyVO(
 data class StrategyPageVO(
     val id: Long,
     val name: String,
-    val type: StrategyType
+    val type: StrategyType,
+    val createTime: LocalDateTime
 )

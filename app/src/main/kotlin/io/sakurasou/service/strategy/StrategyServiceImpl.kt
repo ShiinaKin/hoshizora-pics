@@ -90,7 +90,8 @@ class StrategyServiceImpl(
             StrategyPageVO(
                 id = it.id,
                 name = it.name,
-                type = it.config.strategyType
+                type = it.config.strategyType,
+                createTime = it.createTime
             )
         }
         return PageResult(
