@@ -9,6 +9,7 @@ import kotlinx.datetime.LocalDateTime
  */
 data class StrategyInsertDTO(
     val name: String,
+    val isSystemReserved: Boolean,
     val config: StrategyConfig,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime

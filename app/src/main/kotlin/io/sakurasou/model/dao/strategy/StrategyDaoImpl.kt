@@ -2,6 +2,7 @@ package io.sakurasou.model.dao.strategy
 
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.controller.vo.StrategyPageVO
 import io.sakurasou.model.dto.StrategyInsertDTO
 import io.sakurasou.model.dto.StrategyUpdateDTO
 import io.sakurasou.model.entity.Strategy
@@ -16,12 +17,13 @@ import org.jetbrains.exposed.sql.update
  * 2024/9/7 14:07
  */
 class StrategyDaoImpl : StrategyDao {
-    override fun saveStrategy(strategy: StrategyInsertDTO): Long {
+    override fun saveStrategy(insertDTO: StrategyInsertDTO): Long {
         val entityID = Strategies.insertAndGetId {
-            it[name] = strategy.name
-            it[config] = strategy.config
-            it[createTime] = strategy.createTime
-            it[updateTime] = strategy.updateTime
+            it[name] = insertDTO.name
+            it[isSystemReserved] = insertDTO.isSystemReserved
+            it[config] = insertDTO.config
+            it[createTime] = insertDTO.createTime
+            it[updateTime] = insertDTO.updateTime
         }
         return entityID.value
     }
@@ -30,11 +32,11 @@ class StrategyDaoImpl : StrategyDao {
         return Strategies.deleteWhere { Strategies.id eq id }
     }
 
-    override fun updateStrategyById(strategy: StrategyUpdateDTO): Int {
-        return Strategies.update({ Strategies.id eq strategy.id }) {
-            it[name] = strategy.name
-            it[config] = strategy.config
-            it[updateTime] = strategy.updateTime
+    override fun updateStrategyById(updateDTO: StrategyUpdateDTO): Int {
+        return Strategies.update({ Strategies.id eq updateDTO.id }) {
+            it[name] = updateDTO.name
+            it[config] = updateDTO.config
+            it[updateTime] = updateDTO.updateTime
         }
     }
 
@@ -45,6 +47,7 @@ class StrategyDaoImpl : StrategyDao {
                 Strategy(
                     id = it[Strategies.id].value,
                     name = it[Strategies.name],
+                    isSystemReserved = it[Strategies.isSystemReserved],
                     config = it[Strategies.config],
                     createTime = it[Strategies.createTime],
                     updateTime = it[Strategies.updateTime]
@@ -52,14 +55,14 @@ class StrategyDaoImpl : StrategyDao {
             }.firstOrNull()
     }
 
-    override fun pagination(pageRequest: PageRequest): PageResult<Strategy> {
+    override fun pagination(pageRequest: PageRequest): PageResult<StrategyPageVO> {
         return fetchPage(Strategies, pageRequest) { row ->
-            Strategy(
+            StrategyPageVO(
                 id = row[Strategies.id].value,
                 name = row[Strategies.name],
-                config = row[Strategies.config],
+                isSystemReserved = row[Strategies.isSystemReserved],
+                type = row[Strategies.config].strategyType,
                 createTime = row[Strategies.createTime],
-                updateTime = row[Strategies.updateTime]
             )
         }
     }

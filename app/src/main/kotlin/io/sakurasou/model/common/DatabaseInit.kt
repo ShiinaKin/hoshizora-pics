@@ -103,12 +103,13 @@ object DatabaseInit {
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val strategyInsertDTO = StrategyInsertDTO(
             name = "local",
+            isSystemReserved = true,
             config = localStrategyConfig,
             createTime = now,
             updateTime = now
         )
-
         InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
+
         logger.info { "strategy init success" }
     }
 

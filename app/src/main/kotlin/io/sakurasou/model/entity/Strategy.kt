@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 data class Strategy(
     val id: Long,
     val name: String,
+    val isSystemReserved: Boolean,
     val config: StrategyConfig,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime

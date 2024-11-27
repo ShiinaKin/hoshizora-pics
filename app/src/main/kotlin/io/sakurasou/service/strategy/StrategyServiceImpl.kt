@@ -31,6 +31,7 @@ class StrategyServiceImpl(
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val strategyInsertDTO = StrategyInsertDTO(
             name = insertRequest.name,
+            isSystemReserved = false,
             config = insertRequest.config,
             createTime = now,
             updateTime = now
@@ -43,7 +44,8 @@ class StrategyServiceImpl(
         runCatching {
             dbQuery {
                 val strategy = strategyDao.findStrategyById(id) ?: throw StrategyNotFoundException()
-                if (groupDao.doesGroupUsingStrategy(strategy.id)) StrategyDeleteFailedException(null, "Strategy is being used by Group")
+                if (groupDao.doesGroupUsingStrategy(strategy.id))
+                    throw StrategyDeleteFailedException(null, "Strategy is being used by Group")
                 strategyDao.deleteStrategyById(id)
             }
         }.onFailure {
@@ -86,20 +88,6 @@ class StrategyServiceImpl(
 
     override suspend fun pageStrategies(pageRequest: PageRequest): PageResult<StrategyPageVO> {
         val strategyPageResult = dbQuery { strategyDao.pagination(pageRequest) }
-        val pageVOList = strategyPageResult.data.map {
-            StrategyPageVO(
-                id = it.id,
-                name = it.name,
-                type = it.config.strategyType,
-                createTime = it.createTime
-            )
-        }
-        return PageResult(
-            page = strategyPageResult.page,
-            pageSize = strategyPageResult.pageSize,
-            total = strategyPageResult.total,
-            totalPage = strategyPageResult.totalPage,
-            data = pageVOList
-        )
+        return strategyPageResult
     }
 }

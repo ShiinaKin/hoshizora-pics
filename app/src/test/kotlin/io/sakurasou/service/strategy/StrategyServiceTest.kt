@@ -6,6 +6,7 @@ import io.sakurasou.controller.request.StrategyPatchRequest
 import io.sakurasou.controller.vo.StrategyVO
 import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.model.DatabaseSingleton
+import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
 import io.sakurasou.model.dto.StrategyUpdateDTO
@@ -26,6 +27,7 @@ import kotlin.test.assertFailsWith
  */
 class StrategyServiceTest {
     private lateinit var strategyDao: StrategyDao
+    private lateinit var groupDao: GroupDao
     private lateinit var strategyService: StrategyService
     private lateinit var instant: Instant
     private lateinit var now: LocalDateTime
@@ -35,7 +37,8 @@ class StrategyServiceTest {
         mockkObject(DatabaseSingleton)
         mockkObject(Clock.System)
         strategyDao = mockk()
-        strategyService = StrategyServiceImpl(strategyDao)
+        groupDao = mockk()
+        strategyService = StrategyServiceImpl(strategyDao, groupDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
         now = instant.toLocalDateTime(TimeZone.UTC)
@@ -53,7 +56,7 @@ class StrategyServiceTest {
         """.trimIndent()
         val localStrategy = Json.decodeFromString<StrategyConfig>(json)
         val insertRequest = StrategyInsertRequest("Test Strategy", localStrategy)
-        val exceptedInsertDTO = StrategyInsertDTO("Test Strategy", localStrategy, now, now)
+        val exceptedInsertDTO = StrategyInsertDTO("Test Strategy", false, localStrategy, now, now)
 
         coEvery { DatabaseSingleton.dbQuery<Long>(any()) } coAnswers {
             this.arg<suspend () -> Long>(0).invoke()
@@ -67,14 +70,17 @@ class StrategyServiceTest {
 
     @Test
     fun `delete should be successful`() = runBlocking {
+        val strategyId = 1L
+
         coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
             this.arg<suspend () -> Int>(0).invoke()
         }
-        every { strategyDao.deleteStrategyById(1L) } returns 1
+        every { strategyDao.deleteStrategyById(strategyId) } returns 1
+        every { groupDao.doesGroupUsingStrategy(strategyId) }
 
-        strategyService.deleteStrategy(1L)
+        strategyService.deleteStrategy(strategyId)
 
-        verify(exactly = 1) { strategyDao.deleteStrategyById(1L) }
+        verify(exactly = 1) { strategyDao.deleteStrategyById(strategyId) }
     }
 
     @Test
@@ -82,6 +88,7 @@ class StrategyServiceTest {
         val strategy = Strategy(
             id = 1L,
             name = "Test Strategy",
+            isSystemReserved = false,
             config = LocalStrategy(
                 uploadFolder = "/uploads",
                 thumbnailFolder = "/thumbnails"
@@ -130,6 +137,7 @@ class StrategyServiceTest {
         val strategy = Strategy(
             id = 1L,
             name = "Test Strategy",
+            isSystemReserved = false,
             config = LocalStrategy(
                 uploadFolder = "/uploads",
                 thumbnailFolder = "/thumbnails"
