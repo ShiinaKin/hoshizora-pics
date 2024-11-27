@@ -2,6 +2,8 @@ plugins {
     id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
+group = "io.sakurasou"
+
 tasks.register("build") {
     group = "build"
     dependsOn(":app:build")
