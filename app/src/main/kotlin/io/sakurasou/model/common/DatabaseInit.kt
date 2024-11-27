@@ -3,6 +3,7 @@ package io.sakurasou.model.common
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.constant.*
 import io.sakurasou.di.InstanceCenter
+import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
@@ -22,6 +23,7 @@ import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.model.setting.SystemStatus
 import io.sakurasou.model.strategy.LocalStrategy
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -33,30 +35,182 @@ import org.jetbrains.exposed.sql.SchemaUtils
  */
 private val logger = KotlinLogging.logger {}
 
-fun init(version: String) {
-    if (isFirstRunning()) return
-    SchemaUtils.create(Images)
-    SchemaUtils.create(Albums)
-    SchemaUtils.create(Strategies)
-    SchemaUtils.create(Settings)
-    SchemaUtils.create(Users)
-    SchemaUtils.create(Groups)
-    SchemaUtils.create(Roles)
-    SchemaUtils.create(Permissions)
-    SchemaUtils.create(GroupRoles)
-    SchemaUtils.create(RolePermissions)
-    SchemaUtils.create(PersonalAccessTokens)
-    SchemaUtils.create(PersonalAccessTokenPermissions)
-    initStrategy()
-    initSetting(version)
-    initPermission()
-    initRole()
-    initGroup()
-    initRelation()
-}
+object DatabaseInit {
+    fun init(version: String) {
+        runBlocking {
+            dbQuery {
+                if (!isFirstRunning()) {
+                    SchemaUtils.create(Images)
+                    SchemaUtils.create(Albums)
+                    SchemaUtils.create(Strategies)
+                    SchemaUtils.create(Settings)
+                    SchemaUtils.create(Users)
+                    SchemaUtils.create(Groups)
+                    SchemaUtils.create(Roles)
+                    SchemaUtils.create(Permissions)
+                    SchemaUtils.create(GroupRoles)
+                    SchemaUtils.create(RolePermissions)
+                    SchemaUtils.create(PersonalAccessTokens)
+                    SchemaUtils.create(PersonalAccessTokenPermissions)
+                    initStrategy()
+                    initSetting(version)
+                    initPermission()
+                    initRole()
+                    initGroup()
+                    initRelation()
+                }
+            }
+            InstanceCenter.initSystemStatus()
+            InstanceCenter.initRolePermissions()
+        }
+    }
 
-private fun isFirstRunning(): Boolean {
-    return SchemaUtils.listTables().size == 12
+    private fun isFirstRunning(): Boolean {
+        return SchemaUtils.listTables().size == 12
+    }
+
+    private fun initPermission() {
+        val allPermissions = listOf(
+            userOpsPermissions,
+            groupOpsPermissions,
+            roleOpsPermissions,
+            permissionOpsPermissions,
+            settingOpsPermissions,
+            strategyOpsPermissions,
+            imageOpsPermissions,
+            albumOpsPermissions,
+            personalAccessTokenOpsPermissions
+        )
+            .flatten()
+            .map { PermissionInsertDTO(it, null) }
+
+        InstanceCenter.permissionDao.batchSavePermission(allPermissions)
+
+        logger.info { "permission init success" }
+    }
+
+    private fun initRole() {
+        val adminRoleInsertDTO = RoleInsertDTO(ROLE_ADMIN, null)
+        val userRoleInsertDTO = RoleInsertDTO(ROLE_USER, null)
+        InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
+        InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
+
+        logger.info { "role init success" }
+    }
+
+    private fun initStrategy() {
+        val localStrategyConfig = LocalStrategy("uploads", "thumbnails")
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        val strategyInsertDTO = StrategyInsertDTO(
+            name = "local",
+            config = localStrategyConfig,
+            createTime = now,
+            updateTime = now
+        )
+
+        InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
+        logger.info { "strategy init success" }
+    }
+
+    private fun initGroup() {
+        val adminGroupConfig = GroupConfig(
+            groupStrategyConfig = GroupStrategyConfig()
+        )
+        val adminGroup = GroupInsertDTO(
+            name = GROUP_ADMIN,
+            description = "admin group",
+            strategyId = 1,
+            config = adminGroupConfig,
+            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        )
+        val userGroupConfig = GroupConfig(
+            groupStrategyConfig = GroupStrategyConfig()
+        )
+        val userGroup = GroupInsertDTO(
+            name = GROUP_USER,
+            description = "user group",
+            strategyId = 1,
+            config = userGroupConfig,
+            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        )
+        InstanceCenter.groupDao.saveGroup(adminGroup)
+        InstanceCenter.groupDao.saveGroup(userGroup)
+
+        logger.info { "group init success" }
+    }
+
+    private fun initRelation() {
+        // role-permission
+        val adminPermissions = listOf(
+            userOpsPermissions,
+            groupOpsPermissions,
+            settingOpsPermissions,
+            roleOpsPermissions,
+            strategyOpsPermissions,
+            imageOpsPermissions,
+            albumOpsPermissions,
+            personalAccessTokenOpsPermissions
+        ).flatten()
+        val userPermissions = listOf(
+            USER_READ_SELF,
+            USER_WRITE_SELF,
+            ROLE_READ_SELF,
+            IMAGE_READ_SELF_SINGLE,
+            IMAGE_READ_SELF_ALL,
+            IMAGE_WRITE_SELF,
+            IMAGE_DELETE_SELF,
+            ALBUM_READ_SELF_SINGLE,
+            ALBUM_READ_SELF_ALL,
+            ALBUM_WRITE_SELF,
+            ALBUM_DELETE_SELF,
+            PERSONAL_ACCESS_TOKEN_READ_SELF,
+            PERSONAL_ACCESS_TOKEN_WRITE_SELF
+        )
+
+        InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
+        InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
+
+        logger.info { "role-permission relation init success" }
+
+        // group-role
+        val adminRoles = listOf(ROLE_ADMIN)
+        val userRoles = listOf(ROLE_USER)
+        InstanceCenter.relationDao.batchInsertGroupToRoles(1, adminRoles)
+        InstanceCenter.relationDao.batchInsertGroupToRoles(2, userRoles)
+
+        logger.info { "group-role relation init success" }
+    }
+
+    private fun initSetting(version: String) {
+        val siteSettingConfig = SiteSetting(
+            siteExternalUrl = "http://localhost:8080",
+            siteTitle = "HoshizoraPics",
+            siteSubtitle = "A simple pic management",
+            siteDescription = "A simple pic management"
+        )
+        val systemSettingConfig = SystemSetting(
+            defaultGroupId = 2,
+            allowSignup = false,
+            allowRandomFetch = false
+        )
+        val systemStatus = SystemStatus(
+            isInit = false,
+            version = version
+        )
+
+        val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+
+        val siteSettingInsertDTO = SettingInsertDTO(SETTING_SITE, siteSettingConfig, now, now)
+        val systemSettingInsertDTO = SettingInsertDTO(SETTING_SYSTEM, systemSettingConfig, now, now)
+        val systemStatusInsertDTO = SettingInsertDTO(SETTING_STATUS, systemStatus, now, now)
+
+        InstanceCenter.settingDao.saveSetting(siteSettingInsertDTO)
+        InstanceCenter.settingDao.saveSetting(systemSettingInsertDTO)
+        InstanceCenter.settingDao.saveSetting(systemStatusInsertDTO)
+
+        logger.info { "setting init success" }
+    }
+
 }
 
 private val userOpsPermissions = listOf(
@@ -125,145 +279,3 @@ private val personalAccessTokenOpsPermissions = listOf(
     PERSONAL_ACCESS_TOKEN_READ_SELF,
     PERSONAL_ACCESS_TOKEN_WRITE_SELF
 )
-
-private fun initPermission() {
-    val allPermissions = listOf(
-        userOpsPermissions,
-        groupOpsPermissions,
-        roleOpsPermissions,
-        permissionOpsPermissions,
-        settingOpsPermissions,
-        strategyOpsPermissions,
-        imageOpsPermissions,
-        albumOpsPermissions,
-        personalAccessTokenOpsPermissions
-    )
-        .flatten()
-        .map { PermissionInsertDTO(it, null) }
-
-    InstanceCenter.permissionDao.batchSavePermission(allPermissions)
-
-    logger.info { "permission init success" }
-}
-
-private fun initRole() {
-    val adminRoleInsertDTO = RoleInsertDTO(ROLE_ADMIN, null)
-    val userRoleInsertDTO = RoleInsertDTO(ROLE_USER, null)
-    InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
-    InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
-
-    logger.info { "role init success" }
-}
-
-private fun initStrategy() {
-    val localStrategyConfig = LocalStrategy("uploads", "thumbnails")
-    val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-    val strategyInsertDTO = StrategyInsertDTO(
-        name = "local",
-        config = localStrategyConfig,
-        createTime = now,
-        updateTime = now
-    )
-
-    InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
-    logger.info { "strategy init success" }
-}
-
-private fun initGroup() {
-    val adminGroupConfig = GroupConfig(
-        groupStrategyConfig = GroupStrategyConfig()
-    )
-    val adminGroup = GroupInsertDTO(
-        name = GROUP_ADMIN,
-        description = "admin group",
-        strategyId = 1,
-        config = adminGroupConfig,
-        createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-    )
-    val userGroupConfig = GroupConfig(
-        groupStrategyConfig = GroupStrategyConfig()
-    )
-    val userGroup = GroupInsertDTO(
-        name = GROUP_USER,
-        description = "user group",
-        strategyId = 1,
-        config = userGroupConfig,
-        createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-    )
-    InstanceCenter.groupDao.saveGroup(adminGroup)
-    InstanceCenter.groupDao.saveGroup(userGroup)
-
-    logger.info { "group init success" }
-}
-
-private fun initRelation() {
-    // role-permission
-    val adminPermissions = listOf(
-        userOpsPermissions,
-        groupOpsPermissions,
-        settingOpsPermissions,
-        roleOpsPermissions,
-        strategyOpsPermissions,
-        imageOpsPermissions,
-        albumOpsPermissions,
-        personalAccessTokenOpsPermissions
-    ).flatten()
-    val userPermissions = listOf(
-        USER_READ_SELF,
-        USER_WRITE_SELF,
-        ROLE_READ_SELF,
-        IMAGE_READ_SELF_SINGLE,
-        IMAGE_READ_SELF_ALL,
-        IMAGE_WRITE_SELF,
-        IMAGE_DELETE_SELF,
-        ALBUM_READ_SELF_SINGLE,
-        ALBUM_READ_SELF_ALL,
-        ALBUM_WRITE_SELF,
-        ALBUM_DELETE_SELF,
-        PERSONAL_ACCESS_TOKEN_READ_SELF,
-        PERSONAL_ACCESS_TOKEN_WRITE_SELF
-    )
-
-    InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
-    InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
-
-    logger.info { "role-permission relation init success" }
-
-    // group-role
-    val adminRoles = listOf(ROLE_ADMIN)
-    val userRoles = listOf(ROLE_USER)
-    InstanceCenter.relationDao.batchInsertGroupToRoles(1, adminRoles)
-    InstanceCenter.relationDao.batchInsertGroupToRoles(2, userRoles)
-
-    logger.info { "group-role relation init success" }
-}
-
-private fun initSetting(version: String) {
-    val siteSettingConfig = SiteSetting(
-        siteExternalUrl = "http://localhost:8080",
-        siteTitle = "HoshizoraPics",
-        siteSubtitle = "A simple pic management",
-        siteDescription = "A simple pic management"
-    )
-    val systemSettingConfig = SystemSetting(
-        defaultGroupId = 2,
-        allowSignup = false,
-        allowRandomFetch = false
-    )
-    val systemStatus = SystemStatus(
-        isInit = false,
-        version = version
-    )
-
-    val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-
-    val siteSettingInsertDTO = SettingInsertDTO(SETTING_SITE, siteSettingConfig, now, now)
-    val systemSettingInsertDTO = SettingInsertDTO(SETTING_SYSTEM, systemSettingConfig, now, now)
-    val systemStatusInsertDTO = SettingInsertDTO(SETTING_STATUS, systemStatus, now, now)
-
-    InstanceCenter.settingDao.saveSetting(siteSettingInsertDTO)
-    InstanceCenter.settingDao.saveSetting(systemSettingInsertDTO)
-    InstanceCenter.settingDao.saveSetting(systemStatusInsertDTO)
-
-    logger.info { "setting init success" }
-}

@@ -49,7 +49,7 @@ import io.sakurasou.service.system.SystemService
 import io.sakurasou.service.system.SystemServiceImpl
 import io.sakurasou.service.user.UserService
 import io.sakurasou.service.user.UserServiceImpl
-import kotlinx.coroutines.runBlocking
+import org.jetbrains.exposed.sql.Database
 
 /**
  * @author Shiina Kin
@@ -57,6 +57,8 @@ import kotlinx.coroutines.runBlocking
  */
 object InstanceCenter {
     lateinit var client: HttpClient
+
+    lateinit var database: Database
 
     lateinit var userDao: UserDao
     lateinit var imageDao: ImageDao
@@ -126,20 +128,17 @@ object InstanceCenter {
         imageService = ImageServiceImpl(imageDao, albumDao, userDao, groupDao, strategyDao, settingService)
     }
 
-    fun initSystemStatus() {
-        systemStatus = runBlocking {
-            settingService.getSystemStatus()
-        }
+    suspend fun initSystemStatus() {
+        systemStatus = settingService.getSystemStatus()
     }
 
-    fun initRolePermissions() {
-        rolePermissions = runBlocking {
-            dbQuery {
+    suspend fun initRolePermissions() {
+        rolePermissions = dbQuery {
                 val roles = roleDao.listRoles()
                 roles.associate {
                     it.name to relationDao.listPermissionByRole(it.name).toSet()
                 }
             }
-        }
+
     }
 }

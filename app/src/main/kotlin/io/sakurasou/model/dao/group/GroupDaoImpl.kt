@@ -21,6 +21,7 @@ class GroupDaoImpl : GroupDao {
             it[description] = groupInsertDTO.description
             it[strategyId] = groupInsertDTO.strategyId
             it[config] = groupInsertDTO.config
+            it[createTime] = groupInsertDTO.createTime
         }
         return entityID.value
     }

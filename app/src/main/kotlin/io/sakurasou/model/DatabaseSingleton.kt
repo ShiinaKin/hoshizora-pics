@@ -2,11 +2,11 @@ package io.sakurasou.model
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.sakurasou.model.common.init
+import io.sakurasou.di.InstanceCenter
+import io.sakurasou.model.common.DatabaseInit
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * @author ShiinaKin
@@ -25,12 +25,10 @@ object DatabaseSingleton {
         }
         val dataSource = HikariDataSource(hikariConfig)
 
-        val database = Database.connect(dataSource)
+        InstanceCenter.database = Database.connect(dataSource)
 
-        transaction(database) {
-            init(version)
-        }
+        DatabaseInit.init(version)
     }
 
-    suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
+    suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO, InstanceCenter.database) { block() }
 }

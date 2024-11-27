@@ -30,8 +30,6 @@ fun Application.mainModule() {
     InstanceCenter.initDao()
     InstanceCenter.initService()
     configureDatabase()
-    InstanceCenter.initSystemStatus()
-    InstanceCenter.initRolePermissions()
     configureCache(redisHost, redisPort)
     configureJwt()
     configureSecurity()
