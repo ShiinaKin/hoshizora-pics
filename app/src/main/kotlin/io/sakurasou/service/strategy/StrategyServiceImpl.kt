@@ -44,6 +44,8 @@ class StrategyServiceImpl(
         runCatching {
             dbQuery {
                 val strategy = strategyDao.findStrategyById(id) ?: throw StrategyNotFoundException()
+                if (strategy.isSystemReserved)
+                    throw StrategyDeleteFailedException(null, "System Reserved Strategy cannot be deleted")
                 if (groupDao.doesGroupUsingStrategy(strategy.id))
                     throw StrategyDeleteFailedException(null, "Strategy is being used by Group")
                 strategyDao.deleteStrategyById(id)
