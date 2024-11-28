@@ -71,12 +71,24 @@ class StrategyServiceTest {
     @Test
     fun `delete should be successful`() = runBlocking {
         val strategyId = 1L
+        val strategy = Strategy(
+            id = 1L,
+            name = "Test Strategy",
+            isSystemReserved = false,
+            config = LocalStrategy(
+                uploadFolder = "/uploads",
+                thumbnailFolder = "/thumbnails"
+            ),
+            createTime = now,
+            updateTime = now
+        )
 
         coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
             this.arg<suspend () -> Int>(0).invoke()
         }
+        every { strategyDao.findStrategyById(strategyId) } returns strategy
+        every { groupDao.doesGroupUsingStrategy(strategyId) } returns false
         every { strategyDao.deleteStrategyById(strategyId) } returns 1
-        every { groupDao.doesGroupUsingStrategy(strategyId) }
 
         strategyService.deleteStrategy(strategyId)
 
