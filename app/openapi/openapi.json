@@ -3677,9 +3677,15 @@
       "StrategyPageVO" : {
         "type" : "object",
         "properties" : {
+          "createTime" : {
+            "type" : "string"
+          },
           "id" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "isSystemReserved" : {
+            "type" : "boolean"
           },
           "name" : {
             "type" : "string"
@@ -3688,7 +3694,7 @@
             "$ref" : "#/components/schemas/StrategyTypeEnum"
           }
         },
-        "required" : [ "id", "name", "type" ]
+        "required" : [ "createTime", "id", "isSystemReserved", "name", "type" ]
       },
       "CommonResponse_PageResult_StrategyPageVO" : {
         "type" : "object",

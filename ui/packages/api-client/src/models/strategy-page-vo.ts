@@ -25,10 +25,22 @@ import type { StrategyTypeEnum } from './strategy-type-enum';
 export interface StrategyPageVO {
     /**
      * 
+     * @type {string}
+     * @memberof StrategyPageVO
+     */
+    'createTime': string;
+    /**
+     * 
      * @type {number}
      * @memberof StrategyPageVO
      */
     'id': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StrategyPageVO
+     */
+    'isSystemReserved': boolean;
     /**
      * 
      * @type {string}
