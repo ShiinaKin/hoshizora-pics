@@ -33,7 +33,7 @@ export default [
       "vue/valid-template-root": "warn",
       "@typescript-eslint/no-extra-non-null-assertion": "off",
       "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-      // "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn"
     }
   }
 ];
