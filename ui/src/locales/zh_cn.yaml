@@ -461,3 +461,156 @@ adminUserManageView:
     toast:
       successTitle: "删除成功"
       failedTitle: "删除失败"
+adminStrategyManageView:
+  strategyFilter:
+    createTimeASC: "创建时间升序"
+    createTimeDESC: "创建时间降序"
+  table:
+    id: "策略ID"
+    name: "策略名"
+    type: "策略类型"
+    createTime: "创建时间"
+    ops:
+      title: "操作"
+      detail: "查看"
+      edit: "编辑"
+      delete: "删除"
+  detail:
+    title: "存储策略详情"
+    id: "策略ID"
+    name: "策略名"
+    type: "策略类型"
+    config:
+      local:
+        uploadFolder: "上传目录"
+        thumbnailFolder: "缩略图目录"
+      s3:
+        endpoint: "终端点"
+        bucketName: "存储桶名"
+        region: "区域"
+        publicUrl: "公开访问URL"
+        uploadFolder: "上传目录"
+        thumbnailFolder: "缩略图目录"
+    email: "邮箱"
+    createTime: "创建时间"
+  create:
+    dialog:
+      title: "创建存储策略"
+      form:
+        name: "策略名"
+        type: "策略类型"
+        typeOptions:
+          local: "本地"
+          s3: "S3"
+        config:
+          local:
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+          s3:
+            endpoint: "终端点"
+            bucketName: "存储桶名"
+            region: "区域"
+            accessKey: "访问密钥"
+            secretKey: "私密密钥"
+            publicUrl: "公开访问URL"
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+        submitButton: "创建"
+        cancelButton: "取消"
+        verify:
+          name:
+            required: "策略名不能为空"
+          type:
+            invalid: "策略类型无效"
+            required: "策略类型不能为空"
+          config:
+            local:
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+                required: "上传目录不能为空"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+                required: "缩略图目录不能为空"
+            s3:
+              endpoint:
+                invalid: "终端点必须是URL格式: http(s)://~"
+                dontEndWithSlash: "终端点不能以 / 结尾"
+                required: "终端点不能为空"
+              bucketName:
+                required: "存储桶名不能为空"
+              region:
+                required: "区域不能为空"
+              accessKey:
+                required: "访问密钥不能为空"
+              secretKey:
+                required: "私密密钥不能为空"
+              publicUrl:
+                invalid: "公开访问URL必须是URL格式: http(s)://~"
+                dontEndWithSlash: "公开访问URL不能以 / 结尾"
+                required: "公开访问URL不能为空"
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+                required: "上传目录不能为空"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+                required: "缩略图目录不能为空"
+    toast:
+      successTitle: "创建成功"
+      failedTitle: "创建失败"
+  edit:
+    dialog:
+      title: "修改存储策略"
+      form:
+        name: "策略名"
+        config:
+          local:
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+          s3:
+            endpoint: "终端点"
+            bucketName: "存储桶名"
+            region: "区域"
+            accessKey: "访问密钥"
+            secretKey: "私密密钥"
+            publicUrl: "公开访问URL"
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+        submitButton: "创建"
+        cancelButton: "取消"
+        verify:
+          name:
+          config:
+            local:
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+            s3:
+              endpoint:
+                invalid: "终端点必须是URL格式: http(s)://~"
+                dontEndWithSlash: "终端点不能以 / 结尾"
+              bucketName:
+              region:
+              accessKey:
+              secretKey:
+              publicUrl:
+                invalid: "公开访问URL必须是URL格式: http(s)://~"
+                dontEndWithSlash: "公开访问URL不能以 / 结尾"
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+          atLeastOneField: "请至少修改一个字段"
+    toast:
+      successTitle: "创建成功"
+      failedTitle: "创建失败"
+  delete:
+    confirmDialog:
+      header: "确认删除"
+      mainContent: "你确定要删除这个存储方案吗？"
+      subContent: "已存在的图片和缩略图不会被删除"
+      cancelButton: "取消"
+      submitButton: "确认删除"
+    toast:
+      successTitle: "删除成功"
+      failedTitle: "删除失败"
