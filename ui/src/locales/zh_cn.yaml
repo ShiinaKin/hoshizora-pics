@@ -614,3 +614,23 @@ adminStrategyManageView:
     toast:
       successTitle: "删除成功"
       failedTitle: "删除失败"
+settingView:
+  siteSetting:
+    title: "站点设置"
+    form:
+      siteTitle: "站点标题"
+      siteSubtitle: "站点副标题"
+      siteDescription: "站点描述"
+      siteExternalUrl: "站点外部链接"
+      verify:
+        siteExternalUrl:
+          invalid: "站点外部链接必须是URL格式: http(s)://~"
+          dontEndWithSlash: "站点外部链接不能以 / 结尾"
+        atLeastOneField: "请至少修改一个字段"
+      submitButton: "保存"
+    toast:
+      patch:
+        successTitle: "修改成功"
+        failedTitle: "修改失败"
+      fetch:
+        failedTitle: "获取站点设置失败"
