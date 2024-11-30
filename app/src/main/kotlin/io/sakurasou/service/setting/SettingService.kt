@@ -1,7 +1,6 @@
 package io.sakurasou.service.setting
 
 import io.sakurasou.controller.request.SiteSettingPatchRequest
-import io.sakurasou.controller.request.StrategySettingPatchRequest
 import io.sakurasou.controller.request.SystemSettingPatchRequest
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemSetting

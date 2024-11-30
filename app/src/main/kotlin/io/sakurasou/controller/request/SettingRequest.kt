@@ -13,14 +13,7 @@ data class SiteSettingPatchRequest(
     val siteExternalUrl: String? = null,
     val siteTitle: String? = null,
     val siteSubtitle: String? = null,
-    val siteKeyword: String? = null,
     val siteDescription: String? = null
-)
-
-@Serializable
-@Name("StrategySettingPatchRequest")
-data class StrategySettingPatchRequest(
-    val allowedImageTypes: List<String>
 )
 
 @Serializable
