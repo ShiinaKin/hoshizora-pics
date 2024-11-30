@@ -15,8 +15,6 @@ import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.StrategyInsertDTO
 import io.sakurasou.model.dto.StrategyUpdateDTO
-import io.sakurasou.model.strategy.LocalStrategy
-import io.sakurasou.model.strategy.S3Strategy
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -82,12 +80,7 @@ class StrategyServiceImpl(
         val strategyVO = StrategyVO(
             id = strategy.id,
             name = strategy.name,
-            config = strategy.config.let {
-                when (it) {
-                    is LocalStrategy -> it
-                    is S3Strategy -> it.copy(accessKey = "", secretKey = "")
-                }
-            },
+            config = strategy.config,
             // type = strategy.config::class.annotations.filterIsInstance<SerialName>().firstOrNull()?.value!!,
             type = strategy.config.strategyType,
             createTime = strategy.createTime
