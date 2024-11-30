@@ -37,12 +37,6 @@ export interface SiteSettingPatchRequest {
      * @type {string}
      * @memberof SiteSettingPatchRequest
      */
-    'siteKeyword'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof SiteSettingPatchRequest
-     */
     'siteSubtitle'?: string | null;
     /**
      * 

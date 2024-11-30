@@ -17,32 +17,32 @@
 /**
  * 
  * @export
- * @interface CommonResponseSettingVOMap
+ * @interface SiteSetting
  */
-export interface CommonResponseSettingVOMap {
+export interface SiteSetting {
     /**
      * 
-     * @type {any}
-     * @memberof CommonResponseSettingVOMap
+     * @type {string}
+     * @memberof SiteSetting
      */
-    'code'?: any;
+    'siteDescription': string;
     /**
      * 
-     * @type {any}
-     * @memberof CommonResponseSettingVOMap
+     * @type {string}
+     * @memberof SiteSetting
      */
-    'message'?: any;
+    'siteExternalUrl': string;
     /**
      * 
-     * @type {{ [key: string]: any; }}
-     * @memberof CommonResponseSettingVOMap
+     * @type {string}
+     * @memberof SiteSetting
      */
-    'data'?: { [key: string]: any; };
+    'siteSubtitle': string;
     /**
      * 
-     * @type {any}
-     * @memberof CommonResponseSettingVOMap
+     * @type {string}
+     * @memberof SiteSetting
      */
-    'isSuccessful'?: any;
+    'siteTitle': string;
 }
 

@@ -13,18 +13,27 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SettingConfigSealed } from './setting-config-sealed';
 
 /**
  * 
  * @export
- * @interface StrategySettingPatchRequest
+ * @interface SettingVO
  */
-export interface StrategySettingPatchRequest {
+export interface SettingVO {
     /**
      * 
-     * @type {Array<string>}
-     * @memberof StrategySettingPatchRequest
+     * @type {SettingConfigSealed}
+     * @memberof SettingVO
      */
-    'allowedImageTypes': Array<string>;
+    'config': SettingConfigSealed;
+    /**
+     * 
+     * @type {string}
+     * @memberof SettingVO
+     */
+    'name': string;
 }
 

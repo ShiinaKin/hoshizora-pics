@@ -24,11 +24,11 @@ import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError
 // @ts-ignore
 import type { CommonResponseKotlinUnit } from '../models';
 // @ts-ignore
-import type { CommonResponseSettingVOMap } from '../models';
+import type { CommonResponseSettingVO } from '../models';
 // @ts-ignore
 import type { SiteSettingPatchRequest } from '../models';
 // @ts-ignore
-import type { StrategySettingPatchRequest } from '../models';
+import type { SystemSettingPatchRequest } from '../models';
 /**
  * SettingApi - axios parameter creator
  * @export
@@ -36,12 +36,16 @@ import type { StrategySettingPatchRequest } from '../models';
 export const SettingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * get all settings
+         * get settings
+         * @param {string} settingType setting type
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiSettingGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/setting`;
+        apiSettingSettingTypeGet: async (settingType: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'settingType' is not null or undefined
+            assertParamExists('apiSettingSettingTypeGet', 'settingType', settingType)
+            const localVarPath = `/api/setting/{setting_type}`
+                .replace(`{${"setting_type"}}`, encodeURIComponent(String(settingType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -109,13 +113,13 @@ export const SettingApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * system setting
-         * @param {StrategySettingPatchRequest} strategySettingPatchRequest 
+         * @param {SystemSettingPatchRequest} systemSettingPatchRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiSettingSystemPatch: async (strategySettingPatchRequest: StrategySettingPatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'strategySettingPatchRequest' is not null or undefined
-            assertParamExists('apiSettingSystemPatch', 'strategySettingPatchRequest', strategySettingPatchRequest)
+        apiSettingSystemPatch: async (systemSettingPatchRequest: SystemSettingPatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemSettingPatchRequest' is not null or undefined
+            assertParamExists('apiSettingSystemPatch', 'systemSettingPatchRequest', systemSettingPatchRequest)
             const localVarPath = `/api/setting/system`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -139,7 +143,7 @@ export const SettingApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(strategySettingPatchRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(systemSettingPatchRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -157,14 +161,15 @@ export const SettingApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SettingApiAxiosParamCreator(configuration)
     return {
         /**
-         * get all settings
+         * get settings
+         * @param {string} settingType setting type
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiSettingGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseSettingVOMap>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiSettingGet(options);
+        async apiSettingSettingTypeGet(settingType: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseSettingVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiSettingSettingTypeGet(settingType, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SettingApi.apiSettingGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SettingApi.apiSettingSettingTypeGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -181,12 +186,12 @@ export const SettingApiFp = function(configuration?: Configuration) {
         },
         /**
          * system setting
-         * @param {StrategySettingPatchRequest} strategySettingPatchRequest 
+         * @param {SystemSettingPatchRequest} systemSettingPatchRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiSettingSystemPatch(strategySettingPatchRequest: StrategySettingPatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiSettingSystemPatch(strategySettingPatchRequest, options);
+        async apiSettingSystemPatch(systemSettingPatchRequest: SystemSettingPatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiSettingSystemPatch(systemSettingPatchRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SettingApi.apiSettingSystemPatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -202,12 +207,13 @@ export const SettingApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = SettingApiFp(configuration)
     return {
         /**
-         * get all settings
+         * get settings
+         * @param {SettingApiApiSettingSettingTypeGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiSettingGet(options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseSettingVOMap> {
-            return localVarFp.apiSettingGet(options).then((request) => request(axios, basePath));
+        apiSettingSettingTypeGet(requestParameters: SettingApiApiSettingSettingTypeGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseSettingVO> {
+            return localVarFp.apiSettingSettingTypeGet(requestParameters.settingType, options).then((request) => request(axios, basePath));
         },
         /**
          * site setting
@@ -225,10 +231,24 @@ export const SettingApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         apiSettingSystemPatch(requestParameters: SettingApiApiSettingSystemPatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
-            return localVarFp.apiSettingSystemPatch(requestParameters.strategySettingPatchRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.apiSettingSystemPatch(requestParameters.systemSettingPatchRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
+
+/**
+ * Request parameters for apiSettingSettingTypeGet operation in SettingApi.
+ * @export
+ * @interface SettingApiApiSettingSettingTypeGetRequest
+ */
+export interface SettingApiApiSettingSettingTypeGetRequest {
+    /**
+     * setting type
+     * @type {string}
+     * @memberof SettingApiApiSettingSettingTypeGet
+     */
+    readonly settingType: string
+}
 
 /**
  * Request parameters for apiSettingSitePatch operation in SettingApi.
@@ -252,10 +272,10 @@ export interface SettingApiApiSettingSitePatchRequest {
 export interface SettingApiApiSettingSystemPatchRequest {
     /**
      * 
-     * @type {StrategySettingPatchRequest}
+     * @type {SystemSettingPatchRequest}
      * @memberof SettingApiApiSettingSystemPatch
      */
-    readonly strategySettingPatchRequest: StrategySettingPatchRequest
+    readonly systemSettingPatchRequest: SystemSettingPatchRequest
 }
 
 /**
@@ -266,13 +286,14 @@ export interface SettingApiApiSettingSystemPatchRequest {
  */
 export class SettingApi extends BaseAPI {
     /**
-     * get all settings
+     * get settings
+     * @param {SettingApiApiSettingSettingTypeGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SettingApi
      */
-    public apiSettingGet(options?: RawAxiosRequestConfig) {
-        return SettingApiFp(this.configuration).apiSettingGet(options).then((request) => request(this.axios, this.basePath));
+    public apiSettingSettingTypeGet(requestParameters: SettingApiApiSettingSettingTypeGetRequest, options?: RawAxiosRequestConfig) {
+        return SettingApiFp(this.configuration).apiSettingSettingTypeGet(requestParameters.settingType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -294,7 +315,7 @@ export class SettingApi extends BaseAPI {
      * @memberof SettingApi
      */
     public apiSettingSystemPatch(requestParameters: SettingApiApiSettingSystemPatchRequest, options?: RawAxiosRequestConfig) {
-        return SettingApiFp(this.configuration).apiSettingSystemPatch(requestParameters.strategySettingPatchRequest, options).then((request) => request(this.axios, this.basePath));
+        return SettingApiFp(this.configuration).apiSettingSystemPatch(requestParameters.systemSettingPatchRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

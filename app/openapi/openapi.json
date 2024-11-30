@@ -1636,11 +1636,21 @@
         } ]
       }
     },
-    "/api/setting" : {
+    "/api/setting/{setting_type}" : {
       "get" : {
         "tags" : [ "Setting" ],
-        "description" : "get all settings",
-        "parameters" : [ ],
+        "description" : "get settings",
+        "parameters" : [ {
+          "name" : "setting_type",
+          "in" : "path",
+          "description" : "setting type",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "success",
@@ -1648,15 +1658,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "properties" : {
-                    "code" : { },
-                    "message" : { },
-                    "data" : {
-                      "additionalProperties" : { }
-                    },
-                    "isSuccessful" : { }
-                  },
-                  "title" : "CommonResponseSettingVOMap"
+                  "$ref" : "#/components/schemas/CommonResponse_SettingVO"
                 }
               }
             }
@@ -1711,7 +1713,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/StrategySettingPatchRequest"
+                "$ref" : "#/components/schemas/SystemSettingPatchRequest"
               }
             }
           },
@@ -3719,6 +3721,96 @@
         },
         "required" : [ "code", "isSuccessful", "message" ]
       },
+      "SettingVO" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "$ref" : "#/components/schemas/SettingConfigSealed"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "config", "name" ]
+      },
+      "SettingConfigSealed" : {
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/SiteSetting"
+        }, {
+          "$ref" : "#/components/schemas/SystemSetting"
+        }, {
+          "$ref" : "#/components/schemas/SystemStatus"
+        } ]
+      },
+      "SiteSetting" : {
+        "type" : "object",
+        "properties" : {
+          "siteDescription" : {
+            "type" : "string"
+          },
+          "siteExternalUrl" : {
+            "type" : "string"
+          },
+          "siteSubtitle" : {
+            "type" : "string"
+          },
+          "siteTitle" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "siteDescription", "siteExternalUrl", "siteSubtitle", "siteTitle" ]
+      },
+      "SystemSetting" : {
+        "type" : "object",
+        "properties" : {
+          "allowRandomFetch" : {
+            "type" : "boolean"
+          },
+          "allowSignup" : {
+            "type" : "boolean"
+          },
+          "defaultGroupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "allowRandomFetch", "allowSignup", "defaultGroupId" ]
+      },
+      "SystemStatus" : {
+        "type" : "object",
+        "properties" : {
+          "isInit" : {
+            "type" : "boolean"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "isInit", "version" ]
+      },
+      "CommonResponse_SettingVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/SettingVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
       "SiteSettingPatchRequest" : {
         "type" : "object",
         "properties" : {
@@ -3726,9 +3818,6 @@
             "type" : [ "null", "string" ]
           },
           "siteExternalUrl" : {
-            "type" : [ "null", "string" ]
-          },
-          "siteKeyword" : {
             "type" : [ "null", "string" ]
           },
           "siteSubtitle" : {
@@ -3739,17 +3828,20 @@
           }
         }
       },
-      "StrategySettingPatchRequest" : {
+      "SystemSettingPatchRequest" : {
         "type" : "object",
         "properties" : {
-          "allowedImageTypes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
+          "allowRandomFetch" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "allowSignup" : {
+            "type" : [ "null", "boolean" ]
+          },
+          "defaultGroupId" : {
+            "type" : [ "null", "integer" ],
+            "format" : "int64"
           }
-        },
-        "required" : [ "allowedImageTypes" ]
+        }
       },
       "UserSelfPatchRequest" : {
         "type" : "object",
