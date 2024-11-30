@@ -99,20 +99,22 @@ function patchSiteSetting(patchRequest: SiteSettingPatchRequest) {
         toast.add({
           severity: "success",
           summary: t("settingView.siteSetting.toast.patch.successTitle"),
-          detail: resp.message
+          detail: resp.message,
+          life: 3000
         });
         fetchSiteSetting();
       } else {
         toast.add({
           severity: "warn",
           summary: t("settingView.siteSetting.toast.patch.failedTitle"),
-          detail: resp.message
+          detail: resp.message,
+          life: 3000
         });
       }
     })
     .catch((error) => {
       console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message });
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 
@@ -127,13 +129,14 @@ function fetchSiteSetting() {
         toast.add({
           severity: "warn",
           summary: t("settingView.siteSetting.toast.fetch.failedTitle"),
-          detail: resp.message
+          detail: resp.message,
+          life: 3000
         });
       }
     })
     .catch((error) => {
       console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message });
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 </script>

@@ -634,3 +634,19 @@ settingView:
         failedTitle: "修改失败"
       fetch:
         failedTitle: "获取站点设置失败"
+  systemSetting:
+    title: "系统设置"
+    form:
+      defaultGroupId: "默认用户组"
+      allowSignup: "允许注册"
+      allowRandomFetch: "允许获取随机图"
+      verify:
+        atLeastOneField: "请至少修改一个字段"
+      submitButton: "保存"
+    toast:
+      patch:
+        successTitle: "修改成功"
+        failedTitle: "修改失败"
+      fetch:
+        failedTitle: "获取站点设置失败"
+        groupFailedTitle: "获取用户组失败"
