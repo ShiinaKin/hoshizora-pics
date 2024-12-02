@@ -8,6 +8,7 @@ import io.sakurasou.di.InstanceCenter.albumService
 import io.sakurasou.di.InstanceCenter.authService
 import io.sakurasou.di.InstanceCenter.groupService
 import io.sakurasou.di.InstanceCenter.imageService
+import io.sakurasou.di.InstanceCenter.permissionService
 import io.sakurasou.di.InstanceCenter.personalAccessTokenService
 import io.sakurasou.di.InstanceCenter.roleService
 import io.sakurasou.di.InstanceCenter.settingService
@@ -38,6 +39,7 @@ fun Route.apiRoute() {
                 userRoute(userService)
                 groupRoute(groupService)
                 roleRoute(roleService)
+                permissionRoutes(permissionService)
                 personalAccessTokenRoute(personalAccessTokenService)
                 systemRoute(systemService)
             }

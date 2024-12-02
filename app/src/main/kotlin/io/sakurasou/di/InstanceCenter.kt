@@ -5,7 +5,6 @@ import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.logging.*
-import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.album.AlbumDaoImpl
 import io.sakurasou.model.dao.group.GroupDao
@@ -37,6 +36,8 @@ import io.sakurasou.service.group.GroupService
 import io.sakurasou.service.group.GroupServiceImpl
 import io.sakurasou.service.image.ImageService
 import io.sakurasou.service.image.ImageServiceImpl
+import io.sakurasou.service.permission.PermissionService
+import io.sakurasou.service.permission.PermissionServiceImpl
 import io.sakurasou.service.personalAccessToken.PersonalAccessTokenService
 import io.sakurasou.service.personalAccessToken.PersonalAccessTokenServiceImpl
 import io.sakurasou.service.role.RoleService
@@ -81,6 +82,7 @@ object InstanceCenter {
     lateinit var settingService: SettingService
     lateinit var commonService: CommonService
     lateinit var roleService: RoleService
+    lateinit var permissionService: PermissionService
     lateinit var personalAccessTokenService: PersonalAccessTokenService
 
     lateinit var systemService: SystemService
@@ -110,6 +112,7 @@ object InstanceCenter {
 
     fun initService() {
         settingService = SettingServiceImpl(settingDao)
+        permissionService = PermissionServiceImpl(permissionDao)
 
         authService = AuthServiceImpl(userDao, relationDao)
         groupService = GroupServiceImpl(groupDao, strategyDao, relationDao)
