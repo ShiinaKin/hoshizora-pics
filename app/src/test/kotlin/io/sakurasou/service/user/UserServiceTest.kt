@@ -527,6 +527,7 @@ class UserServiceTest {
             description = null,
             strategyId = 1,
             config = GroupConfig(GroupStrategyConfig()),
+            isSystemReserved = false,
             createTime = now
         )
         val imageCountAndTotalSizeDTO = ImageCountAndTotalSizeDTO(10, 204800)

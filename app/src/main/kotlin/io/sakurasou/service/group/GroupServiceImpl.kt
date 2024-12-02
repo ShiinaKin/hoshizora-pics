@@ -38,6 +38,7 @@ class GroupServiceImpl(
             config = GroupConfig(
                 groupStrategyConfig = GroupStrategyConfig()
             ),
+            isSystemReserved = false,
             createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )
         val groupRoles = insertRequest.roles

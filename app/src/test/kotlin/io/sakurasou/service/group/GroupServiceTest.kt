@@ -57,6 +57,7 @@ class GroupServiceTest {
             description = "test",
             strategyId = 1,
             config = GroupConfig(GroupStrategyConfig()),
+            isSystemReserved = false,
             createTime = now
         )
         val exceptedRoles = listOf("user")
@@ -93,6 +94,7 @@ class GroupServiceTest {
             description = "test",
             strategyId = 1,
             config = GroupConfig(GroupStrategyConfig()),
+            isSystemReserved = false,
             createTime = now
         )
         val patchRequest = GroupPatchRequest(
@@ -130,6 +132,7 @@ class GroupServiceTest {
             description = "test",
             strategyId = 1,
             config = GroupConfig(GroupStrategyConfig()),
+            isSystemReserved = false,
             createTime = now
         )
         val roles = listOf("user")
@@ -140,7 +143,8 @@ class GroupServiceTest {
             description = "test",
             strategyId = 1,
             groupConfig = GroupConfig(GroupStrategyConfig()),
-            roles = listOf("user")
+            roles = listOf("user"),
+            createTime = now
         )
 
         coEvery { DatabaseSingleton.dbQuery<Group?>(any()) } coAnswers {

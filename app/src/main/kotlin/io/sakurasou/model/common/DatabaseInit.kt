@@ -122,6 +122,7 @@ object DatabaseInit {
             description = "admin group",
             strategyId = 1,
             config = adminGroupConfig,
+            isSystemReserved = true,
             createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )
         val userGroupConfig = GroupConfig(
@@ -132,6 +133,7 @@ object DatabaseInit {
             description = "user group",
             strategyId = 1,
             config = userGroupConfig,
+            isSystemReserved = true,
             createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )
         InstanceCenter.groupDao.saveGroup(adminGroup)

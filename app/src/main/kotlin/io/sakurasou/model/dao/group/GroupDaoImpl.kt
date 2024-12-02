@@ -4,6 +4,8 @@ import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.model.dao.image.Images
+import io.sakurasou.model.dao.strategy.Strategies
+import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.entity.Group
@@ -21,6 +23,7 @@ class GroupDaoImpl : GroupDao {
             it[description] = groupInsertDTO.description
             it[strategyId] = groupInsertDTO.strategyId
             it[config] = groupInsertDTO.config
+            it[isSystemReserved] = groupInsertDTO.isSystemReserved
             it[createTime] = groupInsertDTO.createTime
         }
         return entityID.value
@@ -44,12 +47,13 @@ class GroupDaoImpl : GroupDao {
             .where { Groups.id eq id }
             .map {
                 Group(
-                    it[Groups.id].value,
-                    it[Groups.name],
-                    it[Groups.description],
-                    it[Groups.strategyId],
-                    it[Groups.config],
-                    it[Groups.createTime]
+                    id = it[Groups.id].value,
+                    name = it[Groups.name],
+                    description = it[Groups.description],
+                    strategyId = it[Groups.strategyId],
+                    config = it[Groups.config],
+                    isSystemReserved = it[Groups.isSystemReserved],
+                    createTime = it[Groups.createTime]
                 )
             }
             .firstOrNull()

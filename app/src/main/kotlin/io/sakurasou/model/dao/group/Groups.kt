@@ -2,6 +2,7 @@ package io.sakurasou.model.dao.group
 
 import io.sakurasou.model.dao.image.Images
 import io.sakurasou.model.dao.strategy.Strategies
+import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.group.GroupConfig
 import io.sakurasou.plugins.jsonFormat
 import org.jetbrains.exposed.dao.id.LongIdTable
@@ -19,6 +20,7 @@ object Groups : LongIdTable("groups") {
     val description = varchar("description", 255).nullable()
     val strategyId = long("strategy_id")
     val config = json<GroupConfig>("config", jsonFormat)
+    val isSystemReserved = bool("is_system_reserved")
     val createTime = datetime("create_time")
 
     init {
@@ -26,6 +28,10 @@ object Groups : LongIdTable("groups") {
     }
 
     val columnMap = mapOf(
-        "createTime" to createTime,
+        "groupName" to name,
+        "userCount" to Users.id.count(),
+        "imageCount" to Images.id.count(),
+        "imageSize" to Images.size.sum(),
+        "createTime" to createTime
     )
 }

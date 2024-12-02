@@ -12,6 +12,7 @@ data class GroupInsertDTO(
     val description: String?,
     val strategyId: Long,
     val config: GroupConfig,
+    val isSystemReserved: Boolean,
     val createTime: LocalDateTime
 )
 
