@@ -37,9 +37,7 @@ class GroupServiceImpl(
             name = insertRequest.name,
             description = insertRequest.description,
             strategyId = insertRequest.strategyId,
-            config = GroupConfig(
-                groupStrategyConfig = GroupStrategyConfig()
-            ),
+            config = insertRequest.config,
             isSystemReserved = false,
             createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )

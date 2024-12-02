@@ -1,6 +1,7 @@
 package io.sakurasou.controller.request
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
+import io.sakurasou.model.group.GroupConfig
 import io.sakurasou.model.group.GroupStrategyConfig
 import kotlinx.serialization.Serializable
 
@@ -13,6 +14,7 @@ import kotlinx.serialization.Serializable
 data class GroupInsertRequest(
     val name: String,
     val description: String? = null,
+    val config: GroupConfig,
     val strategyId: Long,
     val roles: List<String>
 )

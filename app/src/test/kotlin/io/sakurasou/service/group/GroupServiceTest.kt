@@ -54,6 +54,7 @@ class GroupServiceTest {
         val insertRequest = GroupInsertRequest(
             name = "Test Group",
             description = "test",
+            config = GroupConfig(GroupStrategyConfig()),
             strategyId = 1,
             roles = listOf("user")
         )
