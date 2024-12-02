@@ -7,13 +7,14 @@ import io.sakurasou.exception.ServiceThrowable
  * 2024/9/25 12:44
  */
 class GroupDeleteFailedException(
-    cause: ServiceThrowable? = null
+    cause: ServiceThrowable? = null,
+    reason: String? = null
 ) : ServiceThrowable() {
     override val code: Int
         get() = 4000
     override var message: String = "Group Delete Failed"
 
     init {
-        message = (message + (cause?.let { ", " + it.message } ?: ""))
+        message += if (cause != null) ", ${cause.message}" else if (reason != null) ", $reason" else ""
     }
 }

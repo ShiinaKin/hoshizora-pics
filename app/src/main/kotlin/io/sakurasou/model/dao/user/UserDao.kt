@@ -26,6 +26,7 @@ interface UserDao : PaginationDao {
     fun findUserById(id: Long): User?
     fun findUserByName(name: String): User?
     fun countUser(): Long
+    fun doesUsersBelongToUserGroup(groupId: Long): Boolean
 
     fun pagination(pageRequest: PageRequest): PageResult<UserPageVO>
 }

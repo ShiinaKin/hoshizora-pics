@@ -88,6 +88,12 @@ class UserDaoImpl : UserDao {
         return Users.select(Users.id).count()
     }
 
+    override fun doesUsersBelongToUserGroup(groupId: Long): Boolean {
+        return Users.select(Users.groupId)
+            .where { Users.groupId eq groupId }
+            .count() > 0
+    }
+
     override fun pagination(pageRequest: PageRequest): PageResult<UserPageVO> {
         val query = { query: Query ->
             query

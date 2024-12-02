@@ -34,6 +34,10 @@ class RelationDaoImpl : RelationDao {
         PersonalAccessTokenPermissions.deleteWhere { tokenId eq patId }
     }
 
+    override fun deleteGroupToRolesByGroupId(groupId: Long) {
+        GroupRoles.deleteWhere { GroupRoles.groupId eq groupId }
+    }
+
     override fun listRoleByGroupId(groupId: Long): List<String> {
         return GroupRoles.select(GroupRoles.roleName)
             .where { GroupRoles.groupId eq groupId }

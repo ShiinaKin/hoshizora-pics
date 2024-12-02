@@ -15,6 +15,7 @@ import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.strategy.StrategyDao
+import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.group.GroupConfig
@@ -29,6 +30,7 @@ import kotlinx.datetime.toLocalDateTime
  */
 class GroupServiceImpl(
     private val groupDao: GroupDao,
+    private val userDao: UserDao,
     private val strategyDao: StrategyDao,
     private val relationDao: RelationDao
 ) : GroupService {
@@ -58,8 +60,12 @@ class GroupServiceImpl(
 
     override suspend fun deleteGroup(id: Long) {
         runCatching {
-            val influenceRow = dbQuery { groupDao.deleteGroupById(id) }
-            if (influenceRow < 1) throw GroupNotFoundException()
+            dbQuery {
+                val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+                if (userDao.doesUsersBelongToUserGroup(group.id)) throw GroupDeleteFailedException(null, "Group is not empty")
+                relationDao.deleteGroupToRolesByGroupId(group.id)
+                groupDao.deleteGroupById(group.id)
+            }
         }.onFailure {
             if (it is GroupNotFoundException) throw GroupDeleteFailedException(it)
             else throw it
