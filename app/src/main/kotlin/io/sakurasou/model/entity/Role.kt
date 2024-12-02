@@ -1,5 +1,6 @@
 package io.sakurasou.model.entity
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -11,5 +12,6 @@ data class Role(
     val name: String,
     val displayName: String,
     val isSystemReserved: Boolean,
-    val description: String?
+    val description: String?,
+    val createTime: LocalDateTime
 )

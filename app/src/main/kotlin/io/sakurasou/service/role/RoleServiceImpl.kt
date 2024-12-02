@@ -17,6 +17,9 @@ import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.role.RoleDao
 import io.sakurasou.model.dto.RoleInsertDTO
 import io.sakurasou.model.dto.RoleUpdateDTO
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * @author ShiinaKin
@@ -33,9 +36,15 @@ class RoleServiceImpl(
                 name = insertRequest.name,
                 displayName = insertRequest.displayName,
                 isSystemReserved = false,
-                description = insertRequest.description
+                description = insertRequest.description,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             )
             roleDao.saveRole(insertDTO)
+
+            insertRequest.permissions.forEach { permission ->
+                permissionDao.findPermissionByName(permission) ?: throw PermissionNotFoundException()
+            }
+            relationDao.batchInsertRoleToPermissions(insertRequest.name, insertRequest.permissions)
         }
     }
 

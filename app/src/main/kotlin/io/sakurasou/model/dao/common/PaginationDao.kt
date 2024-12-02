@@ -6,6 +6,7 @@ import io.sakurasou.exception.controller.param.PagingParameterWrongException
 import io.sakurasou.model.dao.album.Albums
 import io.sakurasou.model.dao.group.Groups
 import io.sakurasou.model.dao.image.Images
+import io.sakurasou.model.dao.role.Roles
 import io.sakurasou.model.dao.strategy.Strategies
 import io.sakurasou.model.dao.user.Users
 import org.jetbrains.exposed.sql.*
@@ -57,6 +58,7 @@ interface PaginationDao {
             Users -> Users.columnMap[columnName]
             Groups -> Groups.columnMap[columnName]
             Strategies -> Strategies.columnMap[columnName]
+            Roles -> Roles.columnMap[columnName]
             else -> null
         } ?: throw PagingParameterWrongException("Column $columnName not found in table ${table.tableName}")
     }

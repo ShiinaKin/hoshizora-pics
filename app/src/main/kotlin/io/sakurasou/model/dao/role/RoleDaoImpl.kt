@@ -55,6 +55,7 @@ class RoleDaoImpl : RoleDao {
         name = rows[Roles.name],
         displayName = rows[Roles.displayName],
         isSystemReserved = rows[Roles.isSystemReserved],
-        description = rows[Roles.description]
+        description = rows[Roles.description],
+        createTime = rows[Roles.createTime]
     )
 }
