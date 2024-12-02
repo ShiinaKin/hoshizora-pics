@@ -10,6 +10,7 @@ import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.strategy.StrategyDao
+import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.entity.Group
@@ -30,6 +31,7 @@ import kotlin.test.assertFailsWith
  */
 class GroupServiceTest {
     private lateinit var groupDao: GroupDao
+    private lateinit var userDao: UserDao
     private lateinit var strategyDao: StrategyDao
     private lateinit var relationDao: RelationDao
     private lateinit var groupService: GroupService
@@ -41,9 +43,10 @@ class GroupServiceTest {
         mockkObject(DatabaseSingleton)
         mockkObject(Clock.System)
         groupDao = mockk()
+        userDao = mockk()
         strategyDao = mockk()
         relationDao = mockk()
-        groupService = GroupServiceImpl(groupDao, strategyDao, relationDao)
+        groupService = GroupServiceImpl(groupDao, userDao, strategyDao, relationDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
         now = instant.toLocalDateTime(TimeZone.UTC)
@@ -82,10 +85,23 @@ class GroupServiceTest {
 
     @Test
     fun `delete group should be successful`() = runBlocking {
+        val group = Group(
+            id = 1,
+            name = "Test Group",
+            description = "test",
+            strategyId = 1,
+            config = GroupConfig(GroupStrategyConfig()),
+            isSystemReserved = false,
+            createTime = now
+        )
+
         coEvery { DatabaseSingleton.dbQuery<Int>(any()) } coAnswers {
             this.arg<suspend () -> Int>(0).invoke()
         }
-        every { groupDao.deleteGroupById(1) } returns 1
+        every { groupDao.findGroupById(1L) } returns group
+        every { userDao.doesUsersBelongToUserGroup(group.id) } returns false
+        every { relationDao.deleteGroupToRolesByGroupId(group.id) } just Runs
+        every { groupDao.deleteGroupById(group.id) } returns 1
 
         groupService.deleteGroup(1)
 
