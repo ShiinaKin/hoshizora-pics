@@ -461,6 +461,61 @@ adminUserManageView:
     toast:
       successTitle: "删除成功"
       failedTitle: "删除失败"
+adminGroupManageView:
+  create:
+    dialog:
+      title: "创建用户组"
+      form:
+        name: "用户组名"
+        description: "用户组描述"
+        strategy: "存储策略"
+        roles: "角色"
+        config:
+          strategy:
+            title: "存储设置"
+            singleFileMaxSize: "单文件最大大小"
+            maxSize: "单用户最大空间"
+            pathNamingRule: "路径命名规则"
+            fileNamingRule: "文件命名规则"
+            imageQuality: "图片质量"
+            imageAutoTransformTarget: "自动转换目标类型"
+            allowedImageTypes: "允许图片类型"
+        submitButton: "创建"
+        cancelButton: "取消"
+        verify:
+          groupName:
+            required: "用户组名不能为空"
+          strategy:
+            required: "存储策略不能为空"
+          roles:
+            required: "角色不能为空"
+            invalid: "角色无效"
+          config:
+            strategy:
+              singleFileMaxSize:
+                required: "单文件最大大小不能为空"
+                invalid: "单文件最大大小必须是数字"
+              maxSize:
+                required: "单用户最大空间不能为空"
+                invalid: "单用户最大空间必须是数字"
+              pathNamingRule:
+                required: "路径命名规则不能为空"
+              fileNamingRule:
+                required: "文件命名规则不能为空"
+              imageQuality:
+                required: "图片质量不能为空"
+                invalid: "图片质量必须是数字"
+                min: "图片质量必须大于等于0"
+                max: "图片质量必须小于等于100"
+              imageAutoTransformTarget:
+                invalid: "自动转换目标类型无效"
+              allowedImageTypes:
+                invalid: "允许图片类型无效"
+    toast:
+      successTitle: "创建成功"
+      failedTitle: "创建失败"
+      pageStrategyFailedTitle: "获取存储策略失败"
+      pageRoleFailedTitle: "获取角色失败"
 adminStrategyManageView:
   strategyFilter:
     createTimeASC: "创建时间升序"
