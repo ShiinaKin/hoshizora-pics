@@ -28,4 +28,14 @@ class PermissionDaoImpl : PermissionDao {
             }
             .firstOrNull()
     }
+
+    override fun findAllPermissions(): List<Permission> {
+        return Permissions.selectAll()
+            .map {
+                Permission(
+                    it[Permissions.name],
+                    it[Permissions.description]
+                )
+            }
+    }
 }
