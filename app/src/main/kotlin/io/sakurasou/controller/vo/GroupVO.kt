@@ -2,6 +2,7 @@ package io.sakurasou.controller.vo
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.model.group.GroupConfig
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,7 +17,8 @@ data class GroupVO(
     val description: String?,
     val groupConfig: GroupConfig,
     val strategyId: Long,
-    val roles: List<String>
+    val roles: List<String>,
+    val createTime: LocalDateTime
 )
 
 @Serializable
@@ -25,8 +27,11 @@ data class GroupPageVO(
     val id: Long,
     val name: String,
     val strategyId: Long,
-    val totalImageCount: Long,
-    val totalImageSize: Double
+    val strategyName: String,
+    val userCount: Long,
+    val imageCount: Long,
+    val imageSize: Double,
+    val createTime: LocalDateTime
 )
 
 @Serializable

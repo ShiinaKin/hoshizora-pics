@@ -103,7 +103,8 @@ class GroupServiceImpl(
             description = group.description,
             groupConfig = group.config,
             strategyId = group.strategyId,
-            roles = roles
+            roles = roles,
+            createTime = group.createTime
         )
     }
 

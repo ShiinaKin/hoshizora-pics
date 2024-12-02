@@ -63,19 +63,35 @@ class GroupDaoImpl : GroupDao {
 
     override fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO> {
         val query = { query: Query ->
-            query.adjustColumnSet { join(Images, JoinType.FULL) {Images.groupId eq Groups.id} }
-                .adjustSelect { select(Groups.fields + Images.id.count() + Images.size.sum()) }
-                .groupBy(Groups.id, Groups.name)
+            query.adjustColumnSet {
+                leftJoin(Images) { Images.groupId eq Groups.id }
+                    .leftJoin(Users) { Users.groupId eq Groups.id }
+                    .innerJoin(Strategies) { Strategies.id eq Groups.strategyId }
+            }
+                .adjustSelect {
+                    select(
+                        Groups.fields + Strategies.id + Strategies.name + Users.id.count()
+                                + Images.id.count() + Coalesce(Images.size.sum(), longLiteral(0))
+                    )
+                }
+                .groupBy(
+                    Groups.id,
+                    Groups.name,
+                    Strategies.id,
+                    Strategies.name
+                )
         }
         return fetchPage(Groups, pageRequest, query) { row ->
             GroupPageVO(
-                row[Groups.id].value,
-                row[Groups.name],
-                row[Groups.strategyId],
-                row[Images.id.count()],
-                row[Images.size.sum()]?.let {
-                    it / 1024.0 / 1024.0
-                } ?: 0.0
+                id = row[Groups.id].value,
+                name = row[Groups.name],
+                strategyId = row[Strategies.id].value,
+                strategyName = row[Strategies.name],
+                userCount = row[Users.id.count()],
+                imageCount = row[Images.id.count()],
+                imageSize = row[Coalesce(Images.size.sum(), longLiteral(0))]
+                    .let { size -> if (size != 0L) size / 1024 / 1024.0 else 0.0 },
+                createTime = row[Groups.createTime]
             )
         }
     }
