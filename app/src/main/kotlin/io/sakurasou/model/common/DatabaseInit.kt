@@ -61,7 +61,6 @@ object DatabaseInit {
                 }
             }
             InstanceCenter.initSystemStatus()
-            InstanceCenter.initRolePermissions()
         }
     }
 

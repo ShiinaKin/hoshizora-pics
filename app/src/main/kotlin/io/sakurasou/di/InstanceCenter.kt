@@ -85,7 +85,6 @@ object InstanceCenter {
 
     lateinit var systemService: SystemService
     lateinit var systemStatus: SystemStatus
-    lateinit var rolePermissions: Map<String, Set<String>>
 
     fun initClient(timeout: Long = 30000, proxyAddress: String) {
         client = HttpClient(CIO) {
@@ -130,14 +129,5 @@ object InstanceCenter {
 
     suspend fun initSystemStatus() {
         systemStatus = settingService.getSystemStatus()
-    }
-
-    suspend fun initRolePermissions() {
-        rolePermissions = dbQuery {
-                val roles = roleDao.listRoles()
-                roles.associate {
-                    it.name to relationDao.listPermissionByRole(it.name).toSet()
-                }
-            }
     }
 }

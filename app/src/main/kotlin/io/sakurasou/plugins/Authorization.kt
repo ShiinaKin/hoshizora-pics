@@ -1,5 +1,6 @@
 package io.sakurasou.plugins
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -14,6 +15,9 @@ import io.sakurasou.model.DatabaseSingleton.dbQuery
  * @author Shiina Kin
  * 2024/9/17 18:08
  */
+
+private val logger = KotlinLogging.logger { }
+
 val AuthorizationPlugin = createRouteScopedPlugin(
     name = "AuthorizationPlugin",
     createConfiguration = ::AuthorizationConfig
@@ -39,8 +43,13 @@ val AuthorizationPlugin = createRouteScopedPlugin(
                 if (!permissions!!.contains(permission)) throw UnauthorizedAccessException()
             } else {
                 roles!!.forEach {
-                    val rolePermissions = InstanceCenter.rolePermissions[it]!!
-                    if (permission !in rolePermissions) throw UnauthorizedAccessException()
+                    runCatching {
+                        val rolePermissions = dbQuery { InstanceCenter.relationDao.listPermissionByRole(it) }
+                        if (permission !in rolePermissions) throw UnauthorizedAccessException()
+                    }.onFailure { exception ->
+                        if (exception !is UnauthorizedAccessException) logger.trace { exception }
+                        throw UnauthorizedAccessException()
+                    }
                 }
             }
         }
