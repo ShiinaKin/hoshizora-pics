@@ -13,45 +13,36 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { GroupConfig } from './group-config';
 
 /**
  * 
  * @export
- * @interface GroupInsertRequest
+ * @interface RoleInsertRequest
  */
-export interface GroupInsertRequest {
-    /**
-     * 
-     * @type {GroupConfig}
-     * @memberof GroupInsertRequest
-     */
-    'config': GroupConfig;
+export interface RoleInsertRequest {
     /**
      * 
      * @type {string}
-     * @memberof GroupInsertRequest
+     * @memberof RoleInsertRequest
      */
     'description'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof GroupInsertRequest
+     * @memberof RoleInsertRequest
+     */
+    'displayName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoleInsertRequest
      */
     'name': string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof GroupInsertRequest
+     * @memberof RoleInsertRequest
      */
-    'roles': Array<string>;
-    /**
-     * 
-     * @type {number}
-     * @memberof GroupInsertRequest
-     */
-    'strategyId': number;
+    'permissions': Array<string>;
 }
 

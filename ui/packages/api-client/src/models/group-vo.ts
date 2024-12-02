@@ -28,6 +28,12 @@ export interface GroupVO {
      * @type {string}
      * @memberof GroupVO
      */
+    'createTime': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupVO
+     */
     'description'?: string | null;
     /**
      * 
@@ -41,6 +47,12 @@ export interface GroupVO {
      * @memberof GroupVO
      */
     'id': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GroupVO
+     */
+    'isSystemReserved': boolean;
     /**
      * 
      * @type {string}
@@ -59,5 +71,11 @@ export interface GroupVO {
      * @memberof GroupVO
      */
     'strategyId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupVO
+     */
+    'strategyName': string;
 }
 

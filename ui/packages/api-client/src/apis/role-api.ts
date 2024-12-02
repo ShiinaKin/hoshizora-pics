@@ -23,6 +23,16 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
 import type { CommonResponseKotlinCollectionsListRoleVO } from '../models';
+// @ts-ignore
+import type { CommonResponseKotlinUnit } from '../models';
+// @ts-ignore
+import type { CommonResponsePageResultRolePageVO } from '../models';
+// @ts-ignore
+import type { CommonResponseRoleVO } from '../models';
+// @ts-ignore
+import type { RoleInsertRequest } from '../models';
+// @ts-ignore
+import type { RolePatchRequest } from '../models';
 /**
  * RoleApi - axios parameter creator
  * @export
@@ -31,11 +41,148 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {number} page page
+         * @param {number} pageSize pageSize
+         * @param {string} [order] order
+         * @param {string} [orderBy] orderBy
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiRoleAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/role/all`;
+        apiRolePageGet: async (page: number, pageSize: number, order?: string, orderBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'page' is not null or undefined
+            assertParamExists('apiRolePageGet', 'page', page)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('apiRolePageGet', 'pageSize', pageSize)
+            const localVarPath = `/api/role/page`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (orderBy !== undefined) {
+                localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RoleInsertRequest} roleInsertRequest role insert request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRolePost: async (roleInsertRequest: RoleInsertRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roleInsertRequest' is not null or undefined
+            assertParamExists('apiRolePost', 'roleInsertRequest', roleInsertRequest)
+            const localVarPath = `/api/role`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(roleInsertRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNameDelete: async (roleName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roleName' is not null or undefined
+            assertParamExists('apiRoleRoleNameDelete', 'roleName', roleName)
+            const localVarPath = `/api/role/{role_name}`
+                .replace(`{${"role_name"}}`, encodeURIComponent(String(roleName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNameGet: async (roleName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roleName' is not null or undefined
+            assertParamExists('apiRoleRoleNameGet', 'roleName', roleName)
+            const localVarPath = `/api/role/{role_name}`
+                .replace(`{${"role_name"}}`, encodeURIComponent(String(roleName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -56,6 +203,49 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {RolePatchRequest} rolePatchRequest role patch request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNamePatch: async (roleName: string, rolePatchRequest: RolePatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roleName' is not null or undefined
+            assertParamExists('apiRoleRoleNamePatch', 'roleName', roleName)
+            // verify required parameter 'rolePatchRequest' is not null or undefined
+            assertParamExists('apiRoleRoleNamePatch', 'rolePatchRequest', rolePatchRequest)
+            const localVarPath = `/api/role/{role_name}`
+                .replace(`{${"role_name"}}`, encodeURIComponent(String(roleName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(rolePatchRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -107,13 +297,66 @@ export const RoleApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} page page
+         * @param {number} pageSize pageSize
+         * @param {string} [order] order
+         * @param {string} [orderBy] orderBy
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiRoleAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinCollectionsListRoleVO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRoleAllGet(options);
+        async apiRolePageGet(page: number, pageSize: number, order?: string, orderBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponsePageResultRolePageVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRolePageGet(page, pageSize, order, orderBy, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRoleAllGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRolePageGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RoleInsertRequest} roleInsertRequest role insert request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiRolePost(roleInsertRequest: RoleInsertRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRolePost(roleInsertRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRolePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiRoleRoleNameDelete(roleName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRoleRoleNameDelete(roleName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRoleRoleNameDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiRoleRoleNameGet(roleName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseRoleVO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRoleRoleNameGet(roleName, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRoleRoleNameGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} roleName role name
+         * @param {RolePatchRequest} rolePatchRequest role patch request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiRoleRoleNamePatch(roleName: string, rolePatchRequest: RolePatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiRoleRoleNamePatch(roleName, rolePatchRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoleApi.apiRoleRoleNamePatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -139,11 +382,48 @@ export const RoleApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {RoleApiApiRolePageGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiRoleAllGet(options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinCollectionsListRoleVO> {
-            return localVarFp.apiRoleAllGet(options).then((request) => request(axios, basePath));
+        apiRolePageGet(requestParameters: RoleApiApiRolePageGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponsePageResultRolePageVO> {
+            return localVarFp.apiRolePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RoleApiApiRolePostRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRolePost(requestParameters: RoleApiApiRolePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
+            return localVarFp.apiRolePost(requestParameters.roleInsertRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RoleApiApiRoleRoleNameDeleteRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNameDelete(requestParameters: RoleApiApiRoleRoleNameDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
+            return localVarFp.apiRoleRoleNameDelete(requestParameters.roleName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RoleApiApiRoleRoleNameGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNameGet(requestParameters: RoleApiApiRoleRoleNameGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseRoleVO> {
+            return localVarFp.apiRoleRoleNameGet(requestParameters.roleName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RoleApiApiRoleRoleNamePatchRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiRoleRoleNamePatch(requestParameters: RoleApiApiRoleRoleNamePatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
+            return localVarFp.apiRoleRoleNamePatch(requestParameters.roleName, requestParameters.rolePatchRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -157,6 +437,104 @@ export const RoleApiFactory = function (configuration?: Configuration, basePath?
 };
 
 /**
+ * Request parameters for apiRolePageGet operation in RoleApi.
+ * @export
+ * @interface RoleApiApiRolePageGetRequest
+ */
+export interface RoleApiApiRolePageGetRequest {
+    /**
+     * page
+     * @type {number}
+     * @memberof RoleApiApiRolePageGet
+     */
+    readonly page: number
+
+    /**
+     * pageSize
+     * @type {number}
+     * @memberof RoleApiApiRolePageGet
+     */
+    readonly pageSize: number
+
+    /**
+     * order
+     * @type {string}
+     * @memberof RoleApiApiRolePageGet
+     */
+    readonly order?: string
+
+    /**
+     * orderBy
+     * @type {string}
+     * @memberof RoleApiApiRolePageGet
+     */
+    readonly orderBy?: string
+}
+
+/**
+ * Request parameters for apiRolePost operation in RoleApi.
+ * @export
+ * @interface RoleApiApiRolePostRequest
+ */
+export interface RoleApiApiRolePostRequest {
+    /**
+     * role insert request
+     * @type {RoleInsertRequest}
+     * @memberof RoleApiApiRolePost
+     */
+    readonly roleInsertRequest: RoleInsertRequest
+}
+
+/**
+ * Request parameters for apiRoleRoleNameDelete operation in RoleApi.
+ * @export
+ * @interface RoleApiApiRoleRoleNameDeleteRequest
+ */
+export interface RoleApiApiRoleRoleNameDeleteRequest {
+    /**
+     * role name
+     * @type {string}
+     * @memberof RoleApiApiRoleRoleNameDelete
+     */
+    readonly roleName: string
+}
+
+/**
+ * Request parameters for apiRoleRoleNameGet operation in RoleApi.
+ * @export
+ * @interface RoleApiApiRoleRoleNameGetRequest
+ */
+export interface RoleApiApiRoleRoleNameGetRequest {
+    /**
+     * role name
+     * @type {string}
+     * @memberof RoleApiApiRoleRoleNameGet
+     */
+    readonly roleName: string
+}
+
+/**
+ * Request parameters for apiRoleRoleNamePatch operation in RoleApi.
+ * @export
+ * @interface RoleApiApiRoleRoleNamePatchRequest
+ */
+export interface RoleApiApiRoleRoleNamePatchRequest {
+    /**
+     * role name
+     * @type {string}
+     * @memberof RoleApiApiRoleRoleNamePatch
+     */
+    readonly roleName: string
+
+    /**
+     * role patch request
+     * @type {RolePatchRequest}
+     * @memberof RoleApiApiRoleRoleNamePatch
+     */
+    readonly rolePatchRequest: RolePatchRequest
+}
+
+/**
  * RoleApi - object-oriented interface
  * @export
  * @class RoleApi
@@ -165,12 +543,57 @@ export const RoleApiFactory = function (configuration?: Configuration, basePath?
 export class RoleApi extends BaseAPI {
     /**
      * 
+     * @param {RoleApiApiRolePageGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoleApi
      */
-    public apiRoleAllGet(options?: RawAxiosRequestConfig) {
-        return RoleApiFp(this.configuration).apiRoleAllGet(options).then((request) => request(this.axios, this.basePath));
+    public apiRolePageGet(requestParameters: RoleApiApiRolePageGetRequest, options?: RawAxiosRequestConfig) {
+        return RoleApiFp(this.configuration).apiRolePageGet(requestParameters.page, requestParameters.pageSize, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RoleApiApiRolePostRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleApi
+     */
+    public apiRolePost(requestParameters: RoleApiApiRolePostRequest, options?: RawAxiosRequestConfig) {
+        return RoleApiFp(this.configuration).apiRolePost(requestParameters.roleInsertRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RoleApiApiRoleRoleNameDeleteRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleApi
+     */
+    public apiRoleRoleNameDelete(requestParameters: RoleApiApiRoleRoleNameDeleteRequest, options?: RawAxiosRequestConfig) {
+        return RoleApiFp(this.configuration).apiRoleRoleNameDelete(requestParameters.roleName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RoleApiApiRoleRoleNameGetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleApi
+     */
+    public apiRoleRoleNameGet(requestParameters: RoleApiApiRoleRoleNameGetRequest, options?: RawAxiosRequestConfig) {
+        return RoleApiFp(this.configuration).apiRoleRoleNameGet(requestParameters.roleName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RoleApiApiRoleRoleNamePatchRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleApi
+     */
+    public apiRoleRoleNamePatch(requestParameters: RoleApiApiRoleRoleNamePatchRequest, options?: RawAxiosRequestConfig) {
+        return RoleApiFp(this.configuration).apiRoleRoleNamePatch(requestParameters.roleName, requestParameters.rolePatchRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

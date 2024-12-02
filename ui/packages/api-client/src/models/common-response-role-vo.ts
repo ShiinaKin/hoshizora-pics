@@ -15,37 +15,37 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { PermissionVO } from './permission-vo';
+import type { RoleVO } from './role-vo';
 
 /**
  * 
  * @export
- * @interface RoleVO
+ * @interface CommonResponseRoleVO
  */
-export interface RoleVO {
+export interface CommonResponseRoleVO {
+    /**
+     * 
+     * @type {number}
+     * @memberof CommonResponseRoleVO
+     */
+    'code': number;
+    /**
+     * 
+     * @type {RoleVO}
+     * @memberof CommonResponseRoleVO
+     */
+    'data'?: RoleVO | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CommonResponseRoleVO
+     */
+    'isSuccessful': boolean;
     /**
      * 
      * @type {string}
-     * @memberof RoleVO
+     * @memberof CommonResponseRoleVO
      */
-    'description'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoleVO
-     */
-    'displayName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoleVO
-     */
-    'name': string;
-    /**
-     * 
-     * @type {Array<PermissionVO>}
-     * @memberof RoleVO
-     */
-    'permissions': Array<PermissionVO>;
+    'message': string;
 }
 

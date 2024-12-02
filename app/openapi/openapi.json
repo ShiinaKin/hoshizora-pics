@@ -2425,10 +2425,20 @@
         } ]
       }
     },
-    "/api/role/all" : {
+    "/api/role/{role_name}" : {
       "get" : {
         "tags" : [ "Role" ],
-        "parameters" : [ ],
+        "parameters" : [ {
+          "name" : "role_name",
+          "in" : "path",
+          "description" : "role name",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "success",
@@ -2436,7 +2446,114 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.List_RoleVO"
+                  "$ref" : "#/components/schemas/CommonResponse_RoleVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ {
+          "name" : "role_name",
+          "in" : "path",
+          "description" : "role name",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ {
+          "name" : "role_name",
+          "in" : "path",
+          "description" : "role name",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "role patch request",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RolePatchRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/role" : {
+      "post" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "role insert request",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RoleInsertRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
                 }
               }
             }
@@ -2460,6 +2577,93 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.List_RoleVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/role/page" : {
+      "get" : {
+        "tags" : [ "Role" ],
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "order",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "orderBy",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_PageResult_RolePageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/permission/all" : {
+      "get" : {
+        "tags" : [ "Permission" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.collections.List_PermissionVO"
                 }
               }
             }
@@ -4057,39 +4261,14 @@
         },
         "required" : [ "code", "isSuccessful", "message" ]
       },
-      "GroupInsertRequest" : {
-        "type" : "object",
-        "properties" : {
-          "description" : {
-            "type" : [ "null", "string" ]
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "roles" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "strategyId" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        },
-        "required" : [ "name", "roles", "strategyId" ]
-      },
-      "GroupConfigUpdatePatch" : {
+      "GroupConfig" : {
         "type" : "object",
         "properties" : {
           "groupStrategyConfig" : {
-            "oneOf" : [ {
-              "type" : "null"
-            }, {
-              "$ref" : "#/components/schemas/GroupStrategyConfig"
-            } ]
+            "$ref" : "#/components/schemas/GroupStrategyConfig"
           }
-        }
+        },
+        "required" : [ "groupStrategyConfig" ]
       },
       "GroupStrategyConfig" : {
         "type" : "object",
@@ -4133,6 +4312,43 @@
         "type" : "string",
         "enum" : [ "JPEG", "JPG", "PNG", "GIF", "TIF", "BMP", "ICO", "PSD", "WEBP" ]
       },
+      "GroupInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "$ref" : "#/components/schemas/GroupConfig"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "config", "name", "roles", "strategyId" ]
+      },
+      "GroupConfigUpdatePatch" : {
+        "type" : "object",
+        "properties" : {
+          "groupStrategyConfig" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/GroupStrategyConfig"
+            } ]
+          }
+        }
+      },
       "GroupPatchRequest" : {
         "type" : "object",
         "properties" : {
@@ -4164,6 +4380,9 @@
       "GroupVO" : {
         "type" : "object",
         "properties" : {
+          "createTime" : {
+            "type" : "string"
+          },
           "description" : {
             "type" : [ "null", "string" ]
           },
@@ -4173,6 +4392,9 @@
           "id" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "isSystemReserved" : {
+            "type" : "boolean"
           },
           "name" : {
             "type" : "string"
@@ -4186,18 +4408,12 @@
           "strategyId" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "strategyName" : {
+            "type" : "string"
           }
         },
-        "required" : [ "groupConfig", "id", "name", "roles", "strategyId" ]
-      },
-      "GroupConfig" : {
-        "type" : "object",
-        "properties" : {
-          "groupStrategyConfig" : {
-            "$ref" : "#/components/schemas/GroupStrategyConfig"
-          }
-        },
-        "required" : [ "groupStrategyConfig" ]
+        "required" : [ "createTime", "groupConfig", "id", "isSystemReserved", "name", "roles", "strategyId", "strategyName" ]
       },
       "CommonResponse_GroupVO" : {
         "type" : "object",
@@ -4253,9 +4469,23 @@
       "GroupPageVO" : {
         "type" : "object",
         "properties" : {
+          "createTime" : {
+            "type" : "string"
+          },
           "id" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "imageCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageSize" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "isSystemReserved" : {
+            "type" : "boolean"
           },
           "name" : {
             "type" : "string"
@@ -4264,16 +4494,15 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "totalImageCount" : {
+          "strategyName" : {
+            "type" : "string"
+          },
+          "userCount" : {
             "type" : "integer",
             "format" : "int64"
-          },
-          "totalImageSize" : {
-            "type" : "number",
-            "format" : "double"
           }
         },
-        "required" : [ "id", "name", "strategyId", "totalImageCount", "totalImageSize" ]
+        "required" : [ "createTime", "id", "imageCount", "imageSize", "isSystemReserved", "name", "strategyId", "strategyName", "userCount" ]
       },
       "CommonResponse_PageResult_GroupPageVO" : {
         "type" : "object",
@@ -4334,11 +4563,25 @@
         },
         "required" : [ "code", "isSuccessful", "message" ]
       },
+      "RolePatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : [ "null", "string" ]
+          }
+        }
+      },
       "RoleVO" : {
         "type" : "object",
         "properties" : {
           "description" : {
             "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : "string"
           },
           "name" : {
             "type" : "string"
@@ -4350,7 +4593,7 @@
             }
           }
         },
-        "required" : [ "name", "permissions" ]
+        "required" : [ "displayName", "name", "permissions" ]
       },
       "PermissionVO" : {
         "type" : "object",
@@ -4364,6 +4607,50 @@
         },
         "required" : [ "name" ]
       },
+      "CommonResponse_RoleVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/RoleVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "RoleInsertRequest" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "displayName", "name", "permissions" ]
+      },
       "CommonResponse_kotlin.collections.List_RoleVO" : {
         "type" : "object",
         "properties" : {
@@ -4375,6 +4662,94 @@
             "type" : [ "null", "array" ],
             "items" : {
               "$ref" : "#/components/schemas/RoleVO"
+            }
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "PageResult_RolePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RolePageVO"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPage" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "data", "page", "pageSize", "total", "totalPage" ]
+      },
+      "RolePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "displayName", "name" ]
+      },
+      "CommonResponse_PageResult_RolePageVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "oneOf" : [ {
+              "type" : "null"
+            }, {
+              "$ref" : "#/components/schemas/PageResult_RolePageVO"
+            } ]
+          },
+          "isSuccessful" : {
+            "type" : "boolean"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "isSuccessful", "message" ]
+      },
+      "CommonResponse_kotlin.collections.List_PermissionVO" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : [ "null", "array" ],
+            "items" : {
+              "$ref" : "#/components/schemas/PermissionVO"
             }
           },
           "isSuccessful" : {

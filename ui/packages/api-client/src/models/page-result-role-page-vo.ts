@@ -15,43 +15,43 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { GroupConfig } from './group-config';
+import type { RolePageVO } from './role-page-vo';
 
 /**
  * 
  * @export
- * @interface GroupInsertRequest
+ * @interface PageResultRolePageVO
  */
-export interface GroupInsertRequest {
+export interface PageResultRolePageVO {
     /**
      * 
-     * @type {GroupConfig}
-     * @memberof GroupInsertRequest
+     * @type {Array<RolePageVO>}
+     * @memberof PageResultRolePageVO
      */
-    'config': GroupConfig;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupInsertRequest
-     */
-    'description'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupInsertRequest
-     */
-    'name': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GroupInsertRequest
-     */
-    'roles': Array<string>;
+    'data': Array<RolePageVO>;
     /**
      * 
      * @type {number}
-     * @memberof GroupInsertRequest
+     * @memberof PageResultRolePageVO
      */
-    'strategyId': number;
+    'page': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageResultRolePageVO
+     */
+    'pageSize': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageResultRolePageVO
+     */
+    'total': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageResultRolePageVO
+     */
+    'totalPage': number;
 }
 

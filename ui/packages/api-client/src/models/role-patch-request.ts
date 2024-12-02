@@ -13,39 +13,24 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { PermissionVO } from './permission-vo';
 
 /**
  * 
  * @export
- * @interface RoleVO
+ * @interface RolePatchRequest
  */
-export interface RoleVO {
+export interface RolePatchRequest {
     /**
      * 
      * @type {string}
-     * @memberof RoleVO
+     * @memberof RolePatchRequest
      */
     'description'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof RoleVO
+     * @memberof RolePatchRequest
      */
-    'displayName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoleVO
-     */
-    'name': string;
-    /**
-     * 
-     * @type {Array<PermissionVO>}
-     * @memberof RoleVO
-     */
-    'permissions': Array<PermissionVO>;
+    'displayName'?: string | null;
 }
 

@@ -19,6 +19,7 @@ export * from './apis/auth-api';
 export * from './apis/common-api';
 export * from './apis/group-api';
 export * from './apis/image-api';
+export * from './apis/permission-api';
 export * from './apis/personal-access-token-api';
 export * from './apis/role-api';
 export * from './apis/setting-api';

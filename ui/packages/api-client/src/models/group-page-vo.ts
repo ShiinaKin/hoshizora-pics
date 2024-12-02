@@ -22,10 +22,34 @@
 export interface GroupPageVO {
     /**
      * 
+     * @type {string}
+     * @memberof GroupPageVO
+     */
+    'createTime': string;
+    /**
+     * 
      * @type {number}
      * @memberof GroupPageVO
      */
     'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GroupPageVO
+     */
+    'imageCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GroupPageVO
+     */
+    'imageSize': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GroupPageVO
+     */
+    'isSystemReserved': boolean;
     /**
      * 
      * @type {string}
@@ -40,15 +64,15 @@ export interface GroupPageVO {
     'strategyId': number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GroupPageVO
      */
-    'totalImageCount': number;
+    'strategyName': string;
     /**
      * 
      * @type {number}
      * @memberof GroupPageVO
      */
-    'totalImageSize': number;
+    'userCount': number;
 }
 
