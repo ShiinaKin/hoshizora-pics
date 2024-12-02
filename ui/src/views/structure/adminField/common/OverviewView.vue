@@ -29,12 +29,12 @@ function fetchSystemStatistics() {
       if (resp.isSuccessful) {
         systemStatistics.value = resp.data!;
       } else {
-        toast.add({ severity: "warn", summary: t("adminOverviewView.adminOverviewFetchStatisticsFailedTitle"), detail: resp.message });
+        toast.add({ severity: "warn", summary: t("adminOverviewView.adminOverviewFetchStatisticsFailedTitle"), detail: resp.message, life: 3000 });
       }
     })
     .catch((error) => {
       console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message});
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 
@@ -51,7 +51,7 @@ function fetchSystemOverview() {
     })
     .catch((error) => {
       console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message});
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
 </script>
