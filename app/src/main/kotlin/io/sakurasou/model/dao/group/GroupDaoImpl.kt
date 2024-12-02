@@ -95,6 +95,7 @@ class GroupDaoImpl : GroupDao {
                 imageCount = row[Images.id.count()],
                 imageSize = row[Coalesce(Images.size.sum(), longLiteral(0))]
                     .let { size -> if (size != 0L) size / 1024 / 1024.0 else 0.0 },
+                isSystemReserved = row[Groups.isSystemReserved],
                 createTime = row[Groups.createTime]
             )
         }

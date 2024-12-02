@@ -14,6 +14,7 @@ import io.sakurasou.exception.service.role.RoleNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
+import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.group.GroupConfig
@@ -28,6 +29,7 @@ import kotlinx.datetime.toLocalDateTime
  */
 class GroupServiceImpl(
     private val groupDao: GroupDao,
+    private val strategyDao: StrategyDao,
     private val relationDao: RelationDao
 ) : GroupService {
     override suspend fun saveGroup(insertRequest: GroupInsertRequest) {
@@ -96,17 +98,22 @@ class GroupServiceImpl(
     }
 
     override suspend fun fetchGroup(id: Long): GroupVO {
-        val group = dbQuery { groupDao.findGroupById(id) } ?: throw GroupNotFoundException()
-        val roles = dbQuery { relationDao.listRoleByGroupId(group.id) }
-        return GroupVO(
-            id = group.id,
-            name = group.name,
-            description = group.description,
-            groupConfig = group.config,
-            strategyId = group.strategyId,
-            roles = roles,
-            createTime = group.createTime
-        )
+        return dbQuery {
+            val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+            val strategy = strategyDao.findStrategyById(group.strategyId) ?: throw GroupNotFoundException()
+            val roles = relationDao.listRoleByGroupId(group.id)
+            GroupVO(
+                id = group.id,
+                name = group.name,
+                description = group.description,
+                groupConfig = group.config,
+                strategyId = group.strategyId,
+                strategyName = strategy.name,
+                roles = roles,
+                isSystemReserved = group.isSystemReserved,
+                createTime = group.createTime
+            )
+        }
     }
 
     override suspend fun pageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {

@@ -9,11 +9,14 @@ import io.sakurasou.exception.service.group.GroupNotFoundException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
+import io.sakurasou.model.dao.strategy.StrategyDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.entity.Group
+import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.GroupConfig
 import io.sakurasou.model.group.GroupStrategyConfig
+import io.sakurasou.model.strategy.LocalStrategy
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.*
 import kotlin.test.BeforeTest
@@ -27,6 +30,7 @@ import kotlin.test.assertFailsWith
  */
 class GroupServiceTest {
     private lateinit var groupDao: GroupDao
+    private lateinit var strategyDao: StrategyDao
     private lateinit var relationDao: RelationDao
     private lateinit var groupService: GroupService
     private lateinit var instant: Instant
@@ -37,8 +41,9 @@ class GroupServiceTest {
         mockkObject(DatabaseSingleton)
         mockkObject(Clock.System)
         groupDao = mockk()
+        strategyDao = mockk()
         relationDao = mockk()
-        groupService = GroupServiceImpl(groupDao, relationDao)
+        groupService = GroupServiceImpl(groupDao, strategyDao, relationDao)
         instant = Clock.System.now()
         every { Clock.System.now() } returns instant
         now = instant.toLocalDateTime(TimeZone.UTC)
@@ -135,6 +140,17 @@ class GroupServiceTest {
             isSystemReserved = false,
             createTime = now
         )
+        val strategy = Strategy(
+            id = 1L,
+            name = "Test Strategy",
+            isSystemReserved = false,
+            config = LocalStrategy(
+                uploadFolder = "/uploads",
+                thumbnailFolder = "/thumbnails"
+            ),
+            createTime = now,
+            updateTime = now
+        )
         val roles = listOf("user")
 
         val exceptedGroupVO = GroupVO(
@@ -142,19 +158,19 @@ class GroupServiceTest {
             name = "Test Group",
             description = "test",
             strategyId = 1,
+            strategyName = "Test Strategy",
             groupConfig = GroupConfig(GroupStrategyConfig()),
             roles = listOf("user"),
+            isSystemReserved = false,
             createTime = now
         )
 
-        coEvery { DatabaseSingleton.dbQuery<Group?>(any()) } coAnswers {
-            this.arg<suspend () -> Group?>(0).invoke()
-        }
-        coEvery { DatabaseSingleton.dbQuery<List<String>>(any()) } coAnswers {
-            this.arg<suspend () -> List<String>>(0).invoke()
+        coEvery { DatabaseSingleton.dbQuery<GroupVO>(any()) } coAnswers {
+            this.arg<suspend () -> GroupVO>(0).invoke()
         }
         every { groupDao.findGroupById(1) } returns group
-        every { relationDao.listRoleByGroupId(1) } returns roles
+        every { strategyDao.findStrategyById(group.strategyId) } returns strategy
+        every { relationDao.listRoleByGroupId(group.id) } returns roles
 
         val result = groupService.fetchGroup(1)
 

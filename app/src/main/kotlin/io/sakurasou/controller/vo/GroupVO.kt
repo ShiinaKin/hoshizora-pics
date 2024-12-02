@@ -17,7 +17,9 @@ data class GroupVO(
     val description: String?,
     val groupConfig: GroupConfig,
     val strategyId: Long,
+    val strategyName: String,
     val roles: List<String>,
+    val isSystemReserved: Boolean,
     val createTime: LocalDateTime
 )
 
@@ -31,6 +33,7 @@ data class GroupPageVO(
     val userCount: Long,
     val imageCount: Long,
     val imageSize: Double,
+    val isSystemReserved: Boolean,
     val createTime: LocalDateTime
 )
 
