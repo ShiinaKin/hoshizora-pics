@@ -265,6 +265,7 @@ async function pageGroup(pageRequest: GroupApiApiGroupPageGetRequest): Promise<G
                 :placeholder="systemSettingDefaultGroupVO?.name"
                 v-model="defaultGroup"
                 v-bind="defaultGroupAttrs"
+                :class="{ 'p-invalid': !!errors.defaultGroup }"
                 :virtualScrollerOptions="{
                   lazy: true,
                   showLoader: true,
