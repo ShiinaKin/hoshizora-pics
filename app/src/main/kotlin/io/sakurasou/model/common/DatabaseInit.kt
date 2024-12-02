@@ -89,8 +89,20 @@ object DatabaseInit {
     }
 
     private fun initRole() {
-        val adminRoleInsertDTO = RoleInsertDTO(ROLE_ADMIN, "Role for admin", true, null)
-        val userRoleInsertDTO = RoleInsertDTO(ROLE_USER, "Role for user", true, null)
+        val adminRoleInsertDTO = RoleInsertDTO(
+            name = ROLE_ADMIN,
+            displayName = "Role for admin",
+            isSystemReserved = true,
+            description = null,
+            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        )
+        val userRoleInsertDTO = RoleInsertDTO(
+            name = ROLE_USER,
+            displayName = "Role for user",
+            isSystemReserved = true,
+            description = null,
+            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        )
         InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
         InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
 
@@ -234,7 +246,8 @@ private val groupOpsPermissions = listOf(
 
 private val roleOpsPermissions = listOf(
     ROLE_READ_SELF,
-    ROLE_READ_ALL
+    ROLE_READ_ALL,
+    ROLE_WRITE_ALL
 )
 
 private val permissionOpsPermissions = listOf(
