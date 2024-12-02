@@ -167,7 +167,7 @@ const onCancel = () => {
           :label="t('adminStrategyManageView.create.dialog.form.type')"
         />
       </div>
-      {{ createFormValues.values }}
+
       <div
         v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Local"
         class="flex flex-col gap-1"
