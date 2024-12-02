@@ -1,25 +1,25 @@
-package io.sakurasou.controller.vo
+package io.sakurasou.controller.request
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
  * @author Shiina Kin
- * 2024/9/9 10:45
+ * 2024/12/2 17:41
  */
+
 @Serializable
-@Name("RoleVO")
-data class RoleVO(
+@Name("RoleInsertRequest")
+data class RoleInsertRequest(
     val name: String,
     val displayName: String,
     val description: String? = null,
-    val permissions: List<PermissionVO>
+    val permissions: List<String>
 )
 
 @Serializable
-@Name("RolePageVO")
-data class RolePageVO(
-    val name: String,
-    val displayName: String,
+@Name("RolePatchRequest")
+data class RolePatchRequest(
+    val displayName: String? = null,
     val description: String? = null
 )

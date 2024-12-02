@@ -9,5 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Role(
     val name: String,
+    val displayName: String,
+    val isSystemReserved: Boolean,
     val description: String?
 )

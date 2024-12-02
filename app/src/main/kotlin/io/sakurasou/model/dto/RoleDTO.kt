@@ -6,5 +6,12 @@ package io.sakurasou.model.dto
  */
 data class RoleInsertDTO(
     val name: String,
+    val displayName: String,
+    val isSystemReserved: Boolean,
+    val description: String?
+)
+
+data class RoleUpdateDTO(
+    val displayName: String,
     val description: String?
 )

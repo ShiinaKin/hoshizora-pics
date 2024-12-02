@@ -90,8 +90,8 @@ object DatabaseInit {
     }
 
     private fun initRole() {
-        val adminRoleInsertDTO = RoleInsertDTO(ROLE_ADMIN, null)
-        val userRoleInsertDTO = RoleInsertDTO(ROLE_USER, null)
+        val adminRoleInsertDTO = RoleInsertDTO(ROLE_ADMIN, "Role for admin", true, null)
+        val userRoleInsertDTO = RoleInsertDTO(ROLE_USER, "Role for user", true, null)
         InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
         InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
 
