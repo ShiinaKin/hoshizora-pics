@@ -14,10 +14,7 @@ import {
   type StrategyVO
 } from "api-client";
 import Toolbar from "primevue/toolbar";
-import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import InputGroupAddon from "primevue/inputgroupaddon";
-import InputGroup from "primevue/inputgroup";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Popover from "primevue/popover";
@@ -26,10 +23,10 @@ import { Icon } from "@iconify/vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import LoadingDialog from "@/components/LoadingDialog.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
-import { debounce, defaultTo } from "lodash-es";
+import { debounce } from "lodash-es";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
-import StrategyCreateForm from "@/components/form/strategy/StrategyCreateForm.vue";
-import StrategyEditForm from "@/components/form/strategy/StrategyEditForm.vue";
+import StrategyCreateForm from "@/components/form/adminField/strategy/StrategyCreateForm.vue";
+import StrategyEditForm from "@/components/form/adminField/strategy/StrategyEditForm.vue";
 
 const { t } = useI18n();
 const toast = useToast();
