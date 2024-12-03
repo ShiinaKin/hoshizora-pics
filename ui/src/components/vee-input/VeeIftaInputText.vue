@@ -22,7 +22,7 @@ const { id, name, type, label, placeholder } = defineProps({
     required: true
   },
   placeholder: {
-    type: String
+    type: [String, Number]
   }
 });
 
@@ -37,7 +37,7 @@ const { value, errorMessage } = useField(() => name);
       :type
       :value="value"
       @update:modelValue="value = $event"
-      :placeholder
+      :placeholder="placeholder as any"
       :class="{ 'p-invalid': errorMessage!! }"
       fluid
     />
