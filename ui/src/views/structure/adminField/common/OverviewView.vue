@@ -29,7 +29,12 @@ function fetchSystemStatistics() {
       if (resp.isSuccessful) {
         systemStatistics.value = resp.data!;
       } else {
-        toast.add({ severity: "warn", summary: t("adminOverviewView.adminOverviewFetchStatisticsFailedTitle"), detail: resp.message, life: 3000 });
+        toast.add({
+          severity: "warn",
+          summary: t("adminOverviewView.toast.fetchStatisticsFailedTitle"),
+          detail: resp.message,
+          life: 3000
+        });
       }
     })
     .catch((error) => {
@@ -46,7 +51,11 @@ function fetchSystemOverview() {
       if (resp.isSuccessful) {
         systemOverview.value = resp.data!;
       } else {
-        toast.add({ severity: "warn", summary: t("adminOverviewView.adminOverviewFetchSystemOverviewFailedTitle"), detail: resp.message });
+        toast.add({
+          severity: "warn",
+          summary: t("adminOverviewView.toast.fetchSystemOverviewFailedTitle"),
+          detail: resp.message
+        });
       }
     })
     .catch((error) => {
@@ -69,11 +78,11 @@ function fetchSystemOverview() {
 
           <div>
             <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
-              {{ t("adminOverviewView.adminOverviewImageCount") }}
+              {{ t("adminOverviewView.header.imageCount") }}
             </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ systemStatistics?.totalImageCount }} {{ t("adminOverviewView.adminOverviewImageCountUnit") }}
+              {{ systemStatistics?.totalImageCount }} {{ t("adminOverviewView.header.imageCountUnit") }}
             </p>
           </div>
         </div>
@@ -88,11 +97,11 @@ function fetchSystemOverview() {
 
           <div>
             <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
-              {{ t("adminOverviewView.adminOverviewAlbumCount") }}
+              {{ t("adminOverviewView.header.albumCount") }}
             </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ systemStatistics?.totalAlbumCount }} {{ t("adminOverviewView.adminOverviewAlbumCountUnit") }}
+              {{ systemStatistics?.totalAlbumCount }} {{ t("adminOverviewView.header.albumCountUnit") }}
             </p>
           </div>
         </div>
@@ -107,11 +116,11 @@ function fetchSystemOverview() {
 
           <div>
             <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
-              {{ t("adminOverviewView.adminOverviewUserCount") }}
+              {{ t("adminOverviewView.header.userCount") }}
             </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ systemStatistics?.totalUserCount }} {{ t("adminOverviewView.adminOverviewUserCountUnit") }}
+              {{ systemStatistics?.totalUserCount }} {{ t("adminOverviewView.header.userCountUnit") }}
             </p>
           </div>
         </div>
@@ -126,11 +135,11 @@ function fetchSystemOverview() {
 
           <div>
             <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
-              {{ t("adminOverviewView.adminOverviewUsedSpace") }}
+              {{ t("adminOverviewView.header.usedSpace") }}
             </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ systemStatistics?.totalUsedSpace?.toFixed(2) }} {{ t("adminOverviewView.adminOverviewSpaceSizeUnit") }}
+              {{ systemStatistics?.totalUsedSpace?.toFixed(2) }} {{ t("adminOverviewView.header.spaceSizeUnit") }}
             </p>
           </div>
         </div>
@@ -144,19 +153,19 @@ function fetchSystemOverview() {
         <div class="flow-root rounded-lg border border-gray-100 py-3 shadow-sm">
           <dl class="-my-3 divide-y divide-gray-100 text-sm">
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">版本</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.version") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.hoshizoraStatus?.version }}</dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">构建时间</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.buildTime") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">
                 {{ formatUTCStringToLocale(systemOverview?.hoshizoraStatus?.buildTime) }}
               </dd>
             </div>
 
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">CommitID</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.commitId") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.hoshizoraStatus?.commitId }}</dd>
             </div>
           </dl>
@@ -164,23 +173,23 @@ function fetchSystemOverview() {
         <div class="flow-root rounded-lg border border-gray-100 py-3 shadow-sm">
           <dl class="-my-3 divide-y divide-gray-100 text-sm">
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">Java版本</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.javaVersion") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.systemStatus?.javaVersion }}</dd>
             </div>
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">数据库版本</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.dbVersion") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.systemStatus?.databaseVersion }}</dd>
             </div>
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">操作系统</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.os") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.systemStatus?.operatingSystem }}</dd>
             </div>
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">系统时区</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.serverTimeZone") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.systemStatus?.serverTimeZone }}</dd>
             </div>
             <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-              <dt class="font-medium text-gray-900">系统语言</dt>
+              <dt class="font-medium text-gray-900">{{ t("adminOverviewView.detail.serverLanguage") }}</dt>
               <dd class="text-gray-700 sm:col-span-2">{{ systemOverview?.systemStatus?.serverLanguage }}</dd>
             </div>
           </dl>

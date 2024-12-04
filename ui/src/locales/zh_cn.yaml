@@ -242,16 +242,27 @@ adminField:
       toast:
         logoutSuccess: "登出成功"
 adminOverviewView:
-  adminOverviewImageCount: "总图片数量"
-  adminOverviewAlbumCount: "总相册数量"
-  adminOverviewUserCount: "总用户数量"
-  adminOverviewUsedSpace: "总已用空间"
-  adminOverviewSpaceSizeUnit: "MB"
-  adminOverviewImageCountUnit: "张"
-  adminOverviewAlbumCountUnit: "个"
-  adminOverviewUserCountUnit: "个"
-  adminOverviewFetchStatisticsFailedTitle: "获取统计信息失败"
-  adminOverviewFetchSystemOverviewFailedTitle: "获取系统概览失败"
+  header:
+    imageCount: "总图片数量"
+    albumCount: "总相册数量"
+    userCount: "总用户数量"
+    usedSpace: "总已用空间"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "张"
+    albumCountUnit: "个"
+    userCountUnit: "个"
+  detail:
+    version: "版本"
+    buildTime: "构建时间"
+    commitId: "CommitID"
+    javaVersion: "Java版本"
+    dbVersion: "数据库版本"
+    os: "操作系统"
+    serverTimeZone: "系统时区"
+    serverLanguage: "系统语言"
+  toast:
+    fetchStatisticsFailedTitle: "获取统计信息失败"
+    fetchSystemOverviewFailedTitle: "获取系统概览失败"
 adminImageManageView:
   imageFilter:
     uploadTimeASC: "上传时间升序"
