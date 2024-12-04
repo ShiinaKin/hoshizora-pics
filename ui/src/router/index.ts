@@ -27,92 +27,92 @@ const router = createRouter({
     {
       path: "/user",
       name: "userField",
-      component: () => import("@/views/structure/userField/UserField.vue"),
+      component: () => import("@/views/userField/UserField.vue"),
       redirect: { name: "userOverview" },
       children: [
         {
           path: "overview",
           name: "userOverview",
-          component: () => import("@/views/structure/userField/common/OverviewView.vue")
+          component: () => import("@/views/userField/common/OverviewView.vue")
         },
         {
           path: "upload",
           name: "imageUpload",
-          component: () => import("@/views/structure/userField/image/ImageUploadView.vue")
+          component: () => import("@/views/userField/image/ImageUploadView.vue")
         },
         {
           path: "images",
           name: "myImage",
-          component: () => import("@/views/structure/userField/image/MyImageView.vue")
+          component: () => import("@/views/userField/image/MyImageView.vue")
         },
         {
           path: "albums",
           name: "myAlbum",
-          component: () => import("@/views/structure/userField/album/MyAlbumView.vue")
+          component: () => import("@/views/userField/album/MyAlbumView.vue")
         },
         {
           path: "profile",
           name: "profile",
-          component: () => import("@/views/structure/userField/user/UserProfileView.vue")
+          component: () => import("@/views/userField/user/UserProfileView.vue")
         },
         {
           path: "pat",
           name: "myPersonalAccessToken",
-          component: () => import("@/views/structure/userField/pat/MyPersonalAccessTokenView.vue")
+          component: () => import("@/views/userField/pat/MyPersonalAccessTokenView.vue")
         }
       ]
     },
     {
       path: "/admin",
       name: "adminField",
-      component: () => import("@/views/structure/adminField/AdminField.vue"),
+      component: () => import("@/views/adminField/AdminField.vue"),
       redirect: { name: "adminOverview" },
       children: [
         {
           path: "overview",
           name: "adminOverview",
-          component: () => import("@/views/structure/adminField/common/OverviewView.vue")
+          component: () => import("@/views/adminField/common/OverviewView.vue")
         },
         {
           path: "image",
           name: "imageManagement",
-          component: () => import("@/views/structure/adminField/image/ImageManagementView.vue")
+          component: () => import("@/views/adminField/image/ImageManagementView.vue")
         },
         {
           path: "album",
           name: "albumManagement",
-          component: () => import("@/views/structure/adminField/album/AlbumManagementView.vue")
+          component: () => import("@/views/adminField/album/AlbumManagementView.vue")
         },
         {
           path: "user",
           name: "userManagement",
-          component: () => import("@/views/structure/adminField/user/UserManagementView.vue")
+          component: () => import("@/views/adminField/user/UserManagementView.vue")
         },
         {
           path: "group",
           name: "groupManagement",
-          component: () => import("@/views/structure/adminField/group/GroupManagementView.vue")
+          component: () => import("@/views/adminField/group/GroupManagementView.vue")
         },
         {
           path: "strategy",
           name: "strategyManagement",
-          component: () => import("@/views/structure/adminField/strategy/StrategyManagementView.vue")
+          component: () => import("@/views/adminField/strategy/StrategyManagementView.vue")
         },
         {
           path: "setting",
           name: "settingHome",
-          component: () => import("@/views/structure/adminField/setting/SettingView.vue"),
+          component: () => import("@/views/adminField/setting/SettingView.vue"),
           redirect: { name: "systemSetting" },
           children: [
             {
               path: "system",
               name: "systemSetting",
-              component: () => import("@/views/structure/adminField/setting/SystemSettingView.vue")
+              component: () => import("@/views/adminField/setting/SystemSettingView.vue")
             },
             {
               path: "site",
               name: "siteSetting",
-              component: () => import("@/views/structure/adminField/setting/SiteSettingView.vue")
+              component: () => import("@/views/adminField/setting/SiteSettingView.vue")
             }
           ]
         }
