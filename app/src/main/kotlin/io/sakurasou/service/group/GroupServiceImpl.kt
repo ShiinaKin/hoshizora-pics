@@ -2,6 +2,7 @@ package io.sakurasou.service.group
 
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
+import io.sakurasou.controller.request.GroupPutRequest
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.GroupPageVO
 import io.sakurasou.controller.vo.GroupVO
@@ -19,7 +20,6 @@ import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.GroupInsertDTO
 import io.sakurasou.model.dto.GroupUpdateDTO
 import io.sakurasou.model.group.GroupConfig
-import io.sakurasou.model.group.GroupStrategyConfig
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -62,6 +62,7 @@ class GroupServiceImpl(
         runCatching {
             dbQuery {
                 val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+                if (group.isSystemReserved) throw GroupDeleteFailedException(null, "Cannot delete system reserved group")
                 if (userDao.doesUsersBelongToUserGroup(group.id)) throw GroupDeleteFailedException(null, "Group is not empty")
                 relationDao.deleteGroupToRolesByGroupId(group.id)
                 groupDao.deleteGroupById(group.id)
@@ -72,12 +73,36 @@ class GroupServiceImpl(
         }
     }
 
-    override suspend fun updateGroup(id: Long, patchRequest: GroupPatchRequest) {
+    override suspend fun updateGroup(id: Long, putRequest: GroupPutRequest) {
         dbQuery {
             runCatching {
                 val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-                if (oldGroup.name == "admin" && patchRequest.name != null)
-                    throw GroupUpdateFailedException(null, "Cannot update admin group name")
+                if (oldGroup.isSystemReserved && putRequest.name != oldGroup.name)
+                    throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
+
+                val groupUpdateDTO = GroupUpdateDTO(
+                    id = id,
+                    name = putRequest.name,
+                    description = putRequest.description,
+                    strategyId = putRequest.strategyId,
+                    config = putRequest.config
+                )
+
+                val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
+                if (influenceRow < 1) throw GroupNotFoundException()
+            }.onFailure {
+                if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
+                else throw it
+            }
+        }
+    }
+
+    override suspend fun patchGroup(id: Long, patchRequest: GroupPatchRequest) {
+        dbQuery {
+            runCatching {
+                val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+                if (oldGroup.isSystemReserved && patchRequest.name != null)
+                    throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
 
                 val groupUpdateDTO = GroupUpdateDTO(
                     id = id,

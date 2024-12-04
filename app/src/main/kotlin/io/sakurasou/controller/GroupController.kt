@@ -10,6 +10,7 @@ import io.sakurasou.constant.GROUP_READ_SINGLE
 import io.sakurasou.constant.GROUP_WRITE
 import io.sakurasou.controller.request.GroupInsertRequest
 import io.sakurasou.controller.request.GroupPatchRequest
+import io.sakurasou.controller.request.GroupPutRequest
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.*
 import io.sakurasou.extension.getPrincipal
@@ -47,6 +48,7 @@ fun Route.groupRoute(groupService: GroupService) {
         }) {
             groupDelete(controller)
             groupUpdate(controller)
+            groupPatch(controller)
             groupFetch(controller)
         }
         groupPage(controller)
@@ -103,7 +105,7 @@ private fun Route.groupDelete(controller: GroupController) {
     }
 }
 
-private fun Route.groupUpdate(controller: GroupController) {
+private fun Route.groupPatch(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
@@ -124,6 +126,32 @@ private fun Route.groupUpdate(controller: GroupController) {
             val id = call.id()
             val patchRequest = call.receive<GroupPatchRequest>()
             controller.handlePatchGroup(id, patchRequest)
+            call.success()
+        }
+    }
+}
+
+private fun Route.groupUpdate(controller: GroupController) {
+    route {
+        install(AuthorizationPlugin) {
+            permission = GROUP_WRITE
+        }
+        put({
+            request {
+                body<GroupPutRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "success"
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            val id = call.id()
+            val patchRequest = call.receive<GroupPutRequest>()
+            controller.handleUpdateGroup(id, patchRequest)
             call.success()
         }
     }
@@ -206,8 +234,12 @@ class GroupController(
         groupService.deleteGroup(id)
     }
 
+    suspend fun handleUpdateGroup(id: Long, putRequest: GroupPutRequest) {
+        groupService.updateGroup(id, putRequest)
+    }
+
     suspend fun handlePatchGroup(id: Long, patchRequest: GroupPatchRequest) {
-        groupService.updateGroup(id, patchRequest)
+        groupService.patchGroup(id, patchRequest)
     }
 
     suspend fun handleFetchGroup(id: Long): GroupVO {

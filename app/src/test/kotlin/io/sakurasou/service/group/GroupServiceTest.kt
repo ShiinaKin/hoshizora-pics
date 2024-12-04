@@ -141,7 +141,7 @@ class GroupServiceTest {
         every { groupDao.findGroupById(1) } returns group
         every { groupDao.updateGroupById(exceptedUpdateDTO) } returns 1
 
-        groupService.updateGroup(1, patchRequest)
+        groupService.patchGroup(1, patchRequest)
 
         verify(exactly = 1) { groupDao.updateGroupById(exceptedUpdateDTO) }
     }

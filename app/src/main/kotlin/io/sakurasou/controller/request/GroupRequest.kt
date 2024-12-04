@@ -30,6 +30,16 @@ data class GroupPatchRequest(
 )
 
 @Serializable
+@Name("GroupPutRequest")
+data class GroupPutRequest(
+    val name: String,
+    val description: String? = null,
+    val strategyId: Long,
+    val config: GroupConfig,
+    val roles: List<String>
+)
+
+@Serializable
 @Name("GroupConfigUpdatePatch")
 data class GroupConfigUpdatePatch(
     val groupStrategyConfig: GroupStrategyConfig? = null
