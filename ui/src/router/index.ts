@@ -63,6 +63,62 @@ const router = createRouter({
       ]
     },
     {
+      path: "/admin",
+      name: "adminField",
+      component: () => import("@/views/structure/adminField/AdminField.vue"),
+      redirect: { name: "adminOverview" },
+      children: [
+        {
+          path: "overview",
+          name: "adminOverview",
+          component: () => import("@/views/structure/adminField/common/OverviewView.vue")
+        },
+        {
+          path: "image",
+          name: "imageManagement",
+          component: () => import("@/views/structure/adminField/image/ImageManagementView.vue")
+        },
+        {
+          path: "album",
+          name: "albumManagement",
+          component: () => import("@/views/structure/adminField/album/AlbumManagementView.vue")
+        },
+        {
+          path: "user",
+          name: "userManagement",
+          component: () => import("@/views/structure/adminField/user/UserManagementView.vue")
+        },
+        {
+          path: "group",
+          name: "groupManagement",
+          component: () => import("@/views/structure/adminField/group/GroupManagementView.vue")
+        },
+        {
+          path: "strategy",
+          name: "strategyManagement",
+          component: () => import("@/views/structure/adminField/strategy/StrategyManagementView.vue")
+        },
+        {
+          path: "setting",
+          name: "settingHome",
+          component: () => import("@/views/structure/adminField/setting/SettingView.vue"),
+          redirect: { name: "systemSetting" },
+          children: [
+            {
+              path: "system",
+              name: "systemSetting",
+              component: () => import("@/views/structure/adminField/setting/SystemSettingView.vue")
+            },
+            {
+              path: "site",
+              name: "siteSetting",
+              component: () => import("@/views/structure/adminField/setting/SiteSettingView.vue")
+            }
+          ]
+        }
+      ]
+    },
+    {
       path: "/:pathMatch(.*)",
       name: "notFound",
       component: () => import("@/views/error/NotFoundView.vue")
