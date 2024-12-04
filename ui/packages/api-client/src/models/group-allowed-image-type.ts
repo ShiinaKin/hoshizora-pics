@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ImageTypeEnum } from './image-type-enum';
 
 /**
  * 
@@ -22,9 +25,9 @@
 export interface GroupAllowedImageType {
     /**
      * 
-     * @type {Set<string>}
+     * @type {Array<ImageTypeEnum>}
      * @memberof GroupAllowedImageType
      */
-    'allowedImageTypes': Set<string>;
+    'allowedImageTypes': Array<ImageTypeEnum>;
 }
 

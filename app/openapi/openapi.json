@@ -2236,6 +2236,59 @@
           "JWT" : [ ]
         } ]
       },
+      "put" : {
+        "tags" : [ "Group" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "group id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GroupPutRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "group not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      },
       "delete" : {
         "tags" : [ "Group" ],
         "parameters" : [ {
@@ -4337,6 +4390,31 @@
         },
         "required" : [ "config", "name", "roles", "strategyId" ]
       },
+      "GroupPutRequest" : {
+        "type" : "object",
+        "properties" : {
+          "config" : {
+            "$ref" : "#/components/schemas/GroupConfig"
+          },
+          "description" : {
+            "type" : [ "null", "string" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "strategyId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "config", "name", "roles", "strategyId" ]
+      },
       "GroupConfigUpdatePatch" : {
         "type" : "object",
         "properties" : {
@@ -4533,9 +4611,8 @@
           "allowedImageTypes" : {
             "type" : "array",
             "items" : {
-              "type" : "string"
-            },
-            "uniqueItems" : true
+              "$ref" : "#/components/schemas/ImageTypeEnum"
+            }
           }
         },
         "required" : [ "allowedImageTypes" ]

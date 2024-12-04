@@ -40,6 +40,7 @@ export * from './group-config-update-patch';
 export * from './group-insert-request';
 export * from './group-page-vo';
 export * from './group-patch-request';
+export * from './group-put-request';
 export * from './group-strategy-config';
 export * from './group-vo';
 export * from './hoshizora-status-vo';

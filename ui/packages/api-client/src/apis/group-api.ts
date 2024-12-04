@@ -33,6 +33,8 @@ import type { CommonResponsePageResultGroupPageVO } from '../models';
 import type { GroupInsertRequest } from '../models';
 // @ts-ignore
 import type { GroupPatchRequest } from '../models';
+// @ts-ignore
+import type { GroupPutRequest } from '../models';
 /**
  * GroupApi - axios parameter creator
  * @export
@@ -150,6 +152,49 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(groupPatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id group id
+         * @param {GroupPutRequest} groupPutRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiGroupIdPut: async (id: number, groupPutRequest: GroupPutRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiGroupIdPut', 'id', id)
+            // verify required parameter 'groupPutRequest' is not null or undefined
+            assertParamExists('apiGroupIdPut', 'groupPutRequest', groupPutRequest)
+            const localVarPath = `/api/group/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(groupPutRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -334,6 +379,19 @@ export const GroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} id group id
+         * @param {GroupPutRequest} groupPutRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiGroupIdPut(id: number, groupPutRequest: GroupPutRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommonResponseKotlinUnit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiGroupIdPut(id, groupPutRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GroupApi.apiGroupIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} page page
          * @param {number} pageSize pageSize
          * @param {string} [order] order
@@ -406,6 +464,15 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         apiGroupIdPatch(requestParameters: GroupApiApiGroupIdPatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
             return localVarFp.apiGroupIdPatch(requestParameters.id, requestParameters.groupPatchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {GroupApiApiGroupIdPutRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiGroupIdPut(requestParameters: GroupApiApiGroupIdPutRequest, options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseKotlinUnit> {
+            return localVarFp.apiGroupIdPut(requestParameters.id, requestParameters.groupPutRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -483,6 +550,27 @@ export interface GroupApiApiGroupIdPatchRequest {
      * @memberof GroupApiApiGroupIdPatch
      */
     readonly groupPatchRequest: GroupPatchRequest
+}
+
+/**
+ * Request parameters for apiGroupIdPut operation in GroupApi.
+ * @export
+ * @interface GroupApiApiGroupIdPutRequest
+ */
+export interface GroupApiApiGroupIdPutRequest {
+    /**
+     * group id
+     * @type {number}
+     * @memberof GroupApiApiGroupIdPut
+     */
+    readonly id: number
+
+    /**
+     * 
+     * @type {GroupPutRequest}
+     * @memberof GroupApiApiGroupIdPut
+     */
+    readonly groupPutRequest: GroupPutRequest
 }
 
 /**
@@ -572,6 +660,17 @@ export class GroupApi extends BaseAPI {
      */
     public apiGroupIdPatch(requestParameters: GroupApiApiGroupIdPatchRequest, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).apiGroupIdPatch(requestParameters.id, requestParameters.groupPatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {GroupApiApiGroupIdPutRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public apiGroupIdPut(requestParameters: GroupApiApiGroupIdPutRequest, options?: RawAxiosRequestConfig) {
+        return GroupApiFp(this.configuration).apiGroupIdPut(requestParameters.id, requestParameters.groupPutRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
