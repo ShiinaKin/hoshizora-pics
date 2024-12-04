@@ -462,6 +462,8 @@ adminUserManageView:
       successTitle: "删除成功"
       failedTitle: "删除失败"
 adminGroupManageView:
+  tips:
+    namingRulePlaceholder: "命名规则占位符:\n{'{yyyy}'} 年\n{'{MM}'} 月\n{'{dd}'} 日\n{'{timestamp}'} 时间戳\n{'{uniq}'} 唯一字符串\n{'{md5}'} 随机md5值\n{'{str-random-16}'} 16位随机字符串\n{'{str-random-10}'} 10位随机字符串\n{'{fileName}'} 文件原始名称\n{'{user-id}'} 用户ID"
   create:
     dialog:
       title: "创建用户组"

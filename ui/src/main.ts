@@ -10,6 +10,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import PrimeVue from "primevue/config";
+import Tooltip from 'primevue/tooltip';
 import ToastService from "primevue/toastservice";
 
 import "viewerjs/dist/viewer.css";
@@ -41,6 +42,7 @@ app.use(PrimeVue, {
   theme: "none"
 });
 app.use(VueViewer);
+app.directive('tooltip', Tooltip);
 app.use(ToastService);
 
 app.provide("dayjs", dayjs);

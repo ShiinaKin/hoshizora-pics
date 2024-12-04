@@ -377,6 +377,14 @@ const onCancel = () => {
                     name="config.strategyConfig.pathNamingRule"
                     v-model="pathNamingRule"
                     v-bind="pathNamingRuleAttrs"
+                    v-tooltip="{
+                      value: t('adminGroupManageView.tips.namingRulePlaceholder'),
+                      pt: {
+                        root: {
+                          class: 'min-w-fit'
+                        }
+                      }
+                    }"
                     :class="{ 'p-invalid': !!errors['config.strategyConfig.pathNamingRule'] }"
                     fluid
                   />
@@ -400,6 +408,14 @@ const onCancel = () => {
                     name="config.strategyConfig.fileNamingRule"
                     v-model="fileNamingRule"
                     v-bind="fileNamingRuleAttrs"
+                    v-tooltip="{
+                      value: t('adminGroupManageView.tips.namingRulePlaceholder'),
+                      pt: {
+                        root: {
+                          class: 'min-w-fit'
+                        }
+                      }
+                    }"
                     :class="{ 'p-invalid': !!errors['config.strategyConfig.fileNamingRule'] }"
                     fluid
                   />
