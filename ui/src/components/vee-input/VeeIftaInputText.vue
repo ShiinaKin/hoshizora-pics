@@ -4,7 +4,7 @@ import InputText from "primevue/inputtext";
 import Message from "primevue/message";
 import { useField } from "vee-validate";
 
-const { id, name, type, label, placeholder } = defineProps({
+const { id, name, type, label, placeholder, disabled } = defineProps({
   id: {
     type: String,
     required: true
@@ -23,6 +23,10 @@ const { id, name, type, label, placeholder } = defineProps({
   },
   placeholder: {
     type: [String, Number]
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -39,6 +43,7 @@ const { value, errorMessage } = useField(() => name);
       @update:modelValue="value = $event"
       :placeholder="placeholder as any"
       :class="{ 'p-invalid': errorMessage!! }"
+      :disabled
       fluid
     />
     <label :for="id">{{ label }}</label>
