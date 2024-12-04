@@ -464,6 +464,64 @@ adminUserManageView:
 adminGroupManageView:
   tips:
     namingRulePlaceholder: "命名规则占位符:\n{'{yyyy}'} 年\n{'{MM}'} 月\n{'{dd}'} 日\n{'{timestamp}'} 时间戳\n{'{uniq}'} 唯一字符串\n{'{md5}'} 随机md5值\n{'{str-random-16}'} 16位随机字符串\n{'{str-random-10}'} 10位随机字符串\n{'{fileName}'} 文件原始名称\n{'{user-id}'} 用户ID"
+  filter:
+    group:
+      createTimeASC: "创建时间升序"
+      createTimeDESC: "创建时间降序"
+      userCountASC: "用户数量升序"
+      userCountDESC: "用户数量降序"
+      imageCountASC: "图片数量升序"
+      imageCountDESC: "图片数量降序"
+      imageSizeASC: "图片大小升序"
+      imageSizeDESC: "图片大小降序"
+  table:
+    id: "用户组ID"
+    name: "用户组名"
+    strategyId: "存储策略ID"
+    strategyName: "存储策略"
+    userCount: "用户数量"
+    imageCount: "图片数量"
+    imageSize: "图片大小"
+    imageSizeUnit: "MB"
+    isSystemReserved:
+      title: "系统保留"
+      true: "是"
+      false: "否"
+    createTime: "创建时间"
+    ops:
+      title: "操作"
+      detail: "查看"
+      edit: "编辑"
+      delete: "删除"
+    toast:
+      failedTitle: "获取用户组失败"
+  detail:
+    dialog:
+      title: "用户组详情"
+      id: "用户组ID"
+      name: "用户组名"
+      description: "用户组描述"
+      strategyId: "存储策略ID"
+      strategyName: "存储策略"
+      roles: "用户组角色"
+      config:
+        strategy:
+          singleFileMaxSize: "单文件最大大小"
+          maxSize: "单用户最大空间"
+          pathNamingRule: "路径命名规则"
+          fileNamingRule: "文件命名规则"
+          imageQuality: "图片质量"
+          imageAutoTransformTarget: "自动转换目标类型"
+          imageAutoTransformTargetNull: "无"
+          allowedImageTypes: "允许图片类型"
+          spaceSizeUnit: "MB"
+      isSystemReserved:
+        title: "系统保留"
+        true: "是"
+        false: "否"
+      createTime: "创建时间"
+    toast:
+      failedTitle: "获取失败"
   create:
     dialog:
       title: "创建用户组"
@@ -518,6 +576,71 @@ adminGroupManageView:
       failedTitle: "创建失败"
       pageStrategyFailedTitle: "获取存储策略失败"
       pageRoleFailedTitle: "获取角色失败"
+  edit:
+    dialog:
+      title: "修改用户组"
+      form:
+        name: "用户组名"
+        description: "用户组描述"
+        strategy: "存储策略"
+        roles: "角色"
+        config:
+          strategy:
+            title: "存储设置"
+            singleFileMaxSize: "单文件最大大小"
+            maxSize: "单用户最大空间"
+            pathNamingRule: "路径命名规则"
+            fileNamingRule: "文件命名规则"
+            imageQuality: "图片质量"
+            imageAutoTransformTarget: "自动转换目标类型"
+            allowedImageTypes: "允许图片类型"
+        submitButton: "修改"
+        cancelButton: "取消"
+        verify:
+          groupName:
+            required: "用户组名不能为空"
+          strategy:
+            required: "存储策略不能为空"
+          roles:
+            required: "角色不能为空"
+            invalid: "角色无效"
+          config:
+            strategy:
+              singleFileMaxSize:
+                required: "单文件最大大小不能为空"
+                invalid: "单文件最大大小必须是数字"
+              maxSize:
+                required: "单用户最大空间不能为空"
+                invalid: "单用户最大空间必须是数字"
+              pathNamingRule:
+                required: "路径命名规则不能为空"
+              fileNamingRule:
+                required: "文件命名规则不能为空"
+              imageQuality:
+                required: "图片质量不能为空"
+                invalid: "图片质量必须是数字"
+                min: "图片质量必须大于等于0"
+                max: "图片质量必须小于等于100"
+              imageAutoTransformTarget:
+                invalid: "自动转换目标类型无效"
+              allowedImageTypes:
+                invalid: "允许图片类型无效"
+          atLeastOneField: "请至少修改一个字段"
+    toast:
+      successTitle: "创建成功"
+      failedTitle: "创建失败"
+      pageStrategyFailedTitle: "获取存储策略失败"
+      pageRoleFailedTitle: "获取角色失败"
+  delete:
+    confirmDialog:
+      header: "确认删除"
+      mainContent: "你确定要删除用户组吗？"
+      subContent: "真的会删除，而且无法找回，用户组的用户会被移动到默认用户组"
+      cancelButton: "取消"
+      submitButton: "确认删除"
+    toast:
+      successTitle: "删除成功"
+      failedTitle: "删除失败"
 adminStrategyManageView:
   strategyFilter:
     createTimeASC: "创建时间升序"
