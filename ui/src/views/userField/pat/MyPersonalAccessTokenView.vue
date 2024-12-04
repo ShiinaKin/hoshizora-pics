@@ -11,6 +11,7 @@ import {
   type PersonalAccessTokenInsertRequest,
   type PersonalAccessTokenPatchRequest
 } from "api-client";
+import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
@@ -92,9 +93,9 @@ const createFormInitialValues = reactive<PATInsertForm>({
 
 const createFormResolver = yupResolver(
   yup.object({
-    name: yup.string().trim().required(t("myPatView.myPATCreateDialogPATNameRequirements")),
+    name: yup.string().trim().required(t("myPatView.create.dialog.form.verify.patName.required")),
     description: yup.string().trim(),
-    expireTime: yup.date().required(t("myPatView.myPATCreateDialogPATExpireTimeRequirements")),
+    expireTime: yup.date().required(t("myPatView.create.dialog.form.verify.expireTime.required")),
     permissions: yup.array().of(yup.string())
   })
 );
@@ -109,14 +110,14 @@ const editFormResolver = yupResolver(
     name: yup
       .string()
       .trim()
-      .test("not-both-empty", t("myPatView.myPATEditDialogValidationFailedMessage"), function (value) {
+      .test("not-both-empty", t("myPatView.edit.dialog.form.verify.atLeastOneField"), function (value) {
         const { description } = this.parent;
         return !isEmpty(value) || !isEmpty(description);
       }),
     description: yup
       .string()
       .trim()
-      .test("not-both-empty", t("myPatView.myPATEditDialogValidationFailedMessage"), function (value) {
+      .test("not-both-empty", t("myPatView.edit.dialog.form.verify.atLeastOneField"), function (value) {
         const { name } = this.parent;
         return !isEmpty(value) || !isEmpty(name);
       })
@@ -157,8 +158,8 @@ function copyAndCloseTokenDisplayDialog() {
   navigator.clipboard.writeText(curCreatedToken.value).then(() => {
     toast.add({
       severity: "success",
-      summary: t("myPatView.myPATTokenDisplayDialogCopySuccessTitle"),
-      detail: t("myPatView.myPATTokenDisplayDialogCopySuccessContent"),
+      summary: t("myPatView.createdDetail.dialog.toast.copySuccessTitle"),
+      detail: t("myPatView.createdDetail.dialog.toast.copySuccessContent"),
       life: 3000
     });
     closeTokenDisplayDialog();
@@ -198,7 +199,7 @@ async function createPAT(insertRequest: PersonalAccessTokenInsertRequest): Promi
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myPatView.myPATCreateDialogSuccessTitle"),
+          summary: t("myPatView.create.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -208,7 +209,7 @@ async function createPAT(insertRequest: PersonalAccessTokenInsertRequest): Promi
       }
       toast.add({
         severity: "warn",
-        summary: t("myPatView.myPATCreateDialogFailedTitle"),
+        summary: t("myPatView.create.toast.failedTitle"),
         detail: resp.message,
         life: 3000
       });
@@ -218,7 +219,7 @@ async function createPAT(insertRequest: PersonalAccessTokenInsertRequest): Promi
       console.error(error);
       toast.add({
         severity: "error",
-        summary: t("myPatView.myPATCreateDialogFailedTitle"),
+        summary: "Error",
         detail: error.message,
         life: 3000
       });
@@ -234,7 +235,7 @@ function deletePAT(patId: number) {
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myPatView.myPATDeleteConfirmDialogSuccessTitle"),
+          summary: t("myPatView.delete.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -242,7 +243,7 @@ function deletePAT(patId: number) {
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myPatView.myPATDeleteConfirmDialogFailedTitle"),
+          summary: t("myPatView.delete.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -252,7 +253,7 @@ function deletePAT(patId: number) {
       console.error(error);
       toast.add({
         severity: "error",
-        summary: t("myPatView.myPATDeleteConfirmDialogFailedTitle"),
+        summary: "Error",
         detail: error.message,
         life: 3000
       });
@@ -271,7 +272,7 @@ async function patchPAT(patId: number, patchRequest: PersonalAccessTokenPatchReq
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myPatView.myPATEditDialogSuccessTitle"),
+          summary: t("myPatView.edit.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -279,7 +280,7 @@ async function patchPAT(patId: number, patchRequest: PersonalAccessTokenPatchReq
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myPatView.myPATEditDialogFailedTitle"),
+          summary: t("myPatView.edit.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -333,17 +334,17 @@ async function fetchSelfRoles(): Promise<void> {
 
 <template>
   <div class="w-full flex flex-col gap-4 bg-gray-100 p-8">
-    <div class="flex justify-between items-center bg-white rounded-2xl p-4">
-      <div class="ml-auto">
+    <Toolbar class="rounded-2xl border-none text-sm">
+      <template #start>
         <button
           class="flex items-center gap-1 border p-1.5 rounded-md shadow-sm text-gray-800 hover:bg-gray-50 text-sm"
           @click="showCreatePATDialog"
         >
           <Icon icon="mdi:key-plus" />
-          {{ t("myPatView.myPATCreateButton") }}
+          {{ t("myPatView.toolbar.createButton") }}
         </button>
-      </div>
-    </div>
+      </template>
+    </Toolbar>
     <DataTable
       class="flex-grow overflow-y-auto"
       :value="pageData"
@@ -354,33 +355,33 @@ async function fetchSelfRoles(): Promise<void> {
       :sortOrder="1"
       tableStyle="min-width: 50rem"
     >
-      <Column field="id" :header="t('myPatView.myPATTablePATId')"></Column>
-      <Column field="name" :header="t('myPatView.myPATTablePATName')"></Column>
-      <Column sortable field="createTime" :header="t('myPatView.myPATTableCreateTime')">
+      <Column field="id" :header="t('myPatView.table.patId')"></Column>
+      <Column field="name" :header="t('myPatView.table.patName')"></Column>
+      <Column field="createTime" :header="t('myPatView.table.createTime')" :sortable="true">
         <template #body="{ data }">
           {{ formatUTCStringToLocale(data.createTime) }}
         </template>
       </Column>
-      <Column sortable field="expireTime" :header="t('myPatView.myPATTableExpireTime')">
+      <Column field="expireTime" :header="t('myPatView.table.expireTime')" :sortable="true">
         <template #body="{ data }">
           {{ formatUTCStringToLocale(data.expireTime) }}
         </template>
       </Column>
-      <Column :header="t('myPatView.myPATTableOpsTitle')" class="w-48">
+      <Column :header="t('myPatView.table.ops.title')" class="w-48">
         <template #body="{ data }">
           <div class="flex gap-0.5 text-sm">
             <Button @click="showPATEditDialog(data)" severity="info" size="small">
-              {{ t("myPatView.myPATTableOpsEdit") }}
+              {{ t("myPatView.table.ops.edit") }}
             </Button>
             <Button @click="showPATDeleteDialog(data.id)" severity="danger" size="small">
-              {{ t("myPatView.myPATTableOpsDelete") }}
+              {{ t("myPatView.table.ops.delete") }}
             </Button>
           </div>
         </template>
       </Column>
     </DataTable>
     <!--create-->
-    <Dialog v-model:visible="patCreateDialog" modal :header="t('myPatView.myPATCreateDialogTitle')">
+    <Dialog v-model:visible="patCreateDialog" modal :header="t('myPatView.create.dialog.title')">
       <Form
         v-slot="$createForm"
         :initialValues="createFormInitialValues"
@@ -392,7 +393,7 @@ async function fetchSelfRoles(): Promise<void> {
           <div class="flex flex-col gap-1">
             <FloatLabel variant="on">
               <InputText id="newPATName" name="name" pattern="\S+" fluid />
-              <label for="newPATName">{{ t("myPatView.myPATCreateDialogPATName") }}</label>
+              <label for="newPATName">{{ t("myPatView.create.dialog.form.patName") }}</label>
             </FloatLabel>
             <Message v-if="($createForm as any).name?.invalid" severity="error" size="small" variant="simple">
               {{ ($createForm as any).name.error?.message }}
@@ -401,7 +402,7 @@ async function fetchSelfRoles(): Promise<void> {
           <div class="flex flex-col gap-1">
             <FloatLabel variant="on">
               <InputText id="newPATDesc" name="description" fluid />
-              <label for="newPATDesc">{{ t("myPatView.myPATCreateDialogPATDesc") }}</label>
+              <label for="newPATDesc">{{ t("myPatView.create.dialog.form.description") }}</label>
             </FloatLabel>
             <Message v-if="($createForm as any).description?.invalid" severity="error" size="small" variant="simple">
               {{ ($createForm as any).description.error?.message }}
@@ -409,8 +410,8 @@ async function fetchSelfRoles(): Promise<void> {
           </div>
           <div class="flex flex-col gap-1">
             <FloatLabel variant="on">
-              <DatePicker id="datepicker-24h" name="expireTime" showTime hourFormat="24" fluid />
-              <label for="datepicker">{{ t("myPatView.myPATCreateDialogPATExpireTime") }}</label>
+              <DatePicker id="newPATDatepicker" name="expireTime" showTime hourFormat="24" fluid />
+              <label for="newPATDatepicker">{{ t("myPatView.create.dialog.form.expireTime") }}</label>
             </FloatLabel>
             <Message v-if="($createForm as any).expireTime?.invalid" severity="error" size="small" variant="simple">
               {{ ($createForm as any).expireTime.error?.message }}
@@ -419,7 +420,7 @@ async function fetchSelfRoles(): Promise<void> {
           <div class="flex flex-col gap-1">
             <Accordion>
               <AccordionPanel v-for="(role, idx) in roles" :value="idx" :key="idx">
-                <AccordionHeader>{{ role.name }}</AccordionHeader>
+                <AccordionHeader>{{ role.name + " - " + role.displayName }}</AccordionHeader>
                 <AccordionContent>
                   <div v-for="(permission, pIdx) of role.permissions" :key="pIdx" class="flex items-center gap-2">
                     <Checkbox name="permissions" :inputId="'permission-' + pIdx" :value="permission.name" />
@@ -436,11 +437,15 @@ async function fetchSelfRoles(): Promise<void> {
         <div class="flex justify-end gap-2">
           <Button
             type="button"
-            :label="t('myPatView.myPATCreateDialogCancelButton')"
+            :label="t('myPatView.create.dialog.form.cancelButton')"
             severity="secondary"
             @click="patCreateDialog = false"
           />
-          <Button type="submit" :label="t('myPatView.myPATCreateDialogSubmitButton')" :disabled="!$createForm.valid" />
+          <Button
+            type="submit"
+            :label="t('myPatView.create.dialog.form.submitButton')"
+            :disabled="!$createForm.valid"
+          />
         </div>
       </Form>
     </Dialog>
@@ -448,7 +453,7 @@ async function fetchSelfRoles(): Promise<void> {
     <Dialog
       v-model:visible="patCreatedTokenDisplayDialog"
       modal
-      :header="t('myPatView.myPATTokenDisplayDialogTitle')"
+      :header="t('myPatView.createdDetail.dialog.title')"
       :pt="{
         pcCloseButton: {
           root: {
@@ -462,20 +467,20 @@ async function fetchSelfRoles(): Promise<void> {
     >
       <div class="w-96 flex flex-col gap-4 m-4">
         <div class="flex flex-col gap-2">
-          <h2 class="font-bold">{{ t("myPatView.myPATTokenDisplayDialogToken") }}</h2>
+          <h2 class="font-bold">{{ t("myPatView.createdDetail.dialog.token") }}</h2>
           <p class="text-sm overflow-auto break-all">{{ curCreatedToken }}</p>
         </div>
         <div class="flex gap-2 self-end">
           <Button
             type="button"
-            :label="t('myPatView.myPATTokenDisplayDialogCopyButton')"
+            :label="t('myPatView.createdDetail.dialog.copyButton')"
             @click="copyAndCloseTokenDisplayDialog"
           />
         </div>
       </div>
     </Dialog>
     <!--edit-->
-    <Dialog v-model:visible="patEditDialog" modal :header="t('myPatView.myPATEditDialogTitle')">
+    <Dialog v-model:visible="patEditDialog" modal :header="t('myPatView.edit.dialog.title')">
       <Form
         v-slot="$editForm"
         :initialValues="editFormInitialValues"
@@ -488,7 +493,7 @@ async function fetchSelfRoles(): Promise<void> {
           <div class="flex flex-col gap-1">
             <IftaLabel variant="on">
               <InputText id="editPATName" name="name" :placeholder="curPAT!.name" fluid />
-              <label for="editPATName">{{ t("myPatView.myPATEditDialogPATName") }}</label>
+              <label for="editPATName">{{ t("myPatView.edit.dialog.form.patName") }}</label>
             </IftaLabel>
             <Message v-if="($editForm as any).name?.invalid" severity="error" size="small" variant="simple">
               {{ ($editForm as any).name.error?.message }}
@@ -497,7 +502,7 @@ async function fetchSelfRoles(): Promise<void> {
           <div class="flex flex-col gap-1">
             <IftaLabel variant="on">
               <InputText id="editPATDesc" name="description" :placeholder="curPAT!.description || ''" fluid />
-              <label for="editPATDesc">{{ t("myPatView.myPATEditDialogPATDesc") }}</label>
+              <label for="editPATDesc">{{ t("myPatView.edit.dialog.form.patDescription") }}</label>
             </IftaLabel>
             <Message v-if="($editForm as any).description?.invalid" severity="error" size="small" variant="simple">
               {{ ($editForm as any).description.error?.message }}
@@ -507,30 +512,30 @@ async function fetchSelfRoles(): Promise<void> {
         <div class="flex justify-end gap-2">
           <Button
             type="button"
-            :label="t('myPatView.myPATEditDialogCancelButton')"
+            :label="t('myPatView.edit.dialog.form.cancelButton')"
             severity="secondary"
             @click="patEditDialog = false"
           />
-          <Button type="submit" :label="t('myPatView.myPATEditDialogSubmitButton')" />
+          <Button type="submit" :label="t('myPatView.edit.dialog.form.submitButton')" />
         </div>
       </Form>
     </Dialog>
     <!--delete confirm-->
-    <Dialog v-model:visible="patDeleteDialog" modal :header="t('myPatView.myPATDeleteConfirmDialogTitle')">
+    <Dialog v-model:visible="patDeleteDialog" modal :header="t('myPatView.delete.dialog.title')">
       <div class="flex flex-col gap-4 mb-4 min-w-64">
-        <h2 class="text-lg">{{ t("myPatView.myPATDeleteConfirmDialogWarningTitle") }}</h2>
-        <p class="text-sm">{{ t("myPatView.myPATDeleteConfirmDialogWarningContent") }}</p>
+        <h2 class="text-lg">{{ t("myPatView.delete.dialog.warningTitle") }}</h2>
+        <p class="text-sm">{{ t("myPatView.delete.dialog.warningContent") }}</p>
       </div>
       <div class="flex justify-end gap-2">
         <Button
           type="button"
-          :label="t('myPatView.myPATDeleteConfirmDialogCancelButton')"
+          :label="t('myPatView.delete.dialog.cancelButton')"
           severity="secondary"
           @click="patDeleteDialog = false"
         ></Button>
         <Button
           type="button"
-          :label="t('myPatView.myPATDeleteConfirmDialogSubmitButton')"
+          :label="t('myPatView.delete.dialog.submitButton')"
           severity="danger"
           @click="deletePAT(curPATId)"
         ></Button>
