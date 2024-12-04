@@ -225,19 +225,22 @@ myPatView:
   myPATEditDialogFailedTitle: "修改失败"
   myPATEditDialogValidationFailedMessage: "令牌名和描述不能同时为空"
 adminField:
-  adminMenuOverview: "概览"
-  adminMenuImageManage: "图片管理"
-  adminMenuAlbumManage: "相册管理"
-  adminMenuUserManage: "用户管理"
-  adminMenuGroupManage: "用户组管理"
-  adminMenuStrategyManage: "存储策略管理"
-  adminMenuSetting: "设置"
-  adminMenuSettingSiteSetting: "站点设置"
-  adminMenuSettingSystemSetting: "系统设置"
-  adminMenuSettingSystemStatus: "系统状态"
-  adminMenuUserField: "用户中心"
-  adminMenuLogout: "退出登录"
-  adminMenuLogoutSuccess: "登出成功"
+  menu:
+    overview: "概览"
+    imageManage: "图片管理"
+    albumManage: "相册管理"
+    userManage: "用户管理"
+    groupManage: "用户组管理"
+    strategyManage: "存储策略管理"
+    setting:
+      title: "设置"
+      siteSetting: "站点设置"
+      systemSetting: "系统设置"
+    userField: "用户中心"
+    logout:
+      title: "退出登录"
+      toast:
+        logoutSuccess: "登出成功"
 adminOverviewView:
   adminOverviewImageCount: "总图片数量"
   adminOverviewAlbumCount: "总相册数量"
