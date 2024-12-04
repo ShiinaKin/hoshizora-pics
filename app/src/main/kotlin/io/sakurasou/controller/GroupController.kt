@@ -217,7 +217,7 @@ class GroupController(
     suspend fun handleFetchGroupAllowedImageType(id: Long): GroupAllowedImageType {
         val groupVO = groupService.fetchGroup(id)
         return GroupAllowedImageType(
-            allowedImageTypes = groupVO.groupConfig.groupStrategyConfig.allowedImageTypes.map { it.name }.toSet()
+            allowedImageTypes = groupVO.groupConfig.groupStrategyConfig.allowedImageTypes.toList()
         )
     }
 

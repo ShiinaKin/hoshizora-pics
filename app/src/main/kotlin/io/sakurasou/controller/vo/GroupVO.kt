@@ -2,6 +2,7 @@ package io.sakurasou.controller.vo
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.model.group.GroupConfig
+import io.sakurasou.model.group.ImageType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -40,5 +41,5 @@ data class GroupPageVO(
 @Serializable
 @Name("GroupAllowedImageType")
 data class GroupAllowedImageType(
-    val allowedImageTypes: Set<String>
+    val allowedImageTypes: List<ImageType>
 )
