@@ -156,35 +156,52 @@ myAlbumView:
   myAlbumDetailDialogAlbumIsDefault: "是否默认"
   myAlbumDetailDialogAlbumCreateTime: "创建时间"
 myProfileView:
-  profileTitle: "我的资料"
-  profileUpdateButton: "修改资料"
-  profileEditDialogTitle: "修改资料"
-  profileEditFormEmail: "邮箱"
-  profileEditFormPasswordPlaceholder: "请输入密码"
-  profileEditFormIsDefaultImagePrivate: "默认私密"
-  profileEditFormValidationFailedMessage: "请至少修改一个字段"
-  profileEditFormEmailValidationFailedMessage: "请输入正确的邮箱地址"
-  profileEditFormPasswordValidationFailedMessage: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字"
-  profileEditFormCancelButton: "取消"
-  profileEditFormSubmitButton: "修改"
-  profileUserId: "用户ID"
-  profileUsername: "用户名"
-  profileEmail: "邮箱"
-  profileCreateTime: "创建时间"
-  profileBanStatus: "封禁状态"
-  profileBanStatusNormal: "正常"
-  profileBanStatusBanned: "封禁"
-  profileUserGroupName: "用户组名"
-  profileImageCount: "图片数量"
-  profileAlbumCount: "相册数量"
-  profileUsedSpace: "已用空间"
-  profileUsableSpace: "可用空间"
-  profileSpaceSizeUnit: "MB"
-  profileImageCountUnit: "张"
-  profileAlbumCountUnit: "个"
-  profileIsDefaultImagePrivate: "默认私密"
-  profileIsDefaultImagePrivateTrue: "是"
-  profileIsDefaultImagePrivateFalse: "否"
+  toolbar:
+    title: "我的资料"
+    updateButton: "修改资料"
+  detail:
+    userId: "用户ID"
+    username: "用户名"
+    email: "邮箱"
+    createTime: "创建时间"
+    banStatus:
+      title: "封禁状态"
+      normal: "正常"
+      banned: "封禁"
+    groupName: "用户组名"
+    imageCount: "图片数量"
+    albumCount: "相册数量"
+    usedSpace: "已用空间"
+    usableSpace: "可用空间"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "张"
+    albumCountUnit: "个"
+    isDefaultImagePrivate:
+      title: "默认私密"
+      true: "是"
+      false: "否"
+    toast:
+      failedTitle: "获取用户信息失败"
+  edit:
+    dialog:
+      title: "修改资料"
+      form:
+        email: "邮箱"
+        password: "新密码"
+        isDefaultImagePrivate: "默认私密"
+        cancelButton: "取消"
+        submitButton: "修改"
+        verify:
+          email:
+            invalid: "请输入正确的邮箱地址"
+          password:
+            min: "密码长度必须大于等于8个字符"
+            max: "密码长度必须小于等于32个字符"
+            invalid: "只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
+          atLeastOneField: "请至少修改一个字段"
+    toast:
+      successTitle: "修改成功"
+      failedTitle: "修改失败"
 myPatView:
   toolbar:
     createButton: "创建令牌"
