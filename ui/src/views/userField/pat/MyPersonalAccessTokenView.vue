@@ -1,36 +1,26 @@
 <script setup lang="ts">
-import { computed, ref, reactive, watchEffect, inject } from "vue";
+import { computed, inject, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   Configuration,
   PersonalAccessTokenApi,
   RoleApi,
-  type RoleVO,
   type PersonalAccessTokenApiApiPersonalAccessTokenPageGetRequest,
-  type PersonalAccessTokenPageVO,
   type PersonalAccessTokenInsertRequest,
-  type PersonalAccessTokenPatchRequest
+  type PersonalAccessTokenPageVO,
+  type PersonalAccessTokenPatchRequest,
+  type RoleVO
 } from "api-client";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import FloatLabel from "primevue/floatlabel";
-import IftaLabel from "primevue/iftalabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Dialog from "primevue/dialog";
-import DatePicker from "primevue/datepicker";
-import Message from "primevue/message";
-import Checkbox from "primevue/checkbox";
-import Accordion from "primevue/accordion";
-import AccordionPanel from "primevue/accordionpanel";
-import AccordionHeader from "primevue/accordionheader";
-import AccordionContent from "primevue/accordioncontent";
+import PersonalAccessTokenCreateForm from "@/components/form/userField/pat/PersonalAccessTokenCreateForm.vue";
+import PersonalAccessTokenEditForm from "@/components/form/userField/pat/PersonalAccessTokenEditForm.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
-import { Form, type FormSubmitEvent } from "@primevue/forms";
-import { yupResolver } from "@primevue/forms/resolvers/yup";
 import { useToast } from "primevue/usetoast";
-import * as yup from "yup";
 import { Icon } from "@iconify/vue";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 import type { Dayjs } from "dayjs";
@@ -72,61 +62,10 @@ const curPAT = ref<PersonalAccessTokenPageVO>();
 
 const roles = ref<RoleVO[]>([]);
 
-interface PATInsertForm {
-  name: string | undefined;
-  description: string | undefined;
-  expireTime: Date | undefined;
-  permissions: string[];
-}
-
 const patCreateDialog = ref(false);
 const patCreatedTokenDisplayDialog = ref(false);
 const patEditDialog = ref(false);
 const patDeleteDialog = ref(false);
-
-const createFormInitialValues = reactive<PATInsertForm>({
-  name: undefined,
-  description: undefined,
-  expireTime: undefined,
-  permissions: []
-});
-
-const createFormResolver = yupResolver(
-  yup.object({
-    name: yup.string().trim().required(t("myPatView.create.dialog.form.verify.patName.required")),
-    description: yup.string().trim(),
-    expireTime: yup.date().required(t("myPatView.create.dialog.form.verify.expireTime.required")),
-    permissions: yup.array().of(yup.string())
-  })
-);
-
-const editFormInitialValues = reactive<PersonalAccessTokenPatchRequest>({
-  name: undefined,
-  description: undefined
-});
-
-const editFormResolver = yupResolver(
-  yup.object({
-    name: yup
-      .string()
-      .trim()
-      .test("not-both-empty", t("myPatView.edit.dialog.form.verify.atLeastOneField"), function (value) {
-        const { description } = this.parent;
-        return !isEmpty(value) || !isEmpty(description);
-      }),
-    description: yup
-      .string()
-      .trim()
-      .test("not-both-empty", t("myPatView.edit.dialog.form.verify.atLeastOneField"), function (value) {
-        const { name } = this.parent;
-        return !isEmpty(value) || !isEmpty(name);
-      })
-  })
-);
-
-function isEmpty(value: string | undefined): boolean {
-  return value === undefined || value === "";
-}
 
 function showCreatePATDialog() {
   if (roles.value.length !== 0) {
@@ -158,21 +97,20 @@ function copyAndCloseTokenDisplayDialog() {
   navigator.clipboard.writeText(curCreatedToken.value).then(() => {
     toast.add({
       severity: "success",
-      summary: t("myPatView.createdDetail.dialog.toast.copySuccessTitle"),
-      detail: t("myPatView.createdDetail.dialog.toast.copySuccessContent"),
+      summary: t("myPatView.createdDetail.toast.copySuccessTitle"),
+      detail: t("myPatView.createdDetail.toast.copySuccessContent"),
       life: 3000
     });
     closeTokenDisplayDialog();
   });
 }
 
-const onCreateFormSubmit = ({ valid, values }: FormSubmitEvent) => {
-  if (!valid) return;
+const onCreateFormSubmit = (values: any) => {
   const insertRequest: PersonalAccessTokenInsertRequest = {
     name: values.name!,
     description: values.description || undefined,
     expireTime: dayjs(values.expireTime!).utc().format("YYYY-MM-DDTHH:mm:ss.SSS"),
-    permissions: values.permissions
+    permissions: values.permissions || []
   };
   createPAT(insertRequest).then((isSuccessful: boolean) => {
     patCreateDialog.value = false;
@@ -180,8 +118,7 @@ const onCreateFormSubmit = ({ valid, values }: FormSubmitEvent) => {
   });
 };
 
-const onEditFormSubmit = ({ valid, values }: FormSubmitEvent) => {
-  if (!valid) return;
+const onEditFormSubmit = (values: any) => {
   const patchRequest: PersonalAccessTokenPatchRequest = {
     name: values.name,
     description: values.description
@@ -382,74 +319,9 @@ async function fetchSelfRoles(): Promise<void> {
     </DataTable>
     <!--create-->
     <Dialog v-model:visible="patCreateDialog" modal :header="t('myPatView.create.dialog.title')">
-      <Form
-        v-slot="$createForm"
-        :initialValues="createFormInitialValues"
-        :resolver="createFormResolver"
-        @submit="onCreateFormSubmit"
-        class="flex flex-col gap-4 m-4 w-96"
-      >
-        <div class="flex flex-col gap-2 w-full">
-          <div class="flex flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputText id="newPATName" name="name" pattern="\S+" fluid />
-              <label for="newPATName">{{ t("myPatView.create.dialog.form.patName") }}</label>
-            </FloatLabel>
-            <Message v-if="($createForm as any).name?.invalid" severity="error" size="small" variant="simple">
-              {{ ($createForm as any).name.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputText id="newPATDesc" name="description" fluid />
-              <label for="newPATDesc">{{ t("myPatView.create.dialog.form.description") }}</label>
-            </FloatLabel>
-            <Message v-if="($createForm as any).description?.invalid" severity="error" size="small" variant="simple">
-              {{ ($createForm as any).description.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <FloatLabel variant="on">
-              <DatePicker id="newPATDatepicker" name="expireTime" showTime hourFormat="24" fluid />
-              <label for="newPATDatepicker">{{ t("myPatView.create.dialog.form.expireTime") }}</label>
-            </FloatLabel>
-            <Message v-if="($createForm as any).expireTime?.invalid" severity="error" size="small" variant="simple">
-              {{ ($createForm as any).expireTime.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <Accordion>
-              <AccordionPanel v-for="(role, idx) in roles" :value="idx" :key="idx">
-                <AccordionHeader>{{ role.name + " - " + role.displayName }}</AccordionHeader>
-                <AccordionContent>
-                  <div v-for="(permission, pIdx) of role.permissions" :key="pIdx" class="flex items-center gap-2">
-                    <Checkbox name="permissions" :inputId="'permission-' + pIdx" :value="permission.name" />
-                    <label :for="'permission-' + pIdx">{{ permission.name }}</label>
-                  </div>
-                </AccordionContent>
-              </AccordionPanel>
-            </Accordion>
-            <Message v-if="($createForm as any).permissions?.invalid" severity="error" size="small" variant="simple">
-              {{ ($createForm as any).permissions.error?.message }}
-            </Message>
-          </div>
-        </div>
-        <div class="flex justify-end gap-2">
-          <Button
-            type="button"
-            :label="t('myPatView.create.dialog.form.cancelButton')"
-            severity="secondary"
-            @click="patCreateDialog = false"
-          />
-          <Button
-            type="submit"
-            :label="t('myPatView.create.dialog.form.submitButton')"
-            :disabled="!$createForm.valid"
-          />
-        </div>
-      </Form>
+      <PersonalAccessTokenCreateForm :roles="roles" @cancel="patCreateDialog = false" @submit="onCreateFormSubmit" />
     </Dialog>
-    <!--display token-->
+    <!--display created token-->
     <Dialog
       v-model:visible="patCreatedTokenDisplayDialog"
       modal
@@ -481,66 +353,19 @@ async function fetchSelfRoles(): Promise<void> {
     </Dialog>
     <!--edit-->
     <Dialog v-model:visible="patEditDialog" modal :header="t('myPatView.edit.dialog.title')">
-      <Form
-        v-slot="$editForm"
-        :initialValues="editFormInitialValues"
-        :resolver="editFormResolver"
-        @submit="onEditFormSubmit"
-        :validateOnSubmit="true"
-        class="flex flex-col gap-4 m-4 w-96"
-      >
-        <div class="flex flex-col gap-2 w-full">
-          <div class="flex flex-col gap-1">
-            <IftaLabel variant="on">
-              <InputText id="editPATName" name="name" :placeholder="curPAT!.name" fluid />
-              <label for="editPATName">{{ t("myPatView.edit.dialog.form.patName") }}</label>
-            </IftaLabel>
-            <Message v-if="($editForm as any).name?.invalid" severity="error" size="small" variant="simple">
-              {{ ($editForm as any).name.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <IftaLabel variant="on">
-              <InputText id="editPATDesc" name="description" :placeholder="curPAT!.description || ''" fluid />
-              <label for="editPATDesc">{{ t("myPatView.edit.dialog.form.patDescription") }}</label>
-            </IftaLabel>
-            <Message v-if="($editForm as any).description?.invalid" severity="error" size="small" variant="simple">
-              {{ ($editForm as any).description.error?.message }}
-            </Message>
-          </div>
-        </div>
-        <div class="flex justify-end gap-2">
-          <Button
-            type="button"
-            :label="t('myPatView.edit.dialog.form.cancelButton')"
-            severity="secondary"
-            @click="patEditDialog = false"
-          />
-          <Button type="submit" :label="t('myPatView.edit.dialog.form.submitButton')" />
-        </div>
-      </Form>
+      <PersonalAccessTokenEditForm :pat="curPAT" @cancel="patEditDialog = false" @submit="onEditFormSubmit" />
     </Dialog>
     <!--delete confirm-->
-    <Dialog v-model:visible="patDeleteDialog" modal :header="t('myPatView.delete.dialog.title')">
-      <div class="flex flex-col gap-4 mb-4 min-w-64">
-        <h2 class="text-lg">{{ t("myPatView.delete.dialog.warningTitle") }}</h2>
-        <p class="text-sm">{{ t("myPatView.delete.dialog.warningContent") }}</p>
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          :label="t('myPatView.delete.dialog.cancelButton')"
-          severity="secondary"
-          @click="patDeleteDialog = false"
-        ></Button>
-        <Button
-          type="button"
-          :label="t('myPatView.delete.dialog.submitButton')"
-          severity="danger"
-          @click="deletePAT(curPATId)"
-        ></Button>
-      </div>
-    </Dialog>
+    <ConfirmDialog
+      v-model:visible="patDeleteDialog"
+      :header="t('myPatView.delete.dialog.title')"
+      :main-content="t('myPatView.delete.dialog.warningTitle')"
+      :sub-content="t('myPatView.delete.dialog.warningContent')"
+      :cancel-btn-msg="t('myPatView.delete.dialog.cancelButton')"
+      :submit-btn-msg="t('myPatView.delete.dialog.submitButton')"
+      @cancel="patDeleteDialog = false"
+      @submit="deletePAT(curPATId)"
+    />
 
     <BottomPaginator
       v-model:page="page"
