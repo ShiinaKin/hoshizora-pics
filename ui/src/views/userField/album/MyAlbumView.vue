@@ -3,13 +3,13 @@ import { computed, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue/usetoast";
 import {
+  Configuration,
   AlbumApi,
   type AlbumApiApiAlbumPageGetRequest,
   type AlbumPageVO,
   type AlbumSelfInsertRequest,
   type AlbumSelfPatchRequest,
-  type AlbumVO,
-  Configuration
+  type AlbumVO
 } from "api-client";
 import Button from "primevue/button";
 import Column from "primevue/column";
@@ -17,12 +17,16 @@ import DataTable from "primevue/datatable";
 import Toolbar from "primevue/toolbar";
 import Dialog from "primevue/dialog";
 import Popover from "primevue/popover";
+import InputText from "primevue/inputtext";
+import InputGroup from "primevue/inputgroup";
+import InputGroupAddon from "primevue/inputgroupaddon";
 import { Icon } from "@iconify/vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import AlbumCreateForm from "@/components/form/userField/album/AlbumCreateForm.vue";
 import AlbumEditForm from "@/components/form/userField/album/AlbumEditForm.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
+import { debounce } from "lodash-es";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -53,8 +57,13 @@ const albumCurPage = ref(1);
 const albumTotalRecord = ref(1);
 const albumPageData = ref<AlbumPageVO[]>([]);
 
+const debouncePageUserImage = debounce((request: AlbumApiApiAlbumPageGetRequest) => {
+  pageUserAlbum(request);
+}, 300);
+
 watchEffect(() => {
-  pageUserAlbum();
+  const pageReq = albumPageRequest.value;
+  debouncePageUserImage(pageReq);
 });
 
 const albumFilterRef = ref();
@@ -115,24 +124,6 @@ const onEditFormSubmit = (values: any) => {
   });
 };
 
-async function pageUserAlbum(): Promise<void> {
-  return albumApi
-    .apiAlbumPageGet(albumPageRequest.value)
-    .then((response) => {
-      const resp = response.data!;
-      if (resp.isSuccessful) {
-        const pageResult = resp.data!;
-        albumCurPage.value = pageResult.page;
-        albumTotalRecord.value = pageResult.total;
-        albumPageData.value = pageResult.data;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
-    });
-}
-
 async function createAlbum(insertRequest: AlbumSelfInsertRequest) {
   return albumApi
     .apiAlbumPost({ albumSelfInsertRequest: insertRequest })
@@ -145,7 +136,7 @@ async function createAlbum(insertRequest: AlbumSelfInsertRequest) {
           detail: resp.message,
           life: 3000
         });
-        pageUserAlbum();
+        pageUserAlbum(albumPageRequest.value);
       } else {
         toast.add({
           severity: "warn",
@@ -178,7 +169,7 @@ function deleteAlbum(albumId: number) {
           detail: resp.message,
           life: 3000
         });
-        pageUserAlbum();
+        pageUserAlbum(albumPageRequest.value);
       } else {
         toast.add({
           severity: "warn",
@@ -215,7 +206,7 @@ async function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) 
           detail: resp.message,
           life: 3000
         });
-        pageUserAlbum();
+        pageUserAlbum(albumPageRequest.value);
       } else {
         toast.add({
           severity: "warn",
@@ -257,6 +248,25 @@ async function fetchUserAlbum(albumId: number) {
       toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
     });
 }
+
+async function pageUserAlbum(albumPageRequest: AlbumApiApiAlbumPageGetRequest) {
+  return albumApi
+    .apiAlbumPageGet(albumPageRequest)
+    .then((response) => {
+      const resp = response.data!;
+      if (resp.isSuccessful) {
+        isAlbumPreviousPageReqTakeSearch.value = albumPageRequest.albumName !== undefined;
+        const pageResult = resp.data!;
+        albumCurPage.value = pageResult.page;
+        albumTotalRecord.value = pageResult.total;
+        albumPageData.value = pageResult.data;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
+    });
+}
 </script>
 
 <template>
@@ -270,6 +280,14 @@ async function fetchUserAlbum(albumId: number) {
           <Icon icon="mdi:image-album" />
           {{ t("myAlbumView.toolbar.createButton") }}
         </button>
+      </template>
+      <template #center>
+        <InputGroup class="w-full">
+          <InputGroupAddon>
+            <Icon icon="mdi:search" class="size-4" />
+          </InputGroupAddon>
+          <InputText v-model="albumSearchContent" placeholder="Search" class="w-full" />
+        </InputGroup>
       </template>
       <template #end>
         <div class="flex gap-2">
