@@ -126,6 +126,12 @@ myImageView:
 myAlbumView:
   toolbar:
     createButton: "创建相册"
+  filter:
+    album:
+      createTimeASC: "创建时间升序"
+      createTimeDESC: "创建时间降序"
+      imageCountASC: "图片数量升序"
+      imageCountDESC: "图片数量降序"
   table:
     albumId: "相册ID"
     albumName: "相册名"

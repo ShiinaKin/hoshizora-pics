@@ -126,7 +126,7 @@ const albumFilterRef = ref();
 const userFilterLoading = ref(false);
 
 const selectedUser = ref();
-const activeImageFilter = ref("createTimeDESC");
+const activeAlbumFilter = ref("createTimeDESC");
 const activeFilterClass = ref("bg-gray-200  hover:bg-gray-200");
 
 const showLoadingDialog = ref(false);
@@ -352,12 +352,12 @@ async function fetchAlbumDetail(albumId: number) {
       <div class="w-40 flex flex-col">
         <button
           class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-          :class="activeImageFilter === 'createTimeASC' ? activeFilterClass : ''"
+          :class="activeAlbumFilter === 'createTimeASC' ? activeFilterClass : ''"
           @click="
             () => {
               albumOrderBy = 'createTime';
               albumOrder = 'ASC';
-              activeImageFilter = 'createTimeASC';
+              activeAlbumFilter = 'createTimeASC';
               albumFilterRef.hide();
             }
           "
@@ -369,12 +369,12 @@ async function fetchAlbumDetail(albumId: number) {
         </button>
         <button
           class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-          :class="activeImageFilter === 'createTimeDESC' ? activeFilterClass : ''"
+          :class="activeAlbumFilter === 'createTimeDESC' ? activeFilterClass : ''"
           @click="
             () => {
               albumOrderBy = 'createTime';
               albumOrder = 'DESC';
-              activeImageFilter = 'createTimeDESC';
+              activeAlbumFilter = 'createTimeDESC';
               albumFilterRef.hide();
             }
           "
