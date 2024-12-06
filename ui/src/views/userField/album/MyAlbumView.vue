@@ -11,20 +11,17 @@ import {
   type AlbumSelfPatchRequest
 } from "api-client";
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import FloatLabel from "primevue/floatlabel";
-import IftaLabel from "primevue/iftalabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Toolbar from 'primevue/toolbar';
+import Toolbar from "primevue/toolbar";
 import Dialog from "primevue/dialog";
 import { useToast } from "primevue/usetoast";
-import { useField, useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/yup";
-import * as yup from "yup";
 import { Icon } from "@iconify/vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
+import AlbumCreateForm from "@/components/form/userField/album/AlbumCreateForm.vue";
+import AlbumEditForm from "@/components/form/userField/album/AlbumEditForm.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -56,74 +53,10 @@ const albumDetail = ref<AlbumVO>();
 
 const curAlbumId = ref(-1);
 
-const insertRequest = ref<AlbumSelfInsertRequest>({
-  name: "",
-  description: null
-});
-
 const albumCreateDialog = ref(false);
 const albumDetailDialog = ref(false);
 const albumEditDialog = ref(false);
 const albumDeleteDialog = ref(false);
-
-const albumEditValidationSchema = toTypedSchema(
-  yup
-    .object({
-      patchAlbumName: yup
-        .string()
-        .trim()
-        .test("not-both-empty", t("myAlbumView.myAlbumEditDialogValidationFailedMessage"), (value) => {
-          return (
-            // afterMount, dont show error
-            (value === undefined && patchAlbumDesc.value === undefined) ||
-            // self is not empty
-            (value !== undefined && value !== "") ||
-            // self is empty, but another is not empty
-            ((value === undefined || value === "") && patchAlbumDesc.value !== undefined && patchAlbumDesc.value !== "")
-          );
-        }),
-      patchAlbumDesc: yup
-        .string()
-        .trim()
-        .test("not-both-empty", t("myAlbumView.myAlbumEditDialogValidationFailedMessage"), (value) => {
-          return (
-            (value === undefined && patchAlbumName.value === undefined) ||
-            (value !== undefined && value !== "") ||
-            ((value === undefined || value === "") && patchAlbumName.value !== undefined && patchAlbumName.value !== "")
-          );
-        })
-    })
-    .test("not-both-empty", t("myAlbumView.myAlbumEditDialogValidationFailedMessage"), (values) => {
-      return (
-        // afterMount, dont show error and disable submit button
-        (values.patchAlbumName !== undefined && values.patchAlbumName !== "") ||
-        (values.patchAlbumDesc !== undefined && values.patchAlbumDesc !== "")
-      );
-    })
-);
-
-const { handleSubmit, errors, meta, validate } = useForm({
-  validationSchema: albumEditValidationSchema,
-  validateOnMount: false
-});
-
-const { value: patchAlbumName, handleBlur: nameBlur } = useField<string | undefined>("patchAlbumName");
-const { value: patchAlbumDesc, handleBlur: descriptionBlur } = useField<string | undefined>("patchAlbumDesc");
-
-const handleBlur = (field: "name" | "description") => {
-  if (field === "name") {
-    nameBlur();
-  } else {
-    descriptionBlur();
-  }
-  validate();
-};
-
-function showCreateAlbumDialog() {
-  insertRequest.value.name = "";
-  insertRequest.value.description = null;
-  albumCreateDialog.value = true;
-}
 
 function handleFetchAlbumDetail(albumId: number) {
   fetchUserAlbum(albumId).then(() => {
@@ -138,15 +71,6 @@ function handleSettingAsDefault(albumId: number) {
   patchAlbum(albumId, patchRequest);
 }
 
-const handleEditAlbum = handleSubmit((values) => {
-  const patchRequest: AlbumSelfPatchRequest = {
-    name: values.patchAlbumName || albumDetail.value!.name,
-    description: values.patchAlbumDesc || albumDetail.value!.description
-  };
-  patchAlbum(curAlbumId.value, patchRequest);
-  albumEditDialog.value = false;
-});
-
 function showAlbumDeleteDialog(albumId: number) {
   curAlbumId.value = albumId;
   albumDeleteDialog.value = true;
@@ -155,11 +79,29 @@ function showAlbumDeleteDialog(albumId: number) {
 function showAlbumEditDialog(albumId: number) {
   fetchUserAlbum(albumId).then(() => {
     curAlbumId.value = albumId;
-    patchAlbumName.value = undefined;
-    patchAlbumDesc.value = undefined;
     albumEditDialog.value = true;
   });
 }
+
+const onCreateFormSubmit = (values: any) => {
+  const insertRequest: AlbumSelfInsertRequest = {
+    name: values.name,
+    description: values.description
+  };
+  createAlbum(insertRequest).then(() => {
+    albumCreateDialog.value = false;
+  });
+};
+
+const onEditFormSubmit = (values: any) => {
+  const patchRequest: AlbumSelfPatchRequest = {
+    name: values.name,
+    description: values.description
+  };
+  patchAlbum(curAlbumId.value, patchRequest).then(() => {
+    albumEditDialog.value = false;
+  });
+};
 
 async function pageUserAlbum(): Promise<void> {
   return albumApi
@@ -180,15 +122,15 @@ async function pageUserAlbum(): Promise<void> {
     });
 }
 
-function createAlbum() {
-  albumApi
-    .apiAlbumPost({ albumSelfInsertRequest: insertRequest.value })
+async function createAlbum(insertRequest: AlbumSelfInsertRequest) {
+  return albumApi
+    .apiAlbumPost({ albumSelfInsertRequest: insertRequest })
     .then((response) => {
       const resp = response.data;
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myAlbumView.myAlbumCreateDialogSuccessTitle"),
+          summary: t("myAlbumView.create.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -196,7 +138,7 @@ function createAlbum() {
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myAlbumView.myAlbumCreateDialogFailedTitle"),
+          summary: t("myAlbumView.create.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -206,12 +148,11 @@ function createAlbum() {
       console.error(error);
       toast.add({
         severity: "error",
-        summary: t("myAlbumView.myAlbumCreateDialogFailedTitle"),
+        summary: "Error",
         detail: error.message,
         life: 3000
       });
     });
-  albumCreateDialog.value = false;
 }
 
 function deleteAlbum(albumId: number) {
@@ -222,7 +163,7 @@ function deleteAlbum(albumId: number) {
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myAlbumView.myAlbumDeleteConfirmDialogSuccessTitle"),
+          summary: t("myAlbumView.delete.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -230,7 +171,7 @@ function deleteAlbum(albumId: number) {
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myAlbumView.myAlbumDeleteConfirmDialogFailedTitle"),
+          summary: t("myAlbumView.delete.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -240,7 +181,7 @@ function deleteAlbum(albumId: number) {
       console.error(error);
       toast.add({
         severity: "error",
-        summary: t("myAlbumView.myAlbumDeleteConfirmDialogFailedTitle"),
+        summary: "Error",
         detail: error.message,
         life: 3000
       });
@@ -248,8 +189,8 @@ function deleteAlbum(albumId: number) {
   albumDeleteDialog.value = false;
 }
 
-function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
-  albumApi
+async function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
+  return albumApi
     .apiAlbumAlbumIdPatch({
       albumId: albumId,
       albumSelfPatchRequest: patchRequest
@@ -259,7 +200,7 @@ function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: t("myAlbumView.myAlbumEditDialogSuccessTitle"),
+          summary: t("myAlbumView.edit.toast.successTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -267,7 +208,7 @@ function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myAlbumView.myAlbumEditDialogFailedTitle"),
+          summary: t("myAlbumView.edit.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -277,7 +218,7 @@ function patchAlbum(albumId: number, patchRequest: AlbumSelfPatchRequest) {
       console.error(error);
       toast.add({
         severity: "error",
-        summary: t("myAlbumView.myAlbumEditDialogFailedTitle"),
+        summary: "Error",
         detail: error.message,
         life: 3000
       });
@@ -292,7 +233,12 @@ async function fetchUserAlbum(albumId: number) {
       if (resp.isSuccessful) {
         albumDetail.value = resp.data!;
       } else {
-        toast.add({ severity: "warn", summary: "Warning", detail: resp.message, life: 3000 });
+        toast.add({
+          severity: "warn",
+          summary: t("myAlbumView.detail.toast.failedTitle"),
+          detail: resp.message,
+          life: 3000
+        });
       }
     })
     .catch((error) => {
@@ -308,10 +254,10 @@ async function fetchUserAlbum(albumId: number) {
       <template #end>
         <button
           class="flex items-center gap-1 border p-1.5 rounded-md shadow-sm text-gray-800 hover:bg-gray-50"
-          @click="showCreateAlbumDialog"
+          @click="albumCreateDialog = true"
         >
           <Icon icon="mdi:image-album" />
-          {{ t("myAlbumView.myAlbumCreateButton") }}
+          {{ t("myAlbumView.toolbar.createButton") }}
         </button>
       </template>
     </Toolbar>
@@ -322,161 +268,113 @@ async function fetchUserAlbum(albumId: number) {
       dataKey="id"
       scrollable
       removableSort
-      tableStyle="min-width: 50rem"
     >
-      <Column field="id" :header="t('myAlbumView.myAlbumTableAlbumId')"></Column>
-      <Column field="name" :header="t('myAlbumView.myAlbumTableAlbumName')"></Column>
-      <Column field="imageCount" :header="t('myAlbumView.myAlbumTableImageCount')" :sortable="true"></Column>
-      <Column field="isUncategorized" :header="t('myAlbumView.myAlbumTableIsUncategorized')"></Column>
-      <Column field="isDefault" :header="t('myAlbumView.myAlbumTableIsDefault')"></Column>
-      <Column field="createTime" :header="t('myAlbumView.myAlbumTableCreateTime')" :sortable="true">
+      <Column field="id" :header="t('myAlbumView.table.albumId')"></Column>
+      <Column field="name" :header="t('myAlbumView.table.albumName')"></Column>
+      <Column field="imageCount" :header="t('myAlbumView.table.imageCount')" :sortable="true"></Column>
+      <Column field="isUncategorized" :header="t('myAlbumView.table.isUncategorized.title')">
+        <template #body="{ data }">
+          {{
+            data.isUncategorized
+              ? t("myAlbumView.table.isUncategorized.true")
+              : t("myAlbumView.table.isUncategorized.false")
+          }}
+        </template>
+      </Column>
+      <Column field="isDefault" :header="t('myAlbumView.table.isDefault.title')">
+        <template #body="{ data }">
+          {{
+            data.isDefault
+              ? t("myAlbumView.table.isDefault.true")
+              : t("myAlbumView.table.isDefault.false")
+          }}
+        </template>
+      </Column>
+      <Column field="createTime" :header="t('myAlbumView.table.createTime')" :sortable="true">
         <template #body="{ data }">
           {{ formatUTCStringToLocale(data.createTime) }}
         </template>
       </Column>
-      <Column :header="t('myAlbumView.myAlbumTableOpsTitle')" class="w-72">
+      <Column :header="t('myAlbumView.table.ops.title')" class="w-72">
         <template #body="{ data }">
           <div class="flex gap-0.5 text-sm">
             <Button @click="handleFetchAlbumDetail(data.id)" severity="secondary" size="small">
-              {{ t("myAlbumView.myAlbumTableOpsDetail") }}
+              {{ t("myAlbumView.table.ops.detail") }}
             </Button>
             <Button @click="handleSettingAsDefault(data.id)" size="small" :disabled="data.isDefault">
-              {{ t("myAlbumView.myAlbumTableOpsSettingAsDefault") }}
+              {{ t("myAlbumView.table.ops.settingAsDefault") }}
             </Button>
             <Button @click="showAlbumEditDialog(data.id)" severity="info" size="small">
-              {{ t("myAlbumView.myAlbumTableOpsEdit") }}
+              {{ t("myAlbumView.table.ops.edit") }}
             </Button>
             <Button @click="showAlbumDeleteDialog(data.id)" severity="danger" size="small">
-              {{ t("myAlbumView.myAlbumTableOpsDelete") }}
+              {{ t("myAlbumView.table.ops.delete") }}
             </Button>
           </div>
         </template>
       </Column>
     </DataTable>
     <!--      create-->
-    <Dialog v-model:visible="albumCreateDialog" modal :header="t('myAlbumView.myAlbumCreateDialogTitle')" class="w-96">
-      <form @submit.prevent="createAlbum">
-        <div class="flex flex-col gap-4 m-4">
-          <div class="flex flex-col gap-2 w-full">
-            <FloatLabel variant="on">
-              <InputText id="newAlbumName" v-model="insertRequest.name" class="w-full" pattern="\S+" required />
-              <label for="newAlbumName">{{ t("myAlbumView.myAlbumCreateDialogAlbumName") }}</label>
-            </FloatLabel>
-            <FloatLabel variant="on">
-              <InputText id="newAlbumDesc" v-model="insertRequest.description" class="w-full" />
-              <label for="newAlbumDesc">{{ t("myAlbumView.myAlbumCreateDialogAlbumDesc") }}</label>
-            </FloatLabel>
-          </div>
-          <div class="flex justify-end gap-2">
-            <Button
-              type="button"
-              :label="t('myAlbumView.myAlbumCreateDialogCancelButton')"
-              severity="secondary"
-              @click="albumCreateDialog = false"
-            />
-            <Button type="submit" :label="t('myAlbumView.myAlbumCreateDialogSubmitButton')" />
-          </div>
-        </div>
-      </form>
+    <Dialog v-model:visible="albumCreateDialog" modal :header="t('myAlbumView.create.dialog.title')" class="min-w-96">
+      <AlbumCreateForm @submit="onCreateFormSubmit" @cancel="albumCreateDialog = false" />
     </Dialog>
     <!--      edit-->
-    <Dialog v-model:visible="albumEditDialog" modal :header="t('myAlbumView.myAlbumEditDialogTitle')">
-      <form @submit="handleEditAlbum">
-        <div class="flex flex-col gap-4 m-4 w-96">
-          <div class="flex flex-col gap-2 w-full">
-            <IftaLabel variant="on">
-              <InputText
-                id="editAlbumName"
-                v-model="patchAlbumName"
-                :placeholder="albumDetail!.name"
-                class="w-full"
-                @blur="handleBlur('name')"
-              />
-              <label for="editAlbumName">{{ t("myAlbumView.myAlbumEditDialogAlbumName") }}</label>
-              <p class="text-red-500 text-sm">{{ errors.patchAlbumName }}</p>
-            </IftaLabel>
-
-            <IftaLabel variant="on">
-              <InputText
-                id="editAlbumDesc"
-                v-model="patchAlbumDesc"
-                :placeholder="albumDetail!.description || ''"
-                class="w-full"
-                @blur="handleBlur('description')"
-              />
-              <label for="editAlbumDesc">{{ t("myAlbumView.myAlbumEditDialogAlbumDesc") }}</label>
-              <p class="text-red-500 text-sm">{{ errors.patchAlbumDesc }}</p>
-            </IftaLabel>
-          </div>
-          <div class="flex justify-end gap-2">
-            <Button
-              type="button"
-              :label="t('myAlbumView.myAlbumEditDialogCancelButton')"
-              severity="secondary"
-              @click="albumEditDialog = false"
-            />
-            <Button type="submit" :label="t('myAlbumView.myAlbumEditDialogSubmitButton')" :disabled="!meta.valid" />
-          </div>
-        </div>
-      </form>
+    <Dialog v-model:visible="albumEditDialog" modal :header="t('myAlbumView.edit.dialog.title')">
+      <AlbumEditForm :album-detail="albumDetail" @submit="onEditFormSubmit" @cancel="albumEditDialog = false" />
     </Dialog>
     <!--      delete confirm-->
-    <Dialog
-      v-model:visible="albumDeleteDialog"
-      modal
-      :header="t('myAlbumView.myAlbumDeleteConfirmDialogTitle')"
-      class="w-72"
-    >
-      <div class="flex flex-col gap-4 mb-4">
-        <h2 class="text-lg">{{ t("myAlbumView.myAlbumDeleteConfirmDialogWarningTitle") }}</h2>
-        <p class="text-sm">{{ t("myAlbumView.myAlbumDeleteConfirmDialogWarningContent") }}</p>
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          :label="t('myAlbumView.myAlbumDeleteConfirmDialogCancelButton')"
-          severity="secondary"
-          @click="albumDeleteDialog = false"
-        ></Button>
-        <Button
-          type="button"
-          :label="t('myAlbumView.myAlbumDeleteConfirmDialogSubmitButton')"
-          severity="danger"
-          @click="deleteAlbum(curAlbumId)"
-        ></Button>
-      </div>
+    <Dialog v-model:visible="albumDeleteDialog" modal :header="t('myAlbumView.delete.dialog.title')" class="min-w-96">
+      <ConfirmDialog
+        :header="t('myAlbumView.delete.dialog.title')"
+        :main-content="t('myAlbumView.delete.dialog.warningTitle')"
+        :sub-content="t('myAlbumView.delete.dialog.warningContent')"
+        @cancel="albumDeleteDialog = false"
+        @submit="deleteAlbum(curAlbumId)"
+      />
     </Dialog>
     <!--      detail-->
-    <Dialog v-model:visible="albumDetailDialog" modal :header="t('myAlbumView.myAlbumDetailDialogTitle')" class="w-96">
+    <Dialog v-model:visible="albumDetailDialog" modal :header="t('myAlbumView.detail.dialog.title')" class="min-w-96">
       <div class="flow-root">
         <dl class="-my-3 divide-y divide-gray-100 text-sm">
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.name") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.name }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumDesc") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.description") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.description }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumImageCount") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.imageCount") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.imageCount }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumIsUncategorized") }}</dt>
-            <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.isUncategorized }}</dd>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isUncategorized.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                albumDetail?.isUncategorized
+                  ? t("myAlbumView.detail.dialog.isUncategorized.true")
+                  : t("myAlbumView.detail.dialog.isUncategorized.false")
+              }}
+            </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumIsDefault") }}</dt>
-            <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.isDefault }}</dd>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isDefault.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                albumDetail?.isDefault
+                  ? t("myAlbumView.detail.dialog.isDefault.true")
+                  : t("myAlbumView.detail.dialog.isDefault.false")
+              }}
+            </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("myAlbumView.myAlbumDetailDialogAlbumCreateTime") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.createTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ formatUTCStringToLocale(albumDetail?.createTime) }}
             </dd>
