@@ -37,16 +37,20 @@ registerView:
   registerSubmitButton: "注册"
   registerLoginButton: "登录"
 userField:
-  userMenuOverview: "概览"
-  userMenuUploadImage: "上传图片"
-  userMenuMyImage: "我的图片"
-  userMenuMyAlbum: "我的相册"
-  userMenuAccount: "我的账户"
-  userMenuProfile: "我的资料"
-  userMenuMyAccessToken: "我的令牌"
-  userMenuAdminField: "管理后台"
-  userMenuLogout: "退出登录"
-  userMenuLogoutSuccess: "登出成功"
+  menu:
+    overview: "概览"
+    uploadImage: "上传图片"
+    myImage: "我的图片"
+    myAlbum: "我的相册"
+    myAccount:
+      title: "我的账户"
+      profile: "我的资料"
+      personalAccessToken: "我的令牌"
+    adminField: "管理后台"
+    logout:
+      title: "退出登录"
+      toast:
+        logoutSuccess: "登出成功"
 userOverviewView:
   userOverviewImageCount: "图片数量"
   userOverviewAlbumCount: "相册数量"
