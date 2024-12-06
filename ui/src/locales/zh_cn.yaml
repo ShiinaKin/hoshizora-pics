@@ -58,8 +58,8 @@ userOverviewView:
   userOverviewUsableSpaceTip: "总空间 - 已用空间"
   userOverviewFetchStatisticsFailedTitle: "获取统计信息失败"
 dragUploader:
-  dragUploaderUsageTip: "点击或拖拽文件到此处上传"
-  dragUploaderAllowedFileTypeTip: "支持的文件类型："
+  usageTip: "点击或拖拽文件到此处上传"
+  allowedFileTypeTip: "支持的文件类型："
 imageUploadView:
   toolbar:
     title: "上传图片"

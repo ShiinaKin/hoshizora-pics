@@ -60,8 +60,8 @@ const handleFiles = (files: FileList) => {
     <input type="file" ref="fileInput" @change="onFileSelected" multiple class="hidden" />
     <div class="text-gray-500">
       <Icon icon="mdi:cloud-upload-outline" class="mx-auto size-12 text-gray-400" />
-      <p class="mt-2 text-sm">{{ t("dragUploader.dragUploaderUsageTip") }}</p>
-      <p class="mt-1 text-sm">{{ t("dragUploader.dragUploaderAllowedFileTypeTip") }} {{ allowedImageTypes }}</p>
+      <p class="mt-2 text-sm">{{ t("dragUploader.usageTip") }}</p>
+      <p class="mt-1 text-sm">{{ t("dragUploader.allowedFileTypeTip") }} {{ allowedImageTypes }}</p>
     </div>
   </div>
 </template>
