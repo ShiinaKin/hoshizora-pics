@@ -52,15 +52,19 @@ userField:
       toast:
         logoutSuccess: "登出成功"
 userOverviewView:
-  userOverviewImageCount: "图片数量"
-  userOverviewAlbumCount: "相册数量"
-  userOverviewUsedSpace: "已用空间"
-  userOverviewUsableSpace: "可用空间"
-  userOverviewSpaceSizeUnit: "MB"
-  userOverviewImageCountUnit: "张"
-  userOverviewAlbumCountUnit: "个"
-  userOverviewUsableSpaceTip: "总空间 - 已用空间"
-  userOverviewFetchStatisticsFailedTitle: "获取统计信息失败"
+  header:
+    imageCount: "图片数量"
+    albumCount: "相册数量"
+    usedSpace: "已用空间"
+    usableSpace:
+      title: "可用空间"
+      tips: "总空间 - 已用空间"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "张"
+    albumCountUnit: "个"
+    userCountUnit: "个"
+  toast:
+    fetchStatisticsFailedTitle: "获取统计信息失败"
 dragUploader:
   usageTip: "点击或拖拽文件到此处上传"
   allowedFileTypeTip: "支持的文件类型："

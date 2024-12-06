@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useToast } from "primevue/usetoast";
 import { Configuration, UserApi } from "api-client";
 import { Icon } from "@iconify/vue";
-import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const token = localStorage.getItem("token");
@@ -35,81 +35,102 @@ userApi
       usedSpace.value = userVO.totalImageSize!;
       usableSpace.value = userVO.allSize! - userVO.totalImageSize;
     } else {
-      toast.add({ severity: "warn", summary: t("userOverviewView.userOverviewFetchStatisticsFailedTitle"), detail: resp.message, life: 3000 });
+      toast.add({
+        severity: "warn",
+        summary: t("userOverviewView.toast.fetchStatisticsFailedTitle"),
+        detail: resp.message,
+        life: 3000
+      });
     }
   })
   .catch((error) => {
     console.error(error);
-    toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000});
+    toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
   });
 </script>
 
 <template>
   <div class="p-8 w-full flex flex-col items-center gap-8">
     <div class="flex w-full h-40 gap-6 justify-between">
-      <div class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60">
+      <div
+        class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60"
+      >
         <div class="lg:flex lg:justify-between lg:gap-4">
           <div class="hidden lg:block lg:shrink-0">
             <Icon icon="mdi:image-outline" class="size-16 rounded-lg object-cover" />
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewImageCount") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
+              {{ t("userOverviewView.header.imageCount") }}
+            </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ imageCount }} {{ t("userOverviewView.userOverviewImageCountUnit") }}
+              {{ imageCount }} {{ t("userOverviewView.header.imageCountUnit") }}
             </p>
           </div>
         </div>
       </div>
-      <div class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60">
+      <div
+        class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60"
+      >
         <div class="lg:flex lg:justify-between lg:gap-4">
           <div class="hidden lg:block lg:shrink-0">
             <Icon icon="mdi:image-multiple-outline" class="size-16 rounded-lg object-cover" />
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewAlbumCount") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
+              {{ t("userOverviewView.header.albumCount") }}
+            </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ albumCount }} {{ t("userOverviewView.userOverviewAlbumCountUnit") }}
+              {{ albumCount }} {{ t("userOverviewView.header.albumCountUnit") }}
             </p>
           </div>
         </div>
       </div>
-      <div class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60">
+      <div
+        class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60"
+      >
         <div class="lg:flex lg:justify-between lg:gap-4">
           <div class="hidden lg:block lg:shrink-0">
             <Icon icon="mdi:zip-box-outline" class="size-16 rounded-lg object-cover" />
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewUsedSpace") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
+              {{ t("userOverviewView.header.usedSpace") }}
+            </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ usedSpace.toFixed(2) }} {{ t("userOverviewView.userOverviewSpaceSizeUnit") }}
+              {{ usedSpace.toFixed(2) }} {{ t("userOverviewView.header.spaceSizeUnit") }}
             </p>
           </div>
         </div>
       </div>
-      <div class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60">
+      <div
+        class="relative flex-1 block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 xl:min-w-60"
+      >
         <div class="lg:flex lg:justify-between lg:gap-4">
           <div class="hidden lg:block lg:shrink-0">
             <Icon icon="mdi:food-takeout-box-outline" class="size-16 rounded-lg object-cover" />
           </div>
 
           <div>
-            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">{{ t("userOverviewView.userOverviewUsableSpace") }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 sm:text-xl">
+              {{ t("userOverviewView.header.usableSpace.title") }}
+            </h3>
             <div class="my-2"></div>
             <p class="text-pretty text-sm text-gray-500">
-              {{ usableSpace.toFixed(2) }} {{ t("userOverviewView.userOverviewSpaceSizeUnit") }}
+              {{ usableSpace.toFixed(2) }} {{ t("userOverviewView.header.spaceSizeUnit") }}
             </p>
           </div>
         </div>
 
         <dl class="mt-6 flex gap-4 sm:gap-6 items-center justify-center">
           <div class="flex flex-col">
-            <dd class="text-xs text-gray-500">{{ t("userOverviewView.userOverviewUsableSpaceTip") }}</dd>
+            <dd class="text-xs text-gray-500">{{ t("userOverviewView.header.usableSpace.tips") }}</dd>
           </div>
         </dl>
       </div>
