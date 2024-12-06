@@ -3,7 +3,7 @@ import { ref } from "vue";
 import ContextMenu from "primevue/contextmenu";
 import { Icon } from "@iconify/vue";
 
-const { menuItems } = defineProps(["menuItems"]);
+const { menuItems, pt } = defineProps(["menuItems", "pt"]);
 
 const menuRef = ref();
 
@@ -19,7 +19,7 @@ defineExpose({ show, hide });
 </script>
 
 <template>
-  <ContextMenu class="text-sm rounded-xl" ref="menuRef" :model="menuItems">
+  <ContextMenu class="text-sm rounded-xl" ref="menuRef" :model="menuItems" :pt>
     <template #item="{ item, props }">
       <a class="flex items-center overflow-hidden" v-bind="props.action">
         <Icon :icon="item.icon as string" class="size-4" />
