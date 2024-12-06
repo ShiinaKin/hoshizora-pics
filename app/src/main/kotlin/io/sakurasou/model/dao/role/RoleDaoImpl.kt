@@ -20,6 +20,7 @@ class RoleDaoImpl : RoleDao {
             it[displayName] = insertDTO.displayName
             it[isSystemReserved] = insertDTO.isSystemReserved
             it[description] = insertDTO.description
+            it[createTime] = insertDTO.createTime
         }
     }
 
