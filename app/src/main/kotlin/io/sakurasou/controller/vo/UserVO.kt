@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 data class UserVO(
     val id: Long,
     val username: String,
+    val groupId: Long,
     val groupName: String,
     val email: String,
     val isDefaultImagePrivate: Boolean,

@@ -535,6 +535,7 @@ class UserServiceTest {
         val exceptedUserVO = UserVO(
             id = userId,
             username = "oldUser",
+            groupId = 2,
             groupName = "UserGroup",
             email = "old@example.com",
             isDefaultImagePrivate = false,

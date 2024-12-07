@@ -208,6 +208,7 @@ class UserServiceImpl(
             UserVO(
                 id = user.id,
                 username = user.name,
+                groupId = group.id,
                 groupName = group.name,
                 email = user.email,
                 isDefaultImagePrivate = user.isDefaultImagePrivate,
