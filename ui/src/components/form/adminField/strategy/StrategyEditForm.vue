@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, type PropType } from "vue";
+import { type PropType } from "vue";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
@@ -8,16 +8,6 @@ import Button from "primevue/button";
 import VeeIftaInputText from "@/components/vee-input/VeeIftaInputText.vue";
 
 const { t } = useI18n();
-
-interface StrategyPatchForm {
-  name: string | undefined;
-  config: object | undefined;
-}
-
-const strategyEditFormInitValues = reactive<StrategyPatchForm>({
-  name: undefined,
-  config: undefined
-});
 
 const strategyEditFormLocalSchema = yup.object({
   name: yup
@@ -34,7 +24,7 @@ const strategyEditFormLocalSchema = yup.object({
         /^[^/].*$/,
         t("adminStrategyManageView.edit.dialog.form.verify.config.local.uploadFolder.dontStartWithSlash")
       )
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(formValues.name || formValues.config?.uploadFolder || formValues.config?.thumbnailFolder);
@@ -46,7 +36,7 @@ const strategyEditFormLocalSchema = yup.object({
         /^[^/].*$/,
         t("adminStrategyManageView.edit.dialog.form.verify.config.local.uploadFolder.dontStartWithSlash")
       )
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(formValues.name || formValues.config?.uploadFolder || formValues.config?.thumbnailFolder);
@@ -77,7 +67,7 @@ const strategyEditFormS3Schema = yup.object({
       .trim()
       .url(t("adminStrategyManageView.edit.dialog.form.verify.config.s3.endpoint.invalid"))
       .matches(/^(?!.*\/$).*/, t("adminStrategyManageView.edit.dialog.form.verify.config.s3.endpoint.dontEndWithSlash"))
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -95,7 +85,7 @@ const strategyEditFormS3Schema = yup.object({
     bucketName: yup
       .string()
       .trim()
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -113,7 +103,7 @@ const strategyEditFormS3Schema = yup.object({
     region: yup
       .string()
       .trim()
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -131,7 +121,7 @@ const strategyEditFormS3Schema = yup.object({
     accessKey: yup
       .string()
       .trim()
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -149,7 +139,7 @@ const strategyEditFormS3Schema = yup.object({
     secretKey: yup
       .string()
       .trim()
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -172,7 +162,7 @@ const strategyEditFormS3Schema = yup.object({
         /^(?!.*\/$).*/,
         t("adminStrategyManageView.edit.dialog.form.verify.config.s3.publicUrl.dontEndWithSlash")
       )
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -194,7 +184,7 @@ const strategyEditFormS3Schema = yup.object({
         /^[^/].*$/,
         t("adminStrategyManageView.edit.dialog.form.verify.config.s3.uploadFolder.dontStartWithSlash")
       )
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -216,7 +206,7 @@ const strategyEditFormS3Schema = yup.object({
         /^[^/].*$/,
         t("adminStrategyManageView.edit.dialog.form.verify.config.s3.uploadFolder.dontStartWithSlash")
       )
-      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (value, context) {
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
         const { from } = context;
         const formValues = from && from.length > 0 ? from[1].value : {};
         return !!(
@@ -267,7 +257,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <form :initial-values="strategyEditFormInitValues" @submit="onSubmit" class="flex flex-col gap-4 m-4 w-96">
+  <form @submit="onSubmit" class="flex flex-col gap-4 m-4 w-96">
     <div class="flex flex-col gap-2.5 w-full">
       <div class="flex flex-col gap-1">
         <VeeIftaInputText

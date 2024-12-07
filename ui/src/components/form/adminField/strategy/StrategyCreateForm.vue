@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { StrategyTypeEnum } from "api-client";
@@ -25,18 +25,6 @@ const strategyTypeArr = ref<StrategyType[]>([
     strategyTypeValue: StrategyTypeEnum.S3
   }
 ]);
-
-interface StrategyInsertForm {
-  name: string | undefined;
-  strategyType: StrategyType | undefined;
-  config: object | undefined;
-}
-
-const strategyCreateFormInitValues = reactive<StrategyInsertForm>({
-  name: undefined,
-  strategyType: undefined,
-  config: undefined
-});
 
 const strategyCreateFormSchema = yup.object({
   name: yup.string().trim().required(t("adminStrategyManageView.create.dialog.form.verify.name.required")),
@@ -149,7 +137,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <form :initial-values="strategyCreateFormInitValues" @submit="onSubmit" class="flex flex-col gap-4 m-4 w-96">
+  <form @submit="onSubmit" class="flex flex-col gap-4 m-4 w-96">
     <div class="flex flex-col gap-2.5 w-full">
       <div class="flex flex-col gap-1">
         <VeeFloatInputText

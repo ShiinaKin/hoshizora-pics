@@ -606,6 +606,7 @@ adminUserManageView:
     toast:
       successTitle: "创建成功"
       failedTitle: "创建失败"
+      groupPageFailedTitle: "获取用户组失败"
   userEdit:
     dialog:
       title: "创建用户"
@@ -640,6 +641,7 @@ adminUserManageView:
     toast:
       successTitle: "修改成功"
       failedTitle: "修改失败"
+      groupPageFailedTitle: "获取用户组失败"
   userBan:
     confirmDialog:
       header: "确认封禁"
