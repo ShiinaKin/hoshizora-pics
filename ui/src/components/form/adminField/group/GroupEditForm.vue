@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, ref } from "vue";
+import { computed, onMounted, type PropType, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue/usetoast";
@@ -569,12 +569,14 @@ const [allowedImageTypes, allowedImageTypesAttrs] = defineField("config.strategy
 
 const groupDetailRoles = (groupDetail.roles as Array<string>).map((role) => ({ name: role }));
 
-if (groupDetailRoles.every((needRole) => !roleData.value.some((role) => role.name === needRole.name))) {
-  pageRole(rolePageRequest.value).then((data) => {
-    rolePage.value++;
-    if (data) roleData.value.push(...data);
-  });
-}
+onMounted(async () => {
+  while (!groupDetailRoles.every((needRole) => roleData.value.some((role) => role.name === needRole.name))) {
+    await pageRole(rolePageRequest.value).then((data) => {
+      rolePage.value++;
+      if (data) roleData.value.push(...data);
+    });
+  }
+});
 
 name.value = groupDetail.name;
 description.value = groupDetail.description;
