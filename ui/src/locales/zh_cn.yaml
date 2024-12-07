@@ -37,13 +37,25 @@ siteInitView:
     successTitle: "站点初始化成功"
     failedTitle: "站点初始化失败"
 loginView:
-  loginTitle: "登录"
-  loginUsernamePlaceholder: "请输入用户名"
-  loginUsernameRequirements: "用户名必须是4-20个字符，只能包含字母和数字。"
-  loginPasswordPlaceholder: "请输入密码"
-  loginPasswordRequirements: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
-  loginSubmitButton: "登录"
-  loginSignupButton: "注册"
+  title: "登录"
+  form:
+    username: "用户名"
+    password: "密码"
+    loginButton: "登录"
+    signupButton: "注册"
+    verify:
+      username:
+        required: "用户名不能为空"
+        min: "用户名必须大于等于4个字符"
+        max: "用户名必须小于等于20个字符"
+      password:
+        required: "密码不能为空"
+        min: "密码长度必须大于等于8个字符"
+        max: "密码长度必须小于等于32个字符"
+        invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+  toast:
+    loginFailedTitle: "登录失败"
+    loginSuccessTitle: "登录成功"
 registerView:
   registerTitle: "注册"
   registerUsernamePlaceholder: "请输入用户名"
