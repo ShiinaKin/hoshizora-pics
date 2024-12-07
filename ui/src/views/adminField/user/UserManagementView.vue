@@ -149,7 +149,7 @@ const userCreateFormResolver = yupResolver(
       .min(8, t("adminUserManageView.userCreate.dialog.form.verify.password.min"))
       .max(32, t("adminUserManageView.userCreate.dialog.form.verify.password.max"))
       .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,32}$/,
         t("adminUserManageView.userCreate.dialog.form.verify.password.invalid")
       )
       .required(t("adminUserManageView.userCreate.dialog.form.verify.password.required")),
@@ -175,7 +175,7 @@ const userEditFormResolver = yupResolver(
       .min(8, t("adminUserManageView.userEdit.dialog.form.verify.password.min"))
       .max(32, t("adminUserManageView.userEdit.dialog.form.verify.password.max"))
       .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,32}$/,
         t("adminUserManageView.userEdit.dialog.form.verify.password.invalid")
       )
       .test("at-least-one-field", t("adminUserManageView.userEdit.dialog.form.verify.atLeastOneField"), function () {

@@ -35,7 +35,8 @@ const userEditValidationSchema = yup.object({
       return !!(
         this.parent.email ||
         this.parent.password ||
-        (this.parent.isDefaultImagePrivate !== undefined && this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
+        (this.parent.isDefaultImagePrivate !== undefined &&
+          this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
       );
     }),
   password: yup
@@ -43,12 +44,16 @@ const userEditValidationSchema = yup.object({
     .trim()
     .min(8, t("myProfileView.edit.dialog.form.verify.password.min"))
     .max(32, t("myProfileView.edit.dialog.form.verify.password.max"))
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/, t("myProfileView.edit.dialog.form.verify.password.invalid"))
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,32}$/,
+      t("myProfileView.edit.dialog.form.verify.password.invalid")
+    )
     .test("at-least-one-field", t("myProfileView.edit.dialog.form.verify.atLeastOneField"), function () {
       return !!(
         this.parent.email ||
         this.parent.password ||
-        (this.parent.isDefaultImagePrivate !== undefined && this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
+        (this.parent.isDefaultImagePrivate !== undefined &&
+          this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
       );
     }),
   isDefaultImagePrivate: yup
@@ -57,10 +62,12 @@ const userEditValidationSchema = yup.object({
       return !!(
         this.parent.email ||
         this.parent.password ||
-        (this.parent.isDefaultImagePrivate !== undefined && this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
+        (this.parent.isDefaultImagePrivate !== undefined &&
+          this.parent.isDefaultImagePrivate !== userVO.value?.isDefaultImagePrivate)
       );
     })
 });
+
 const { handleSubmit } = useForm({
   validationSchema: userEditValidationSchema
 });
