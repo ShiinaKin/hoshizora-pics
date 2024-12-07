@@ -1,23 +1,41 @@
 siteInitView:
-  siteInitTitle: "站点初始化"
-  siteInitDesc: "这是系统初始化后的首次访问，请先初始化站点"
-  siteInitSubmitButton: "提交"
-  siteInitSuccess: "站点初始化成功"
-  siteInitFailed: "站点初始化失败"
-  siteInitSiteTitlePlaceholder: "请输入站点标题"
-  siteInitSiteTitleRequirements: "网站标题不能为空，且必须包含至少一个非空白字符。"
-  siteInitSiteSubtitlePlaceholder: "请输入站点副标题"
-  siteInitSiteSubtitleRequirements: "网站副标题不能为空，且必须包含至少一个非空白字符。"
-  siteInitSiteDescriptionPlaceholder: "请输入站点描述"
-  siteInitSiteDescriptionRequirements: "网站描述不能为空，且必须包含至少一个非空白字符。"
-  siteInitSiteExternalUrlPlaceholder: "请输入站点外部链接"
-  siteInitSiteExternalUrlRequirements: "站点外部链接不能为空。"
-  siteInitUsernamePlaceholder: "请输入用户名"
-  siteInitUsernameRequirements: "用户名必须是4-20个字符，只能包含字母和数字。"
-  siteInitPasswordPlaceholder: "请输入密码"
-  siteInitPasswordRequirements: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
-  siteInitEmailPlaceholder: "请输入邮箱"
-  siteInitEmailRequirements: "请输入正确的邮箱地址。"
+  title: "站点初始化"
+  description: "这是系统初始化后的首次访问，请先初始化站点"
+  form:
+    siteTitle: "站点标题"
+    siteSubtitle: "站点副标题"
+    siteDescription: "站点描述"
+    siteExternalUrl: "站点外部链接"
+    username: "用户名"
+    password: "密码"
+    email: "邮箱"
+    verify:
+      siteTitle:
+        required: "站点标题不能为空"
+      siteSubtitle:
+        required: "站点副标题不能为空"
+      siteDescription:
+        required: "站点描述不能为空"
+      siteExternalUrl:
+        required: "站点外部链接不能为空"
+        invalid: "请输入正确的URL"
+      username:
+        required: "用户名不能为空"
+        min: "用户名必须大于等于4个字符"
+        max: "用户名必须小于等于20个字符"
+        invalid: "用户名只能包含字母和数字"
+      password:
+        required: "密码不能为空"
+        min: "密码长度必须大于等于8个字符"
+        max: "密码长度必须小于等于32个字符"
+        invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+      email:
+        required: "邮箱不能为空"
+        invalid: "邮箱格式不正确"
+    submitButton: "提交"
+  toast:
+    successTitle: "站点初始化成功"
+    failedTitle: "站点初始化失败"
 loginView:
   loginTitle: "登录"
   loginUsernamePlaceholder: "请输入用户名"
