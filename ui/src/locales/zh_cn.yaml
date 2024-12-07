@@ -562,7 +562,7 @@ adminUserManageView:
     email: "邮箱"
     imageCount: "图片数量"
     albumCount: "相册数量"
-    isDefaultImagePrivate: "默认私密"
+    isDefaultImagePrivate: "图片默认私密"
     isDefaultImagePrivateTrue: "是"
     isDefaultImagePrivateFalse: "否"
     createTime: "创建时间"
@@ -582,7 +582,7 @@ adminUserManageView:
         password: "密码"
         email: "邮箱"
         groupId: "用户组"
-        isDefaultImagePrivate: "默认私密"
+        isDefaultImagePrivate: "图片默认私密"
         submitButton: "创建"
         cancelButton: "取消"
         verify:
@@ -602,21 +602,21 @@ adminUserManageView:
           groupId:
             required: "用户组不能为空"
           isDefaultImagePrivate:
-            required: "默认私密不能为空"
+            required: "图片默认是否私密不能为空"
     toast:
       successTitle: "创建成功"
       failedTitle: "创建失败"
       groupPageFailedTitle: "获取用户组失败"
   userEdit:
     dialog:
-      title: "创建用户"
+      title: "修改用户"
       form:
         userId: "用户ID"
         username: "用户名"
         password: "密码"
         email: "邮箱"
         groupId: "用户组"
-        isDefaultImagePrivate: "默认私密"
+        isDefaultImagePrivate: "图片默认私密"
         submitButton: "保存"
         cancelButton: "取消"
         verify:
@@ -636,7 +636,7 @@ adminUserManageView:
           groupId:
             required: "用户组不能为空"
           isDefaultImagePrivate:
-            required: "默认私密不能为空"
+            required: "图片默认是否私密不能为空"
           atLeastOneField: "请至少修改一个字段"
     toast:
       successTitle: "修改成功"

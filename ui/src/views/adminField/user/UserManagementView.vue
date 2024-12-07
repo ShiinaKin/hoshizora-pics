@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue/usetoast";
 import {
   Configuration,
   GroupApi,
-  type GroupApiApiGroupPageGetRequest,
-  type GroupPageVO,
   UserApi,
   type UserApiApiUserManagePageGetRequest,
   type UserManageInsertRequest,
@@ -19,27 +17,19 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import InputGroupAddon from "primevue/inputgroupaddon";
 import InputGroup from "primevue/inputgroup";
-import IftaLabel from "primevue/iftalabel";
-import Message from "primevue/message";
-import FloatLabel from "primevue/floatlabel";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Popover from "primevue/popover";
 import Dialog from "primevue/dialog";
-import Select from "primevue/select";
-import ToggleSwitch from "primevue/toggleswitch";
-import Divider from "primevue/divider";
-import { Form, type FormSubmitEvent } from "@primevue/forms";
-import { yupResolver } from "@primevue/forms/resolvers/yup";
 import { Icon } from "@iconify/vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import LoadingDialog from "@/components/LoadingDialog.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import UserCreateForm from "@/components/form/adminField/user/UserCreateForm.vue";
+import UserEditForm from "@/components/form/adminField/user/UserEditForm.vue";
 import { debounce } from "lodash-es";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
 import md5 from "crypto-js/md5";
-import * as yup from "yup";
-import type { VirtualScrollerLazyEvent } from "primevue";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -80,147 +70,11 @@ watchEffect(() => {
   debouncePageUser(imagePageReq);
 });
 
-const groupPage = ref(1);
-const groupPageSize = ref(15);
-const groupOrderBy = ref("createTime");
-const groupOrder = ref("DESC");
-const groupPageRequest = computed<GroupApiApiGroupPageGetRequest>(() => {
-  return {
-    page: groupPage.value,
-    pageSize: groupPageSize.value,
-    orderBy: groupOrderBy.value === "" ? undefined : userOrderBy.value,
-    order: groupOrder.value === "" ? undefined : userOrder.value
-  };
-});
-const groupCurPage = ref(1);
-const groupTotalRecord = ref(-1);
-const groupPageData = ref<GroupPageVO[]>([]);
-
 const curUserId = ref(-1);
 const userDetail = ref<UserVO>();
 
-const userCreateFormGroupFilterLoading = ref(false);
-
 const userFilterRef = ref();
 const bannedStatusFilterRef = ref();
-
-interface UserInsertForm {
-  username: string | undefined;
-  password: string | undefined;
-  email: string | undefined;
-  group: object | undefined;
-  isDefaultImagePrivate: boolean;
-}
-
-interface UserPatchForm {
-  password: string | undefined;
-  email: string | undefined;
-  group: object | undefined;
-  isDefaultImagePrivate: boolean | undefined;
-}
-
-const userCreateFormInitValues = reactive<UserInsertForm>({
-  username: undefined,
-  password: undefined,
-  email: undefined,
-  group: undefined,
-  isDefaultImagePrivate: false
-});
-
-const userEditFormInitValues = reactive<UserPatchForm>({
-  password: undefined,
-  email: undefined,
-  group: undefined,
-  isDefaultImagePrivate: undefined
-});
-
-const userCreateFormResolver = yupResolver(
-  yup.object({
-    username: yup
-      .string()
-      .trim()
-      .min(4, t("adminUserManageView.userCreate.dialog.form.verify.username.min"))
-      .max(20, t("adminUserManageView.userCreate.dialog.form.verify.username.max"))
-      .matches(/^[a-zA-Z0-9_]+$/, t("adminUserManageView.userCreate.dialog.form.verify.username.invalid"))
-      .required(t("adminUserManageView.userCreate.dialog.form.verify.username.required")),
-    password: yup
-      .string()
-      .trim()
-      .min(8, t("adminUserManageView.userCreate.dialog.form.verify.password.min"))
-      .max(32, t("adminUserManageView.userCreate.dialog.form.verify.password.max"))
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,32}$/,
-        t("adminUserManageView.userCreate.dialog.form.verify.password.invalid")
-      )
-      .required(t("adminUserManageView.userCreate.dialog.form.verify.password.required")),
-    email: yup
-      .string()
-      .trim()
-      .email(t("adminUserManageView.userCreate.dialog.form.verify.email.invalid"))
-      .required(t("adminUserManageView.userCreate.dialog.form.verify.email.required")),
-    group: yup.object({
-      id: yup.number().required(t("adminUserManageView.userCreate.dialog.form.verify.groupId.required"))
-    }),
-    isDefaultImagePrivate: yup
-      .boolean()
-      .required(t("adminUserManageView.userCreate.dialog.form.verify.isDefaultImagePrivate.required"))
-  })
-);
-
-const userEditFormResolver = yupResolver(
-  yup.object({
-    password: yup
-      .string()
-      .trim()
-      .min(8, t("adminUserManageView.userEdit.dialog.form.verify.password.min"))
-      .max(32, t("adminUserManageView.userEdit.dialog.form.verify.password.max"))
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,32}$/,
-        t("adminUserManageView.userEdit.dialog.form.verify.password.invalid")
-      )
-      .test("at-least-one-field", t("adminUserManageView.userEdit.dialog.form.verify.atLeastOneField"), function () {
-        return !!(
-          this.parent.password ||
-          this.parent.email ||
-          this.parent.group?.id ||
-          this.parent.isDefaultImagePrivate
-        );
-      }),
-    email: yup
-      .string()
-      .trim()
-      .email(t("adminUserManageView.userEdit.dialog.form.verify.email.invalid"))
-      .test("at-least-one-field", t("adminUserManageView.userEdit.dialog.form.verify.atLeastOneField"), function () {
-        return !!(
-          this.parent.password ||
-          this.parent.email ||
-          this.parent.group?.id ||
-          this.parent.isDefaultImagePrivate
-        );
-      }),
-    group: yup.object({
-      id: yup.number()
-    })
-      .test("at-least-one-field", t("adminUserManageView.userEdit.dialog.form.verify.atLeastOneField"), function (value) {
-        return !!(
-          this.parent.password ||
-          this.parent.email ||
-          value?.id ||
-          this.parent.isDefaultImagePrivate
-        );
-      }),
-    isDefaultImagePrivate: yup
-      .boolean()
-      .test("at-least-one-field", t("adminUserManageView.userEdit.dialog.form.verify.atLeastOneField"), function () {
-        return !!(
-          this.parent.password ||
-          this.parent.email ||
-          this.parent.group?.id ||
-          this.parent.isDefaultImagePrivate
-        );
-      })
-  })
-);
 
 const activeImageFilter = ref("createTimeDESC");
 const activeBannedStatusFilter = ref("all");
@@ -267,13 +121,12 @@ function handleShowDeleteDialog(userId: number) {
   showUserDeleteConfirmDialog.value = true;
 }
 
-const handleUserCreateSubmit = ({ valid, values }: FormSubmitEvent) => {
-  if (!valid) return;
+const onUserCreateFormSubmit = (values: any) => {
   const insertReq: UserManageInsertRequest = {
-    username: values.username!,
-    password: values.password!,
-    email: values.email!,
-    groupId: values.group!.id,
+    username: values.username,
+    password: values.password,
+    email: values.email,
+    groupId: values.group.id,
     isDefaultImagePrivate: values.isDefaultImagePrivate
   };
   createUser(insertReq).then(() => {
@@ -281,12 +134,11 @@ const handleUserCreateSubmit = ({ valid, values }: FormSubmitEvent) => {
   });
 };
 
-const handleUserEditSubmit = ({ valid, values }: FormSubmitEvent) => {
-  if (!valid) return;
+const onUserEditFormSubmit = (values: any) => {
   const patchReq: UserManagePatchRequest = {
-    password: values.password!,
-    email: values.email!,
-    groupId: values.group!.id,
+    password: values.password,
+    email: values.email,
+    groupId: values.group?.id,
     isDefaultImagePrivate: values.isDefaultImagePrivate
   };
   patchUser(curUserId.value, patchReq).then(() => {
@@ -303,30 +155,6 @@ function handleBanOrUnbanConfirm(isBan: boolean) {
 function handleDeleteConfirm() {
   showUserDeleteConfirmDialog.value = false;
   deleteUser(curUserId.value);
-}
-
-const debounceHandleUserCreateFormGroupFilterLazyLoading = debounce(
-  (event: VirtualScrollerLazyEvent) => handleUserCreateFormGroupFilterLazyLoading(event),
-  200
-);
-
-function handleUserCreateFormGroupFilterLazyLoading(event: VirtualScrollerLazyEvent) {
-  if (groupPageData.value.length === 0) {
-    pageGroup(groupPageRequest.value)
-      .then((data) => {
-        if (data instanceof Array) groupPageData.value = data;
-      })
-      .then(() => (userCreateFormGroupFilterLoading.value = false));
-    return;
-  }
-  const { last } = event;
-  if (groupTotalRecord.value === last) return;
-  groupPage.value += 1;
-  pageGroup(groupPageRequest.value)
-    .then((data) => {
-      if (data) groupPageData.value.push(...data);
-    })
-    .then(() => (userCreateFormGroupFilterLoading.value = false));
 }
 
 async function createUser(insertRequest: UserManageInsertRequest): Promise<void> {
@@ -458,26 +286,6 @@ function pageUser(pageRequest: UserApiApiUserManagePageGetRequest) {
         userCurPage.value = pageResult.page;
         userTotalRecord.value = pageResult.total;
         userPageData.value = pageResult.data;
-      } else {
-        toast.add({ severity: "warn", summary: "Warn", detail: resp.message, life: 3000 });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      toast.add({ severity: "error", summary: "Error", detail: error.message, life: 3000 });
-    });
-}
-
-async function pageGroup(pageRequest: GroupApiApiGroupPageGetRequest): Promise<GroupPageVO[] | void> {
-  return groupApi
-    .apiGroupPageGet(pageRequest)
-    .then((response) => {
-      const resp = response.data;
-      if (resp.isSuccessful) {
-        const pageResult = resp.data!;
-        groupCurPage.value = pageResult.page;
-        groupTotalRecord.value = pageResult.total;
-        return pageResult.data;
       } else {
         toast.add({ severity: "warn", summary: "Warn", detail: resp.message, life: 3000 });
       }
@@ -843,99 +651,7 @@ async function fetchUserDetail(userId: number) {
       :header="t('adminUserManageView.userCreate.dialog.title')"
       class="min-w-96"
     >
-      <Form
-        v-slot="$userCreateForm"
-        :initial-values="userCreateFormInitValues"
-        :resolver="userCreateFormResolver"
-        @submit="handleUserCreateSubmit"
-        class="flex flex-col gap-4 m-4 w-96"
-      >
-        <div class="flex flex-col">
-          <div class="flex flex-col gap-2.5 w-full">
-            <div class="flex flex-col gap-1">
-              <FloatLabel variant="on">
-                <InputText id="createFormUsername" name="username" fluid />
-                <label for="createFormUsername">{{ t("adminUserManageView.userCreate.dialog.form.username") }}</label>
-              </FloatLabel>
-              <Message v-if="($userCreateForm as any).username?.invalid" severity="error" size="small" variant="simple">
-                {{ ($userCreateForm as any).username.error?.message }}
-              </Message>
-            </div>
-            <div class="flex flex-col gap-1">
-              <FloatLabel variant="on">
-                <InputText id="createFormPassword" name="password" type="password" fluid />
-                <label for="createFormPassword">{{ t("adminUserManageView.userCreate.dialog.form.password") }}</label>
-              </FloatLabel>
-              <Message v-if="($userCreateForm as any).password?.invalid" severity="error" size="small" variant="simple">
-                {{ ($userCreateForm as any).password.error?.message }}
-              </Message>
-            </div>
-            <div class="flex flex-col gap-1">
-              <FloatLabel variant="on">
-                <InputText id="createFormEmail" name="email" fluid />
-                <label for="createFormEmail">{{ t("adminUserManageView.userCreate.dialog.form.email") }}</label>
-              </FloatLabel>
-              <Message v-if="($userCreateForm as any).email?.invalid" severity="error" size="small" variant="simple">
-                {{ ($userCreateForm as any).email.error?.message }}
-              </Message>
-            </div>
-            <div class="flex flex-col gap-1">
-              <FloatLabel variant="on">
-                <Select
-                  id="createFormGroup"
-                  name="group"
-                  :options="groupPageData"
-                  optionLabel="name"
-                  :virtualScrollerOptions="{
-                    lazy: true,
-                    showLoader: true,
-                    loading: userCreateFormGroupFilterLoading,
-                    onLazyLoad: debounceHandleUserCreateFormGroupFilterLazyLoading
-                  }"
-                  class="w-full md:w-56"
-                  fluid
-                />
-                <label for="createFormGroup">{{ t("adminUserManageView.userCreate.dialog.form.groupId") }}</label>
-              </FloatLabel>
-              <Message v-if="($userCreateForm as any).group?.invalid" severity="error" size="small" variant="simple">
-                {{ ($userCreateForm as any).group.error?.message }}
-              </Message>
-            </div>
-            <div class="flex flex-col gap-1">
-              <div class="flex gap-4">
-                <label for="createFormDefaultImagePrivate">{{
-                  t("adminUserManageView.userCreate.dialog.form.isDefaultImagePrivate")
-                }}</label>
-                <ToggleSwitch id="createFormDefaultImagePrivate" name="isDefaultImagePrivate" />
-              </div>
-              <Message
-                v-if="($userCreateForm as any).isDefaultImagePrivate?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-              >
-                {{ ($userCreateForm as any).isDefaultImagePrivate.error?.message }}
-              </Message>
-            </div>
-          </div>
-          <Message v-if="($userCreateForm as any).invalid" severity="error" size="small" variant="simple">
-            {{ ($userCreateForm as any).error?.message }}
-          </Message>
-        </div>
-        <div class="flex justify-end gap-2">
-          <Button
-            type="button"
-            :label="t('adminUserManageView.userCreate.dialog.form.cancelButton')"
-            severity="secondary"
-            @click="showUserCreateDialog = false"
-          />
-          <Button
-            type="submit"
-            :label="t('adminUserManageView.userCreate.dialog.form.submitButton')"
-            :disabled="!$userCreateForm.valid"
-          />
-        </div>
-      </Form>
+      <UserCreateForm :group-api="groupApi" @cancel="showUserCreateDialog = false" @submit="onUserCreateFormSubmit" />
     </Dialog>
     <!--user edit-->
     <Dialog
@@ -944,92 +660,12 @@ async function fetchUserDetail(userId: number) {
       :header="t('adminUserManageView.userEdit.dialog.title')"
       class="min-w-96"
     >
-      <Form
-        v-slot="$userEditForm"
-        :initial-values="userEditFormInitValues"
-        :resolver="userEditFormResolver"
-        @submit="handleUserEditSubmit"
-        class="flex flex-col gap-4 m-4 w-96"
-      >
-        <div class="flex flex-col gap-2.5">
-          <div class="flex gap-2">
-            <span>{{ t("adminUserManageView.userEdit.dialog.form.userId") }}:</span>
-            <span>{{ userDetail?.id }}</span>
-          </div>
-          <div class="flex gap-2">
-            <span>{{ t("adminUserManageView.userEdit.dialog.form.username") }}:</span>
-            <span>{{ userDetail?.username }}</span>
-          </div>
-        </div>
-        <Divider />
-        <div class="flex flex-col gap-2.5 w-full">
-          <div class="flex flex-col gap-1">
-            <IftaLabel>
-              <InputText id="editFormPassword" name="password" type="password" fluid />
-              <label for="editFormPassword">{{ t("adminUserManageView.userEdit.dialog.form.password") }}</label>
-            </IftaLabel>
-            <Message v-if="($userEditForm as any).password?.invalid" severity="error" size="small" variant="simple">
-              {{ ($userEditForm as any).password.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <IftaLabel>
-              <InputText id="editFormEmail" name="email" :placeholder="userDetail?.email" fluid />
-              <label for="editFormEmail">{{ t("adminUserManageView.userEdit.dialog.form.email") }}</label>
-            </IftaLabel>
-            <Message v-if="($userEditForm as any).email?.invalid" severity="error" size="small" variant="simple">
-              {{ ($userEditForm as any).email.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <IftaLabel>
-              <Select
-                id="editFormGroup"
-                name="group"
-                :options="groupPageData"
-                optionLabel="name"
-                :placeholder="userDetail?.groupName"
-                :virtualScrollerOptions="{
-                  lazy: true,
-                  showLoader: true,
-                  loading: userCreateFormGroupFilterLoading,
-                  onLazyLoad: debounceHandleUserCreateFormGroupFilterLazyLoading
-                }"
-                class="w-full md:w-56"
-                fluid
-              />
-              <label for="editFormGroup">{{ t("adminUserManageView.userEdit.dialog.form.groupId") }}</label>
-            </IftaLabel>
-            <Message v-if="($userEditForm as any).group?.invalid" severity="error" size="small" variant="simple">
-              {{ ($userEditForm as any).group.error?.message }}
-            </Message>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="flex gap-4">
-              <label for="createFormDefaultImagePrivate">
-                {{ t("adminUserManageView.userEdit.dialog.form.isDefaultImagePrivate") }}
-              </label>
-              <ToggleSwitch
-                id="createFormDefaultImagePrivate"
-                name="isDefaultImagePrivate"
-                :default-value="userDetail?.isDefaultImagePrivate"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-end gap-2">
-          <Button
-            type="button"
-            :label="t('adminUserManageView.userEdit.dialog.form.cancelButton')"
-            severity="secondary"
-            @click="showUserCreateDialog = false"
-          />
-          <Button
-            type="submit"
-            :label="t('adminUserManageView.userEdit.dialog.form.submitButton')"
-          />
-        </div>
-      </Form>
+      <UserEditForm
+        :user-detail="userDetail!"
+        :group-api="groupApi"
+        @cancel="showUserEditDialog = false"
+        @submit="onUserEditFormSubmit"
+      />
     </Dialog>
     <!--user detail-->
     <Dialog
