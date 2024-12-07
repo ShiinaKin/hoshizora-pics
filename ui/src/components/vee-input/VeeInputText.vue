@@ -49,7 +49,6 @@ const { value, errorMessage } = useField(() => name);
       :class="{ 'p-invalid': errorMessage!! }"
       fluid
     />
-    <label class="hidden" :for="id">{{ label }}</label>
     <InputGroupAddon v-if="endIcon">
       <Icon :icon="endIcon" />
     </InputGroupAddon>
