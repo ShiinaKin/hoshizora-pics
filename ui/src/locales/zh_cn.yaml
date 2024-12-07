@@ -54,18 +54,33 @@ loginView:
         max: "密码长度必须小于等于32个字符"
         invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
   toast:
-    loginFailedTitle: "登录失败"
-    loginSuccessTitle: "登录成功"
+    successTitle: "登录成功"
+    failedTitle: "登录失败"
 registerView:
-  registerTitle: "注册"
-  registerUsernamePlaceholder: "请输入用户名"
-  registerUsernameRequirements: "用户名必须是4-20个字符，只能包含字母和数字。"
-  registerPasswordPlaceholder: "请输入密码"
-  registerPasswordRequirements: "密码长度必须在8到32个字符之间。只能为大小写字母、数字和特殊符号的组合，必须有字母和数字。"
-  registerEmailPlaceholder: "请输入邮箱"
-  registerEmailRequirements: "请输入正确的邮箱地址。"
-  registerSubmitButton: "注册"
-  registerLoginButton: "登录"
+  title: "注册"
+  form:
+    username: "用户名"
+    password: "密码"
+    email: "邮箱"
+    signupButton: "注册"
+    loginButton: "登录"
+    verify:
+      username:
+        required: "用户名不能为空"
+        min: "用户名必须大于等于4个字符"
+        max: "用户名必须小于等于20个字符"
+        invalid: "用户名只能包含字母和数字"
+      password:
+        required: "密码不能为空"
+        min: "密码长度必须大于等于8个字符"
+        max: "密码长度必须小于等于32个字符"
+        invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
+      email:
+        required: "邮箱不能为空"
+        invalid: "邮箱格式不正确"
+  toast:
+    successTitle: "注册成功"
+    failedTitle: "注册失败"
 userField:
   menu:
     overview: "概览"
