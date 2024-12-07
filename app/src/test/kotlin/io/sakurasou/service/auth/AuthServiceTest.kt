@@ -3,8 +3,7 @@ package io.sakurasou.service.auth
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.mockk.*
 import io.sakurasou.controller.request.UserLoginRequest
-import io.sakurasou.exception.controller.status.UnauthorizedAccessException
-import io.sakurasou.exception.service.user.UserNotFoundException
+import io.sakurasou.exception.service.auth.LoginFailedException
 import io.sakurasou.model.DatabaseSingleton
 import io.sakurasou.model.dao.relation.RelationDao
 import io.sakurasou.model.dao.user.UserDao
@@ -43,7 +42,7 @@ class AuthServiceTest {
     }
 
     @Test
-    fun `login should throw UserNotFoundException for non-existent user`() = runBlocking {
+    fun `login should throw LoginFailedException for non-existent user`() = runBlocking {
         val userLoginRequest = UserLoginRequest(username, password)
 
         coEvery { DatabaseSingleton.dbQuery<User>(any()) } coAnswers {
@@ -51,14 +50,14 @@ class AuthServiceTest {
         }
         coEvery { userDao.findUserByName(username) } returns null
 
-        assertFailsWith<UserNotFoundException> {
+        assertFailsWith<LoginFailedException> {
             authService.login(userLoginRequest)
         }
         coVerify(exactly = 1) { userDao.findUserByName(username) }
     }
 
     @Test
-    fun `login should throw UnauthorizedAccessException for incorrect password`() = runBlocking {
+    fun `login should throw LoginFailedException for incorrect password`() = runBlocking {
         val userLoginRequest = UserLoginRequest(username, password)
 
         val instant = Clock.System.now()
@@ -82,7 +81,7 @@ class AuthServiceTest {
         }
         coEvery { userDao.findUserByName(username) } returns user
 
-        assertFailsWith<UnauthorizedAccessException> {
+        assertFailsWith<LoginFailedException> {
             authService.login(userLoginRequest)
         }
         coVerify { userDao.findUserByName(username) }
