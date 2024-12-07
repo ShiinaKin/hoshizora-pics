@@ -4135,6 +4135,10 @@
           "email" : {
             "type" : "string"
           },
+          "groupId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
           "groupName" : {
             "type" : "string"
           },
@@ -4160,7 +4164,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "albumCount", "allSize", "createTime", "email", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
+        "required" : [ "albumCount", "allSize", "createTime", "email", "groupId", "groupName", "id", "imageCount", "isBanned", "isDefaultImagePrivate", "totalImageSize", "username" ]
       },
       "CommonResponse_UserVO" : {
         "type" : "object",

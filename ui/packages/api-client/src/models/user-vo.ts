@@ -46,6 +46,12 @@ export interface UserVO {
     'email': string;
     /**
      * 
+     * @type {number}
+     * @memberof UserVO
+     */
+    'groupId': number;
+    /**
+     * 
      * @type {string}
      * @memberof UserVO
      */
