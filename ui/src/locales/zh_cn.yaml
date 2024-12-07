@@ -28,7 +28,7 @@ siteInitView:
         required: "密码不能为空"
         min: "密码长度必须大于等于8个字符"
         max: "密码长度必须小于等于32个字符"
-        invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+        invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
       email:
         required: "邮箱不能为空"
         invalid: "邮箱格式不正确"
@@ -52,7 +52,7 @@ loginView:
         required: "密码不能为空"
         min: "密码长度必须大于等于8个字符"
         max: "密码长度必须小于等于32个字符"
-        invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+        invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
   toast:
     loginFailedTitle: "登录失败"
     loginSuccessTitle: "登录成功"
@@ -339,7 +339,7 @@ myProfileView:
           password:
             min: "密码长度必须大于等于8个字符"
             max: "密码长度必须小于等于32个字符"
-            invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+            invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
           atLeastOneField: "请至少修改一个字段"
     toast:
       successTitle: "修改成功"
@@ -580,7 +580,7 @@ adminUserManageView:
             required: "密码不能为空"
             min: "密码长度必须大于等于8个字符"
             max: "密码长度必须小于等于32个字符"
-            invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+            invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
           email:
             required: "邮箱不能为空"
             invalid: "邮箱格式不正确"
@@ -613,7 +613,7 @@ adminUserManageView:
             required: "密码不能为空"
             min: "密码长度必须大于等于8个字符"
             max: "密码长度必须小于等于32个字符"
-            invalid: "密码只能为大小写字母、数字和 @$!%*#?& 的组合"
+            invalid: "密码只能为大小写字母、数字和 {'@'}$!%*#?& 的组合"
           email:
             required: "邮箱不能为空"
             invalid: "邮箱格式不正确"
