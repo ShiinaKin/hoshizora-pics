@@ -3,6 +3,7 @@ package io.sakurasou.controller
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.controller.request.UserInsertRequest
@@ -29,53 +30,78 @@ fun Route.authRoute(authService: AuthService, userService: UserService) {
 }
 
 private fun Route.login(authController: AuthController) {
-    post("login", {
-        request {
-            body<UserLoginRequest> {
-                required = true
+    route {
+        install(RequestValidation) {
+            validate<UserLoginRequest> { loginRequest ->
+                if (loginRequest.username.isBlank()) ValidationResult.Invalid("username is required")
+                else if (loginRequest.password.isBlank()) ValidationResult.Invalid("password is required")
+                else if (!loginRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else ValidationResult.Valid
             }
         }
-        response {
-            HttpStatusCode.OK to {
-                body(Schema<CommonResponse<Map<String, String>>>().apply {
-                    title = "CommonResponseLoginResponse"
-                    type = "object"
-                    addProperty("code", Schema<Int>().apply { type = "integer" })
-                    addProperty("message", Schema<String>().apply { type = "string" })
-                    addProperty("data", Schema<Map<String, String>>().apply {
+        post("login", {
+            request {
+                body<UserLoginRequest> {
+                    required = true
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    body(Schema<CommonResponse<Map<String, String>>>().apply {
+                        title = "CommonResponseLoginResponse"
                         type = "object"
-                        additionalProperties = Schema<String>().apply {
-                            type = "string"
-                        }
+                        addProperty("code", Schema<Int>().apply { type = "integer" })
+                        addProperty("message", Schema<String>().apply { type = "string" })
+                        addProperty("data", Schema<Map<String, String>>().apply {
+                            type = "object"
+                            additionalProperties = Schema<String>().apply {
+                                type = "string"
+                            }
+                        })
+                        addProperty("isSuccessful", Schema<Boolean>().apply { type = "boolean" })
                     })
-                    addProperty("isSuccessful", Schema<Boolean>().apply { type = "boolean" })
-                })
+                }
             }
+        }) {
+            val loginRequest = call.receive<UserLoginRequest>()
+            val token = authController.handleLogin(loginRequest)
+            call.success(mapOf("token" to token))
         }
-    }) {
-        val loginRequest = call.receive<UserLoginRequest>()
-        val token = authController.handleLogin(loginRequest)
-        call.success(mapOf("token" to token))
     }
 }
 
 private fun Route.signup(authController: AuthController) {
-    post("signup", {
-        protected = false
-        request {
-            body<UserInsertRequest> {
-                required = true
+    route {
+        install(RequestValidation) {
+            validate<UserInsertRequest> { userInsertRequest ->
+                if (userInsertRequest.username.isBlank()) ValidationResult.Invalid("username is required")
+                else if (userInsertRequest.password.isBlank()) ValidationResult.Invalid("password is required")
+                else if (userInsertRequest.email.isBlank()) ValidationResult.Invalid("email is required")
+                else if (!userInsertRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else if (!userInsertRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                    ValidationResult.Invalid("email is invalid")
+                else ValidationResult.Valid
             }
         }
-        response {
-            HttpStatusCode.OK to {
-                body<CommonResponse<Unit>> { }
+        post("signup", {
+            protected = false
+            request {
+                body<UserInsertRequest> {
+                    required = true
+                }
             }
+            response {
+                HttpStatusCode.OK to {
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            val userInsertRequest = call.receive<UserInsertRequest>()
+            authController.handleSignup(userInsertRequest)
+            call.success()
         }
-    }) {
-        val userInsertRequest = call.receive<UserInsertRequest>()
-        authController.handleSignup(userInsertRequest)
-        call.success()
     }
 }
 
