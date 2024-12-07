@@ -65,6 +65,8 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers-jvm")
     implementation("io.ktor:ktor-server-forwarded-header-jvm")
     implementation("io.ktor:ktor-server-cors")
+    implementation("io.ktor:ktor-server-request-validation")
+    implementation("io.ktor:ktor-server-rate-limit")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-config-yaml")
 
