@@ -7,6 +7,7 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -36,21 +37,37 @@ fun Route.commonRoute(commonService: CommonService) {
 
 fun Route.siteInitRoute() {
     val commonController = CommonController(commonService)
-    post("site/init", {
-        request {
-            body<SiteInitRequest> {
-                required = true
+    route {
+        install(RequestValidation) {
+            validate<SiteInitRequest> { siteInitRequest ->
+                if (siteInitRequest.siteTitle.isBlank()) ValidationResult.Invalid("siteTitle is invalid")
+                else if (!siteInitRequest.siteExternalUrl.matches(Regex("^https?://(.+\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)\$")))
+                    ValidationResult.Invalid("siteExternalUrl is invalid")
+                else if (!siteInitRequest.username.matches(Regex("^[a-zA-Z0-9]{4,20}\$")))
+                    ValidationResult.Invalid("username is invalid")
+                else if (!siteInitRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else if (!siteInitRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                    ValidationResult.Invalid("email is invalid")
+                else ValidationResult.Valid
             }
         }
-        response {
-            HttpStatusCode.OK to {
-                body<CommonResponse<Unit>> { }
+        post("site/init", {
+            request {
+                body<SiteInitRequest> {
+                    required = true
+                }
             }
+            response {
+                HttpStatusCode.OK to {
+                    body<CommonResponse<Unit>> { }
+                }
+            }
+        }) {
+            val siteInitRequest = call.receive<SiteInitRequest>()
+            commonController.handleInit(siteInitRequest)
+            call.success()
         }
-    }) {
-        val siteInitRequest = call.receive<SiteInitRequest>()
-        commonController.handleInit(siteInitRequest)
-        call.success()
     }
 }
 
