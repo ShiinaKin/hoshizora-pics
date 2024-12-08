@@ -2,6 +2,7 @@ package io.sakurasou.controller
 
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.GROUP_DELETE
@@ -13,11 +14,7 @@ import io.sakurasou.controller.request.GroupPatchRequest
 import io.sakurasou.controller.request.GroupPutRequest
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.*
-import io.sakurasou.extension.getPrincipal
-import io.sakurasou.extension.id
-import io.sakurasou.extension.pageRequest
-import io.sakurasou.extension.pageRequestSpec
-import io.sakurasou.extension.success
+import io.sakurasou.extension.*
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.group.GroupService
 
@@ -60,6 +57,13 @@ private fun Route.groupInsert(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
+        }
+        install(RequestValidation) {
+            validate<GroupInsertRequest> { insertRequest ->
+                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
+                else if (insertRequest.roles.isEmpty()) ValidationResult.Invalid("roles is invalid")
+                else ValidationResult.Valid
+            }
         }
         post({
             request {
@@ -110,6 +114,22 @@ private fun Route.groupPatch(controller: GroupController) {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
         }
+        install(RequestValidation) {
+            validate<GroupPatchRequest> { patchRequest ->
+                if (patchRequest.name == null
+                    && patchRequest.description == null
+                    && patchRequest.strategyId == null
+                    && patchRequest.config == null
+                    && patchRequest.roles == null
+                )
+                    ValidationResult.Invalid("at least one field is required")
+                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                    ValidationResult.Invalid("name is invalid")
+                else if (patchRequest.roles != null && patchRequest.roles.isEmpty())
+                    ValidationResult.Invalid("roles is invalid")
+                else ValidationResult.Valid
+            }
+        }
         patch({
             request {
                 body<GroupPatchRequest> {
@@ -135,6 +155,13 @@ private fun Route.groupUpdate(controller: GroupController) {
     route {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
+        }
+        install(RequestValidation) {
+            validate<GroupPutRequest> { putRequest ->
+                if (putRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
+                else if (putRequest.roles.isEmpty()) ValidationResult.Invalid("roles is invalid")
+                else ValidationResult.Valid
+            }
         }
         put({
             request {
