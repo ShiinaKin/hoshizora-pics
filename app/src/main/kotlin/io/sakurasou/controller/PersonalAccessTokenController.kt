@@ -6,6 +6,7 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.PERSONAL_ACCESS_TOKEN_READ_SELF
@@ -23,6 +24,9 @@ import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.personalAccessToken.PersonalAccessTokenService
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * @author ShiinaKin
@@ -62,6 +66,14 @@ private fun Route.patInsert(controller: PersonalAccessTokenController) {
     route {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<PersonalAccessTokenInsertRequest> { insertRequest ->
+                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
+                else if (insertRequest.expireTime < Clock.System.now().toLocalDateTime(TimeZone.UTC))
+                    ValidationResult.Invalid("expireTime is invalid")
+                else ValidationResult.Valid
+            }
         }
         post({
             request {
@@ -104,6 +116,15 @@ private fun Route.patPatch(controller: PersonalAccessTokenController) {
     route {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<PersonalAccessTokenPatchRequest> { patchRequest ->
+                if (patchRequest.name == null && patchRequest.description == null)
+                    ValidationResult.Invalid("at least one field is required")
+                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                    ValidationResult.Invalid("name is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
@@ -160,7 +181,8 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
     }
 }
 
-private fun ApplicationCall.patId() = parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
+private fun ApplicationCall.patId() =
+    parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
 
 class PersonalAccessTokenController(
     private val personalAccessTokenService: PersonalAccessTokenService
