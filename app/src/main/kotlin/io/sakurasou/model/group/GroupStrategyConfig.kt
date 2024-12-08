@@ -16,5 +16,5 @@ data class GroupStrategyConfig(
     val fileNamingRule: String = "{uniq}",
     val imageQuality: Int = 100,
     val imageAutoTransformTarget: ImageType? = null,
-    val allowedImageTypes: Set<ImageType> = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP)
+    val allowedImageTypes: Set<ImageType> = setOf()
 )
