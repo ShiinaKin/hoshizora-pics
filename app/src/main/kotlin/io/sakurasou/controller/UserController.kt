@@ -2,6 +2,7 @@ package io.sakurasou.controller
 
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
@@ -14,11 +15,7 @@ import io.sakurasou.controller.vo.PageResult
 import io.sakurasou.controller.vo.UserPageVO
 import io.sakurasou.controller.vo.UserVO
 import io.sakurasou.exception.controller.param.WrongParameterException
-import io.sakurasou.extension.getPrincipal
-import io.sakurasou.extension.id
-import io.sakurasou.extension.pageRequest
-import io.sakurasou.extension.pageRequestSpec
-import io.sakurasou.extension.success
+import io.sakurasou.extension.*
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.user.UserService
 
@@ -57,6 +54,21 @@ private fun Route.patchSelf(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<UserSelfPatchRequest> { selfPatchRequest ->
+                if (selfPatchRequest.password.isNullOrBlank()
+                    && selfPatchRequest.email.isNullOrBlank()
+                    && selfPatchRequest.defaultAlbumId == null
+                    && selfPatchRequest.isDefaultImagePrivate == null
+                )
+                    ValidationResult.Invalid("at least one field is required")
+                else if (selfPatchRequest.password != null && !selfPatchRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else if (selfPatchRequest.email != null && !selfPatchRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                    ValidationResult.Invalid("email is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             description = "modify self"
@@ -132,6 +144,16 @@ private fun Route.insertUser(controller: UserController) {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
         }
+        install(RequestValidation) {
+            validate<UserManageInsertRequest> { manageInsertRequest ->
+                if (!manageInsertRequest.username.matches(Regex("^[a-zA-Z0-9]{4,20}\$"))) ValidationResult.Invalid("username is invalid")
+                else if (!manageInsertRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else if (!manageInsertRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                    ValidationResult.Invalid("email is invalid")
+                else ValidationResult.Valid
+            }
+        }
         post({
             description = "admin manual add user"
             request {
@@ -180,6 +202,22 @@ private fun Route.patchUser(controller: UserController) {
     route {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
+        }
+        install(RequestValidation) {
+            validate<UserManagePatchRequest> { managePatchRequest ->
+                if (managePatchRequest.password.isNullOrBlank()
+                    && managePatchRequest.email.isNullOrBlank()
+                    && managePatchRequest.defaultAlbumId == null
+                    && managePatchRequest.isDefaultImagePrivate == null
+                    && managePatchRequest.groupId == null
+                )
+                    ValidationResult.Invalid("at least one field is required")
+                else if (!managePatchRequest.password.isNullOrBlank() && !managePatchRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                    ValidationResult.Invalid("password is invalid")
+                else if (!managePatchRequest.email.isNullOrBlank() && !managePatchRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                    ValidationResult.Invalid("email is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             description = "modify any user"
