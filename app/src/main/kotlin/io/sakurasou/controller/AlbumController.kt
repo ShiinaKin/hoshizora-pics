@@ -1,22 +1,14 @@
 package io.sakurasou.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.*
 import io.sakurasou.controller.request.*
-import io.sakurasou.controller.vo.AlbumManagePageVO
-import io.sakurasou.controller.vo.AlbumManageVO
-import io.sakurasou.controller.vo.AlbumPageVO
-import io.sakurasou.controller.vo.AlbumVO
-import io.sakurasou.controller.vo.CommonResponse
-import io.sakurasou.controller.vo.PageResult
+import io.sakurasou.controller.vo.*
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.getPrincipal
 import io.sakurasou.extension.pageRequest
@@ -53,7 +45,7 @@ private fun Route.albumSelfRoute(controller: AlbumController) {
             }
         }) {
             albumSelfDelete(controller)
-            albumSelfUpdate(controller)
+            albumSelfPatch(controller)
             albumSelfFetch(controller)
         }
         albumSelfPage(controller)
@@ -64,6 +56,12 @@ private fun Route.albumSelfInsert(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<AlbumSelfInsertRequest> { selfInsertRequest ->
+                if (selfInsertRequest.name.isBlank()) ValidationResult.Invalid("albumName is invalid")
+                else ValidationResult.Valid
+            }
         }
         post({
             request {
@@ -107,10 +105,21 @@ private fun Route.albumSelfDelete(controller: AlbumController) {
     }
 }
 
-private fun Route.albumSelfUpdate(controller: AlbumController) {
+private fun Route.albumSelfPatch(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<AlbumSelfPatchRequest> { selfPatchRequest ->
+                if (selfPatchRequest.name == null
+                    && selfPatchRequest.description == null
+                    && selfPatchRequest.isDefault == null
+                )
+                    ValidationResult.Invalid("at least one field is required")
+                else if (selfPatchRequest.name?.isBlank() == true) ValidationResult.Invalid("albumName is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
@@ -214,7 +223,7 @@ private fun Route.albumManageRoute(controller: AlbumController) {
             }
         }) {
             albumManageDelete(controller)
-            albumManageUpdate(controller)
+            albumManagePatch(controller)
             albumManageFetch(controller)
         }
         albumManagePage(controller)
@@ -225,6 +234,12 @@ private fun Route.albumManageInsert(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
+        }
+        install(RequestValidation) {
+            validate<AlbumManageInsertRequest> { manageInsertRequest ->
+                if (manageInsertRequest.name.isBlank()) ValidationResult.Invalid("albumName is invalid")
+                else ValidationResult.Valid
+            }
         }
         post({
             request {
@@ -266,10 +281,22 @@ private fun Route.albumManageDelete(controller: AlbumController) {
     }
 }
 
-private fun Route.albumManageUpdate(controller: AlbumController) {
+private fun Route.albumManagePatch(controller: AlbumController) {
     route {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
+        }
+        install(RequestValidation) {
+            validate<AlbumManagePatchRequest> { managePatchRequest ->
+                if (managePatchRequest.name == null
+                    && managePatchRequest.description == null
+                    && managePatchRequest.isDefault == null
+                    && managePatchRequest.userId == null
+                )
+                    ValidationResult.Invalid("at least one field is required")
+                else if (managePatchRequest.name?.isBlank() == true) ValidationResult.Invalid("albumName is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
