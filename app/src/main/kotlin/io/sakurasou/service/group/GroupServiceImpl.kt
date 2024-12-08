@@ -12,6 +12,7 @@ import io.sakurasou.exception.service.group.GroupInsertFailedException
 import io.sakurasou.exception.service.group.GroupNotFoundException
 import io.sakurasou.exception.service.group.GroupUpdateFailedException
 import io.sakurasou.exception.service.role.RoleNotFoundException
+import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.group.GroupDao
 import io.sakurasou.model.dao.relation.RelationDao
@@ -62,8 +63,10 @@ class GroupServiceImpl(
         runCatching {
             dbQuery {
                 val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-                if (group.isSystemReserved) throw GroupDeleteFailedException(null, "Cannot delete system reserved group")
-                if (userDao.doesUsersBelongToUserGroup(group.id)) throw GroupDeleteFailedException(null, "Group is not empty")
+                if (group.isSystemReserved)
+                    throw GroupDeleteFailedException(null, "Cannot delete system reserved group")
+                if (userDao.doesUsersBelongToUserGroup(group.id))
+                    throw GroupDeleteFailedException(null, "Group is not empty")
                 relationDao.deleteGroupToRolesByGroupId(group.id)
                 groupDao.deleteGroupById(group.id)
             }
@@ -79,6 +82,8 @@ class GroupServiceImpl(
                 val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
                 if (oldGroup.isSystemReserved && putRequest.name != oldGroup.name)
                     throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
+
+                strategyDao.findStrategyById(putRequest.strategyId) ?: throw StrategyNotFoundException()
 
                 val groupUpdateDTO = GroupUpdateDTO(
                     id = id,
@@ -103,6 +108,8 @@ class GroupServiceImpl(
                 val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
                 if (oldGroup.isSystemReserved && patchRequest.name != null)
                     throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
+
+                patchRequest.strategyId?.let { strategyDao.findStrategyById(it) ?: throw StrategyNotFoundException() }
 
                 val groupUpdateDTO = GroupUpdateDTO(
                     id = id,
