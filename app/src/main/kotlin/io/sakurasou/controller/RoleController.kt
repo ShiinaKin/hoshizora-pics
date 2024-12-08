@@ -2,6 +2,7 @@ package io.sakurasou.controller
 
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.ROLE_READ_ALL
@@ -56,6 +57,13 @@ private fun Route.insertRole(controller: RoleController) {
         install(AuthorizationPlugin) {
             permission = ROLE_WRITE_ALL
         }
+        install(RequestValidation) {
+            validate<RoleInsertRequest> { insertRequest ->
+                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
+                else if (insertRequest.displayName.isBlank()) ValidationResult.Invalid("displayName is invalid")
+                else ValidationResult.Valid
+            }
+        }
         post({
             request {
                 body<RoleInsertRequest> {
@@ -83,6 +91,14 @@ private fun Route.patchRole(controller: RoleController) {
     route {
         install(AuthorizationPlugin) {
             permission = ROLE_WRITE_ALL
+        }
+        install(RequestValidation) {
+            validate<RolePatchRequest> { patchRequest ->
+                if (patchRequest.displayName == null && patchRequest.description == null)
+                    ValidationResult.Invalid("at least one field is required")
+                else if (patchRequest.displayName != null) ValidationResult.Invalid("displayName is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
