@@ -262,13 +262,7 @@ const [allowedImageTypes, allowedImageTypesAttrs] = defineField("config.strategy
 pathNamingRule.value = "{yyyy}/{MM}/{dd}";
 fileNamingRule.value = "{uniq}";
 imageQuality.value = 100;
-allowedImageTypes.value = [
-  { name: ImageTypeEnum.Jpeg, value: ImageTypeEnum.Jpeg },
-  { name: ImageTypeEnum.Jpg, value: ImageTypeEnum.Jpg },
-  { name: ImageTypeEnum.Png, value: ImageTypeEnum.Png },
-  { name: ImageTypeEnum.Gif, value: ImageTypeEnum.Gif },
-  { name: ImageTypeEnum.Webp, value: ImageTypeEnum.Webp }
-];
+allowedImageTypes.value = [];
 
 const onSubmit = handleSubmit((values, ctx) => {
   emits("submit", values, ctx);
