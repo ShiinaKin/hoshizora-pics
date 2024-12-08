@@ -35,8 +35,6 @@ private fun Route.login(authController: AuthController) {
             validate<UserLoginRequest> { loginRequest ->
                 if (loginRequest.username.isBlank()) ValidationResult.Invalid("username is required")
                 else if (loginRequest.password.isBlank()) ValidationResult.Invalid("password is required")
-                else if (!loginRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
-                    ValidationResult.Invalid("password is invalid")
                 else ValidationResult.Valid
             }
         }
@@ -75,9 +73,7 @@ private fun Route.signup(authController: AuthController) {
     route {
         install(RequestValidation) {
             validate<UserInsertRequest> { userInsertRequest ->
-                if (userInsertRequest.username.isBlank()) ValidationResult.Invalid("username is required")
-                else if (userInsertRequest.password.isBlank()) ValidationResult.Invalid("password is required")
-                else if (userInsertRequest.email.isBlank()) ValidationResult.Invalid("email is required")
+                if (!userInsertRequest.username.matches(Regex("^[a-zA-Z0-9]{4,20}\$"))) ValidationResult.Invalid("username is required")
                 else if (!userInsertRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
                     ValidationResult.Invalid("password is invalid")
                 else if (!userInsertRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
