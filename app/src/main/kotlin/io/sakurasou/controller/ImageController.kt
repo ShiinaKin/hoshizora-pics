@@ -6,6 +6,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -55,7 +56,7 @@ private fun Route.imageSelfRoute(controller: ImageController) {
         }
     }) {
         imageSelfDelete(controller)
-        imageSelfUpdate(controller)
+        imageSelfPatch(controller)
         imageSelfInfoFetch(controller)
         imageSelfFileFetch(controller)
         imageSelfThumbnailFileFetch(controller)
@@ -123,7 +124,7 @@ private fun Route.imageSelfUpload(controller: ImageController) {
                 throw WrongParameterException("No file found")
             }
 
-            val imageName = controller.handleSelfUpload(userId, imageRawFile!!)
+            val imageName = controller.handleSelfUpload(userId, imageRawFile)
 
             call.success(imageName)
         }
@@ -151,10 +152,22 @@ private fun Route.imageSelfDelete(controller: ImageController) {
     }
 }
 
-private fun Route.imageSelfUpdate(controller: ImageController) {
+private fun Route.imageSelfPatch(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_WRITE_SELF
+        }
+        install(RequestValidation) {
+            validate<ImagePatchRequest> { patchRequest ->
+                if (patchRequest.albumId == null
+                    && patchRequest.displayName == null
+                    && patchRequest.description == null
+                    && patchRequest.isPrivate == null
+                ) ValidationResult.Invalid("at least one field should be provided")
+                else if (patchRequest.displayName != null && patchRequest.displayName.isBlank())
+                    ValidationResult.Invalid("displayName is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
@@ -312,7 +325,7 @@ private fun Route.imageManageRoute(controller: ImageController) {
             }
         }) {
             imageManageDelete(controller)
-            imageManageUpdate(controller)
+            imageManagePatch(controller)
             imageManageInfoFetch(controller)
             imageManageFileFetch(controller)
             imageManageThumbnailFileFetch(controller)
@@ -341,10 +354,23 @@ private fun Route.imageManageDelete(controller: ImageController) {
     }
 }
 
-private fun Route.imageManageUpdate(controller: ImageController) {
+private fun Route.imageManagePatch(controller: ImageController) {
     route {
         install(AuthorizationPlugin) {
             permission = IMAGE_WRITE_ALL
+        }
+        install(RequestValidation) {
+            validate<ImageManagePatchRequest> { managePatchRequest ->
+                if (managePatchRequest.userId == null
+                    && managePatchRequest.albumId == null
+                    && managePatchRequest.displayName == null
+                    && managePatchRequest.description == null
+                    && managePatchRequest.isPrivate == null
+                ) ValidationResult.Invalid("at least one field should be provided")
+                else if (managePatchRequest.displayName != null && managePatchRequest.displayName.isBlank())
+                    ValidationResult.Invalid("displayName is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
