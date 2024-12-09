@@ -111,10 +111,10 @@ const activeFilterClass = ref("bg-gray-200  hover:bg-gray-200");
 const imageRawUrlMap = ref<Map<number, string>>(new Map<number, string>());
 
 const imageViewerList = ref<ImageView[]>([]);
-const showRawImageLoadingDialog = ref(false);
+const showLoadingDialog = ref(false);
 
 const showRawImage = async (dbClickImageIdx: number) => {
-  showRawImageLoadingDialog.value = true;
+  showLoadingDialog.value = true;
   await Promise.all(
     imageDisplayList.value.map(async (image) => {
       await fetchImage(image.id);
@@ -130,7 +130,7 @@ const showRawImage = async (dbClickImageIdx: number) => {
     } as ImageView;
   });
 
-  showRawImageLoadingDialog.value = false;
+  showLoadingDialog.value = false;
   viewerApi({
     images: imageViewerList.value,
     options: {
@@ -819,8 +819,10 @@ async function fetchThumbnails() {
         return null;
       })
   );
+  showLoadingDialog.value = true;
   const results = await Promise.all(promises);
   imageDisplayList.value = results.filter((item) => item !== null);
+  showLoadingDialog.value = false;
 }
 </script>
 
@@ -898,330 +900,330 @@ async function fetchThumbnails() {
       :cur-page="curPage"
       :total-record="totalRecord"
     />
-  </div>
 
-  <!--image filter-->
-  <Popover ref="filterRef">
-    <div class="w-40 flex flex-col">
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeFilter === 'createTimeASC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            orderBy = 'createTime';
-            order = 'ASC';
-            activeFilter = 'createTimeASC';
-            filterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-clock-ascending-outline" />
-          {{ t("myImageView.filter.image.uploadTimeASC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeFilter === 'createTimeDESC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            orderBy = 'createTime';
-            order = 'DESC';
-            activeFilter = 'createTimeDESC';
-            filterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-clock-descending-outline" />
-          {{ t("myImageView.filter.image.uploadTimeDESC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeFilter === 'sizeASC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            orderBy = 'size';
-            order = 'ASC';
-            activeFilter = 'sizeASC';
-            filterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-ascending" />
-          {{ t("myImageView.filter.image.fileSizeASC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeFilter === 'sizeDESC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            orderBy = 'size';
-            order = 'DESC';
-            activeFilter = 'sizeDESC';
-            filterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-descending" />
-          {{ t("myImageView.filter.image.fileSizeDESC") }}
-        </span>
-      </button>
-    </div>
-  </Popover>
-  <!--visible filter-->
-  <Popover ref="visibleFilterRef">
-    <div class="w-24 flex flex-col">
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeVisibleFilter === 'public' ? activeFilterClass : ''"
-        @click="
-          () => {
-            isPrivate = false;
-            activeVisibleFilter = 'public';
-            visibleFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:visibility-outline" />
-          {{ t("myImageView.filter.visible.public") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeVisibleFilter === 'private' ? activeFilterClass : ''"
-        @click="
-          () => {
-            isPrivate = true;
-            activeVisibleFilter = 'private';
-            visibleFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:visibility-off-outline" />
-          {{ t("myImageView.filter.visible.private") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeVisibleFilter === 'all' ? activeFilterClass : ''"
-        @click="
-          () => {
-            isPrivate = undefined;
-            activeVisibleFilter = 'all';
-            visibleFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:visibility" />
-          {{ t("myImageView.filter.visible.all") }}
-        </span>
-      </button>
-    </div>
-  </Popover>
-  <!--album drawer-->
-  <Drawer v-model:visible="showAlbumDrawer" position="right" class="bg-gray-100">
-    <template #header>
-      <div class="flex items-center gap-2 text-lg">
-        <span class="font-bold">{{ t("myImageView.filter.album.drawer.title") }}</span>
-        <Icon icon="mdi:restart" class="hover:cursor-pointer size-5" title="Reset" @click="handleAlbumFilterReset" />
-      </div>
-    </template>
-    <div class="h-full flex flex-col">
-      <div class="flex-grow flex flex-col gap-2 overflow-y-auto">
-        <div
-          v-for="(album, idx) in albumPageData"
-          :key="idx"
-          @click="handleAlbumFilterSelect(album.id)"
-          class="p-2 flex items-center justify-between rounded-xl"
-          :class="
-            albumId === album.id ? 'bg-sky-300 hover:cursor-default' : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
-          "
-        >
-          <span>{{ album.id }}.</span>
-          <span>{{ album.name }}</span>
-          <span class="px-2 py-1 rounded-full bg-gray-100">{{ album.imageCount }}</span>
-        </div>
-      </div>
-      <Paginator
-        class="mt-auto"
-        :rows="albumPageSize"
-        :totalRecords="albumTotalRecord"
-        template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-      />
-    </div>
-  </Drawer>
-  <!--loading-->
-  <LoadingDialog v-model:visible="showRawImageLoadingDialog" />
-  <!--change album-->
-  <Dialog
-    v-model:visible="showImageChangeAlbumDialog"
-    modal
-    :header="t('myImageView.changeAlbum.dialog.title')"
-    class="min-w-96 z-99"
-  >
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <DataTable
-          :value="albumPageData"
-          paginator
-          :rows="albumPageSize"
-          :total-records="albumTotalRecord"
-          @page="(it) => (albumPage = it.page + 1)"
-          paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-          currentPageReportTemplate="{first} to {last} of {totalRecords}"
-          scrollable
-          scrollHeight="400px"
-          selectionMode="single"
-          dataKey="id"
-          :metaKeySelection="false"
-          v-model:selection="selectedAlbum"
-        >
-          <Column field="id" :header="t('myImageView.changeAlbum.dialog.form.table.albumId')"></Column>
-          <Column field="name" :header="t('myImageView.changeAlbum.dialog.form.table.albumName')"></Column>
-          <Column field="imageCount" :header="t('myImageView.changeAlbum.dialog.form.table.imageCount')"></Column>
-          <Column
-            field="isUncategorized"
-            :header="t('myImageView.changeAlbum.dialog.form.table.isUncategorized.title')"
-          >
-            <template #body="{ data }">
-              {{
-                data.isUncategorized
-                  ? t("myImageView.changeAlbum.dialog.form.table.isUncategorized.true")
-                  : t("myImageView.changeAlbum.dialog.form.table.isUncategorized.false")
-              }}
-            </template>
-          </Column>
-          <Column field="isDefault" :header="t('myImageView.changeAlbum.dialog.form.table.isDefault.title')">
-            <template #body="{ data }">
-              {{
-                data.isDefault
-                  ? t("myImageView.changeAlbum.dialog.form.table.isDefault.true")
-                  : t("myImageView.changeAlbum.dialog.form.table.isDefault.false")
-              }}
-            </template>
-          </Column>
-        </DataTable>
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          :label="t('myImageView.changeAlbum.dialog.form.cancelButton')"
-          severity="secondary"
-          @click="showImageChangeAlbumDialog = false"
-        />
-        <Button
-          type="button"
-          :label="t('myImageView.changeAlbum.dialog.form.submitButton')"
+    <!--image filter-->
+    <Popover ref="filterRef">
+      <div class="w-40 flex flex-col">
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeFilter === 'createTimeASC' ? activeFilterClass : ''"
           @click="
-            isSingleImageChangeAlbum
-              ? handleSingleImageChangeAlbumDialogSubmit()
-              : handleMultiImageChangeAlbumDialogSubmit()
+            () => {
+              orderBy = 'createTime';
+              order = 'ASC';
+              activeFilter = 'createTimeASC';
+              filterRef.hide();
+            }
           "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-clock-ascending-outline" />
+            {{ t("myImageView.filter.image.uploadTimeASC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeFilter === 'createTimeDESC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              orderBy = 'createTime';
+              order = 'DESC';
+              activeFilter = 'createTimeDESC';
+              filterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-clock-descending-outline" />
+            {{ t("myImageView.filter.image.uploadTimeDESC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeFilter === 'sizeASC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              orderBy = 'size';
+              order = 'ASC';
+              activeFilter = 'sizeASC';
+              filterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-ascending" />
+            {{ t("myImageView.filter.image.fileSizeASC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeFilter === 'sizeDESC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              orderBy = 'size';
+              order = 'DESC';
+              activeFilter = 'sizeDESC';
+              filterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-descending" />
+            {{ t("myImageView.filter.image.fileSizeDESC") }}
+          </span>
+        </button>
+      </div>
+    </Popover>
+    <!--visible filter-->
+    <Popover ref="visibleFilterRef">
+      <div class="w-24 flex flex-col">
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeVisibleFilter === 'public' ? activeFilterClass : ''"
+          @click="
+            () => {
+              isPrivate = false;
+              activeVisibleFilter = 'public';
+              visibleFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:visibility-outline" />
+            {{ t("myImageView.filter.visible.public") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeVisibleFilter === 'private' ? activeFilterClass : ''"
+          @click="
+            () => {
+              isPrivate = true;
+              activeVisibleFilter = 'private';
+              visibleFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:visibility-off-outline" />
+            {{ t("myImageView.filter.visible.private") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeVisibleFilter === 'all' ? activeFilterClass : ''"
+          @click="
+            () => {
+              isPrivate = undefined;
+              activeVisibleFilter = 'all';
+              visibleFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:visibility" />
+            {{ t("myImageView.filter.visible.all") }}
+          </span>
+        </button>
+      </div>
+    </Popover>
+    <!--album drawer-->
+    <Drawer v-model:visible="showAlbumDrawer" position="right" class="bg-gray-100">
+      <template #header>
+        <div class="flex items-center gap-2 text-lg">
+          <span class="font-bold">{{ t("myImageView.filter.album.drawer.title") }}</span>
+          <Icon icon="mdi:restart" class="hover:cursor-pointer size-5" title="Reset" @click="handleAlbumFilterReset" />
+        </div>
+      </template>
+      <div class="h-full flex flex-col">
+        <div class="flex-grow flex flex-col gap-2 overflow-y-auto">
+          <div
+            v-for="(album, idx) in albumPageData"
+            :key="idx"
+            @click="handleAlbumFilterSelect(album.id)"
+            class="p-2 flex items-center justify-between rounded-xl"
+            :class="
+              albumId === album.id ? 'bg-sky-300 hover:cursor-default' : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
+            "
+          >
+            <span>{{ album.id }}.</span>
+            <span>{{ album.name }}</span>
+            <span class="px-2 py-1 rounded-full bg-gray-100">{{ album.imageCount }}</span>
+          </div>
+        </div>
+        <Paginator
+          class="mt-auto"
+          :rows="albumPageSize"
+          :totalRecords="albumTotalRecord"
+          template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         />
       </div>
-    </div>
-  </Dialog>
-  <!--image detail-->
-  <Dialog v-model:visible="showImageDetailDialog" modal :header="t('myImageView.detail.dialog.title')" class="min-w-96">
-    <div class="flow-root">
-      <dl class="-my-3 divide-y divide-gray-100 text-sm">
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.name") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.displayName }}</dd>
+    </Drawer>
+    <!--loading-->
+    <LoadingDialog v-model:visible="showLoadingDialog" />
+    <!--change album-->
+    <Dialog
+      v-model:visible="showImageChangeAlbumDialog"
+      modal
+      :header="t('myImageView.changeAlbum.dialog.title')"
+      class="min-w-96 z-99"
+    >
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <DataTable
+            :value="albumPageData"
+            paginator
+            :rows="albumPageSize"
+            :total-records="albumTotalRecord"
+            @page="(it) => (albumPage = it.page + 1)"
+            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            currentPageReportTemplate="{first} to {last} of {totalRecords}"
+            scrollable
+            scrollHeight="400px"
+            selectionMode="single"
+            dataKey="id"
+            :metaKeySelection="false"
+            v-model:selection="selectedAlbum"
+          >
+            <Column field="id" :header="t('myImageView.changeAlbum.dialog.form.table.albumId')"></Column>
+            <Column field="name" :header="t('myImageView.changeAlbum.dialog.form.table.albumName')"></Column>
+            <Column field="imageCount" :header="t('myImageView.changeAlbum.dialog.form.table.imageCount')"></Column>
+            <Column
+              field="isUncategorized"
+              :header="t('myImageView.changeAlbum.dialog.form.table.isUncategorized.title')"
+            >
+              <template #body="{ data }">
+                {{
+                  data.isUncategorized
+                    ? t("myImageView.changeAlbum.dialog.form.table.isUncategorized.true")
+                    : t("myImageView.changeAlbum.dialog.form.table.isUncategorized.false")
+                }}
+              </template>
+            </Column>
+            <Column field="isDefault" :header="t('myImageView.changeAlbum.dialog.form.table.isDefault.title')">
+              <template #body="{ data }">
+                {{
+                  data.isDefault
+                    ? t("myImageView.changeAlbum.dialog.form.table.isDefault.true")
+                    : t("myImageView.changeAlbum.dialog.form.table.isDefault.false")
+                }}
+              </template>
+            </Column>
+          </DataTable>
         </div>
+        <div class="flex justify-end gap-2">
+          <Button
+            type="button"
+            :label="t('myImageView.changeAlbum.dialog.form.cancelButton')"
+            severity="secondary"
+            @click="showImageChangeAlbumDialog = false"
+          />
+          <Button
+            type="button"
+            :label="t('myImageView.changeAlbum.dialog.form.submitButton')"
+            @click="
+              isSingleImageChangeAlbum
+                ? handleSingleImageChangeAlbumDialogSubmit()
+                : handleMultiImageChangeAlbumDialogSubmit()
+            "
+          />
+        </div>
+      </div>
+    </Dialog>
+    <!--image detail-->
+    <Dialog v-model:visible="showImageDetailDialog" modal :header="t('myImageView.detail.dialog.title')" class="min-w-96">
+      <div class="flow-root">
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.name") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.displayName }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.rawName") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.originName }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.rawName") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.originName }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.type") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.mimeType }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.type") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.mimeType }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.albumName") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.albumName }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.albumName") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.albumName }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.ownerName") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.ownerName }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.ownerName") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.ownerName }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.size") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.width }} * {{ imageInfo?.height }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.size") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.width }} * {{ imageInfo?.height }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.fileSize") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.size }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.fileSize") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.size }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.uploadTime") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">
-            {{ formatUTCStringToLocale(imageInfo?.createTime) }}
-          </dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.uploadTime") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ formatUTCStringToLocale(imageInfo?.createTime) }}
+            </dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.isPrivate.title") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">
-            {{
-              imageInfo?.isPrivate
-                ? t("myImageView.detail.dialog.isPrivate.true")
-                : t("myImageView.detail.dialog.isPrivate.false")
-            }}
-          </dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.isPrivate.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                imageInfo?.isPrivate
+                  ? t("myImageView.detail.dialog.isPrivate.true")
+                  : t("myImageView.detail.dialog.isPrivate.false")
+              }}
+            </dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.description") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.description }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.description") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.description }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">MD5</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.md5 }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">MD5</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.md5 }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">SHA256</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.sha256 }}</dd>
-        </div>
-      </dl>
-    </div>
-  </Dialog>
-  <!--image edit-->
-  <Dialog v-model:visible="showImageEditDialog" modal :header="t('myImageView.edit.dialog.title')" class="min-w-96">
-    <ImageEditForm
-      :imagePageVO="imageList[curRightClickImageIdx]"
-      @cancel="showImageEditDialog = false"
-      @submit="onEditFormSubmit"
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">SHA256</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.sha256 }}</dd>
+          </div>
+        </dl>
+      </div>
+    </Dialog>
+    <!--image edit-->
+    <Dialog v-model:visible="showImageEditDialog" modal :header="t('myImageView.edit.dialog.title')" class="min-w-96">
+      <ImageEditForm
+        :imagePageVO="imageList[curRightClickImageIdx]"
+        @cancel="showImageEditDialog = false"
+        @submit="onEditFormSubmit"
+      />
+    </Dialog>
+    <!--image delete confirm-->
+    <ConfirmDialog
+      v-model:visible="showImageDeleteConfirmDialog"
+      :header="t('myImageView.delete.dialog.title')"
+      :main-content="t('myImageView.delete.dialog.mainContent')"
+      :sub-content="t('myImageView.delete.dialog.subContent')"
+      :cancel-btn-msg="t('myImageView.delete.dialog.cancelButton')"
+      :submit-btn-msg="t('myImageView.delete.dialog.submitButton')"
+      @cancel="showImageDeleteConfirmDialog = false"
+      @confirm="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
     />
-  </Dialog>
-  <!--image delete confirm-->
-  <ConfirmDialog
-    v-model:visible="showImageDeleteConfirmDialog"
-    :header="t('myImageView.delete.dialog.title')"
-    :main-content="t('myImageView.delete.dialog.mainContent')"
-    :sub-content="t('myImageView.delete.dialog.subContent')"
-    :cancel-btn-msg="t('myImageView.delete.dialog.cancelButton')"
-    :submit-btn-msg="t('myImageView.delete.dialog.submitButton')"
-    @cancel="showImageDeleteConfirmDialog = false"
-    @confirm="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
-  />
+  </div>
 </template>
 
 <style scoped></style>
