@@ -11,6 +11,10 @@ import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.sakurasou.constant.REGEX_EMAIL
+import io.sakurasou.constant.REGEX_PASSWORD
+import io.sakurasou.constant.REGEX_URL
+import io.sakurasou.constant.REGEX_USERNAME
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.controller.vo.CommonResponse
 import io.sakurasou.controller.vo.CommonSiteSetting
@@ -41,13 +45,13 @@ fun Route.siteInitRoute() {
         install(RequestValidation) {
             validate<SiteInitRequest> { siteInitRequest ->
                 if (siteInitRequest.siteTitle.isBlank()) ValidationResult.Invalid("siteTitle is invalid")
-                else if (!siteInitRequest.siteExternalUrl.matches(Regex("^https?://(.+\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)\$")))
+                else if (!siteInitRequest.siteExternalUrl.matches(Regex(REGEX_URL)))
                     ValidationResult.Invalid("siteExternalUrl is invalid")
-                else if (!siteInitRequest.username.matches(Regex("^[a-zA-Z0-9]{4,20}\$")))
+                else if (!siteInitRequest.username.matches(Regex(REGEX_USERNAME)))
                     ValidationResult.Invalid("username is invalid")
-                else if (!siteInitRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                else if (!siteInitRequest.password.matches(Regex(REGEX_PASSWORD)))
                     ValidationResult.Invalid("password is invalid")
-                else if (!siteInitRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                else if (!siteInitRequest.email.matches(Regex(REGEX_EMAIL)))
                     ValidationResult.Invalid("email is invalid")
                 else ValidationResult.Valid
             }

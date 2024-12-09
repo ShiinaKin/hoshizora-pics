@@ -7,6 +7,7 @@ import io.ktor.http.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import io.sakurasou.constant.REGEX_URL
 import io.sakurasou.constant.SETTING_READ
 import io.sakurasou.constant.SETTING_SITE
 import io.sakurasou.constant.SETTING_SYSTEM
@@ -88,7 +89,7 @@ private fun Route.handlePatchSiteSetting(controller: SettingController) {
                 else if (patchRequest.siteTitle != null && patchRequest.siteTitle.isBlank())
                     ValidationResult.Invalid("siteTitle is invalid")
                 else if (patchRequest.siteExternalUrl != null
-                    && !patchRequest.siteExternalUrl.matches(Regex("^https?://(.+\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)\$")))
+                    && !patchRequest.siteExternalUrl.matches(Regex(REGEX_URL)))
                     ValidationResult.Invalid("siteExternalUrl is invalid")
                 else ValidationResult.Valid
             }

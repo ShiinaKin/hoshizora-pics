@@ -63,9 +63,9 @@ private fun Route.patchSelf(controller: UserController) {
                     && selfPatchRequest.isDefaultImagePrivate == null
                 )
                     ValidationResult.Invalid("at least one field is required")
-                else if (selfPatchRequest.password != null && !selfPatchRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                else if (selfPatchRequest.password != null && !selfPatchRequest.password.matches(Regex(REGEX_PASSWORD)))
                     ValidationResult.Invalid("password is invalid")
-                else if (selfPatchRequest.email != null && !selfPatchRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                else if (selfPatchRequest.email != null && !selfPatchRequest.email.matches(Regex(REGEX_EMAIL)))
                     ValidationResult.Invalid("email is invalid")
                 else ValidationResult.Valid
             }
@@ -146,10 +146,11 @@ private fun Route.insertUser(controller: UserController) {
         }
         install(RequestValidation) {
             validate<UserManageInsertRequest> { manageInsertRequest ->
-                if (!manageInsertRequest.username.matches(Regex("^[a-zA-Z0-9]{4,20}\$"))) ValidationResult.Invalid("username is invalid")
-                else if (!manageInsertRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                if (!manageInsertRequest.username.matches(Regex(REGEX_USERNAME)))
+                    ValidationResult.Invalid("username is invalid")
+                else if (!manageInsertRequest.password.matches(Regex(REGEX_PASSWORD)))
                     ValidationResult.Invalid("password is invalid")
-                else if (!manageInsertRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                else if (!manageInsertRequest.email.matches(Regex(REGEX_EMAIL)))
                     ValidationResult.Invalid("email is invalid")
                 else ValidationResult.Valid
             }
@@ -212,9 +213,9 @@ private fun Route.patchUser(controller: UserController) {
                     && managePatchRequest.groupId == null
                 )
                     ValidationResult.Invalid("at least one field is required")
-                else if (!managePatchRequest.password.isNullOrBlank() && !managePatchRequest.password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,32}\$")))
+                else if (managePatchRequest.password != null && !managePatchRequest.password.matches(Regex(REGEX_PASSWORD)))
                     ValidationResult.Invalid("password is invalid")
-                else if (!managePatchRequest.email.isNullOrBlank() && !managePatchRequest.email.matches(Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")))
+                else if (managePatchRequest.email != null && !managePatchRequest.email.matches(Regex(REGEX_EMAIL)))
                     ValidationResult.Invalid("email is invalid")
                 else ValidationResult.Valid
             }
