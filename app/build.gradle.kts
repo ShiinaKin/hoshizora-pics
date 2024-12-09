@@ -30,7 +30,7 @@ plugins {
 }
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass = "io.sakurasou.ApplicationKt"
 }
 
 ktor {
