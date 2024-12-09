@@ -863,8 +863,8 @@ adminGroupManageView:
                 invalid: "允许图片类型无效"
           atLeastOneField: "请至少修改一个字段"
     toast:
-      successTitle: "创建成功"
-      failedTitle: "创建失败"
+      successTitle: "修改成功"
+      failedTitle: "修改失败"
       pageStrategyFailedTitle: "获取存储策略失败"
       pageRoleFailedTitle: "获取角色失败"
   delete:
