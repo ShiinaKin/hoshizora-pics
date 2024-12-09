@@ -19,6 +19,7 @@ import io.sakurasou.model.dao.user.Users
 import io.sakurasou.model.dto.*
 import io.sakurasou.model.group.GroupConfig
 import io.sakurasou.model.group.GroupStrategyConfig
+import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemSetting
 import io.sakurasou.model.setting.SystemStatus
@@ -126,7 +127,15 @@ object DatabaseInit {
 
     private fun initGroup() {
         val adminGroupConfig = GroupConfig(
-            groupStrategyConfig = GroupStrategyConfig()
+            groupStrategyConfig = GroupStrategyConfig(
+                singleFileMaxSize = 12 * 1024 * 1024L,
+                maxSize = 16 * 1024 * 1024 * 1024L,
+                pathNamingRule = "{yyyy}/{MM}/{dd}",
+                fileNamingRule = "{uniq}",
+                imageQuality = 100,
+                imageAutoTransformTarget = null,
+                allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP)
+            )
         )
         val adminGroup = GroupInsertDTO(
             name = GROUP_ADMIN,
@@ -137,7 +146,15 @@ object DatabaseInit {
             createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         )
         val userGroupConfig = GroupConfig(
-            groupStrategyConfig = GroupStrategyConfig()
+            groupStrategyConfig = GroupStrategyConfig(
+                singleFileMaxSize = 12 * 1024 * 1024L,
+                maxSize = 8 * 1024 * 1024 * 1024L,
+                pathNamingRule = "{yyyy}/{MM}/{dd}",
+                fileNamingRule = "{uniq}",
+                imageQuality = 100,
+                imageAutoTransformTarget = null,
+                allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP)
+            )
         )
         val userGroup = GroupInsertDTO(
             name = GROUP_USER,
