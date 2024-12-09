@@ -113,9 +113,7 @@ const handleGroupCreateSubmit = (values: any) => {
         pathNamingRule: values.config.strategyConfig.pathNamingRule,
         fileNamingRule: values.config.strategyConfig.fileNamingRule,
         imageQuality: values.config.strategyConfig.imageQuality,
-        imageAutoTransformTarget: values.config.strategyConfig.imageAutoTransformTarget?.map(
-          (types: any) => types.value
-        ),
+        imageAutoTransformTarget: values.config.strategyConfig.imageAutoTransformTarget?.value,
         allowedImageTypes: values.config.strategyConfig.allowedImageTypes.map((types: any) => types.value)
       }
     }
@@ -138,9 +136,7 @@ const handleGroupEditSubmit = (values: any) => {
         pathNamingRule: values.config.strategyConfig.pathNamingRule,
         fileNamingRule: values.config.strategyConfig.fileNamingRule,
         imageQuality: values.config.strategyConfig.imageQuality,
-        imageAutoTransformTarget: values.config.strategyConfig.imageAutoTransformTarget?.map(
-          (types: any) => types.value
-        ),
+        imageAutoTransformTarget: values.config.strategyConfig.imageAutoTransformTarget?.value,
         allowedImageTypes: values.config.strategyConfig.allowedImageTypes.map((types: any) => types.value)
       }
     }
