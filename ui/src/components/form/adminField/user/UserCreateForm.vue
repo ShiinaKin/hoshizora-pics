@@ -45,6 +45,7 @@ const userCreateFormSchema = yup.object({
   }),
   isDefaultImagePrivate: yup
     .boolean()
+    .default(true)
     .required(t("adminUserManageView.userCreate.dialog.form.verify.isDefaultImagePrivate.required"))
 });
 
