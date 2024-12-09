@@ -19,23 +19,25 @@ services:
       DATABASE_PASSWORD: passwd
       REDIS_HOST: hoshizora-pics-redis
       REDIS_PORT: 6379
+      CLIENT_PROXY_ADDRESS: disabled
       JWT_SECRET: your-secret
       JWT_ISSUER: https://some.issuer/
       JWT_AUDIENCE: https://some.audience/
       JWT_REALM: hoshizora-pics
     volumes:
       - hoshizora-pics-uploads:/hoshizora/uploads
+      - hoshizora-pics-thumbnails:/hoshizora/thumbnails
     networks:
       - hoshizora-pics-net
 
   hoshizora-pics-postgres:
     container_name: hoshizora-pics-postgres
-    image: postgres:16.4-alpine
+    image: postgres:16.6-alpine
     environment:
       POSTGRES_PASSWORD: passwd
       POSTGRES_DB: hoshizora
     volumes:
-      - hoshizora-pics-data:/var/lib/postgresql/data
+      - hoshizora-pics-database:/var/lib/postgresql/data
     networks:
       - hoshizora-pics-net
     healthcheck:
@@ -46,7 +48,7 @@ services:
 
   hoshizora-pics-redis:
     container_name: hoshizora-pics-redis
-    image: redis:7.2.4-alpine
+    image: redis:7.4.1-alpine
     networks:
       - hoshizora-pics-net
     healthcheck:
@@ -63,5 +65,7 @@ networks:
 volumes:
   hoshizora-pics-uploads:
     name: hoshizora-pics-uploads
-  hoshizora-pics-data:
-    name: hoshizora-pics-data
+  hoshizora-pics-thumbnails:
+    name: hoshizora-pics-thumbnails
+  hoshizora-pics-database:
+    name: hoshizora-pics-database
