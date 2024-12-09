@@ -468,7 +468,32 @@ adminImageManageView:
     publicVisible: "公开"
     privateVisible: "私密"
     allVisible: "全部"
-  imageDelete:
+  contextMenu:
+    single:
+      copyImage: "复制图片"
+      copyLink: "复制链接"
+      moveToAlbum: "移动到相册"
+      settingAsPrivate: "设为私密"
+      settingAsPublic: "设为公开"
+      detail: "详情信息"
+      delete: "删除"
+    multi:
+      settingAsPrivate: "设为私密"
+      settingAsPublic: "设为公开"
+      delete: "删除"
+  copyImage:
+    toast:
+      successTitle: "复制成功"
+      failedTitle: "复制失败"
+  copyLink:
+    toast:
+      successTitle: "复制成功"
+      failedTitle: "复制失败, 私密图片无法复制外链"
+  changeVisible:
+    toast:
+      successTitle: "修改访问权限成功"
+      failedTitle: "修改访问权限失败"
+  delete:
     confirmDialog:
       header: "确认删除"
       mainContent: "你确定要删除图片吗？"
@@ -478,7 +503,7 @@ adminImageManageView:
     toast:
       successTitle: "删除成功"
       failedTitle: "删除失败"
-  imageDetail:
+  detail:
     title: "图片详情"
     imageName: "图片名称"
     imageRawName: "图片原始名称"

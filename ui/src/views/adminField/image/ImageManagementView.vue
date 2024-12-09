@@ -146,7 +146,7 @@ const singleImageContextMenuRef = ref();
 const multiImageContextMenuRef = ref();
 const singleImageContextMenuItems = ref<MenuItem[]>([
   {
-    label: "复制图片",
+    label: t("adminImageManageView.contextMenu.single.copyImage"),
     icon: "mdi:content-copy",
     command: () => {
       fetchImageBlob(curRightClickImageId.value)
@@ -162,19 +162,23 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
         .then(() => {
           toast.add({
             severity: "success",
-            summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            summary: t("adminImageManageView.copyImage.toast.successTitle"),
             life: 3000
           });
         })
         .catch((e) => {
           console.error(e);
-          toast.add({ severity: "error", summary: "Error", detail: e.message, life: 3000 });
+          toast.add({
+            severity: "error",
+            summary: t("adminImageManageView.copyImage.toast.failedTitle"),
+            detail: e.message,
+            life: 3000
+          });
         });
     }
   },
   {
-    label: "复制链接",
+    label: t("adminImageManageView.contextMenu.single.copyLink"),
     icon: "mdi:link",
     items: [
       {
@@ -186,7 +190,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("adminImageManageView.copyLink.toast.failedTitle"),
               life: 3000
             });
             return;
@@ -195,7 +199,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            detail: t("adminImageManageView.copyLink.toast.successTitle"),
             life: 3000
           });
         }
@@ -209,7 +213,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("adminImageManageView.copyLink.toast.failedTitle"),
               life: 3000
             });
             return;
@@ -218,7 +222,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            detail: t("adminImageManageView.copyLink.toast.successTitle"),
             life: 3000
           });
         }
@@ -232,7 +236,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("adminImageManageView.copyLink.toast.failedTitle"),
               life: 3000
             });
             return;
@@ -241,7 +245,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            detail: t("adminImageManageView.copyLink.toast.successTitle"),
             life: 3000
           });
         }
@@ -255,7 +259,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("adminImageManageView.copyLink.toast.failedTitle"),
               life: 3000
             });
             return;
@@ -264,7 +268,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            detail: t("adminImageManageView.copyLink.toast.successTitle"),
             life: 3000
           });
         }
@@ -278,7 +282,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
             toast.add({
               severity: "warn",
               summary: "Warning",
-              detail: t("myImageView.myImageDialogImageCopyPrivateWarningMessage"),
+              detail: t("adminImageManageView.copyLink.toast.failedTitle"),
               life: 3000
             });
             return;
@@ -287,7 +291,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
           toast.add({
             severity: "success",
             summary: "Success",
-            detail: t("myImageView.myImageDialogImageCopySuccessMessage"),
+            detail: t("adminImageManageView.copyLink.toast.successTitle"),
             life: 3000
           });
         }
@@ -295,21 +299,21 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
     ]
   },
   {
-    label: "设为公开",
+    label: t("adminImageManageView.contextMenu.single.settingAsPublic"),
     icon: "mdi:visibility-outline",
     command: () => {
       handleSingleChangeVisibility(false);
     }
   },
   {
-    label: "设为私密",
+    label: t("adminImageManageView.contextMenu.single.settingAsPrivate"),
     icon: "mdi:visibility-off-outline",
     command: () => {
       handleSingleChangeVisibility(true);
     }
   },
   {
-    label: "详细信息",
+    label: t("adminImageManageView.contextMenu.single.detail"),
     icon: "mdi:information-slab-box-outline",
     command: () => {
       handleImageDetail();
@@ -319,7 +323,7 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
     separator: true
   },
   {
-    label: "删除",
+    label: t("adminImageManageView.contextMenu.single.delete"),
     icon: "mdi:delete-outline",
     command: () => {
       isSingleImageDelete.value = true;
@@ -329,14 +333,14 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
 ]);
 const multiImageContextMenuItems = ref<MenuItem[]>([
   {
-    label: "设为公开",
+    label: t("adminImageManageView.contextMenu.multi.settingAsPublic"),
     icon: "mdi:visibility-outline",
     command: () => {
       handleMultiChangeVisibility(false);
     }
   },
   {
-    label: "设为私密",
+    label: t("adminImageManageView.contextMenu.multi.settingAsPrivate"),
     icon: "mdi:visibility-off-outline",
     command: () => {
       handleMultiChangeVisibility(true);
@@ -346,7 +350,7 @@ const multiImageContextMenuItems = ref<MenuItem[]>([
     separator: true
   },
   {
-    label: "删除",
+    label: t("adminImageManageView.contextMenu.multi.delete"),
     icon: "mdi:delete-outline",
     command: () => {
       isSingleImageDelete.value = false;
@@ -457,15 +461,14 @@ function handleSingleChangeVisibility(isPrivate: boolean) {
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: "Success",
-          detail: t("myImageView.myImageDialogImageChangeVisibleSuccessMessage"),
+          summary: t("adminImageManageView.changeVisible.toast.successTitle"),
           life: 3000
         });
         pageImage(imagePageRequest.value);
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myImageView.myImageDialogImageChangeVisibleFailedTitle"),
+          summary: t("adminImageManageView.changeVisible.toast.failedTitle"),
           detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
           life: 3000
         });
@@ -492,14 +495,13 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
           if (resp.isSuccessful) {
             toast.add({
               severity: "success",
-              summary: "Success",
-              detail: t("myImageView.myImageDialogImageChangeVisibleSuccessMessage"),
+              summary: t("adminImageManageView.changeVisible.toast.successTitle"),
               life: 3000
             });
           } else {
             toast.add({
               severity: "warn",
-              summary: t("myImageView.myImageDialogImageChangeVisibleFailedTitle"),
+              summary: t("adminImageManageView.changeVisible.toast.failedTitle"),
               detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
               life: 3000
             });
@@ -524,15 +526,14 @@ function handleDeleteSingleImage() {
       if (resp.isSuccessful) {
         toast.add({
           severity: "success",
-          summary: "Success",
-          detail: t("myImageView.myImageDialogImageDeleteConfirmSuccessTitle"),
+          summary: t("adminImageManageView.delete.toast.successTitle"),
           life: 3000
         });
         pageImage(imagePageRequest.value);
       } else {
         toast.add({
           severity: "warn",
-          summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
+          summary: t("adminImageManageView.delete.toast.failedTitle"),
           detail: resp.message,
           life: 3000
         });
@@ -543,7 +544,7 @@ function handleDeleteSingleImage() {
       console.error(e);
       toast.add({
         severity: "error",
-        summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
+        summary: "Error",
         detail: e.message,
         life: 3000
       });
@@ -560,14 +561,13 @@ function handleDeleteMultiImage() {
           if (resp.isSuccessful) {
             toast.add({
               severity: "success",
-              summary: "Success",
-              detail: t("myImageView.myImageDialogImageDeleteConfirmSuccessTitle"),
+              summary: t("adminImageManageView.delete.toast.successTitle"),
               life: 3000
             });
           } else {
             toast.add({
               severity: "warn",
-              summary: t("myImageView.myImageDialogImageDeleteConfirmFailedTitle"),
+              summary: t("adminImageManageView.delete.toast.failedTitle"),
               detail: resp.message,
               life: 3000
             });
@@ -698,8 +698,10 @@ async function fetchImageThumbnails() {
         return null;
       })
   );
+  showLoadingDialog.value = true;
   const results = await Promise.all(promises);
-  imageDisplayList.value = results.filter(item => item !== null);
+  imageDisplayList.value = results.filter((item) => item !== null);
+  showLoadingDialog.value = false;
 }
 </script>
 
@@ -754,7 +756,15 @@ async function fetchImageThumbnails() {
         @dblclick="handleShowRawImage(idx)"
         @contextmenu="handleImageRightClick($event, imageDisplay.id, idx)"
       />
-      <ContextMenu ref="singleImageContextMenuRef" :menu-items="singleImageContextMenuItems" />
+      <ContextMenu
+        ref="singleImageContextMenuRef"
+        :menu-items="singleImageContextMenuItems"
+        :pt="{
+          submenu: {
+            class: 'min-w-52'
+          }
+        }"
+      />
       <ContextMenu ref="multiImageContextMenuRef" :menu-items="multiImageContextMenuItems" />
     </div>
 
@@ -932,79 +942,79 @@ async function fetchImageThumbnails() {
     <Dialog
       v-model:visible="showImageDetailDialog"
       modal
-      :header="t('adminImageManageView.imageDetail.title')"
+      :header="t('adminImageManageView.detail.title')"
       class="min-w-96"
     >
       <div class="flow-root">
         <dl class="-my-3 divide-y divide-gray-100 text-sm">
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.displayName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageRawName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageRawName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.originName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageType") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageType") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.mimeType }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageAlbumName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageAlbumName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.albumName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageOwnerName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageOwnerName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.ownerName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageStrategyName") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageStrategyName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.strategyName }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageStrategyType") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageStrategyType") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.strategyType }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageSize") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageSize") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.width }} * {{ imageInfo?.height }}</dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageFileSize") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageFileSize") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ imageInfo?.size.toFixed(2) }} {{ t("adminImageManageView.imageDetail.imageFileSizeUnit") }}
+              {{ imageInfo?.size.toFixed(2) }} {{ t("adminImageManageView.detail.imageFileSizeUnit") }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageUploadTime") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageUploadTime") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ formatUTCStringToLocale(imageInfo?.createTime) }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.imageDetail.imageIsPublic") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageIsPublic") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{
                 imageInfo?.isPrivate
-                  ? t("adminImageManageView.imageDetail.imageIsPublicNo")
-                  : t("adminImageManageView.imageDetail.imageIsPublicYes")
+                  ? t("adminImageManageView.detail.imageIsPublicNo")
+                  : t("adminImageManageView.detail.imageIsPublicYes")
               }}
             </dd>
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900">
-              {{ t("adminImageManageView.imageDetail.imageDesc") }}
+              {{ t("adminImageManageView.detail.imageDesc") }}
             </dt>
             <dd class="text-gray-700 sm:col-span-2">{{ imageInfo?.description }}</dd>
           </div>
@@ -1024,11 +1034,11 @@ async function fetchImageThumbnails() {
     <!--delete confirm-->
     <ConfirmDialog
       v-model:visible="showImageDeleteConfirmDialog"
-      :header="t('adminImageManageView.imageDelete.confirmDialog.header')"
-      :main-content="t('adminImageManageView.imageDelete.confirmDialog.mainContent')"
-      :sub-content="t('adminImageManageView.imageDelete.confirmDialog.subContent')"
-      :cancel-btn-msg="t('adminImageManageView.imageDelete.confirmDialog.cancelButton')"
-      :submit-btn-msg="t('adminImageManageView.imageDelete.confirmDialog.submitButton')"
+      :header="t('adminImageManageView.delete.confirmDialog.header')"
+      :main-content="t('adminImageManageView.delete.confirmDialog.mainContent')"
+      :sub-content="t('adminImageManageView.delete.confirmDialog.subContent')"
+      :cancel-btn-msg="t('adminImageManageView.delete.confirmDialog.cancelButton')"
+      :submit-btn-msg="t('adminImageManageView.delete.confirmDialog.submitButton')"
       @cancel="showImageDeleteConfirmDialog = false"
       @confirm="isSingleImageDelete ? handleDeleteSingleImage() : handleDeleteMultiImage()"
     />
