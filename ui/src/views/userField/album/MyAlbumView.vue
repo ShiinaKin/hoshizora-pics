@@ -351,148 +351,150 @@ async function pageUserAlbum(albumPageRequest: AlbumApiApiAlbumPageGetRequest) {
       :cur-page="albumCurPage"
       :total-record="albumTotalRecord"
     />
-  </div>
-  <!--      create-->
-  <Dialog v-model:visible="albumCreateDialog" modal :header="t('myAlbumView.create.dialog.title')" class="min-w-96">
-    <AlbumCreateForm @submit="onCreateFormSubmit" @cancel="albumCreateDialog = false" />
-  </Dialog>
-  <!--      edit-->
-  <Dialog v-model:visible="albumEditDialog" modal :header="t('myAlbumView.edit.dialog.title')">
-    <AlbumEditForm :album-detail="albumDetail" @submit="onEditFormSubmit" @cancel="albumEditDialog = false" />
-  </Dialog>
-  <!--      delete confirm-->
-  <Dialog v-model:visible="albumDeleteDialog" modal :header="t('myAlbumView.delete.dialog.title')" class="min-w-96">
+
+    <!--      create-->
+    <Dialog v-model:visible="albumCreateDialog" modal :header="t('myAlbumView.create.dialog.title')" class="min-w-96">
+      <AlbumCreateForm @submit="onCreateFormSubmit" @cancel="albumCreateDialog = false" />
+    </Dialog>
+    <!--      edit-->
+    <Dialog v-model:visible="albumEditDialog" modal :header="t('myAlbumView.edit.dialog.title')">
+      <AlbumEditForm :album-detail="albumDetail" @submit="onEditFormSubmit" @cancel="albumEditDialog = false" />
+    </Dialog>
+    <!--      delete confirm-->
     <ConfirmDialog
+      v-model:visible="albumDeleteDialog"
       :header="t('myAlbumView.delete.dialog.title')"
       :main-content="t('myAlbumView.delete.dialog.warningTitle')"
       :sub-content="t('myAlbumView.delete.dialog.warningContent')"
+      :submit-btn-msg="t('myAlbumView.delete.dialog.submitButton')"
+      :cancel-btn-msg="t('myAlbumView.delete.dialog.cancelButton')"
       @cancel="albumDeleteDialog = false"
       @submit="deleteAlbum(curAlbumId)"
     />
-  </Dialog>
-  <!--      detail-->
-  <Dialog v-model:visible="albumDetailDialog" modal :header="t('myAlbumView.detail.dialog.title')" class="min-w-96">
-    <div class="flow-root">
-      <dl class="-my-3 divide-y divide-gray-100 text-sm">
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.name") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.name }}</dd>
-        </div>
+    <!--      detail-->
+    <Dialog v-model:visible="albumDetailDialog" modal :header="t('myAlbumView.detail.dialog.title')" class="min-w-96">
+      <div class="flow-root">
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.name") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.name }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.description") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.description }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.description") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.description }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.imageCount") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.imageCount }}</dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.imageCount") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ albumDetail?.imageCount }}</dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isUncategorized.title") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">
-            {{
-              albumDetail?.isUncategorized
-                ? t("myAlbumView.detail.dialog.isUncategorized.true")
-                : t("myAlbumView.detail.dialog.isUncategorized.false")
-            }}
-          </dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isUncategorized.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                albumDetail?.isUncategorized
+                  ? t("myAlbumView.detail.dialog.isUncategorized.true")
+                  : t("myAlbumView.detail.dialog.isUncategorized.false")
+              }}
+            </dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isDefault.title") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">
-            {{
-              albumDetail?.isDefault
-                ? t("myAlbumView.detail.dialog.isDefault.true")
-                : t("myAlbumView.detail.dialog.isDefault.false")
-            }}
-          </dd>
-        </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.isDefault.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                albumDetail?.isDefault
+                  ? t("myAlbumView.detail.dialog.isDefault.true")
+                  : t("myAlbumView.detail.dialog.isDefault.false")
+              }}
+            </dd>
+          </div>
 
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-          <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.createTime") }}</dt>
-          <dd class="text-gray-700 sm:col-span-2">
-            {{ formatUTCStringToLocale(albumDetail?.createTime) }}
-          </dd>
-        </div>
-      </dl>
-    </div>
-  </Dialog>
-  <!--albumFilter-->
-  <Popover ref="albumFilterRef">
-    <div class="w-40 flex flex-col">
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeAlbumFilter === 'createTimeASC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            albumOrderBy = 'createTime';
-            albumOrder = 'ASC';
-            activeAlbumFilter = 'createTimeASC';
-            albumFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-clock-ascending-outline" />
-          {{ t("myAlbumView.filter.album.createTimeASC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeAlbumFilter === 'createTimeDESC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            albumOrderBy = 'createTime';
-            albumOrder = 'DESC';
-            activeAlbumFilter = 'createTimeDESC';
-            albumFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-clock-descending-outline" />
-          {{ t("myAlbumView.filter.album.createTimeDESC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeAlbumFilter === 'imageCountASC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            albumOrderBy = 'imageCount';
-            albumOrder = 'ASC';
-            activeAlbumFilter = 'imageCountASC';
-            albumFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-ascending" />
-          {{ t("myAlbumView.filter.album.imageCountASC") }}
-        </span>
-      </button>
-      <button
-        class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
-        :class="activeAlbumFilter === 'imageCountDESC' ? activeFilterClass : ''"
-        @click="
-          () => {
-            albumOrderBy = 'imageCount';
-            albumOrder = 'DESC';
-            activeAlbumFilter = 'imageCountDESC';
-            albumFilterRef.hide();
-          }
-        "
-      >
-        <span class="flex gap-2 justify-center items-center">
-          <Icon icon="mdi:sort-descending" />
-          {{ t("myAlbumView.filter.album.imageCountDESC") }}
-        </span>
-      </button>
-    </div>
-  </Popover>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myAlbumView.detail.dialog.createTime") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ formatUTCStringToLocale(albumDetail?.createTime) }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </Dialog>
+    <!--albumFilter-->
+    <Popover ref="albumFilterRef">
+      <div class="w-40 flex flex-col">
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeAlbumFilter === 'createTimeASC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              albumOrderBy = 'createTime';
+              albumOrder = 'ASC';
+              activeAlbumFilter = 'createTimeASC';
+              albumFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-clock-ascending-outline" />
+            {{ t("myAlbumView.filter.album.createTimeASC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeAlbumFilter === 'createTimeDESC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              albumOrderBy = 'createTime';
+              albumOrder = 'DESC';
+              activeAlbumFilter = 'createTimeDESC';
+              albumFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-clock-descending-outline" />
+            {{ t("myAlbumView.filter.album.createTimeDESC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeAlbumFilter === 'imageCountASC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              albumOrderBy = 'imageCount';
+              albumOrder = 'ASC';
+              activeAlbumFilter = 'imageCountASC';
+              albumFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-ascending" />
+            {{ t("myAlbumView.filter.album.imageCountASC") }}
+          </span>
+        </button>
+        <button
+          class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white rounded-md"
+          :class="activeAlbumFilter === 'imageCountDESC' ? activeFilterClass : ''"
+          @click="
+            () => {
+              albumOrderBy = 'imageCount';
+              albumOrder = 'DESC';
+              activeAlbumFilter = 'imageCountDESC';
+              albumFilterRef.hide();
+            }
+          "
+        >
+          <span class="flex gap-2 justify-center items-center">
+            <Icon icon="mdi:sort-descending" />
+            {{ t("myAlbumView.filter.album.imageCountDESC") }}
+          </span>
+        </button>
+      </div>
+    </Popover>
+  </div>
 </template>
 
 <style scoped></style>
