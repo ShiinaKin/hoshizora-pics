@@ -747,8 +747,8 @@ async function fetchUserDetail(userId: number) {
             <dd class="text-gray-700 sm:col-span-2">
               {{
                 userDetail?.isBanned
-                  ? t("adminUserManageView.userDetail.banStatusNormal")
-                  : t("adminUserManageView.userDetail.banStatusBanned")
+                  ? t("adminUserManageView.userDetail.banStatusBanned")
+                  : t("adminUserManageView.userDetail.banStatusNormal")
               }}
             </dd>
           </div>
