@@ -4,6 +4,7 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.patch
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.sakurasou.constant.SETTING_READ
@@ -60,7 +61,8 @@ private fun Route.fetchSetting(controller: SettingController) {
                 }
             }
         }) {
-            val settingType = call.parameters["setting_type"] ?: throw WrongParameterException("setting type is required")
+            val settingType =
+                call.parameters["setting_type"] ?: throw WrongParameterException("setting type is required")
             val settingVO = when (settingType) {
                 SETTING_SITE -> controller.handleFetchSiteSetting()
                 SETTING_SYSTEM -> controller.handleFetchSystemSetting()
@@ -75,6 +77,21 @@ private fun Route.handlePatchSiteSetting(controller: SettingController) {
     route {
         install(AuthorizationPlugin) {
             permission = SETTING_WRITE
+        }
+        install(RequestValidation) {
+            validate<SiteSettingPatchRequest> { patchRequest ->
+                if (patchRequest.siteTitle == null
+                    && patchRequest.siteSubtitle == null
+                    && patchRequest.siteDescription == null
+                    && patchRequest.siteExternalUrl == null
+                ) ValidationResult.Invalid("at least one field is required")
+                else if (patchRequest.siteTitle != null && patchRequest.siteTitle.isBlank())
+                    ValidationResult.Invalid("siteTitle is invalid")
+                else if (patchRequest.siteExternalUrl != null
+                    && !patchRequest.siteExternalUrl.matches(Regex("^https?://(.+\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)\$")))
+                    ValidationResult.Invalid("siteExternalUrl is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch("site", {
             description = "site setting"
@@ -95,6 +112,15 @@ private fun Route.handlePatchSystemSetting(controller: SettingController) {
     route {
         install(AuthorizationPlugin) {
             permission = SETTING_WRITE
+        }
+        install(RequestValidation) {
+            validate<SystemSettingPatchRequest> { patchRequest ->
+                if (patchRequest.defaultGroupId == null
+                    && patchRequest.allowSignup == null
+                    && patchRequest.allowRandomFetch == null
+                ) ValidationResult.Invalid("at least one field is required")
+                else ValidationResult.Valid
+            }
         }
         patch("system", {
             description = "system setting"
