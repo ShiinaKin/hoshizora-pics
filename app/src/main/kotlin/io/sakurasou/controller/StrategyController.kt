@@ -2,12 +2,10 @@ package io.sakurasou.controller
 
 import io.github.smiley4.ktorswaggerui.dsl.routing.*
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import io.sakurasou.constant.STRATEGY_DELETE
-import io.sakurasou.constant.STRATEGY_READ_ALL
-import io.sakurasou.constant.STRATEGY_READ_SINGLE
-import io.sakurasou.constant.STRATEGY_WRITE
+import io.sakurasou.constant.*
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.request.StrategyInsertRequest
 import io.sakurasou.controller.request.StrategyPatchRequest
@@ -64,6 +62,20 @@ private fun Route.insertStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_WRITE
+        }
+        install(RequestValidation) {
+            validate<StrategyInsertRequest> { insertRequest ->
+                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
+                else if (insertRequest.config is S3Strategy && !insertRequest.config.endpoint.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("endpoint is invalid")
+                else if (insertRequest.config is S3Strategy && insertRequest.config.bucketName.isBlank())
+                    ValidationResult.Invalid("bucketName is invalid")
+                else if (insertRequest.config is S3Strategy && insertRequest.config.region.isBlank())
+                    ValidationResult.Invalid("region is invalid")
+                else if (insertRequest.config is S3Strategy && !insertRequest.config.publicUrl.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("publicUrl is invalid")
+                else ValidationResult.Valid
+            }
         }
         post({
             protected = true
@@ -175,6 +187,23 @@ private fun Route.patchStrategy(controller: StrategyController) {
     route {
         install(AuthorizationPlugin) {
             permission = STRATEGY_WRITE
+        }
+        install(RequestValidation) {
+            validate<StrategyPatchRequest> { patchRequest ->
+                if (patchRequest.name == null && patchRequest.config == null)
+                    ValidationResult.Invalid("at least one field is required")
+                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                    ValidationResult.Invalid("name is invalid")
+                else if (patchRequest.config is S3Strategy && !patchRequest.config.endpoint.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("endpoint is invalid")
+                else if (patchRequest.config is S3Strategy && patchRequest.config.bucketName.isBlank())
+                    ValidationResult.Invalid("bucketName is invalid")
+                else if (patchRequest.config is S3Strategy && patchRequest.config.region.isBlank())
+                    ValidationResult.Invalid("region is invalid")
+                else if (patchRequest.config is S3Strategy && !patchRequest.config.publicUrl.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("publicUrl is invalid")
+                else ValidationResult.Valid
+            }
         }
         patch({
             request {
