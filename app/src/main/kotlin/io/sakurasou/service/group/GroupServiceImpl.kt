@@ -83,7 +83,8 @@ class GroupServiceImpl(
                 if (oldGroup.isSystemReserved && putRequest.name != oldGroup.name)
                     throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
 
-                strategyDao.findStrategyById(putRequest.strategyId) ?: throw StrategyNotFoundException()
+                if (putRequest.strategyId != oldGroup.strategyId)
+                    strategyDao.findStrategyById(putRequest.strategyId) ?: throw StrategyNotFoundException()
 
                 val groupUpdateDTO = GroupUpdateDTO(
                     id = id,
