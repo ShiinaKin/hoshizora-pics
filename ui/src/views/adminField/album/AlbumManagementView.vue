@@ -26,7 +26,6 @@ import type { VirtualScrollerLazyEvent } from "primevue";
 import { Icon } from "@iconify/vue";
 import BottomPaginator from "@/components/BottomPaginator.vue";
 import LoadingDialog from "@/components/LoadingDialog.vue";
-import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { debounce } from "lodash-es";
 import md5 from "crypto-js/md5";
 import { formatUTCStringToLocale } from "@/utils/DateTimeUtils";
@@ -131,7 +130,6 @@ const activeFilterClass = ref("bg-gray-200  hover:bg-gray-200");
 
 const showLoadingDialog = ref(false);
 const showAlbumDetailDialog = ref(false);
-const showAlbumDeleteConfirmDialog = ref(false);
 
 watch(selectedUser, (newVal) => {
   if (!newVal) return;
@@ -335,13 +333,7 @@ async function fetchAlbumDetail(albumId: number) {
           </div>
         </template>
         <template #option="slotProps">
-          <div class="flex items-center">
-            <img
-              :alt="slotProps.option.username"
-              :src="`https://gravatar.com/avatar/${md5(slotProps.option.email)}`"
-              :class="`rounded-full mr-2`"
-              class="w-4"
-            />
+          <div class="w-full flex items-center justify-center">
             <div>{{ slotProps.option.username }}</div>
           </div>
         </template>
@@ -456,17 +448,6 @@ async function fetchAlbumDetail(albumId: number) {
         </dl>
       </div>
     </Dialog>
-    <!--delete confirm-->
-    <ConfirmDialog
-      v-model:visible="showAlbumDeleteConfirmDialog"
-      :header="t('adminImageManageView.imageDelete.confirmDialog.header')"
-      :main-content="t('adminImageManageView.imageDelete.confirmDialog.mainContent')"
-      :sub-content="t('adminImageManageView.imageDelete.confirmDialog.subContent')"
-      :cancel-btn-msg="t('adminImageManageView.imageDelete.confirmDialog.cancelButton')"
-      :submit-btn-msg="t('adminImageManageView.imageDelete.confirmDialog.submitButton')"
-      @cancel="showAlbumDeleteConfirmDialog = false"
-      @confirm="console.log('delete')"
-    />
   </div>
 </template>
 
