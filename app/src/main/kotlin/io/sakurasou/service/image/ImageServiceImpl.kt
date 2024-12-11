@@ -200,7 +200,7 @@ class ImageServiceImpl(
 
                 val imageUpdateDTO = ImageUpdateDTO(
                     id = imageId,
-                    albumId = image.albumId,
+                    albumId = selfPatchRequest.albumId ?: image.albumId,
                     displayName = selfPatchRequest.displayName ?: image.displayName,
                     description = selfPatchRequest.description ?: image.description,
                     isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate
