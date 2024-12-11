@@ -198,6 +198,11 @@ class ImageServiceImpl(
                 val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
                 if (image.userId != userId) throw ImageAccessDeniedException()
 
+                selfPatchRequest.albumId?.let {
+                    val album = albumDao.findAlbumById(it) ?: throw AlbumNotFoundException()
+                    if (album.userId != userId) throw AlbumAccessDeniedException()
+                }
+
                 val imageUpdateDTO = ImageUpdateDTO(
                     id = imageId,
                     albumId = selfPatchRequest.albumId ?: image.albumId,
