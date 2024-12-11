@@ -24,7 +24,6 @@ import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.service.common.CommonService
-import kotlin.time.Duration.Companion.hours
 
 /**
  * @author Shiina Kin
@@ -33,7 +32,7 @@ import kotlin.time.Duration.Companion.hours
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route({ tags("common") }) {
-        cacheOutput(6.hours, listOf("id"), true) { route("random") { randomFetchImage(commonController) } }
+        route("random") { randomFetchImage(commonController) }
         // TODO fix cache
         cacheOutput { route("s") { anonymousGetImage(commonController) } }
     }

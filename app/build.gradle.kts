@@ -4,6 +4,7 @@ import java.time.ZoneId
 val logbackVersion: String by project
 val kotlinLoggingVersion: String by project
 
+val lettuceVersion: String by project
 val ktorSimpleCacheVersion: String by project
 
 val exposedVersion: String by project
@@ -80,7 +81,9 @@ dependencies {
     implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
-    implementation("io.sakurasou.ktor:ktor-simple-cache-jvm:0.4.7")
+    implementation("io.lettuce:lettuce-core:$lettuceVersion")
+
+    implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-memory-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-redis-cache-jvm:$ktorSimpleCacheVersion")
 
