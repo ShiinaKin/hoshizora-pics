@@ -95,32 +95,32 @@ const displayUrl = computed<string[]>(() => {
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
         const url = uploadFile.externalUrl!;
-        return transToMarkdown(url, fileName);
+        return transToMarkdown(fileName, url);
       });
     case "markdownWithLink":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
         const url = uploadFile.externalUrl!;
-        return transToMarkdownWithLink(url, fileName);
+        return transToMarkdownWithLink(fileName, url);
       });
     case "html":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
         const url = uploadFile.externalUrl!;
-        return transToHTML(url, fileName);
+        return transToHTML(fileName, url);
       });
     case "bbcode":
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
         const url = uploadFile.externalUrl!;
-        return transToBBCode(url, fileName);
+        return transToBBCode(fileName, url);
       });
     case "direct":
     default:
       return succeedPublicFileList.value.map((uploadFile) => {
         const fileName = uploadFile.file.name;
         const url = uploadFile.externalUrl!;
-        return transToDirect(url, fileName);
+        return transToDirect(fileName, url);
       });
   }
 });
