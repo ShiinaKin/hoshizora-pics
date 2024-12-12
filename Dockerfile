@@ -22,8 +22,8 @@ WORKDIR /hoshizora
 
 COPY --from=build /hoshizora/build/*.jar application.jar
 
-VOLUME /hoshizora/uploads
-VOLUME /hoshizora/thumbnails
+VOLUME /hoshizora/images/uploads
+VOLUME /hoshizora/images/thumbnails
 
 ENV JVM_OPTS="-Xms256m -Xmx512m"
 
