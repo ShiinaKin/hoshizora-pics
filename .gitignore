@@ -37,6 +37,5 @@ out/
 ### VS Code ###
 .vscode/
 
-/uploads/
-/thumbnails/
-/logs
+/images/
+/logs/
