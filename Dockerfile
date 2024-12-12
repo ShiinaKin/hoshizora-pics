@@ -8,6 +8,7 @@ COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 WORKDIR /hoshizora
 
 COPY gradlew gradle.properties build.gradle.kts settings.gradle.kts ./
+COPY .git .git
 COPY gradle gradle
 COPY app app
 COPY ui ui
