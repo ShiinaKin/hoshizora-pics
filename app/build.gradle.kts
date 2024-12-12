@@ -116,23 +116,14 @@ tasks.jar {
 }
 
 tasks.shadowJar {
-    isEnableRelocation = true
-    relocationPrefix = "libs"
     mergeServiceFiles()
 
     exclude(
         "ASL-2.0.txt", "custom.config.conf", "custom.config.yaml",
         "LICENSE", "LICENSE.txt", "LGPL-3.0.txt", "README",
-        "INFO_BIN", "INFO_SRC", "sqlite-jdbc.properties", "VersionInfo.java"
+        "INFO_BIN", "INFO_SRC", "sqlite-jdbc.properties", "VersionInfo.java",
+        "draftv3", "draftv4", "google", "mozilla", "patches", "samples", "schemas"
     )
-
-    relocate("draftv3", "libs.draftv3")
-    relocate("draftv4", "libs.draftv4")
-    relocate("google", "libs.google")
-    relocate("mozilla", "libs.mozilla")
-    relocate("patches", "libs.patches")
-    relocate("samples", "libs.samples")
-    relocate("schemas", "libs.schemas")
 
     from(rootProject.projectDir) {
         include("LICENSE", "README.md")
