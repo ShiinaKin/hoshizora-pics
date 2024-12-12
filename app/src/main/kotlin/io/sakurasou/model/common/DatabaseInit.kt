@@ -40,7 +40,7 @@ object DatabaseInit {
     fun init(version: String) {
         runBlocking {
             dbQuery {
-                if (isFirstRunning()) {
+                if (!isFirstRunning()) {
                     SchemaUtils.create(Images)
                     SchemaUtils.create(Albums)
                     SchemaUtils.create(Strategies)
