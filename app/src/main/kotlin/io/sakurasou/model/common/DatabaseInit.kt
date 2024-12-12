@@ -111,7 +111,7 @@ object DatabaseInit {
     }
 
     private fun initStrategy() {
-        val localStrategyConfig = LocalStrategy("uploads", "thumbnails")
+        val localStrategyConfig = LocalStrategy("images/uploads", "images/thumbnails")
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val strategyInsertDTO = StrategyInsertDTO(
             name = "local",

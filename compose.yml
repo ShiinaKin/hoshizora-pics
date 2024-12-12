@@ -25,8 +25,7 @@ services:
       JWT_AUDIENCE: https://some.audience/
       JWT_REALM: hoshizora-pics
     volumes:
-      - hoshizora-pics-uploads:/hoshizora/uploads
-      - hoshizora-pics-thumbnails:/hoshizora/thumbnails
+      - hoshizora-pics-data:/hoshizora/images
     networks:
       - hoshizora-pics-net
 
@@ -63,9 +62,7 @@ networks:
     driver: bridge
 
 volumes:
-  hoshizora-pics-uploads:
-    name: hoshizora-pics-uploads
-  hoshizora-pics-thumbnails:
-    name: hoshizora-pics-thumbnails
+  hoshizora-pics-data:
+    name: hoshizora-pics-data
   hoshizora-pics-database:
     name: hoshizora-pics-database
