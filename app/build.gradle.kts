@@ -5,6 +5,7 @@ val logbackVersion: String by project
 val kotlinLoggingVersion: String by project
 
 val lettuceVersion: String by project
+val caffeineVersion: String by project
 val ktorSimpleCacheVersion: String by project
 
 val exposedVersion: String by project
@@ -75,6 +76,7 @@ dependencies {
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
     implementation("io.lettuce:lettuce-core:$lettuceVersion")
+    implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
 
     implementation("com.ucasoft.ktor:ktor-simple-cache-jvm:$ktorSimpleCacheVersion")
     implementation("com.ucasoft.ktor:ktor-simple-memory-cache-jvm:$ktorSimpleCacheVersion")
