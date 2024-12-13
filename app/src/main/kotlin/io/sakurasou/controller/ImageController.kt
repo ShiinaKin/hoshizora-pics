@@ -26,6 +26,7 @@ import io.sakurasou.extension.pageRequestSpec
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.plugins.AuthorizationPlugin
+import io.sakurasou.plugins.cache
 import io.sakurasou.service.image.ImageService
 import kotlinx.io.readByteArray
 
@@ -58,8 +59,8 @@ private fun Route.imageSelfRoute(controller: ImageController) {
         imageSelfDelete(controller)
         imageSelfPatch(controller)
         imageSelfInfoFetch(controller)
-        imageSelfFileFetch(controller)
-        imageSelfThumbnailFileFetch(controller)
+        cache { imageSelfFileFetch(controller) }
+        cache { imageSelfThumbnailFileFetch(controller) }
     }
     imageSelfPage(controller)
 }
@@ -327,8 +328,8 @@ private fun Route.imageManageRoute(controller: ImageController) {
             imageManageDelete(controller)
             imageManagePatch(controller)
             imageManageInfoFetch(controller)
-            imageManageFileFetch(controller)
-            imageManageThumbnailFileFetch(controller)
+            cache { imageManageFileFetch(controller) }
+            cache { imageManageThumbnailFileFetch(controller) }
         }
         imageManagePage(controller)
     }

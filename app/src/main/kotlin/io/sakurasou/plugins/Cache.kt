@@ -216,26 +216,3 @@ class MemoryCacheProvider(
         return cache.getIfPresent(key)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
