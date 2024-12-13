@@ -75,6 +75,11 @@ dependencies {
     implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.9.0")
+
     implementation("io.lettuce:lettuce-core:$lettuceVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
 

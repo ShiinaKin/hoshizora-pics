@@ -1,6 +1,5 @@
 package io.sakurasou.controller
 
-import com.ucasoft.ktor.simpleCache.cacheOutput
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
@@ -23,6 +22,7 @@ import io.sakurasou.di.InstanceCenter.commonService
 import io.sakurasou.exception.controller.param.WrongParameterException
 import io.sakurasou.extension.success
 import io.sakurasou.model.dto.ImageFileDTO
+import io.sakurasou.plugins.cache
 import io.sakurasou.service.common.CommonService
 
 /**
@@ -32,9 +32,8 @@ import io.sakurasou.service.common.CommonService
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route({ tags("common") }) {
-        route("random") { randomFetchImage(commonController) }
-        // TODO fix cache
-        cacheOutput { route("s") { anonymousGetImage(commonController) } }
+        cache(cachedNoQueryParamRequest = false) { route("random") { randomFetchImage(commonController) } }
+        cache { route("s") { anonymousGetImage(commonController) } }
     }
 }
 
