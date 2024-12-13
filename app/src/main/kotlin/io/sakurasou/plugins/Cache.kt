@@ -76,8 +76,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
     }
 
     onCall { call ->
-        val queryParams = call.request.queryParameters
-        if (queryParams.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCall
+        if (call.request.queryParameters.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCall
         val key = buildKey(call)
         val cache = provider.loadCache(key) ?: return@onCall
         call.attributes.put(isCache, true)
@@ -85,11 +84,8 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
         logger.info { "Cache hit: $key" }
     }
     onCallRespond { call, body ->
-        if ((call.response.status()?.value
-                ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value
-        ) return@onCallRespond
-        val queryParams = call.request.queryParameters
-        if (queryParams.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCallRespond
+        if ((call.response.status()?.value ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value) return@onCallRespond
+        if (call.request.queryParameters.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCallRespond
         if (call.attributes.getOrNull(isCache) == true) return@onCallRespond
         val key = buildKey(call)
         if (expireTime == null) provider.saveCache(key, body)
@@ -101,7 +97,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
     }
 }
 
-class CacheOutputSelector: RouteSelector() {
+class CacheOutputSelector : RouteSelector() {
     override suspend fun evaluate(context: RoutingResolveContext, segmentIndex: Int): RouteSelectorEvaluation =
         RouteSelectorEvaluation.Transparent
 }
