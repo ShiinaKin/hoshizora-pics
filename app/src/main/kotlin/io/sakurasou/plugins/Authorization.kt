@@ -22,34 +22,33 @@ val AuthorizationPlugin = createRouteScopedPlugin(
     name = "AuthorizationPlugin",
     createConfiguration = ::AuthorizationConfig
 ) {
-    pluginConfig.apply {
-        on(AuthenticationChecked) { call ->
-            val principal = call.principal<JWTPrincipal>() ?: throw PrincipalNotFoundException()
+    val permission = pluginConfig.permission
+    on(AuthenticationChecked) { call ->
+        val principal = call.principal<JWTPrincipal>() ?: throw PrincipalNotFoundException()
 
-            val id = principal.payload.getClaim("id").asLong()
-            val groupId = principal.payload.getClaim("groupId").asLong()
-            val username = principal.payload.getClaim("username").asString()
+        val id = principal.payload.getClaim("id").asLong()
+        val groupId = principal.payload.getClaim("groupId").asLong()
+        val username = principal.payload.getClaim("username").asString()
 
-            val patId = principal.payload.getClaim("patId")?.asLong()
-            val roles = principal.payload.getClaim("roles")?.asList(String::class.java)
-            val permissions = principal.payload.getClaim("permissions")?.asList(String::class.java)
+        val patId = principal.payload.getClaim("patId")?.asLong()
+        val roles = principal.payload.getClaim("roles")?.asList(String::class.java)
+        val permissions = principal.payload.getClaim("permissions")?.asList(String::class.java)
 
-            call.attributes.put(AttributeKey("principal"), Principal(id, groupId, username))
+        call.attributes.put(AttributeKey("principal"), Principal(id, groupId, username))
 
-            if (patId != null) {
-                dbQuery {
-                    InstanceCenter.personalAccessTokenDao.findPATById(patId) ?: throw UnauthorizedAccessException()
-                }
-                if (!permissions!!.contains(permission)) throw UnauthorizedAccessException()
-            } else {
-                roles!!.forEach {
-                    runCatching {
-                        val rolePermissions = dbQuery { InstanceCenter.relationDao.listPermissionByRole(it) }
-                        if (permission !in rolePermissions) throw UnauthorizedAccessException()
-                    }.onFailure { exception ->
-                        if (exception !is UnauthorizedAccessException) logger.trace { exception }
-                        throw UnauthorizedAccessException()
-                    }
+        if (patId != null) {
+            dbQuery {
+                InstanceCenter.personalAccessTokenDao.findPATById(patId) ?: throw UnauthorizedAccessException()
+            }
+            if (!permissions!!.contains(permission)) throw UnauthorizedAccessException()
+        } else {
+            roles!!.forEach {
+                runCatching {
+                    val rolePermissions = dbQuery { InstanceCenter.relationDao.listPermissionByRole(it) }
+                    if (permission !in rolePermissions) throw UnauthorizedAccessException()
+                }.onFailure { exception ->
+                    if (exception !is UnauthorizedAccessException) logger.trace { exception }
+                    throw UnauthorizedAccessException()
                 }
             }
         }
