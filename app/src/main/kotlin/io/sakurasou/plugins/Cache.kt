@@ -3,6 +3,7 @@ package io.sakurasou.plugins
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.gson.*
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
@@ -31,6 +32,8 @@ fun Application.configureCache(host: String, port: String) {
         else memoryProvider(15.minutes)
     }
 }
+
+private val logger = KotlinLogging.logger { }
 
 class CacheConfig(
     var provider: CacheProvider = MemoryCacheProvider(15.minutes)
@@ -79,7 +82,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
         val cache = provider.loadCache(key) ?: return@onCall
         call.attributes.put(isCache, true)
         call.respond(cache)
-        println("Cache hit: $key")
+        logger.info { "Cache hit: $key" }
     }
     onCallRespond { call, body ->
         if ((call.response.status()?.value
@@ -91,7 +94,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
         val key = buildKey(call)
         if (expireTime == null) provider.saveCache(key, body)
         else provider.saveCache(key, body, expireTime)
-        println("Cache saved: $key")
+        logger.info { "Cache saved: $key" }
     }
     on(CallFailed) { call, e ->
         throw e
