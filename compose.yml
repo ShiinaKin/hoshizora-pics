@@ -21,8 +21,8 @@ services:
       REDIS_PORT: 6379
       CLIENT_PROXY_ADDRESS: disabled
       JWT_SECRET: your-secret
-      JWT_ISSUER: https://some.issuer/
-      JWT_AUDIENCE: https://some.audience/
+      JWT_ISSUER: https://some.issuer
+      JWT_AUDIENCE: https://some.audience
       JWT_REALM: hoshizora-pics
     volumes:
       - hoshizora-pics-data:/hoshizora/images
