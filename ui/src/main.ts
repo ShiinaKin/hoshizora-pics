@@ -24,7 +24,7 @@ import utc from "dayjs/plugin/utc";
 
 const i18n = createI18n({
   locale: "zh_cn",
-  fallbackLocale: "en_us",
+  fallbackLocale: "zh_cn",
   messages: {
     zh_cn,
     en_us
@@ -46,5 +46,6 @@ app.directive('tooltip', Tooltip);
 app.use(ToastService);
 
 app.provide("dayjs", dayjs);
+app.provide("i18n", i18n);
 
 app.mount("#app");
