@@ -29,6 +29,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.semver4j.Semver
 
 /**
  * @author Shiina Kin
@@ -62,6 +63,7 @@ object DatabaseInit {
                 }
             }
             InstanceCenter.initSystemStatus()
+            updateSystemVersion(version)
         }
     }
 
@@ -242,6 +244,29 @@ object DatabaseInit {
         logger.info { "setting init success" }
     }
 
+    private suspend fun updateSystemVersion(version: String) {
+        val oldSystemStatus = InstanceCenter.systemStatus
+        val oldVersion = Semver.parse(oldSystemStatus.version) ?: throw IllegalArgumentException("Invalid version")
+        val version = Semver.parse(version) ?: throw IllegalArgumentException("Invalid version")
+        if (oldVersion.isGreaterThan(version)) {
+            logger.warn { "New version is older than current version." }
+            return
+        }
+        if (oldVersion.isEqualTo(version)) {
+            if (!oldVersion.isStable) logger.warn { "Cur version is not stable." }
+            return
+        }
+        if (!version.isStable) logger.warn { "Cur version is not stable." }
+        dbQuery {
+            val systemStatus = SystemStatus(
+                isInit = InstanceCenter.systemStatus.isInit,
+                version = version.version
+            )
+            val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+            val updateDTO = SettingUpdateDTO(SETTING_STATUS, systemStatus, now)
+            InstanceCenter.settingDao.updateSettingByName(updateDTO)
+        }
+    }
 }
 
 private val userOpsPermissions = listOf(

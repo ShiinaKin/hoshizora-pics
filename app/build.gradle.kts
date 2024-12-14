@@ -101,6 +101,8 @@ dependencies {
 
     implementation("software.amazon.awssdk:s3:$awsS3Version")
 
+    implementation("org.semver4j:semver4j:5.4.1")
+
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
