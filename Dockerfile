@@ -1,9 +1,4 @@
-FROM node:alpine AS node_base
-
 FROM eclipse-temurin:21-alpine AS build
-
-COPY --from=node_base /usr/local/bin/node /usr/local/bin/
-COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 WORKDIR /hoshizora-pics
 
