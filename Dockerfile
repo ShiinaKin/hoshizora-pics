@@ -14,7 +14,7 @@ COPY app app
 COPY ui ui
 
 RUN chmod +x ./gradlew
-RUN ./gradlew build
+RUN ./gradlew clean build
 
 FROM eclipse-temurin:21-alpine
 LABEL maintainer="ShiinaKin <shiina@sakurasou.io>"
