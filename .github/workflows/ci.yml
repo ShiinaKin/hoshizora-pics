@@ -41,8 +41,24 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Install dependencies
+        run: cd ui && pnpm install
+
+      - name: Build Packages
+        run: cd ui && pnpm build-packages
+
+      - name: Build UI
+        run: cd ui && pnpm build
+
       - name: Build with Gradle Wrapper
-        run: chmod +x ./gradlew && ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
