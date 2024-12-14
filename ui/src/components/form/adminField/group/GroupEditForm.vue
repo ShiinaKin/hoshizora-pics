@@ -775,6 +775,7 @@ const onCancel = () => {
                     v-bind="pathNamingRuleAttrs"
                     v-tooltip="{
                       value: t('adminGroupManageView.tips.namingRulePlaceholder'),
+                      autoHide: false,
                       pt: {
                         root: {
                           class: 'min-w-fit'
