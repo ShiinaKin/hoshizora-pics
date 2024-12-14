@@ -100,6 +100,8 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
 class CacheOutputSelector : RouteSelector() {
     override suspend fun evaluate(context: RoutingResolveContext, segmentIndex: Int): RouteSelectorEvaluation =
         RouteSelectorEvaluation.Transparent
+
+    override fun toString(): String = ""
 }
 
 fun Route.cache(
