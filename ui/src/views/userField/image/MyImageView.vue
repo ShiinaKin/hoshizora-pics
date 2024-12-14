@@ -767,7 +767,7 @@ async function fetchImage(imageId: number): Promise<string | void> {
     return;
   }
   return imageApi
-    .apiImageImageIdGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
     .then((response) => {
       const uIntArr = new Uint8Array(response.data);
       const blob = new Blob([uIntArr], { type: "image/*" });
@@ -782,7 +782,7 @@ async function fetchImage(imageId: number): Promise<string | void> {
 
 async function fetchImageBlob(imageId: number): Promise<Blob | void> {
   return imageApi
-    .apiImageImageIdGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
     .then((response) => {
       const uIntArr = new Uint8Array(response.data);
       return new Blob([uIntArr], { type: "image/*" });

@@ -218,7 +218,7 @@ private fun Route.imageSelfFileFetch(controller: ImageController) {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_SELF_SINGLE
         }
-        get({
+        get("file", {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
@@ -419,7 +419,7 @@ private fun Route.imageManageFileFetch(controller: ImageController) {
         install(AuthorizationPlugin) {
             permission = IMAGE_READ_ALL_SINGLE
         }
-        get({
+        get("file", {
             response {
                 HttpStatusCode.OK to {
                     description = "success"

@@ -273,7 +273,7 @@
         } ]
       }
     },
-    "/api/image/{imageId}/" : {
+    "/api/image/{imageId}/file" : {
       "get" : {
         "tags" : [ "Image" ],
         "parameters" : [ {
@@ -594,7 +594,7 @@
         } ]
       }
     },
-    "/api/image/manage/{imageId}/" : {
+    "/api/image/manage/{imageId}/file" : {
       "get" : {
         "tags" : [ "Image" ],
         "parameters" : [ {

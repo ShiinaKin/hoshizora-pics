@@ -86,10 +86,10 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageImageIdGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiImageImageIdFileGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'imageId' is not null or undefined
-            assertParamExists('apiImageImageIdGet', 'imageId', imageId)
-            const localVarPath = `/api/image/{imageId}/`
+            assertParamExists('apiImageImageIdFileGet', 'imageId', imageId)
+            const localVarPath = `/api/image/{imageId}/file`
                 .replace(`{${"imageId"}}`, encodeURIComponent(String(imageId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -277,10 +277,10 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManageImageIdGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiImageManageImageIdFileGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'imageId' is not null or undefined
-            assertParamExists('apiImageManageImageIdGet', 'imageId', imageId)
-            const localVarPath = `/api/image/manage/{imageId}/`
+            assertParamExists('apiImageManageImageIdFileGet', 'imageId', imageId)
+            const localVarPath = `/api/image/manage/{imageId}/file`
                 .replace(`{${"imageId"}}`, encodeURIComponent(String(imageId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -635,10 +635,10 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdGet(imageId, options);
+        async apiImageImageIdFileGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageImageIdFileGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageImageIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageImageIdFileGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -696,10 +696,10 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiImageManageImageIdGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManageImageIdGet(imageId, options);
+        async apiImageManageImageIdFileGet(imageId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiImageManageImageIdFileGet(imageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManageImageIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ImageApi.apiImageManageImageIdFileGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -808,12 +808,12 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @param {ImageApiApiImageImageIdGetRequest} requestParameters Request parameters.
+         * @param {ImageApiApiImageImageIdFileGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageImageIdGet(requestParameters: ImageApiApiImageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
-            return localVarFp.apiImageImageIdGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
+        apiImageImageIdFileGet(requestParameters: ImageApiApiImageImageIdFileGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
+            return localVarFp.apiImageImageIdFileGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -853,12 +853,12 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @param {ImageApiApiImageManageImageIdGetRequest} requestParameters Request parameters.
+         * @param {ImageApiApiImageManageImageIdFileGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiImageManageImageIdGet(requestParameters: ImageApiApiImageManageImageIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
-            return localVarFp.apiImageManageImageIdGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
+        apiImageManageImageIdFileGet(requestParameters: ImageApiApiImageManageImageIdFileGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
+            return localVarFp.apiImageManageImageIdFileGet(requestParameters.imageId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -931,15 +931,15 @@ export interface ImageApiApiImageImageIdDeleteRequest {
 }
 
 /**
- * Request parameters for apiImageImageIdGet operation in ImageApi.
+ * Request parameters for apiImageImageIdFileGet operation in ImageApi.
  * @export
- * @interface ImageApiApiImageImageIdGetRequest
+ * @interface ImageApiApiImageImageIdFileGetRequest
  */
-export interface ImageApiApiImageImageIdGetRequest {
+export interface ImageApiApiImageImageIdFileGetRequest {
     /**
      * image id
      * @type {number}
-     * @memberof ImageApiApiImageImageIdGet
+     * @memberof ImageApiApiImageImageIdFileGet
      */
     readonly imageId: number
 }
@@ -1008,15 +1008,15 @@ export interface ImageApiApiImageManageImageIdDeleteRequest {
 }
 
 /**
- * Request parameters for apiImageManageImageIdGet operation in ImageApi.
+ * Request parameters for apiImageManageImageIdFileGet operation in ImageApi.
  * @export
- * @interface ImageApiApiImageManageImageIdGetRequest
+ * @interface ImageApiApiImageManageImageIdFileGetRequest
  */
-export interface ImageApiApiImageManageImageIdGetRequest {
+export interface ImageApiApiImageManageImageIdFileGetRequest {
     /**
      * image id
      * @type {number}
-     * @memberof ImageApiApiImageManageImageIdGet
+     * @memberof ImageApiApiImageManageImageIdFileGet
      */
     readonly imageId: number
 }
@@ -1209,13 +1209,13 @@ export class ImageApi extends BaseAPI {
 
     /**
      * 
-     * @param {ImageApiApiImageImageIdGetRequest} requestParameters Request parameters.
+     * @param {ImageApiApiImageImageIdFileGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ImageApi
      */
-    public apiImageImageIdGet(requestParameters: ImageApiApiImageImageIdGetRequest, options?: RawAxiosRequestConfig) {
-        return ImageApiFp(this.configuration).apiImageImageIdGet(requestParameters.imageId, options).then((request) => request(this.axios, this.basePath));
+    public apiImageImageIdFileGet(requestParameters: ImageApiApiImageImageIdFileGetRequest, options?: RawAxiosRequestConfig) {
+        return ImageApiFp(this.configuration).apiImageImageIdFileGet(requestParameters.imageId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1264,13 +1264,13 @@ export class ImageApi extends BaseAPI {
 
     /**
      * 
-     * @param {ImageApiApiImageManageImageIdGetRequest} requestParameters Request parameters.
+     * @param {ImageApiApiImageManageImageIdFileGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ImageApi
      */
-    public apiImageManageImageIdGet(requestParameters: ImageApiApiImageManageImageIdGetRequest, options?: RawAxiosRequestConfig) {
-        return ImageApiFp(this.configuration).apiImageManageImageIdGet(requestParameters.imageId, options).then((request) => request(this.axios, this.basePath));
+    public apiImageManageImageIdFileGet(requestParameters: ImageApiApiImageManageImageIdFileGetRequest, options?: RawAxiosRequestConfig) {
+        return ImageApiFp(this.configuration).apiImageManageImageIdFileGet(requestParameters.imageId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
