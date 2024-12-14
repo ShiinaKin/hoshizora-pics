@@ -6,6 +6,7 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.plugins.ratelimit.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -32,8 +33,10 @@ import io.sakurasou.service.common.CommonService
 fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route({ tags("common") }) {
-        cache(cachedNoQueryParamRequest = false) { route("random") { randomFetchImage(commonController) } }
-        cache { route("s") { anonymousGetImage(commonController) } }
+        cache(cachedNoQueryParamRequest = false) {
+            rateLimit(RateLimitName("randomFetchLimit")) { route("random") { randomFetchImage(commonController) } }
+        }
+        cache { rateLimit(RateLimitName("anonymousGetLimit")) { route("s") { anonymousGetImage(commonController) } } }
     }
 }
 
@@ -91,7 +94,6 @@ fun Route.commonSiteSettingRoute() {
 
 private fun Route.randomFetchImage(commonController: CommonController) {
     get({
-        hidden = true
         description = "return random image if setting allow"
         request {
             queryParameter<String>("id") {
@@ -114,7 +116,6 @@ private fun Route.randomFetchImage(commonController: CommonController) {
 
 private fun Route.anonymousGetImage(commonController: CommonController) {
     get("{imageUniqueId}", {
-        hidden = true
         request {
             pathParameter<String>("imageUniqueId") {
                 required = true
