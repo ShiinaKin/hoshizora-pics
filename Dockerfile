@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-alpine AS build
 COPY --from=node_base /usr/local/bin/node /usr/local/bin/
 COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-WORKDIR /hoshizora
+WORKDIR /hoshizora-pics
 
 COPY gradlew gradle.properties build.gradle.kts settings.gradle.kts ./
 COPY .git .git
