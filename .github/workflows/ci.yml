@@ -74,6 +74,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           stripGeneratorNotice: true
+          onlyLastTag: true
           compareLink: true
           headerLabel: "## Good things have arrived"
 
