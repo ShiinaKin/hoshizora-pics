@@ -21,7 +21,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -49,7 +49,7 @@ jobs:
           retention-days: 1
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: startsWith(github.ref, 'refs/tags/')
     needs: build
     permissions:
@@ -66,19 +66,18 @@ jobs:
           path: build
 
       - name: Get Previous Release Tag
-        id: get_previous_tag
-        uses: InsonusK/get-latest-release@v1.0.1
-        with:
-         myToken: ${{ secrets.GITHUB_TOKEN }}
-         exclude_types: draft,prerelease
+        run: |
+          git fetch --tags --force
+          previous_tag=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1))
+          echo "previous_tag=$previous_tag" >> $GITHUB_ENV
 
       - name: Generate Changelog
         uses: heinrichreimer/action-github-changelog-generator@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
+          sinceTag: ${{ env.previous_tag }}
           stripGeneratorNotice: true
-          sinceTag: ${{ steps.get_previous_tag.outputs.tag_name }}
           headerLabel: "## Good things have arrived"
 
       - name: Release
@@ -92,7 +91,7 @@ jobs:
   # https://docs.docker.com/build/ci/github-actions/multi-platform/
   # https://github.com/docker/build-push-action
   build-and-push-docker-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: release
     permissions:
       packages: write
