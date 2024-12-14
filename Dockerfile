@@ -18,13 +18,12 @@ RUN ./gradlew build
 
 FROM eclipse-temurin:21-alpine
 LABEL maintainer="ShiinaKin <shiina@sakurasou.io>"
-WORKDIR /hoshizora
+WORKDIR /hoshizora-pics
 
-COPY --from=build /hoshizora/build/*.jar application.jar
+COPY --from=build /hoshizora-pics/build/*.jar hoshizora-pics.jar
 
-VOLUME /hoshizora/images/uploads
-VOLUME /hoshizora/images/thumbnails
+VOLUME /hoshizora-pics/images
 
 ENV JVM_OPTS="-Xms256m -Xmx512m"
 
-ENTRYPOINT java $JVM_OPTS -jar application.jar
+ENTRYPOINT java $JVM_OPTS -jar hoshizora-pics.jar
