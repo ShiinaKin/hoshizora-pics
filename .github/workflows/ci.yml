@@ -65,14 +65,20 @@ jobs:
           name: hoshizora-pics-artifact
           path: build
 
+      - name: Get Previous Release Tag
+        id: get_previous_tag
+        uses: InsonusK/get-latest-release@v1.0.1
+        with:
+         myToken: ${{ secrets.GITHUB_TOKEN }}
+         exclude_types: draft,prerelease
+
       - name: Generate Changelog
         uses: heinrichreimer/action-github-changelog-generator@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           stripGeneratorNotice: true
-          onlyLastTag: true
-          compareLink: true
+          sinceTag: ${{ steps.get_previous_tag.outputs.tag_name }}
           headerLabel: "## Good things have arrived"
 
       - name: Release
