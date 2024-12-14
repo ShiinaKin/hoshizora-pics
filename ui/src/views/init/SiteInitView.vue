@@ -6,6 +6,7 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { CommonApi, type SiteInitRequest } from "api-client";
 import VeeFloatInputText from "@/components/vee-input/VeeFloatInputText.vue";
+import I18nSelect from "@/components/I18nSelect.vue";
 import Button from "primevue/button";
 
 const { t } = useI18n();
@@ -83,7 +84,7 @@ function initSite(siteInitRequest: SiteInitRequest) {
 </script>
 
 <template>
-  <div class="h-screen flex flex-col flex-grow items-center justify-center gap-2">
+  <div class="relative h-screen flex flex-col flex-grow items-center justify-center gap-2">
     <div class="text-center">
       <h1 class="text-2xl font-bold sm:text-3xl">
         {{ t("siteInitView.title") }}
@@ -158,6 +159,10 @@ function initSite(siteInitRequest: SiteInitRequest) {
       </div>
       <Button type="submit" :label="t('siteInitView.form.submitButton')" fluid />
     </form>
+
+    <div class="absolute right-0 bottom-0 rounded-br-xl locale-changer">
+      <I18nSelect />
+    </div>
   </div>
 </template>
 
