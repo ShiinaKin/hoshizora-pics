@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { inject, onMounted } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import { useCommonStore } from "@/stores/counter";
 import { CommonApi } from "api-client";
 import Toast from "primevue/toast";
+import type { I18n } from "vue-i18n";
 
 const route = useRoute();
 const router = useRouter();
 const commonStore = useCommonStore();
 const commonApi = new CommonApi();
 
+const i18n = inject<I18n>("i18n")!;
+
 const token = localStorage.getItem("token");
+const local = localStorage.getItem("locale");
 
 onMounted(() => {
+  if (local) i18n.global.locale = local;
+
   commonApi
     .apiSiteSettingGet()
     .then((response) => {
