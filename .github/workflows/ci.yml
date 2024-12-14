@@ -36,25 +36,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
-
-      - name: Install dependencies
-        run: cd ui && pnpm install
-
-      - name: Build Packages
-        run: cd ui && pnpm build-packages
-
-      - name: Build UI
-        run: cd ui && pnpm build
-
       - name: Build with Gradle Wrapper
         run: |
           chmod +x ./gradlew
