@@ -74,6 +74,7 @@ jobs:
           output: CHANGELOG.md
           onlyLastTag: true
           stripGeneratorNotice: true
+          compareLink: true
           headerLabel: "## Good things have arrived"
 
       - name: Release
