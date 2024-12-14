@@ -6,9 +6,10 @@ plugins {
 
 node {
     version = "20.18.1"
-    workDir = file("${projectDir}/node")
+    workDir = file("${projectDir}/.cache/node")
     download = true
     pnpmVersion = "9.15.0"
+    pnpmWorkDir = file("${projectDir}/.cache/pnpm")
 }
 
 tasks.register<PnpmTask>("build-packages") {

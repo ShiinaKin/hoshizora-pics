@@ -28,5 +28,4 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-.frontend-gradle-plugin
-node
+.cache
