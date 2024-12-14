@@ -1,1 +1,1068 @@
-message:
+siteInitView:
+  title: "Site Initialization"
+  description: "This is the first visit after system initialization. Please initialize the site first."
+  form:
+    siteTitle: "Site Title"
+    siteSubtitle: "Site Subtitle"
+    siteDescription: "Site Description"
+    siteExternalUrl: "Site External URL"
+    username: "Username"
+    password: "Password"
+    email: "Email"
+    verify:
+      siteTitle:
+        required: "Site title cannot be empty"
+      siteSubtitle:
+        required: "Site subtitle cannot be empty"
+      siteDescription:
+        required: "Site description cannot be empty"
+      siteExternalUrl:
+        required: "Site external URL cannot be empty"
+        invalid: "Please enter a valid URL"
+      username:
+        required: "Username cannot be empty"
+        min: "Username must be at least 4 characters"
+        max: "Username must be at most 20 characters"
+        invalid: "Username can only contain letters and numbers"
+      password:
+        required: "Password cannot be empty"
+        min: "Password must be at least 8 characters"
+        max: "Password must be at most 32 characters"
+        invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+      email:
+        required: "Email cannot be empty"
+        invalid: "Invalid email format"
+    submitButton: "Submit"
+  toast:
+    successTitle: "Site initialization successful"
+    failedTitle: "Site initialization failed"
+loginView:
+  title: "Login"
+  form:
+    username: "Username"
+    password: "Password"
+    loginButton: "Login"
+    signupButton: "Sign Up"
+    verify:
+      username:
+        required: "Username cannot be empty"
+        min: "Username must be at least 4 characters"
+        max: "Username must be at most 20 characters"
+      password:
+        required: "Password cannot be empty"
+        min: "Password must be at least 8 characters"
+        max: "Password must be at most 32 characters"
+        invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+  toast:
+    successTitle: "Login successful"
+    failedTitle: "Login failed"
+registerView:
+  title: "Register"
+  form:
+    username: "Username"
+    password: "Password"
+    email: "Email"
+    signupButton: "Sign Up"
+    loginButton: "Login"
+    verify:
+      username:
+        required: "Username cannot be empty"
+        min: "Username must be at least 4 characters"
+        max: "Username must be at most 20 characters"
+        invalid: "Username can only contain letters and numbers"
+      password:
+        required: "Password cannot be empty"
+        min: "Password must be at least 8 characters"
+        max: "Password must be at most 32 characters"
+        invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+      email:
+        required: "Email cannot be empty"
+        invalid: "Invalid email format"
+  toast:
+    successTitle: "Registration successful"
+    failedTitle: "Registration failed"
+userField:
+  menu:
+    overview: "Overview"
+    uploadImage: "Upload Image"
+    myImage: "My Images"
+    myAlbum: "My Albums"
+    myAccount:
+      title: "My Account"
+      profile: "My Profile"
+      personalAccessToken: "My Tokens"
+    adminField: "Admin Panel"
+    logout:
+      title: "Logout"
+      toast:
+        logoutSuccess: "Logout successful"
+userOverviewView:
+  header:
+    imageCount: "Image Count"
+    albumCount: "Album Count"
+    usedSpace: "Used Space"
+    usableSpace:
+      title: "Usable Space"
+      tips: "Total Space - Used Space"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "images"
+    albumCountUnit: "albums"
+    userCountUnit: "users"
+  toast:
+    fetchStatisticsFailedTitle: "Failed to fetch statistics"
+dragUploader:
+  usageTip: "Click or drag files here to upload"
+  allowedFileTypeTip: "Supported file types:"
+imageUploadView:
+  toolbar:
+    title: "Upload Image"
+    description: "Select image files below, then operate in the upload list"
+  uploadList:
+    title: "Upload List"
+    uploadAllButton: "Upload All"
+myImageView:
+  filter:
+    image:
+      uploadTimeASC: "Upload Time Ascending"
+      uploadTimeDESC: "Upload Time Descending"
+      fileSizeASC: "File Size Ascending"
+      fileSizeDESC: "File Size Descending"
+    visible:
+      public: "Public"
+      private: "Private"
+      all: "All"
+    album:
+      button: "Album"
+      drawer:
+        title: "Album List"
+  contextMenu:
+    single:
+      copyImage: "Copy Image"
+      copyLink: "Copy Link"
+      moveToAlbum: "Move to Album"
+      settingAsPrivate: "Set as Private"
+      settingAsPublic: "Set as Public"
+      detail: "Details"
+      edit: "Edit"
+      delete: "Delete"
+    multi:
+      moveToAlbum: "Move to Album"
+      settingAsPrivate: "Set as Private"
+      settingAsPublic: "Set as Public"
+      delete: "Delete"
+  detail:
+    dialog:
+      title: "Image Details"
+      name: "Image Name"
+      rawName: "Original Image Name"
+      type: "Image Type"
+      albumName: "Album Name"
+      ownerName: "Owner Name"
+      strategyName: "Storage Strategy Name"
+      strategyType: "Storage Strategy Type"
+      size: "Image Size"
+      fileSize: "File Size"
+      fileSizeUnit: "MB"
+      uploadTime: "Upload Time"
+      isPrivate:
+        title: "Is Public"
+        true: "Private"
+        false: "Public"
+      description: "Image Description"
+    toast:
+      failedTitle: "Failed to get image information"
+  edit:
+    dialog:
+      title: "Edit Image"
+      form:
+        displayName: "Image Name"
+        description: "Image Description"
+        cancelButton: "Cancel"
+        submitButton: "Save"
+        verify:
+          atLeastOneField: "Please modify at least one field"
+    toast:
+      successTitle: "Rename successful"
+      failedTitle: "Rename failed"
+  copyImage:
+    toast:
+      successTitle: "Copy successful"
+      failedTitle: "Copy failed"
+  copyLink:
+    toast:
+      successTitle: "Copy successful"
+      failedTitle: "Copy failed, private images cannot be copied externally"
+  changeVisible:
+    toast:
+      successTitle: "Access permission modified successfully"
+      failedTitle: "Failed to modify access permission"
+  changeAlbum:
+    dialog:
+      title: "Move to Album"
+      form:
+        table:
+          albumId: "Album ID"
+          albumName: "Album Name"
+          imageCount: "Image Count"
+          isUncategorized:
+            title: "Is Uncategorized"
+            true: "Yes"
+            false: "No"
+          isDefault:
+            title: "Is Default"
+            true: "Yes"
+            false: "No"
+        cancelButton: "Cancel"
+        submitButton: "Move"
+        verify:
+          album:
+            required: "Please select an album"
+    toast:
+      successTitle: "Album modified successfully"
+      failedTitle: "Failed to modify album"
+  delete:
+    dialog:
+      title: "Confirm Deletion"
+      mainContent: "Are you sure you want to delete the image?"
+      subContent: "This will actually delete the image and it cannot be recovered"
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+myAlbumView:
+  toolbar:
+    createButton: "Create Album"
+  filter:
+    album:
+      createTimeASC: "Create Time Ascending"
+      createTimeDESC: "Create Time Descending"
+      imageCountASC: "Image Count Ascending"
+      imageCountDESC: "Image Count Descending"
+  table:
+    albumId: "Album ID"
+    albumName: "Album Name"
+    imageCount: "Image Count"
+    isUncategorized:
+      title: "Is Uncategorized"
+      true: "Yes"
+      false: "No"
+    isDefault:
+      title: "Default Album"
+      true: "Yes"
+      false: "No"
+    createTime: "Create Time"
+    ops:
+      title: "Operations"
+      detail: "View"
+      edit: "Edit"
+      settingAsDefault: "Set as Default"
+      delete: "Delete"
+  create:
+    dialog:
+      title: "Create Album"
+      form:
+        name: "Album Name"
+        description: "Album Description"
+        cancelButton: "Cancel"
+        submitButton: "Create"
+        verify:
+          name:
+            required: "Album name cannot be empty"
+    toast:
+      successTitle: "Create successful"
+      failedTitle: "Create failed"
+  delete:
+    dialog:
+      title: "Confirm Deletion"
+      warningTitle: "Are you sure you want to delete this album?"
+      warningContent: "This will actually delete the album and it cannot be recovered. Images will be moved to the uncategorized album."
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+  edit:
+    dialog:
+      title: "Edit Album"
+      form:
+        name: "Album Name"
+        description: "Album Description"
+        cancelButton: "Cancel"
+        submitButton: "Modify"
+        verify:
+          atLeastOneField: "Album name and description cannot both be empty"
+    toast:
+      successTitle: "Modification successful"
+      failedTitle: "Modification failed"
+  detail:
+    dialog:
+      title: "Album Details"
+      name: "Album Name"
+      description: "Album Description"
+      imageCount: "Image Count"
+      isUncategorized:
+        title: "Is Uncategorized"
+        true: "Yes"
+        false: "No"
+      isDefault:
+        title: "Is Default"
+        true: "Yes"
+        false: "No"
+      createTime: "Create Time"
+    toast:
+      failedTitle: "Failed to get album information"
+myProfileView:
+  toolbar:
+    title: "My Profile"
+    updateButton: "Update Profile"
+  detail:
+    userId: "User ID"
+    username: "Username"
+    email: "Email"
+    createTime: "Create Time"
+    banStatus:
+      title: "Ban Status"
+      normal: "Normal"
+      banned: "Banned"
+    groupName: "User Group Name"
+    imageCount: "Image Count"
+    albumCount: "Album Count"
+    usedSpace: "Used Space"
+    usableSpace: "Usable Space"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "images"
+    albumCountUnit: "albums"
+    isDefaultImagePrivate:
+      title: "Default Private"
+      true: "Yes"
+      false: "No"
+    toast:
+      failedTitle: "Failed to get user information"
+  edit:
+    dialog:
+      title: "Edit Profile"
+      form:
+        email: "Email"
+        password: "New Password"
+        isDefaultImagePrivate: "Default Private"
+        cancelButton: "Cancel"
+        submitButton: "Modify"
+        verify:
+          email:
+            invalid: "Please enter a valid email address"
+          password:
+            min: "Password must be at least 8 characters"
+            max: "Password must be at most 32 characters"
+            invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+          atLeastOneField: "Please modify at least one field"
+    toast:
+      successTitle: "Modification successful"
+      failedTitle: "Modification failed"
+myPatView:
+  toolbar:
+    createButton: "Create Token"
+  table:
+    patId: "Token ID"
+    patName: "Token Name"
+    createTime: "Create Time"
+    expireTime: "Expire Time"
+    ops:
+      title: "Operations"
+      edit: "Edit"
+      delete: "Delete"
+  create:
+    dialog:
+      title: "Create Token"
+      form:
+        patName: "Token Name"
+        description: "Token Description"
+        expireTime: "Expire Time"
+        cancelButton: "Cancel"
+        submitButton: "Create"
+        verify:
+          patName:
+            required: "Token name cannot be empty"
+          expireTime:
+            required: "Expire time cannot be empty"
+    toast:
+      successTitle: "Create successful"
+      failedTitle: "Create failed"
+  createdDetail:
+    dialog:
+      title: "Token Information"
+      token: "Token Value"
+      copyButton: "Copy"
+    toast:
+      copySuccessTitle: "Copy successful"
+      copySuccessContent: "Token has been copied to clipboard"
+  delete:
+    dialog:
+      title: "Confirm Deletion"
+      warningTitle: "Are you sure you want to delete this token?"
+      warningContent: "This will actually delete the token and it will become invalid immediately"
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+  edit:
+    dialog:
+      title: "Edit Token"
+      form:
+        patName: "Token Name"
+        patDescription: "Token Description"
+        cancelButton: "Cancel"
+        submitButton: "Modify"
+        verify:
+          atLeastOneField: "Token name and description cannot both be empty"
+    toast:
+      successTitle: "Modification successful"
+      failedTitle: "Modification failed"
+adminField:
+  menu:
+    overview: "Overview"
+    imageManage: "Image Management"
+    albumManage: "Album Management"
+    userManage: "User Management"
+    groupManage: "User Group Management"
+    strategyManage: "Storage Strategy Management"
+    setting:
+      title: "Settings"
+      siteSetting: "Site Settings"
+      systemSetting: "System Settings"
+    userField: "User Center"
+    logout:
+      title: "Logout"
+      toast:
+        logoutSuccess: "Logout successful"
+adminOverviewView:
+  header:
+    imageCount: "Total Image Count"
+    albumCount: "Total Album Count"
+    userCount: "Total User Count"
+    usedSpace: "Total Used Space"
+    spaceSizeUnit: "MB"
+    imageCountUnit: "images"
+    albumCountUnit: "albums"
+    userCountUnit: "users"
+  detail:
+    version: "Version"
+    buildTime: "Build Time"
+    commitId: "Commit ID"
+    javaVersion: "Java Version"
+    dbVersion: "Database Version"
+    os: "Operating System"
+    serverTimeZone: "Server Time Zone"
+    serverLanguage: "Server Language"
+  toast:
+    fetchStatisticsFailedTitle: "Failed to fetch statistics"
+    fetchSystemOverviewFailedTitle: "Failed to fetch system overview"
+adminImageManageView:
+  imageFilter:
+    uploadTimeASC: "Upload Time Ascending"
+    uploadTimeDESC: "Upload Time Descending"
+    fileSizeASC: "File Size Ascending"
+    fileSizeDESC: "File Size Descending"
+  visibleFilter:
+    publicVisible: "Public"
+    privateVisible: "Private"
+    allVisible: "All"
+  contextMenu:
+    single:
+      copyImage: "Copy Image"
+      copyLink: "Copy Link"
+      moveToAlbum: "Move to Album"
+      settingAsPrivate: "Set as Private"
+      settingAsPublic: "Set as Public"
+      detail: "Details"
+      delete: "Delete"
+    multi:
+      settingAsPrivate: "Set as Private"
+      settingAsPublic: "Set as Public"
+      delete: "Delete"
+  copyImage:
+    toast:
+      successTitle: "Copy successful"
+      failedTitle: "Copy failed"
+  copyLink:
+    toast:
+      successTitle: "Copy successful"
+      failedTitle: "Copy failed, private images cannot be copied externally"
+  changeVisible:
+    toast:
+      successTitle: "Access permission modified successfully"
+      failedTitle: "Failed to modify access permission"
+  delete:
+    confirmDialog:
+      header: "Confirm Deletion"
+      mainContent: "Are you sure you want to delete the image?"
+      subContent: "This will actually delete the image and it cannot be recovered"
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+  detail:
+    title: "Image Details"
+    imageName: "Image Name"
+    imageRawName: "Original Image Name"
+    imageType: "Image Type"
+    imageAlbumName: "Album Name"
+    imageOwnerName: "Owner Name"
+    imageStrategyName: "Storage Strategy Name"
+    imageStrategyType: "Storage Strategy Type"
+    imageSize: "Image Size"
+    imageFileSize: "File Size"
+    imageFileSizeUnit: "MB"
+    imageUploadTime: "Upload Time"
+    imageIsPublic: "Is Public"
+    imageIsPublicYes: "Public"
+    imageIsPublicNo: "Private"
+    imageDesc: "Image Description"
+adminAlbumManageView:
+  albumFilter:
+    createTimeASC: "Create Time Ascending"
+    createTimeDESC: "Create Time Descending"
+  albumTable:
+    albumId: "Album ID"
+    albumName: "Album Name"
+    albumOwnerName: "Owner Name"
+    imageCount: "Image Count"
+    createTime: "Create Time"
+    opsTitle: "Operations"
+    opsDetail: "View"
+  albumDetail:
+    title: "Album Details"
+    albumId: "Album ID"
+    albumName: "Album Name"
+    albumDesc: "Album Description"
+    albumOwnerId: "Owner ID"
+    albumOwnerName: "Owner Name"
+    albumImageCount: "Image Count"
+    albumIsUncategorized: "Is Uncategorized"
+    albumIsUncategorizedYes: "Yes"
+    albumIsUncategorizedNo: "No"
+    albumIsDefault: "Is Default"
+    albumIsDefaultYes: "Yes"
+    albumIsDefaultNo: "No"
+    albumCreateTime: "Create Time"
+adminUserManageView:
+  userFilter:
+    createTimeASC: "Create Time Ascending"
+    createTimeDESC: "Create Time Descending"
+    imageCountASC: "Image Count Ascending"
+    imageCountDESC: "Image Count Descending"
+    albumCountASC: "Album Count Ascending"
+    albumCountDESC: "Album Count Descending"
+    usedSpaceASC: "Used Space Ascending"
+    usedSpaceDESC: "Used Space Descending"
+    bannedStatus:
+      banned: "Banned"
+      normal: "Normal"
+      all: "All"
+  userTable:
+    userId: "User ID"
+    username: "Username"
+    userGroup: "User Group"
+    imageCount: "Image Count"
+    albumCount: "Album Count"
+    usedSpace: "Used Space"
+    createTime: "Registration Time"
+    banStatus: "Ban Status"
+    banStatusNormal: "Normal"
+    banStatusBanned: "Banned"
+    spaceSizeUnit: "MB"
+    opsTitle: "Operations"
+    opsDetail: "View"
+    opsEdit: "Edit"
+    opsBan: "Ban"
+    opsUnban: "Unban"
+    opsDelete: "Delete"
+  userDetail:
+    title: "User Details"
+    userId: "User ID"
+    username: "Username"
+    userGroupName: "User Group Name"
+    email: "Email"
+    imageCount: "Image Count"
+    albumCount: "Album Count"
+    isDefaultImagePrivate: "Default Image Privacy"
+    isDefaultImagePrivateTrue: "Yes"
+    isDefaultImagePrivateFalse: "No"
+    createTime: "Create Time"
+    banStatus: "Ban Status"
+    banStatusNormal: "Normal"
+    banStatusBanned: "Banned"
+    usedSpace: "Used Space"
+    totalSpace: "Total Space"
+    imageCountUnit: "images"
+    albumCountUnit: "albums"
+    spaceSizeUnit: "MB"
+  userCreate:
+    dialog:
+      title: "Create User"
+      form:
+        username: "Username"
+        password: "Password"
+        email: "Email"
+        groupId: "User Group"
+        isDefaultImagePrivate: "Default Image Privacy"
+        submitButton: "Create"
+        cancelButton: "Cancel"
+        verify:
+          username:
+            required: "Username cannot be empty"
+            min: "Username must be at least 4 characters"
+            max: "Username must be at most 20 characters"
+            invalid: "Can only contain letters and numbers"
+          password:
+            required: "Password cannot be empty"
+            min: "Password must be at least 8 characters"
+            max: "Password must be at most 32 characters"
+            invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+          email:
+            required: "Email cannot be empty"
+            invalid: "Invalid email format"
+          groupId:
+            required: "User group cannot be empty"
+          isDefaultImagePrivate:
+            required: "Default image privacy cannot be empty"
+    toast:
+      successTitle: "Creation successful"
+      failedTitle: "Creation failed"
+      groupPageFailedTitle: "Failed to get user groups"
+  userEdit:
+    dialog:
+      title: "Edit User"
+      form:
+        userId: "User ID"
+        username: "Username"
+        password: "Password"
+        email: "Email"
+        groupId: "User Group"
+        isDefaultImagePrivate: "Default Image Privacy"
+        submitButton: "Save"
+        cancelButton: "Cancel"
+        verify:
+          username:
+            required: "Username cannot be empty"
+            min: "Username must be at least 4 characters"
+            max: "Username must be at most 20 characters"
+            invalid: "Can only contain letters and numbers"
+          password:
+            required: "Password cannot be empty"
+            min: "Password must be at least 8 characters"
+            max: "Password must be at most 32 characters"
+            invalid: "Password can only be a combination of uppercase and lowercase letters, numbers, and {'@'}$!%*#?&"
+          email:
+            required: "Email cannot be empty"
+            invalid: "Invalid email format"
+          groupId:
+            required: "User group cannot be empty"
+          isDefaultImagePrivate:
+            required: "Default image privacy cannot be empty"
+          atLeastOneField: "Please modify at least one field"
+    toast:
+      successTitle: "Modification successful"
+      failedTitle: "Modification failed"
+      groupPageFailedTitle: "Failed to get user groups"
+  userBan:
+    confirmDialog:
+      header: "Confirm Ban"
+      mainContent: "Are you sure you want to ban this user?"
+      subContent: "After banning, the user will not be able to log in. The user's images and albums will not be deleted."
+      cancelButton: "Cancel"
+      submitButton: "Confirm Ban"
+    toast:
+      successTitle: "Ban successful"
+      failedTitle: "Ban failed"
+  userUnban:
+    confirmDialog:
+      header: "Confirm Unban"
+      mainContent: "Are you sure you want to unban this user?"
+      subContent: "After unbanning, the user will be able to log in"
+      cancelButton: "Cancel"
+      submitButton: "Confirm Unban"
+    toast:
+      successTitle: "Unban successful"
+      failedTitle: "Unban failed"
+  userDelete:
+    confirmDialog:
+      header: "Confirm Delete"
+      mainContent: "Are you sure you want to delete this user?"
+      subContent: "This will actually delete the user and it cannot be recovered. The user's images and albums will be physically deleted."
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+adminGroupManageView:
+  tips:
+    namingRulePlaceholder: "Naming rule placeholders:\n{'{yyyy}'} Year\n{'{MM}'} Month\n{'{dd}'} Day\n{'{timestamp}'} Timestamp\n{'{uniq}'} Unique string\n{'{md5}'} Random md5 value\n{'{str-random-16}'} 16-character random string\n{'{str-random-10}'} 10-character random string\n{'{fileName}'} Original file name\n{'{user-id}'} User ID"
+  filter:
+    group:
+      createTimeASC: "Create Time Ascending"
+      createTimeDESC: "Create Time Descending"
+      userCountASC: "User Count Ascending"
+      userCountDESC: "User Count Descending"
+      imageCountASC: "Image Count Ascending"
+      imageCountDESC: "Image Count Descending"
+      imageSizeASC: "Image Size Ascending"
+      imageSizeDESC: "Image Size Descending"
+  table:
+    id: "Group ID"
+    name: "Group Name"
+    strategyId: "Strategy ID"
+    strategyName: "Storage Strategy"
+    userCount: "User Count"
+    imageCount: "Image Count"
+    imageSize: "Image Size"
+    imageSizeUnit: "MB"
+    isSystemReserved:
+      title: "System Reserved"
+      true: "Yes"
+      false: "No"
+    createTime: "Create Time"
+    ops:
+      title: "Operations"
+      detail: "View"
+      edit: "Edit"
+      delete: "Delete"
+    toast:
+      failedTitle: "Failed to get user groups"
+  detail:
+    dialog:
+      title: "Group Details"
+      id: "Group ID"
+      name: "Group Name"
+      description: "Group Description"
+      strategyId: "Strategy ID"
+      strategyName: "Storage Strategy"
+      roles: "Group Roles"
+      config:
+        strategy:
+          singleFileMaxSize: "Max Single File Size"
+          maxSize: "Max User Space"
+          pathNamingRule: "Path Naming Rule"
+          fileNamingRule: "File Naming Rule"
+          imageQuality: "Image Quality"
+          imageAutoTransformTarget: "Auto Transform Target Type"
+          imageAutoTransformTargetNull: "None"
+          allowedImageTypes: "Allowed Image Types"
+          spaceSizeUnit: "MB"
+      isSystemReserved:
+        title: "System Reserved"
+        true: "Yes"
+        false: "No"
+      createTime: "Create Time"
+    toast:
+      failedTitle: "Failed to get details"
+  create:
+    dialog:
+      title: "Create User Group"
+      form:
+        name: "Group Name"
+        description: "Group Description"
+        strategy: "Storage Strategy"
+        roles: "Roles"
+        config:
+          strategy:
+            title: "Storage Settings"
+            singleFileMaxSize: "Max Single File Size"
+            maxSize: "Max User Space"
+            pathNamingRule: "Path Naming Rule"
+            fileNamingRule: "File Naming Rule"
+            imageQuality: "Image Quality"
+            imageAutoTransformTarget: "Auto Transform Target Type"
+            allowedImageTypes: "Allowed Image Types"
+        submitButton: "Create"
+        cancelButton: "Cancel"
+        verify:
+          groupName:
+            required: "Group name cannot be empty"
+          strategy:
+            required: "Storage strategy cannot be empty"
+          roles:
+            required: "Roles cannot be empty"
+            invalid: "Invalid role"
+          config:
+            strategy:
+              singleFileMaxSize:
+                required: "Max single file size cannot be empty"
+                invalid: "Max single file size must be a number"
+              maxSize:
+                required: "Max user space cannot be empty"
+                invalid: "Max user space must be a number"
+              pathNamingRule:
+                required: "Path naming rule cannot be empty"
+              fileNamingRule:
+                required: "File naming rule cannot be empty"
+              imageQuality:
+                required: "Image quality cannot be empty"
+                invalid: "Image quality must be a number"
+                min: "Image quality must be greater than or equal to 0"
+                max: "Image quality must be less than or equal to 100"
+              imageAutoTransformTarget:
+                invalid: "Invalid auto transform target type"
+              allowedImageTypes:
+                invalid: "Invalid allowed image types"
+    toast:
+      successTitle: "Creation successful"
+      failedTitle: "Creation failed"
+      pageStrategyFailedTitle: "Failed to get storage strategies"
+      pageRoleFailedTitle: "Failed to get roles"
+  edit:
+    dialog:
+      title: "Edit User Group"
+      form:
+        name: "Group Name"
+        description: "Group Description"
+        strategy: "Storage Strategy"
+        roles: "Roles"
+        config:
+          strategy:
+            title: "Storage Settings"
+            singleFileMaxSize: "Max Single File Size"
+            maxSize: "Max User Space"
+            pathNamingRule: "Path Naming Rule"
+            fileNamingRule: "File Naming Rule"
+            imageQuality: "Image Quality"
+            imageAutoTransformTarget: "Auto Transform Target Type"
+            allowedImageTypes: "Allowed Image Types"
+        submitButton: "Modify"
+        cancelButton: "Cancel"
+        verify:
+          groupName:
+            required: "Group name cannot be empty"
+          strategy:
+            required: "Storage strategy cannot be empty"
+          roles:
+            required: "Roles cannot be empty"
+            invalid: "Invalid role"
+          config:
+            strategy:
+              singleFileMaxSize:
+                required: "Max single file size cannot be empty"
+                invalid: "Max single file size must be a number"
+              maxSize:
+                required: "Max user space cannot be empty"
+                invalid: "Max user space must be a number"
+              pathNamingRule:
+                required: "Path naming rule cannot be empty"
+              fileNamingRule:
+                required: "File naming rule cannot be empty"
+              imageQuality:
+                required: "Image quality cannot be empty"
+                invalid: "Image quality must be a number"
+                min: "Image quality must be greater than or equal to 0"
+                max: "Image quality must be less than or equal to 100"
+              imageAutoTransformTarget:
+                invalid: "Invalid auto transform target type"
+              allowedImageTypes:
+                invalid: "Invalid allowed image types"
+          atLeastOneField: "Please modify at least one field"
+    toast:
+      successTitle: "Modification successful"
+      failedTitle: "Modification failed"
+      pageStrategyFailedTitle: "Failed to get storage strategies"
+      pageRoleFailedTitle: "Failed to get roles"
+  delete:
+    confirmDialog:
+      header: "Confirm Delete"
+      mainContent: "Are you sure you want to delete this user group?"
+      subContent: "This will actually delete the group and it cannot be recovered. Users in this group will be moved to the default user group."
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+adminStrategyManageView:
+  strategyFilter:
+    createTimeASC: "Create Time Ascending"
+    createTimeDESC: "Create Time Descending"
+  table:
+    id: "Strategy ID"
+    name: "Strategy Name"
+    type: "Strategy Type"
+    createTime: "Create Time"
+    ops:
+      title: "Operations"
+      detail: "View"
+      edit: "Edit"
+      delete: "Delete"
+  detail:
+    title: "Storage Strategy Details"
+    id: "Strategy ID"
+    name: "Strategy Name"
+    type: "Strategy Type"
+    config:
+      local:
+        uploadFolder: "Upload Folder"
+        thumbnailFolder: "Thumbnail Folder"
+      s3:
+        endpoint: "Endpoint"
+        bucketName: "Bucket Name"
+        region: "Region"
+        publicUrl: "Public Access URL"
+        uploadFolder: "Upload Folder"
+        thumbnailFolder: "Thumbnail Folder"
+    email: "Email"
+    createTime: "Create Time"
+  create:
+    dialog:
+      title: "Create Storage Strategy"
+      form:
+        name: "Strategy Name"
+        type: "Strategy Type"
+        typeOptions:
+          local: "Local"
+          s3: "S3"
+        config:
+          local:
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+          s3:
+            endpoint: "Endpoint"
+            bucketName: "Bucket Name"
+            region: "Region"
+            accessKey: "Access Key"
+            secretKey: "Secret Key"
+            publicUrl: "Public Access URL"
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+        submitButton: "Create"
+        cancelButton: "Cancel"
+        verify:
+          name:
+            required: "Strategy name cannot be empty"
+          type:
+            invalid: "Invalid strategy type"
+            required: "Strategy type cannot be empty"
+          config:
+            local:
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+                required: "Upload folder cannot be empty"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+                required: "Thumbnail folder cannot be empty"
+            s3:
+              endpoint:
+                invalid: "Endpoint must be in URL format: http(s)://~"
+                dontEndWithSlash: "Endpoint cannot end with /"
+                required: "Endpoint cannot be empty"
+              bucketName:
+                required: "Bucket name cannot be empty"
+              region:
+                required: "Region cannot be empty"
+              accessKey:
+                required: "Access key cannot be empty"
+              secretKey:
+                required: "Secret key cannot be empty"
+              publicUrl:
+                invalid: "Public access URL must be in URL format: http(s)://~"
+                dontEndWithSlash: "Public access URL cannot end with /"
+                required: "Public access URL cannot be empty"
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+                required: "Upload folder cannot be empty"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+                required: "Thumbnail folder cannot be empty"
+    toast:
+      successTitle: "Creation successful"
+      failedTitle: "Creation failed"
+  edit:
+    dialog:
+      title: "Modify Storage Strategy"
+      form:
+        name: "Strategy Name"
+        config:
+          local:
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+          s3:
+            endpoint: "Endpoint"
+            bucketName: "Bucket Name"
+            region: "Region"
+            accessKey: "Access Key"
+            secretKey: "Secret Key"
+            publicUrl: "Public Access URL"
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+        submitButton: "Create"
+        cancelButton: "Cancel"
+        verify:
+          name:
+          config:
+            local:
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+            s3:
+              endpoint:
+                invalid: "Endpoint must be in URL format: http(s)://~"
+                dontEndWithSlash: "Endpoint cannot end with /"
+              bucketName:
+              region:
+              accessKey:
+              secretKey:
+              publicUrl:
+                invalid: "Public access URL must be in URL format: http(s)://~"
+                dontEndWithSlash: "Public access URL cannot end with /"
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+          atLeastOneField: "Please modify at least one field"
+    toast:
+      successTitle: "Creation successful"
+      failedTitle: "Creation failed"
+  delete:
+    confirmDialog:
+      header: "Confirm Delete"
+      mainContent: "Are you sure you want to delete this storage strategy?"
+      subContent: "Existing images and thumbnails will not be deleted"
+      cancelButton: "Cancel"
+      submitButton: "Confirm Delete"
+    toast:
+      successTitle: "Delete successful"
+      failedTitle: "Delete failed"
+settingView:
+  siteSetting:
+    title: "Site Settings"
+    form:
+      siteTitle: "Site Title"
+      siteSubtitle: "Site Subtitle"
+      siteDescription: "Site Description"
+      siteExternalUrl: "Site External Link"
+      verify:
+        siteExternalUrl:
+          invalid: "Site external link must be in URL format: http(s)://~"
+          dontEndWithSlash: "Site external link cannot end with /"
+        atLeastOneField: "Please modify at least one field"
+      submitButton: "Save"
+    toast:
+      patch:
+        successTitle: "Modification successful"
+        failedTitle: "Modification failed"
+      fetch:
+        failedTitle: "Failed to get site settings"
+  systemSetting:
+    title: "System Settings"
+    form:
+      defaultGroupId: "Default User Group"
+      allowSignup: "Allow Registration"
+      allowRandomFetch: "Allow Random Image Fetch"
+      verify:
+        atLeastOneField: "Please modify at least one field"
+      submitButton: "Save"
+    toast:
+      patch:
+        successTitle: "Modification successful"
+        failedTitle: "Modification failed"
+      fetch:
+        failedTitle: "Failed to get site settings"
+        groupFailedTitle: "Failed to get user groups"
