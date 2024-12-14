@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-alpine AS build
+FROM eclipse-temurin:21 AS build
 
 WORKDIR /hoshizora-pics
 
