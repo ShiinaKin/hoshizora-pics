@@ -37,8 +37,6 @@ jobs:
           node-version: 20
 
       - name: Build with Gradle Wrapper
-        env:
-          PAT: ${{ secrets.PAT }}
         run: chmod +x ./gradlew && ./gradlew build
 
       - name: Upload artifact
