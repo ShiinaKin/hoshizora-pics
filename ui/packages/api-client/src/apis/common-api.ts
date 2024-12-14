@@ -97,6 +97,73 @@ export const CommonApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} imageUniqueId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rateLimitAnonymousGetLimitSImageUniqueIdGet: async (imageUniqueId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'imageUniqueId' is not null or undefined
+            assertParamExists('rateLimitAnonymousGetLimitSImageUniqueIdGet', 'imageUniqueId', imageUniqueId)
+            const localVarPath = `/(RateLimit anonymousGetLimit)/s/{imageUniqueId}`
+                .replace(`{${"imageUniqueId"}}`, encodeURIComponent(String(imageUniqueId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * return random image if setting allow
+         * @param {string} [id] identify resources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rateLimitRandomFetchLimitRandomGet: async (id?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/(RateLimit randomFetchLimit)/random`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -130,6 +197,30 @@ export const CommonApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['CommonApi.apiSiteSettingGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} imageUniqueId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rateLimitAnonymousGetLimitSImageUniqueIdGet(imageUniqueId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rateLimitAnonymousGetLimitSImageUniqueIdGet(imageUniqueId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommonApi.rateLimitAnonymousGetLimitSImageUniqueIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * return random image if setting allow
+         * @param {string} [id] identify resources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async rateLimitRandomFetchLimitRandomGet(id?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.rateLimitRandomFetchLimitRandomGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommonApi.rateLimitRandomFetchLimitRandomGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -157,6 +248,24 @@ export const CommonApiFactory = function (configuration?: Configuration, basePat
         apiSiteSettingGet(options?: RawAxiosRequestConfig): AxiosPromise<CommonResponseCommonSiteSetting> {
             return localVarFp.apiSiteSettingGet(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rateLimitAnonymousGetLimitSImageUniqueIdGet(requestParameters: CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
+            return localVarFp.rateLimitAnonymousGetLimitSImageUniqueIdGet(requestParameters.imageUniqueId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * return random image if setting allow
+         * @param {CommonApiRateLimitRandomFetchLimitRandomGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        rateLimitRandomFetchLimitRandomGet(requestParameters: CommonApiRateLimitRandomFetchLimitRandomGetRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<Array<number>> {
+            return localVarFp.rateLimitRandomFetchLimitRandomGet(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -172,6 +281,34 @@ export interface CommonApiApiSiteInitPostRequest {
      * @memberof CommonApiApiSiteInitPost
      */
     readonly siteInitRequest: SiteInitRequest
+}
+
+/**
+ * Request parameters for rateLimitAnonymousGetLimitSImageUniqueIdGet operation in CommonApi.
+ * @export
+ * @interface CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest
+ */
+export interface CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGet
+     */
+    readonly imageUniqueId: string
+}
+
+/**
+ * Request parameters for rateLimitRandomFetchLimitRandomGet operation in CommonApi.
+ * @export
+ * @interface CommonApiRateLimitRandomFetchLimitRandomGetRequest
+ */
+export interface CommonApiRateLimitRandomFetchLimitRandomGetRequest {
+    /**
+     * identify resources
+     * @type {string}
+     * @memberof CommonApiRateLimitRandomFetchLimitRandomGet
+     */
+    readonly id?: string
 }
 
 /**
@@ -200,6 +337,28 @@ export class CommonApi extends BaseAPI {
      */
     public apiSiteSettingGet(options?: RawAxiosRequestConfig) {
         return CommonApiFp(this.configuration).apiSiteSettingGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommonApi
+     */
+    public rateLimitAnonymousGetLimitSImageUniqueIdGet(requestParameters: CommonApiRateLimitAnonymousGetLimitSImageUniqueIdGetRequest, options?: RawAxiosRequestConfig) {
+        return CommonApiFp(this.configuration).rateLimitAnonymousGetLimitSImageUniqueIdGet(requestParameters.imageUniqueId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * return random image if setting allow
+     * @param {CommonApiRateLimitRandomFetchLimitRandomGetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommonApi
+     */
+    public rateLimitRandomFetchLimitRandomGet(requestParameters: CommonApiRateLimitRandomFetchLimitRandomGetRequest = {}, options?: RawAxiosRequestConfig) {
+        return CommonApiFp(this.configuration).rateLimitRandomFetchLimitRandomGet(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

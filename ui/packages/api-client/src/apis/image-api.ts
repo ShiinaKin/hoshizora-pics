@@ -89,7 +89,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
         apiImageImageIdGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'imageId' is not null or undefined
             assertParamExists('apiImageImageIdGet', 'imageId', imageId)
-            const localVarPath = `/api/image/{imageId}`
+            const localVarPath = `/api/image/{imageId}/`
                 .replace(`{${"imageId"}}`, encodeURIComponent(String(imageId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -280,7 +280,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
         apiImageManageImageIdGet: async (imageId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'imageId' is not null or undefined
             assertParamExists('apiImageManageImageIdGet', 'imageId', imageId)
-            const localVarPath = `/api/image/manage/{imageId}`
+            const localVarPath = `/api/image/manage/{imageId}/`
                 .replace(`{${"imageId"}}`, encodeURIComponent(String(imageId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);

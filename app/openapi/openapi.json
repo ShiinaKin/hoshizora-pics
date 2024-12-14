@@ -164,43 +164,6 @@
       }
     },
     "/api/image/{imageId}" : {
-      "get" : {
-        "tags" : [ "Image" ],
-        "parameters" : [ {
-          "name" : "imageId",
-          "in" : "path",
-          "description" : "image id",
-          "required" : true,
-          "deprecated" : false,
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated" : false,
-        "security" : [ {
-          "JWT" : [ ]
-        } ]
-      },
       "delete" : {
         "tags" : [ "Image" ],
         "parameters" : [ {
@@ -299,6 +262,45 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CommonResponse_ImageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/{imageId}/" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -450,54 +452,6 @@
       }
     },
     "/api/image/manage/{imageId}" : {
-      "get" : {
-        "tags" : [ "Image" ],
-        "parameters" : [ {
-          "name" : "imageId",
-          "in" : "path",
-          "description" : "image id",
-          "required" : true,
-          "deprecated" : false,
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
-          "404" : {
-            "description" : "image not found",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
-                }
-              }
-            }
-          },
-          "200" : {
-            "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated" : false,
-        "security" : [ {
-          "JWT" : [ ]
-        } ]
-      },
       "delete" : {
         "tags" : [ "Image" ],
         "parameters" : [ {
@@ -629,6 +583,56 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CommonResponse_ImageManageVO"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "JWT" : [ ]
+        } ]
+      }
+    },
+    "/api/image/manage/{imageId}/" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "parameters" : [ {
+          "name" : "imageId",
+          "in" : "path",
+          "description" : "image id",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "image not found",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResponse_kotlin.Unit"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
                 }
               }
             }
@@ -2952,6 +2956,76 @@
         "security" : [ {
           "JWT" : [ ]
         } ]
+      }
+    },
+    "/(RateLimit randomFetchLimit)/random" : {
+      "get" : {
+        "tags" : [ "common" ],
+        "description" : "return random image if setting allow",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "identify resources",
+          "required" : false,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/(RateLimit anonymousGetLimit)/s/{imageUniqueId}" : {
+      "get" : {
+        "tags" : [ "common" ],
+        "parameters" : [ {
+          "name" : "imageUniqueId",
+          "in" : "path",
+          "required" : true,
+          "deprecated" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "headers" : { },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "maximum" : 127,
+                    "minimum" : -128
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false
       }
     }
   },
