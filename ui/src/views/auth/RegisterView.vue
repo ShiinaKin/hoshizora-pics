@@ -7,6 +7,7 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { AuthApi, type UserInsertRequest } from "api-client";
 import VeeInputText from "@/components/vee-input/VeeInputText.vue";
+import I18nSelect from "@/components/I18nSelect.vue";
 import Button from "primevue/button";
 
 const { t } = useI18n();
@@ -122,6 +123,9 @@ function signup(signupRequest: UserInsertRequest) {
             </div>
           </div>
         </form>
+        <div class="absolute right-0 bottom-0 rounded-br-xl locale-changer">
+          <I18nSelect />
+        </div>
       </div>
     </div>
   </div>
