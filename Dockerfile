@@ -21,4 +21,4 @@ VOLUME /hoshizora-pics/images
 
 ENV JVM_OPTS="-Xms256m -Xmx512m"
 
-ENTRYPOINT ["java", "${JVM_OPTS}", "-jar", "hoshizora-pics.jar"]
+ENTRYPOINT ["sh", "-c", "java $JVM_OPTS -jar hoshizora-pics.jar"]
