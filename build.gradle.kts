@@ -4,6 +4,20 @@ plugins {
 
 group = "io.sakurasou"
 
+tasks.register("updateVersion") {
+    dependsOn(":app:updateVersion", "updateComposeImageTag")
+}
+
+tasks.register("updateComposeImageTag") {
+    val composeFile = file("compose.yml")
+    val contents = composeFile.readText()
+    val regex = Regex("(shiinakin/hoshizora-pics:)(.*)")
+    val newContents = contents.replace(regex) { matchResult ->
+        "${matchResult.groupValues[1]}$version"
+    }
+    composeFile.writeText(newContents)
+}
+
 tasks.register("build") {
     group = "build"
     dependsOn(":app:build")

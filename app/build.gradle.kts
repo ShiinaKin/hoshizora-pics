@@ -169,7 +169,7 @@ tasks.register("generateBuildRecord") {
 }
 
 tasks.named("processResources") {
-    dependsOn("copyFrontendBuildResults", "updateVersion", "generateBuildRecord")
+    dependsOn("copyFrontendBuildResults", "generateBuildRecord")
 }
 
 tasks.register<Delete>("cleanStaticResources") {
