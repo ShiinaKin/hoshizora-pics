@@ -67,7 +67,7 @@ const visibleFilterRef = ref();
 const isPreviousPageReqTakeSearch = ref(false);
 
 const page = ref(1);
-const pageSize = ref(15);
+const pageSize = ref(20);
 const orderBy = ref("createTime");
 const order = ref("DESC");
 const albumId = ref(-1);
@@ -85,13 +85,13 @@ const pageRequest = computed<ImageApiApiImagePageGetRequest>(() => {
   };
 });
 
-const debouncePageUserAlbum = debounce((request: ImageApiApiImagePageGetRequest) => {
+const debouncePageUserImage = debounce((request: ImageApiApiImagePageGetRequest) => {
   pageUserImage(request);
 }, 300);
 
 watchEffect(() => {
   const pageReq = pageRequest.value;
-  debouncePageUserAlbum(pageReq);
+  debouncePageUserImage(pageReq);
 });
 
 const curPage = ref(1);
@@ -434,7 +434,7 @@ function handleAlbumFilterReset() {
   if (albumId.value !== -1) {
     albumId.value = -1;
     page.value = 1;
-    pageSize.value = 15;
+    pageSize.value = 20;
   }
   showAlbumDrawer.value = false;
 }
@@ -443,7 +443,7 @@ function handleAlbumFilterSelect(inputAlbumId: number) {
   if (albumId.value === inputAlbumId) return;
   albumId.value = inputAlbumId;
   page.value = 1;
-  pageSize.value = 15;
+  pageSize.value = 20;
   showAlbumDrawer.value = false;
   pageUserImage(pageRequest.value);
 }
@@ -586,7 +586,7 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
   ).then(() => {
     selectedImageIds.value = [];
     page.value = 1;
-    pageSize.value = 15;
+    pageSize.value = 20;
     pageUserImage(pageRequest.value);
   });
 }
@@ -695,7 +695,7 @@ function handleDeleteMultiImage() {
     showImageDeleteConfirmDialog.value = false;
     selectedImageIds.value = [];
     page.value = 1;
-    pageSize.value = 15;
+    pageSize.value = 20;
     pageUserImage(pageRequest.value);
   });
 }

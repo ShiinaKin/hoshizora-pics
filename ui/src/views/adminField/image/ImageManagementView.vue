@@ -52,7 +52,7 @@ const imageApi = new ImageApi(configuration);
 const userApi = new UserApi(configuration);
 
 const imagePage = ref(1);
-const imagePageSize = ref(15);
+const imagePageSize = ref(20);
 const imageOrderBy = ref("createTime");
 const imageOrder = ref("DESC");
 const userId = ref(-1);
