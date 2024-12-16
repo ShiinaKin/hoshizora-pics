@@ -617,6 +617,9 @@ function pageImage(pageRequest: ImageApiApiImageManagePageGetRequest) {
         imageCurPage.value = pageResult.page;
         imageTotalRecord.value = pageResult.total;
         imageList.value = pageResult.data;
+        singleImageContextMenuRef.value.hide();
+        multiImageContextMenuRef.value.hide();
+        selectedImageIds.value = [];
         fetchImageThumbnails();
       }
     })
