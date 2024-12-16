@@ -125,6 +125,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
+          tags: |
+            type=semver,pattern={{version}}
           images: |
             ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
             ${{ env.DOCKER_HUB_REGISTRY }}/${{ env.IMAGE_NAME }}
