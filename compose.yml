@@ -1,7 +1,7 @@
 services:
   hoshizora-pics:
     container_name: hoshizora-pics
-    image: ghcr.io/shiinakin/hoshizora-pics:latest
+    image: shiinakin/hoshizora-pics:v0.2.1
     build:
       context: .
       dockerfile: Dockerfile
