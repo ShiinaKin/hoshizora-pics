@@ -4,16 +4,31 @@ plugins {
     id("com.github.node-gradle.node") version "7.1.0"
 }
 
+val baseUrl = env.fetchOrNull("BASE_URL") ?: "/"
+
 node {
     version = "20.18.1"
-    workDir = file("${projectDir}/.cache/node")
+    workDir = file("$projectDir/.cache/node")
     download = true
     pnpmVersion = "9.15.0"
-    pnpmWorkDir = file("${projectDir}/.cache/pnpm")
+    pnpmWorkDir = file("$projectDir/.cache/pnpm")
+}
+
+tasks.register("replaceBaseURL") {
+    dependsOn("pnpmInstall")
+    doLast {
+        val baseTS = file("$projectDir/packages/api-client/src/base.ts")
+        val contents = baseTS.readText()
+        val regex = Regex("""BASE_PATH = "(.*?)"""")
+        val newContents = contents.replace(regex) {
+            """BASE_PATH = "$baseUrl""""
+        }
+        baseTS.writeText(newContents)
+    }
 }
 
 tasks.register<PnpmTask>("build-packages") {
-    dependsOn("pnpmInstall")
+    dependsOn("replaceBaseURL")
     args = listOf("build-packages")
 }
 
