@@ -18,6 +18,7 @@ const local = localStorage.getItem("locale");
 
 onMounted(() => {
   if (local) i18n.global.locale = local;
+  else localStorage.setItem("locale", "zh_cn");
 
   commonApi
     .apiSiteSettingGet()
