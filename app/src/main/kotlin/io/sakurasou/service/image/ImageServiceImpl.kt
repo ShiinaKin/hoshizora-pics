@@ -27,6 +27,8 @@ import io.sakurasou.model.dao.user.UserDao
 import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.model.dto.ImageInsertDTO
 import io.sakurasou.model.dto.ImageUpdateDTO
+import io.sakurasou.model.entity.Image
+import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
@@ -329,16 +331,7 @@ class ImageServiceImpl(
             if (image.userId != userId) throw ImageAccessDeniedException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
-            when (strategy.config) {
-                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
-                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
-            }.also {
-                if (it.bytes == null && it.url.isNullOrBlank()) {
-                    logger.debug { "thumbnail of image $imageId doesn't exist, will be generate later." }
-                    ImageExecutor.rePersistThumbnail(strategy, image.path)
-                    throw ImageThumbnailNotFoundException()
-                }
-            }
+            fetchThumbnailFile(strategy, image)
         }
     }
 
@@ -359,10 +352,7 @@ class ImageServiceImpl(
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
-            when (strategy.config) {
-                is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
-                is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
-            }
+            fetchThumbnailFile(strategy, image)
         }
     }
 
@@ -400,6 +390,17 @@ class ImageServiceImpl(
                     )
                 }
             )
+        }
+    }
+
+    private suspend fun fetchThumbnailFile(strategy: Strategy, image: Image) = when (strategy.config) {
+        is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
+        is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+    }.also {
+        if (it.bytes == null && it.url.isNullOrBlank()) {
+            logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }
+            ImageExecutor.rePersistThumbnail(strategy, image.path)
+            throw ImageThumbnailNotFoundException()
         }
     }
 }
