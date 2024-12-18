@@ -81,7 +81,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
         val cache = provider.loadCache(key) ?: return@onCall
         call.attributes.put(isCache, true)
         call.respond(cache)
-        logger.info { "Cache hit: $key" }
+        logger.debug { "Cache hit: $key" }
     }
     onCallRespond { call, body ->
         if ((call.response.status()?.value ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value) return@onCallRespond
@@ -90,7 +90,7 @@ val CacheRoutePlugin = createRouteScopedPlugin("CacheRoutePlugin", ::RouteCacheP
         val key = buildKey(call)
         if (expireTime == null) provider.saveCache(key, body)
         else provider.saveCache(key, body, expireTime)
-        logger.info { "Cache saved: $key" }
+        logger.debug { "Cache saved: $key" }
     }
     on(CallFailed) { call, e ->
         throw e
