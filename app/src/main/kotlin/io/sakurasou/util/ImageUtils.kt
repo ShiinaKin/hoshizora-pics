@@ -178,6 +178,16 @@ object ImageUtils {
         }
     }
 
+    suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType): ByteArray {
+        return withContext(Dispatchers.IO) {
+            ByteArrayOutputStream().apply {
+                Thumbnails.of(rawImage)
+                    .outputFormat(targetImageType.name)
+                    .toOutputStream(this)
+            }.use { it.toByteArray() }
+        }
+    }
+
     suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType, quality: Double): ByteArray {
         return withContext(Dispatchers.IO) {
             ByteArrayOutputStream().apply {
@@ -189,27 +199,9 @@ object ImageUtils {
         }
     }
 
-    suspend fun transformImage(
-        rawImage: BufferedImage,
-        targetImageType: ImageType,
-        newWidth: Int,
-        newHeight: Int,
-        quality: Double
-    ): ByteArray {
-        return withContext(Dispatchers.IO) {
-            ByteArrayOutputStream().apply {
-                Thumbnails.of(rawImage)
-                    .size(newWidth, newHeight)
-                    .outputFormat(targetImageType.name)
-                    .outputQuality(quality)
-                    .toOutputStream(this)
-            }.use { it.toByteArray() }
-        }
-    }
-
     private fun transformImage(
         rawImage: BufferedImage,
-        targetType: String,
+        targetImageType: ImageType,
         newWidth: Int,
         newHeight: Int,
         quality: Double
@@ -217,12 +209,12 @@ object ImageUtils {
         .apply {
             Thumbnails.of(rawImage)
                 .size(newWidth, newHeight)
-                .outputFormat(targetType)
+                .outputFormat(targetImageType.name)
                 .outputQuality(quality)
                 .toOutputStream(this)
         }.use { it.toByteArray() }
 
-    suspend fun transformImageByWidth(
+    private suspend fun transformImageByWidth(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
@@ -232,11 +224,11 @@ object ImageUtils {
             val originalWidth = rawImage.width
             val originalHeight = rawImage.height
             val newHeight = (originalHeight * newWidth) / originalWidth
-            transformImage(rawImage, targetImageType.name.lowercase(), newWidth, newHeight, quality)
+            transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
         }
     }
 
-    suspend fun transformImageByHeight(
+    private suspend fun transformImageByHeight(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newHeight: Int,
@@ -246,7 +238,7 @@ object ImageUtils {
             val originalWidth = rawImage.width
             val originalHeight = rawImage.height
             val newWidth = (originalWidth * newHeight) / originalHeight
-            transformImage(rawImage, targetImageType.name.lowercase(), newWidth, newHeight, quality)
+            transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
         }
     }
 }
