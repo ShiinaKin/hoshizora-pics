@@ -33,11 +33,9 @@ onMounted(() => {
 
         document.title = commonStore.title + " - " + commonStore.subTitle;
         const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-          metaDescription.setAttribute("content", commonStore.subTitle);
-        }
+        if (metaDescription) metaDescription.setAttribute("content", commonStore.subTitle);
 
-        const arr = ["login", "register", "siteInit"];
+        const arr = ["login", "register", "siteInit", "home"];
 
         if (!commonSiteSetting.isSiteInit!) router.push({ name: "siteInit" });
         else if (!token) router.push({ name: "login" });
