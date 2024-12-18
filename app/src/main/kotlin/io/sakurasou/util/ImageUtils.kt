@@ -2,7 +2,6 @@ package io.sakurasou.util
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.exception.service.image.io.ImageFileCreateFailedException
-import io.sakurasou.exception.service.image.io.ImageFileDeleteFailedException
 import io.sakurasou.exception.service.image.io.ImageFileNotFoundException
 import io.sakurasou.exception.service.image.io.ImageParentFolderCreateFailedException
 import io.sakurasou.model.entity.Strategy
@@ -20,11 +19,10 @@ import java.io.File
  * @author Shiina Kin
  * 2024/10/12 08:52
  */
-private val logger = KotlinLogging.logger {}
-
-private const val THUMBNAIL_HEIGHT = 250
 
 object ImageUtils {
+    private val logger = KotlinLogging.logger {}
+
     suspend fun uploadImageAndGetRelativePath(
         strategy: Strategy,
         subFolder: String,
@@ -47,7 +45,7 @@ object ImageUtils {
                         logger.error(it) { "Failed to save image $fileName at ${uploadFile.absolutePath}" }
                         throw ImageFileCreateFailedException()
                     }.onSuccess {
-                        logger.trace { "save image $fileName at ${uploadFile.absolutePath}" }
+                        logger.debug { "save image $fileName at ${uploadFile.absolutePath}" }
                     }
                 }
 
@@ -60,86 +58,40 @@ object ImageUtils {
         }
     }
 
-    suspend fun createAndUploadThumbnail(
+    fun saveThumbnail(
         strategy: Strategy,
         subFolder: String,
         fileName: String,
-        image: BufferedImage
+        thumbnailBytes: ByteArray,
+        relativePath: String
     ) {
-        return withContext(Dispatchers.IO) {
-            val relativePath = "$subFolder/$fileName"
-            val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
-            val thumbnailBytes = transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, 0.9)
-
-            when (val strategyConfig = strategy.config) {
-                is LocalStrategy -> {
-                    val thumbnailFolderStr = strategyConfig.thumbnailFolder
-                    val thumbnailFolder = File(thumbnailFolderStr, subFolder)
-                    if (!thumbnailFolder.exists() && !thumbnailFolder.mkdirs()) {
-                        logger.error { "Failed to create thumbnail folder" }
-                        return@withContext
-                    }
-                    val thumbnailFile = File(thumbnailFolder, fileName)
-                    runCatching {
-                        thumbnailFile.writeBytes(thumbnailBytes)
-                    }.onFailure {
-                        logger.error(it) { "Failed to save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
-                        return@withContext
-                    }.onSuccess {
-                        logger.trace { "save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
-                    }
+        when (val strategyConfig = strategy.config) {
+            is LocalStrategy -> {
+                val thumbnailFolderStr = strategyConfig.thumbnailFolder
+                val thumbnailFolder = File(thumbnailFolderStr, subFolder)
+                if (!thumbnailFolder.exists() && !thumbnailFolder.mkdirs()) {
+                    logger.error { "Failed to create thumbnail folder" }
+                    return
                 }
-
-                is S3Strategy -> {
-                    val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
-                    S3Utils.uploadImage(filePath, thumbnailBytes, strategy)
+                val thumbnailFile = File(thumbnailFolder, fileName)
+                runCatching {
+                    thumbnailFile.writeBytes(thumbnailBytes)
+                }.onFailure {
+                    logger.error(it) { "Failed to save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
+                    return
+                }.onSuccess {
+                    logger.debug { "save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
                 }
+            }
+
+            is S3Strategy -> {
+                val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
+                S3Utils.uploadImage(filePath, thumbnailBytes, strategy)
             }
         }
     }
 
-    suspend fun deleteImage(strategy: Strategy, relativePath: String) {
-        return withContext(Dispatchers.IO) {
-            when (val strategyConfig = strategy.config) {
-                is LocalStrategy -> {
-                    val uploadFolderStr = strategyConfig.uploadFolder
-                    val uploadFile = File(uploadFolderStr, relativePath)
-
-                    if (uploadFile.exists() && !uploadFile.delete()) {
-                        logger.error { "Failed to delete image at $uploadFolderStr/$relativePath" }
-                        throw ImageFileDeleteFailedException()
-                    }
-                }
-
-                is S3Strategy -> {
-                    val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                    S3Utils.deleteImage(filePath, strategy)
-                }
-            }
-        }
-    }
-
-    suspend fun deleteThumbnail(strategy: Strategy, relativePath: String) {
-        return withContext(Dispatchers.IO) {
-            when (val strategyConfig = strategy.config) {
-                is LocalStrategy -> {
-                    val thumbnailFolder = strategyConfig.thumbnailFolder
-                    val thumbnailFile = File(thumbnailFolder, relativePath)
-
-                    if (thumbnailFile.exists() && !thumbnailFile.delete()) {
-                        logger.error { "Failed to delete thumbnail at $thumbnailFolder/$relativePath" }
-                    }
-                }
-
-                is S3Strategy -> {
-                    val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
-                    S3Utils.deleteImage(filePath, strategy)
-                }
-            }
-        }
-    }
-
-    suspend fun fetchLocalImage(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): ByteArray {
+    suspend fun fetchLocalImage(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): ByteArray? {
         return withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
                 is S3Strategy -> throw RuntimeException("Not supported")
@@ -148,8 +100,7 @@ object ImageUtils {
                     val parentFolderStr =
                         if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
                     val uploadFile = File(parentFolderStr, relativePath)
-                    if (!uploadFile.exists()) throw ImageFileNotFoundException()
-                    uploadFile.readBytes()
+                    if (uploadFile.exists()) uploadFile.readBytes() else null
                 }
             }
         }
@@ -162,19 +113,14 @@ object ImageUtils {
 
                 is S3Strategy -> {
                     val folder = if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
-                    "${strategyConfig.publicUrl}/$folder/$relativePath"
+                    val relativePath = "$folder/$relativePath"
+                    if (!S3Utils.isImageExist(relativePath, strategy)) {
+                        if (isThumbnail) return@withContext ""
+                        throw ImageFileNotFoundException()
+                    }
+                    "${strategyConfig.publicUrl}/$relativePath"
                 }
             }
-        }
-    }
-
-    suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType): ByteArray {
-        return withContext(Dispatchers.IO) {
-            ByteArrayOutputStream().apply {
-                Thumbnails.of(rawImage)
-                    .outputFormat(targetImageType.name)
-                    .toOutputStream(this)
-            }.use { it.toByteArray() }
         }
     }
 
@@ -214,31 +160,27 @@ object ImageUtils {
                 .toOutputStream(this)
         }.use { it.toByteArray() }
 
-    private suspend fun transformImageByWidth(
+    fun transformImageByWidth(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
         quality: Double
     ): ByteArray {
-        return withContext(Dispatchers.IO) {
-            val originalWidth = rawImage.width
-            val originalHeight = rawImage.height
-            val newHeight = (originalHeight * newWidth) / originalWidth
-            transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
-        }
+        val originalWidth = rawImage.width
+        val originalHeight = rawImage.height
+        val newHeight = (originalHeight * newWidth) / originalWidth
+        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
     }
 
-    private suspend fun transformImageByHeight(
+    fun transformImageByHeight(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newHeight: Int,
         quality: Double
     ): ByteArray {
-        return withContext(Dispatchers.IO) {
-            val originalWidth = rawImage.width
-            val originalHeight = rawImage.height
-            val newWidth = (originalWidth * newHeight) / originalHeight
-            transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
-        }
+        val originalWidth = rawImage.width
+        val originalHeight = rawImage.height
+        val newWidth = (originalWidth * newHeight) / originalHeight
+        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
     }
 }

@@ -1,5 +1,6 @@
 package io.sakurasou.service.image
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.controller.request.ImageManagePatchRequest
 import io.sakurasou.controller.request.ImagePatchRequest
 import io.sakurasou.controller.request.ImageRawFile
@@ -13,8 +14,10 @@ import io.sakurasou.exception.service.album.AlbumAccessDeniedException
 import io.sakurasou.exception.service.album.AlbumNotFoundException
 import io.sakurasou.exception.service.group.GroupNotFoundException
 import io.sakurasou.exception.service.image.*
+import io.sakurasou.exception.service.image.io.ImageThumbnailNotFoundException
 import io.sakurasou.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.exception.service.user.UserNotFoundException
+import io.sakurasou.execute.executor.image.ImageExecutor
 import io.sakurasou.model.DatabaseSingleton.dbQuery
 import io.sakurasou.model.dao.album.AlbumDao
 import io.sakurasou.model.dao.group.GroupDao
@@ -30,9 +33,6 @@ import io.sakurasou.model.strategy.S3Strategy
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.util.ImageUtils
 import io.sakurasou.util.PlaceholderUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -52,6 +52,8 @@ class ImageServiceImpl(
     private val strategyDao: StrategyDao,
     private val settingService: SettingService
 ) : ImageService {
+    private val logger = KotlinLogging.logger {}
+
     override suspend fun saveImage(userId: Long, imageRawFile: ImageRawFile): String {
         val siteSetting = settingService.getSiteSetting()
         return runCatching {
@@ -143,10 +145,7 @@ class ImageServiceImpl(
 
                 imageDao.saveImage(imageInsertDTO)
 
-                // TODO use a mq to do this
-                CoroutineScope(Dispatchers.IO).launch {
-                    ImageUtils.createAndUploadThumbnail(strategy, subFolder, storageFileName, image)
-                }
+                ImageExecutor.persistThumbnail(strategy, subFolder, storageFileName, image)
 
                 if (user.isDefaultImagePrivate) ""
                 else "${siteSetting.siteExternalUrl}/s/$uniqueName"
@@ -167,8 +166,8 @@ class ImageServiceImpl(
                 val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
                 imageDao.deleteImageById(imageId)
-                ImageUtils.deleteImage(strategy, image.path)
-                ImageUtils.deleteThumbnail(strategy, image.path)
+                ImageExecutor.deleteImage(strategy, image.path)
+                ImageExecutor.deleteThumbnail(strategy, image.path)
             }
         }.onFailure {
             if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
@@ -183,8 +182,8 @@ class ImageServiceImpl(
                 val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
                 imageDao.deleteImageById(imageId)
-                ImageUtils.deleteImage(strategy, image.path)
-                ImageUtils.deleteThumbnail(strategy, image.path)
+                ImageExecutor.deleteImage(strategy, image.path)
+                ImageExecutor.deleteThumbnail(strategy, image.path)
             }
         }.onFailure {
             if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
@@ -333,6 +332,12 @@ class ImageServiceImpl(
             when (strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+            }.also {
+                if (it.bytes == null && it.url.isNullOrBlank()) {
+                    logger.debug { "thumbnail of image $imageId doesn't exist, will be generate later." }
+                    ImageExecutor.rePersistThumbnail(strategy, image.path)
+                    throw ImageThumbnailNotFoundException()
+                }
             }
         }
     }
