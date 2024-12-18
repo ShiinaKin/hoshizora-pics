@@ -56,6 +56,45 @@ object S3Utils {
         }
     }
 
+    fun isImageExist(relativePath: String, strategy: Strategy): Boolean {
+        return runCatching {
+            val strategyConfig = strategy.config as S3Strategy
+            val s3Client = getOrCreateS3Client(strategy, strategyConfig)
+            val headObjectRequest = HeadObjectRequest.builder()
+                .bucket(strategyConfig.bucketName)
+                .key(relativePath)
+                .build()
+            s3Client.headObject(headObjectRequest)
+            true
+        }.onFailure {
+            when (it) {
+                is S3Exception -> {
+                    if (it.statusCode() == 404) return false
+                    throw RuntimeException("Failed to check image existence in S3", it)
+                }
+
+                else -> throw it
+            }
+        }.getOrThrow()
+    }
+
+    fun fetchImage(relativePath: String, strategy: Strategy): InputStream {
+        return runCatching {
+            val strategyConfig = strategy.config as S3Strategy
+            val s3Client = getOrCreateS3Client(strategy, strategyConfig)
+            val getObjectRequest = GetObjectRequest.builder()
+                .bucket(strategyConfig.bucketName)
+                .key(relativePath)
+                .build()
+            s3Client.getObject(getObjectRequest)
+        }.onFailure {
+            when (it) {
+                is S3Exception -> throw RuntimeException("Failed to fetch image from S3", it)
+                else -> throw RuntimeException("Failed to create S3 client", it)
+            }
+        }.getOrThrow()
+    }
+
     private fun getOrCreateS3Client(
         strategy: Strategy,
         strategyConfig: S3Strategy
