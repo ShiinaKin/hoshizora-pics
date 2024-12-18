@@ -69,7 +69,7 @@ object ImageUtils {
         return withContext(Dispatchers.IO) {
             val relativePath = "$subFolder/$fileName"
             val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
-            val thumbnailBytes = transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, 0.5)
+            val thumbnailBytes = transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, 0.9)
 
             when (val strategyConfig = strategy.config) {
                 is LocalStrategy -> {
