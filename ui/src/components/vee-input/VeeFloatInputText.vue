@@ -9,7 +9,7 @@ import { useField } from "vee-validate";
 import type { PropType } from "vue";
 
 type VariantType = "over" | "in" | "on" | undefined;
-const { variant, id, name, type, label } = defineProps({
+const { variant, id, name, type, label, startIcon, endIcon } = defineProps({
   variant: {
     type: String as PropType<VariantType>,
     default: "on"
@@ -35,6 +35,9 @@ const { variant, id, name, type, label } = defineProps({
   },
   endIcon: {
     type: String,
+  },
+  autocomplete: {
+    type: String,
   }
 });
 
@@ -54,6 +57,7 @@ const { value, errorMessage } = useField(() => name);
         :value="value"
         @update:modelValue="value = $event"
         :class="{ 'p-invalid': errorMessage!! }"
+        :autocomplete
         fluid
       />
       <label :for="id">{{ label }}</label>

@@ -27,6 +27,9 @@ const { id, name, type, label, placeholder, disabled } = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  autocomplete: {
+    type: String,
   }
 });
 
@@ -43,6 +46,7 @@ const { value, errorMessage } = useField(() => name);
       @update:modelValue="value = $event"
       :placeholder="placeholder as any"
       :class="{ 'p-invalid': errorMessage!! }"
+      :autocomplete
       :disabled
       fluid
     />

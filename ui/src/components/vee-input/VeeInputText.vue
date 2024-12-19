@@ -6,7 +6,7 @@ import Message from "primevue/message";
 import { Icon } from "@iconify/vue";
 import { useField } from "vee-validate";
 
-const { id, name, type, label } = defineProps({
+const { id, name, type, label, startIcon, endIcon } = defineProps({
   id: {
     type: String,
     required: true
@@ -28,6 +28,9 @@ const { id, name, type, label } = defineProps({
   },
   endIcon: {
     type: String
+  },
+  autocomplete: {
+    type: String,
   }
 });
 
@@ -47,6 +50,7 @@ const { value, errorMessage } = useField(() => name);
       :placeholder="label"
       @update:modelValue="value = $event"
       :class="{ 'p-invalid': errorMessage!! }"
+      :autocomplete
       fluid
     />
     <InputGroupAddon v-if="endIcon">
