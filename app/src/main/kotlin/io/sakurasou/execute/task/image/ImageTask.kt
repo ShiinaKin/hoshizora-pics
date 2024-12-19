@@ -22,7 +22,7 @@ private const val THUMBNAIL_HEIGHT = 256
 private const val THUMBNAIL_QUALITY = 0.9
 
 sealed class ImageTask() {
-    val logger = KotlinLogging.logger {}
+    protected val logger = KotlinLogging.logger {}
     abstract fun execute()
 }
 
