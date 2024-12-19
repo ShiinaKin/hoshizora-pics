@@ -14,16 +14,16 @@ import kotlin.uuid.Uuid
  */
 object PlaceholderUtils {
     /**
-     * {yyyy}	年份(2022)
-     * {MM}	月份(01)
-     * {dd}	当月的第几号(04)
-     * {timestamp}	时间戳(秒)
-     * {uniq}	唯一字符串
-     * {md5}	随机 md5 值
+     * {yyyy}	        年(2000)
+     * {MM}	            月(09)
+     * {dd}	            日(23)
+     * {timestamp}	    时间戳(秒)
+     * {uniq}	        唯一字符串
+     * {md5}	        随机 md5 值
      * {str-random-16}	16位随机字符串
      * {str-random-10}	10位随机字符串
-     * {fileName}	文件原始名称
-     * {user-id}	用户 ID
+     * {fileName}	    文件原始名称
+     * {user-id}	    用户 ID
      */
     private enum class Placeholder(val placeholder: String) {
         YEAR("{yyyy}"),
