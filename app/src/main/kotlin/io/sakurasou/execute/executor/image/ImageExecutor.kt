@@ -32,7 +32,7 @@ object ImageExecutor {
                     try {
                         task.execute()
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        logger.error(e) { "image task failed" }
                     }
                 }
             }
