@@ -770,11 +770,20 @@ async function fetchImage(imageId: number): Promise<string | void> {
     return;
   }
   return imageApi
-    .apiImageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageImageIdFileGet({ imageId }, { responseType: "blob" })
     .then((response) => {
-      const uIntArr = new Uint8Array(response.data);
-      const blob = new Blob([uIntArr], { type: "image/*" });
-      const url = URL.createObjectURL(blob);
+      const blob = response.data as unknown as Blob;
+      let url = "";
+      const contentType = response.headers["content-type"];
+      if (contentType && contentType.includes("application/json")) {
+        blob.text().then((json) => {
+          const jsonResponse = JSON.parse(json);
+          if (jsonResponse.isSuccessful === false)
+            toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+        });
+      } else {
+        url = URL.createObjectURL(blob);
+      }
       imageRawUrlMap.value.set(imageId, url);
     })
     .catch((error) => {
@@ -785,10 +794,18 @@ async function fetchImage(imageId: number): Promise<string | void> {
 
 async function fetchImageBlob(imageId: number): Promise<Blob | void> {
   return imageApi
-    .apiImageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageImageIdFileGet({ imageId }, { responseType: "blob" })
     .then((response) => {
-      const uIntArr = new Uint8Array(response.data);
-      return new Blob([uIntArr], { type: "image/*" });
+      const blob = response.data as unknown as Blob;
+      const contentType = response.headers["content-type"];
+      if (contentType && contentType.includes("application/json")) {
+        blob.text().then((json) => {
+          const jsonResponse = JSON.parse(json);
+          if (jsonResponse.isSuccessful === false)
+            toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+        });
+      }
+      return blob;
     })
     .catch((error) => {
       console.error(error);
@@ -799,11 +816,20 @@ async function fetchImageBlob(imageId: number): Promise<Blob | void> {
 async function fetchThumbnails() {
   const promises = imageList.value.map((imagePageVO) =>
     imageApi
-      .apiImageImageIdThumbnailGet({ imageId: imagePageVO.id }, { responseType: "arraybuffer" })
+      .apiImageImageIdThumbnailGet({ imageId: imagePageVO.id }, { responseType: "blob" })
       .then((response) => {
-        const uIntArr = new Uint8Array(response.data);
-        const blob = new Blob([uIntArr], { type: "image/*" });
-        const url = URL.createObjectURL(blob);
+        const blob = response.data as unknown as Blob;
+        let url = "";
+        const contentType = response.headers["content-type"];
+        if (contentType && contentType.includes("application/json")) {
+          blob.text().then((json) => {
+            const jsonResponse = JSON.parse(json);
+            if (jsonResponse.isSuccessful === false)
+              toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+          });
+        } else {
+          url = URL.createObjectURL(blob);
+        }
 
         return {
           id: imagePageVO.id,
@@ -1046,7 +1072,9 @@ async function fetchThumbnails() {
             @click="handleAlbumFilterSelect(album.id)"
             class="p-2 flex items-center justify-between rounded-xl"
             :class="
-              albumId === album.id ? 'bg-sky-300 hover:cursor-default' : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
+              albumId === album.id
+                ? 'bg-sky-300 hover:cursor-default'
+                : 'bg-white hover:bg-gray-50 hover:cursor-pointer'
             "
           >
             <span>{{ album.id }}.</span>
@@ -1134,7 +1162,12 @@ async function fetchThumbnails() {
       </div>
     </Dialog>
     <!--image detail-->
-    <Dialog v-model:visible="showImageDetailDialog" modal :header="t('myImageView.detail.dialog.title')" class="min-w-96">
+    <Dialog
+      v-model:visible="showImageDetailDialog"
+      modal
+      :header="t('myImageView.detail.dialog.title')"
+      class="min-w-96"
+    >
       <div class="flow-root">
         <dl class="-my-3 divide-y divide-gray-100 text-sm">
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">

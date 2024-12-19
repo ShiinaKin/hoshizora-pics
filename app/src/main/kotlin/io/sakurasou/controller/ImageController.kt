@@ -28,6 +28,7 @@ import io.sakurasou.model.dto.ImageFileDTO
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.plugins.cache
 import io.sakurasou.service.image.ImageService
+import io.swagger.v3.oas.models.media.Schema
 import kotlinx.io.readByteArray
 
 /**
@@ -222,7 +223,9 @@ private fun Route.imageSelfFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ByteArray> { }
+                    Schema<Any>().apply {
+                        type = "blob"
+                    }
                 }
             }
         }) {
@@ -244,7 +247,9 @@ private fun Route.imageSelfThumbnailFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ByteArray> { }
+                    Schema<Any>().apply {
+                        type = "blob"
+                    }
                 }
             }
         }) {
@@ -423,7 +428,9 @@ private fun Route.imageManageFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ByteArray> { }
+                    Schema<Any>().apply {
+                        type = "blob"
+                    }
                 }
             }
         }) {
@@ -444,7 +451,9 @@ private fun Route.imageManageThumbnailFileFetch(controller: ImageController) {
             response {
                 HttpStatusCode.OK to {
                     description = "success"
-                    body<ByteArray> { }
+                    Schema<Any>().apply {
+                        type = "blob"
+                    }
                 }
             }
         }) {

@@ -291,19 +291,7 @@
         "responses" : {
           "200" : {
             "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
+            "headers" : { }
           }
         },
         "deprecated" : false,
@@ -330,19 +318,7 @@
         "responses" : {
           "200" : {
             "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
+            "headers" : { }
           }
         },
         "deprecated" : false,
@@ -623,19 +599,7 @@
           },
           "200" : {
             "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
+            "headers" : { }
           }
         },
         "deprecated" : false,
@@ -673,19 +637,7 @@
           },
           "200" : {
             "description" : "success",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "integer",
-                    "maximum" : 127,
-                    "minimum" : -128
-                  }
-                }
-              }
-            }
+            "headers" : { }
           }
         },
         "deprecated" : false,

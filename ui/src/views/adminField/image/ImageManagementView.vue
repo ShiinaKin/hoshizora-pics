@@ -646,10 +646,18 @@ async function fetchImageInfo(imageId: number): Promise<void> {
 
 async function fetchImageBlob(imageId: number): Promise<Blob | void> {
   return imageApi
-    .apiImageManageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageManageImageIdFileGet({ imageId }, { responseType: "blob" })
     .then((response) => {
-      const uIntArr = new Uint8Array(response.data);
-      return new Blob([uIntArr], { type: "image/*" });
+      const blob = response.data as unknown as Blob;
+      const contentType = response.headers["content-type"];
+      if (contentType && contentType.includes("application/json")) {
+        blob.text().then((json) => {
+          const jsonResponse = JSON.parse(json);
+          if (jsonResponse.isSuccessful === false)
+            toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+        });
+      }
+      return blob;
     })
     .catch((error) => {
       console.error(error);
@@ -662,11 +670,20 @@ async function fetchImage(imageId: number): Promise<string | void> {
     return;
   }
   return imageApi
-    .apiImageManageImageIdFileGet({ imageId }, { responseType: "arraybuffer" })
+    .apiImageManageImageIdFileGet({ imageId }, { responseType: "blob" })
     .then((response) => {
-      const uIntArr = new Uint8Array(response.data);
-      const blob = new Blob([uIntArr], { type: "image/*" });
-      const url = URL.createObjectURL(blob);
+      const blob = response.data as unknown as Blob;
+      let url = "";
+      const contentType = response.headers["content-type"];
+      if (contentType && contentType.includes("application/json")) {
+        blob.text().then((json) => {
+          const jsonResponse = JSON.parse(json);
+          if (jsonResponse.isSuccessful === false)
+            toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+        });
+      } else {
+        url = URL.createObjectURL(blob);
+      }
       imageRawUrlMap.value.set(imageId, url);
     })
     .catch((error) => {
@@ -678,11 +695,20 @@ async function fetchImage(imageId: number): Promise<string | void> {
 async function fetchImageThumbnails() {
   const promises = imageList.value.map((imagePageVO) =>
     imageApi
-      .apiImageManageImageIdThumbnailGet({ imageId: imagePageVO.id }, { responseType: "arraybuffer" })
+      .apiImageManageImageIdThumbnailGet({ imageId: imagePageVO.id }, { responseType: "blob" })
       .then((response) => {
-        const uIntArr = new Uint8Array(response.data);
-        const blob = new Blob([uIntArr], { type: "image/*" });
-        const url = URL.createObjectURL(blob);
+        const blob = response.data as unknown as Blob;
+        let url = "";
+        const contentType = response.headers["content-type"];
+        if (contentType && contentType.includes("application/json")) {
+          blob.text().then((json) => {
+            const jsonResponse = JSON.parse(json);
+            if (jsonResponse.isSuccessful === false)
+              toast.add({ severity: "warn", summary: "Warn", detail: jsonResponse.message, life: 3000 });
+          });
+        } else {
+          url = URL.createObjectURL(blob);
+        }
 
         return {
           id: imagePageVO.id,
