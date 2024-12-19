@@ -1,6 +1,7 @@
 package io.sakurasou.util
 
 import io.ktor.util.*
+import io.sakurasou.exception.service.image.io.s3.S3ClientException
 import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.strategy.S3Strategy
 import org.apache.commons.codec.digest.DigestUtils
@@ -33,7 +34,7 @@ object S3Utils {
             s3Client.putObject(putObject, RequestBody.fromBytes(imageBytes))
         }.onFailure {
             when (it) {
-                is S3Exception -> throw RuntimeException("Failed to upload image to S3", it)
+                is S3Exception -> throw S3ClientException(it)
                 else -> throw it
             }
         }
@@ -50,7 +51,7 @@ object S3Utils {
             s3Client.deleteObject(deleteObjectRequest)
         }.onFailure {
             when (it) {
-                is S3Exception -> throw RuntimeException("Failed to delete image from S3", it)
+                is S3Exception -> throw S3ClientException(it)
                 else -> throw it
             }
         }
@@ -70,7 +71,7 @@ object S3Utils {
             when (it) {
                 is S3Exception -> {
                     if (it.statusCode() == 404) return false
-                    throw RuntimeException("Failed to check image existence in S3", it)
+                    throw S3ClientException(it)
                 }
 
                 else -> throw it
@@ -89,8 +90,8 @@ object S3Utils {
             s3Client.getObject(getObjectRequest)
         }.onFailure {
             when (it) {
-                is S3Exception -> throw RuntimeException("Failed to fetch image from S3", it)
-                else -> throw RuntimeException("Failed to create S3 client", it)
+                is S3Exception -> throw S3ClientException(it)
+                else -> it
             }
         }.getOrThrow()
     }
