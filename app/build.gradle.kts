@@ -6,6 +6,7 @@ val kotlinLoggingVersion: String by project
 
 val lettuceVersion: String by project
 val caffeineVersion: String by project
+val kotlinCoroutineVersion: String by project
 
 val exposedVersion: String by project
 val hikariVersion: String by project
@@ -76,8 +77,8 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.11.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$kotlinCoroutineVersion")
 
     implementation("io.lettuce:lettuce-core:$lettuceVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
