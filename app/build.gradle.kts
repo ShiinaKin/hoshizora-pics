@@ -131,7 +131,7 @@ tasks.shadowJar {
     )
 
     from(rootProject.projectDir) {
-        include("LICENSE", "README.md")
+        include("LICENSE")
     }
 }
 
