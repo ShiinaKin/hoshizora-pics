@@ -7,10 +7,10 @@ plugins {
 val baseUrl = env.fetchOrNull("BASE_URL") ?: "/"
 
 node {
-    version = "20.18.1"
+    version = "22.12.0"
     workDir = file("$projectDir/.cache/node")
     download = true
-    pnpmVersion = "9.15.0"
+    pnpmVersion = "9.15.2"
     pnpmWorkDir = file("$projectDir/.cache/pnpm")
 }
 
