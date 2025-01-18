@@ -313,6 +313,20 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
     }
   },
   {
+    label: t("myImageView.contextMenu.single.allowedRandomFetch"),
+    icon: "el:random",
+    command: () => {
+      handleSingleAllowedRandomFetch(true);
+    }
+  },
+  {
+    label: t("myImageView.contextMenu.single.disallowedRandomFetch"),
+    icon: "mdi:autorenew-off",
+    command: () => {
+      handleSingleAllowedRandomFetch(false);
+    }
+  },
+  {
     label: t("myImageView.contextMenu.single.detail"),
     icon: "mdi:information-slab-box-outline",
     command: () => {
@@ -359,6 +373,20 @@ const multiImageContextMenuItems = ref<MenuItem[]>([
     icon: "mdi:visibility-off-outline",
     command: () => {
       handleMultiChangeVisibility(true);
+    }
+  },
+  {
+    label: t("myImageView.contextMenu.multi.allowedRandomFetch"),
+    icon: "el:random",
+    command: () => {
+      handleMultiAllowedRandomFetch(true);
+    }
+  },
+  {
+    label: t("myImageView.contextMenu.multi.disallowedRandomFetch"),
+    icon: "mdi:autorenew-off",
+    command: () => {
+      handleMultiAllowedRandomFetch(false);
     }
   },
   {
@@ -573,6 +601,78 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
             toast.add({
               severity: "warn",
               summary: t("myImageView.changeVisible.toast.failedTitle"),
+              detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
+              life: 3000
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          toast.add({ severity: "error", summary: "Error", detail: e.message, life: 3000 });
+        });
+    })
+  ).then(() => {
+    selectedImageIds.value = [];
+    page.value = 1;
+    pageSize.value = 20;
+    pageUserImage(pageRequest.value);
+  });
+}
+
+function handleSingleAllowedRandomFetch(isAllowed: boolean) {
+  imageApi
+    .apiImageImageIdPatch({
+      imageId: curRightClickImageId.value,
+      imagePatchRequest: {
+        isAllowedRandomFetch: isAllowed
+      }
+    })
+    .then((response) => {
+      const resp = response.data;
+      if (resp.isSuccessful) {
+        toast.add({
+          severity: "success",
+          summary: t("myImageView.changeAllowedRandomFetch.toast.successTitle"),
+          life: 3000
+        });
+        pageUserImage(pageRequest.value);
+      } else {
+        toast.add({
+          severity: "warn",
+          summary: t("myImageView.changeAllowedRandomFetch.toast.failedTitle"),
+          detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
+          life: 3000
+        });
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+      toast.add({ severity: "error", summary: "Error", detail: e.message, life: 3000 });
+    });
+}
+
+function handleMultiAllowedRandomFetch(isAllowed: boolean) {
+  Promise.all(
+    selectedImageIds.value.map(async (imageId) => {
+      await imageApi
+        .apiImageImageIdPatch({
+          imageId: imageId,
+          imagePatchRequest: {
+            isAllowedRandomFetch: isAllowed
+          }
+        })
+        .then((response) => {
+          const resp = response.data;
+          if (resp.isSuccessful) {
+            toast.add({
+              severity: "success",
+              summary: t("myImageView.changeAllowedRandomFetch.toast.successTitle"),
+              life: 3000
+            });
+          } else {
+            toast.add({
+              severity: "warn",
+              summary: t("myImageView.changeAllowedRandomFetch.toast.failedTitle"),
               detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
               life: 3000
             });
@@ -1219,6 +1319,17 @@ async function fetchThumbnails() {
                 imageInfo?.isPrivate
                   ? t("myImageView.detail.dialog.isPrivate.true")
                   : t("myImageView.detail.dialog.isPrivate.false")
+              }}
+            </dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("myImageView.detail.dialog.isAllowedRandomFetch.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                imageInfo?.isAllowedRandomFetch
+                  ? t("myImageView.detail.dialog.isAllowedRandomFetch.true")
+                  : t("myImageView.detail.dialog.isAllowedRandomFetch.false")
               }}
             </dd>
           </div>

@@ -142,6 +142,8 @@ myImageView:
       moveToAlbum: "移动到相册"
       settingAsPrivate: "设为私密"
       settingAsPublic: "设为公开"
+      allowedRandomFetch: "允许随机"
+      disallowedRandomFetch: "禁止随机"
       detail: "详情信息"
       edit: "修改"
       delete: "删除"
@@ -149,6 +151,8 @@ myImageView:
       moveToAlbum: "移动到相册"
       settingAsPrivate: "设为私密"
       settingAsPublic: "设为公开"
+      allowedRandomFetch: "允许随机"
+      disallowedRandomFetch: "禁止随机"
       delete: "删除"
   detail:
     dialog:
@@ -168,6 +172,10 @@ myImageView:
         title: "是否公开"
         true: "私密"
         false: "公开"
+      isAllowedRandomFetch:
+        title: "随机获取"
+        true: "允许"
+        false: "不允许"
       description: "图片描述"
     toast:
       failedTitle: "获取图片信息失败"
@@ -196,6 +204,10 @@ myImageView:
     toast:
       successTitle: "修改访问权限成功"
       failedTitle: "修改访问权限失败"
+  changeAllowedRandomFetch:
+    toast:
+      successTitle: "修改随机访问权限成功"
+      failedTitle: "修改随机访问权限失败"
   changeAlbum:
     dialog:
       title: "移动到相册"
@@ -475,11 +487,15 @@ adminImageManageView:
       moveToAlbum: "移动到相册"
       settingAsPrivate: "设为私密"
       settingAsPublic: "设为公开"
+      allowedRandomFetch: "允许随机"
+      disallowedRandomFetch: "禁止随机"
       detail: "详情信息"
       delete: "删除"
     multi:
       settingAsPrivate: "设为私密"
       settingAsPublic: "设为公开"
+      allowedRandomFetch: "允许随机"
+      disallowedRandomFetch: "禁止随机"
       delete: "删除"
   copyImage:
     toast:
@@ -493,6 +509,10 @@ adminImageManageView:
     toast:
       successTitle: "修改访问权限成功"
       failedTitle: "修改访问权限失败"
+  changeAllowedRandomFetch:
+    toast:
+      successTitle: "修改随机访问权限成功"
+      failedTitle: "修改随机访问权限失败"
   delete:
     confirmDialog:
       header: "确认删除"
@@ -516,9 +536,14 @@ adminImageManageView:
     imageFileSize: "图片大小"
     imageFileSizeUnit: "MB"
     imageUploadTime: "上传时间"
-    imageIsPublic: "是否公开"
-    imageIsPublicYes: "公开"
-    imageIsPublicNo: "私密"
+    isPrivate:
+      title: "是否公开"
+      true: "私密"
+      false: "公开"
+    isAllowedRandomFetch:
+      title: "随机获取"
+      true: "允许"
+      false: "不允许"
     imageDesc: "图片描述"
 adminAlbumManageView:
   albumFilter:

@@ -142,6 +142,8 @@ myImageView:
       moveToAlbum: "Move to Album"
       settingAsPrivate: "Set as Private"
       settingAsPublic: "Set as Public"
+      allowedRandomFetch: "Allow Random"
+      disallowedRandomFetch: "Disallow Random"
       detail: "Details"
       edit: "Edit"
       delete: "Delete"
@@ -149,6 +151,8 @@ myImageView:
       moveToAlbum: "Move to Album"
       settingAsPrivate: "Set as Private"
       settingAsPublic: "Set as Public"
+      allowedRandomFetch: "Allow Random"
+      disallowedRandomFetch: "Disallow Random"
       delete: "Delete"
   detail:
     dialog:
@@ -165,9 +169,13 @@ myImageView:
       fileSizeUnit: "MB"
       uploadTime: "Upload Time"
       isPrivate:
-        title: "Is Public"
+        title: "Is Private"
         true: "Private"
         false: "Public"
+      isAllowedRandomFetch:
+        title: "Random Fetch"
+        true: "Allowed"
+        false: "Disallowed"
       description: "Image Description"
     toast:
       failedTitle: "Failed to get image information"
@@ -196,6 +204,10 @@ myImageView:
     toast:
       successTitle: "Access permission modified successfully"
       failedTitle: "Failed to modify access permission"
+  changeAllowedRandomFetch:
+    toast:
+      successTitle: "Random Access permission modified successfully"
+      failedTitle: "Failed to modify random access permission"
   changeAlbum:
     dialog:
       title: "Move to Album"
@@ -475,11 +487,15 @@ adminImageManageView:
       moveToAlbum: "Move to Album"
       settingAsPrivate: "Set as Private"
       settingAsPublic: "Set as Public"
+      allowedRandomFetch: "Allow Random"
+      disallowedRandomFetch: "Disallow Random"
       detail: "Details"
       delete: "Delete"
     multi:
       settingAsPrivate: "Set as Private"
       settingAsPublic: "Set as Public"
+      allowedRandomFetch: "Allow Random"
+      disallowedRandomFetch: "Disallow Random"
       delete: "Delete"
   copyImage:
     toast:
@@ -493,6 +509,10 @@ adminImageManageView:
     toast:
       successTitle: "Access permission modified successfully"
       failedTitle: "Failed to modify access permission"
+  changeAllowedRandomFetch:
+    toast:
+      successTitle: "Random Access permission modified successfully"
+      failedTitle: "Failed to modify random access permission"
   delete:
     confirmDialog:
       header: "Confirm Deletion"
@@ -516,9 +536,14 @@ adminImageManageView:
     imageFileSize: "File Size"
     imageFileSizeUnit: "MB"
     imageUploadTime: "Upload Time"
-    imageIsPublic: "Is Public"
-    imageIsPublicYes: "Public"
-    imageIsPublicNo: "Private"
+    isPrivate:
+      title: "Is Private"
+      true: "Private"
+      false: "Public"
+    isAllowedRandomFetch:
+      title: "Random Fetch"
+      true: "Allowed"
+      false: "Disallowed"
     imageDesc: "Image Description"
 adminAlbumManageView:
   albumFilter:
