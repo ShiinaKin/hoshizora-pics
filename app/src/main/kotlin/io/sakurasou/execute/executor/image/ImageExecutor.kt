@@ -1,15 +1,13 @@
 package io.sakurasou.execute.executor.image
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.sakurasou.execute.task.image.DeleteImageTask
-import io.sakurasou.execute.task.image.DeleteThumbnailTask
-import io.sakurasou.execute.task.image.ImageTask
-import io.sakurasou.execute.task.image.PersistImageThumbnailTask
-import io.sakurasou.execute.task.image.RePersistImageThumbnailTask
+import io.sakurasou.execute.task.image.*
 import io.sakurasou.model.entity.Strategy
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.awt.image.BufferedImage
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
 
 /**
  * @author Shiina Kin
@@ -17,8 +15,9 @@ import java.awt.image.BufferedImage
  */
 object ImageExecutor {
     private val logger = KotlinLogging.logger {}
+    private val taskMap = ConcurrentHashMap<Pair<Long, KClass<out ImageTask>>, Unit>()
 
-    private val imageExecuteScope  = CoroutineScope(
+    private val imageExecuteScope = CoroutineScope(
         Dispatchers.IO + SupervisorJob() + CoroutineName("ImageExecutor")
     )
 
@@ -30,7 +29,7 @@ object ImageExecutor {
             for (task in taskChannel) {
                 launch {
                     try {
-                        task.execute()
+                        task.submit()
                     } catch (e: Exception) {
                         logger.error(e) { "image task failed" }
                     }
@@ -39,20 +38,39 @@ object ImageExecutor {
         }
     }
 
-    suspend fun persistThumbnail(strategy: Strategy, subFolder: String, fileName: String, image: BufferedImage) {
-        taskChannel.send(PersistImageThumbnailTask(strategy, subFolder, fileName, image))
+    suspend fun persistThumbnail(
+        opImageId: Long,
+        strategy: Strategy,
+        subFolder: String,
+        fileName: String,
+        image: BufferedImage
+    ) {
+        submitTask(PersistImageThumbnailTask(opImageId, cleanUp, strategy, subFolder, fileName, image))
     }
 
-    suspend fun rePersistThumbnail(strategy: Strategy, relativePath: String) {
-        taskChannel.send(RePersistImageThumbnailTask(strategy, relativePath))
+    suspend fun rePersistThumbnail(opImageId: Long, strategy: Strategy, relativePath: String) {
+        submitTask(RePersistImageThumbnailTask(opImageId, cleanUp, strategy, relativePath))
     }
 
-    suspend fun deleteImage(strategy: Strategy, relativePath: String) {
-        taskChannel.send(DeleteImageTask(strategy, relativePath))
+    suspend fun deleteImage(opImageId: Long, strategy: Strategy, relativePath: String) {
+        submitTask(DeleteImageTask(opImageId, cleanUp, strategy, relativePath))
     }
 
-    suspend fun deleteThumbnail(strategy: Strategy, relativePath: String) {
-        taskChannel.send(DeleteThumbnailTask(strategy, relativePath))
+    suspend fun deleteThumbnail(opImageId: Long, strategy: Strategy, relativePath: String) {
+        submitTask(DeleteThumbnailTask(opImageId, cleanUp, strategy, relativePath))
+    }
+
+    private val cleanUp = { opImageId: Long, taskType: KClass<out ImageTask> ->
+        taskMap.remove(opImageId to taskType)!!
+    }
+
+    private suspend fun submitTask(task: ImageTask) {
+        println(taskMap)
+        if (taskMap.putIfAbsent(task.opImageId to task.taskType, Unit) != null) {
+            logger.debug { "task of imageId: ${task.opImageId} already exists" }
+            return
+        }
+        taskChannel.send(task)
     }
 
     fun shutdown() {

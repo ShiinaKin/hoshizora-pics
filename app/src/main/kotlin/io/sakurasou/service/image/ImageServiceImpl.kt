@@ -145,9 +145,9 @@ class ImageServiceImpl(
                     createTime = now
                 )
 
-                imageDao.saveImage(imageInsertDTO)
+                val imageId = imageDao.saveImage(imageInsertDTO)
 
-                ImageExecutor.persistThumbnail(strategy, subFolder, storageFileName, image)
+                ImageExecutor.persistThumbnail(imageId, strategy, subFolder, storageFileName, image)
 
                 if (user.isDefaultImagePrivate) ""
                 else "${siteSetting.siteExternalUrl}/s/$uniqueName"
@@ -168,8 +168,8 @@ class ImageServiceImpl(
                 val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
                 imageDao.deleteImageById(imageId)
-                ImageExecutor.deleteImage(strategy, image.path)
-                ImageExecutor.deleteThumbnail(strategy, image.path)
+                ImageExecutor.deleteImage(imageId, strategy, image.path)
+                ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
             if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
@@ -184,8 +184,8 @@ class ImageServiceImpl(
                 val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
                 imageDao.deleteImageById(imageId)
-                ImageExecutor.deleteImage(strategy, image.path)
-                ImageExecutor.deleteThumbnail(strategy, image.path)
+                ImageExecutor.deleteImage(imageId, strategy, image.path)
+                ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
             if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
@@ -399,7 +399,7 @@ class ImageServiceImpl(
     }.also {
         if (it.bytes == null && it.url.isNullOrBlank()) {
             logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }
-            ImageExecutor.rePersistThumbnail(strategy, image.path)
+            ImageExecutor.rePersistThumbnail(image.id, strategy, image.path)
             throw ImageThumbnailNotFoundException()
         }
     }
