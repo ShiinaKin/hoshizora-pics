@@ -43,6 +43,12 @@ export interface ImageManagePatchRequest {
      * @type {boolean}
      * @memberof ImageManagePatchRequest
      */
+    'isAllowedRandomFetch'?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ImageManagePatchRequest
+     */
     'isPrivate'?: boolean | null;
     /**
      * 

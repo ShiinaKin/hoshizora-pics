@@ -79,6 +79,12 @@ export interface ImageManageVO {
      * @type {boolean}
      * @memberof ImageManageVO
      */
+    'isAllowedRandomFetch': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ImageManageVO
+     */
     'isPrivate': boolean;
     /**
      * 

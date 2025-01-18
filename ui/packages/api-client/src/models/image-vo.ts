@@ -67,6 +67,12 @@ export interface ImageVO {
      * @type {boolean}
      * @memberof ImageVO
      */
+    'isAllowedRandomFetch': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ImageVO
+     */
     'isPrivate': boolean;
     /**
      * 
