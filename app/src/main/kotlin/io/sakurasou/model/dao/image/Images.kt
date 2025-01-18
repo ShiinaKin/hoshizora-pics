@@ -29,6 +29,7 @@ object Images : LongIdTable() {
     val md5 = char("md5", 32)
     val sha256 = char("sha256", 64)
     val isPrivate = bool("is_private")
+    val isAllowedRandomFetch = bool("is_allowed_random_fetch").default(false)
     val createTime = datetime("create_time")
 
     init {

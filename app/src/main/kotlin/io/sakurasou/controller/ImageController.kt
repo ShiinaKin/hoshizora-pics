@@ -165,6 +165,7 @@ private fun Route.imageSelfPatch(controller: ImageController) {
                     && patchRequest.displayName == null
                     && patchRequest.description == null
                     && patchRequest.isPrivate == null
+                    && patchRequest.isAllowedRandomFetch == null
                 ) ValidationResult.Invalid("at least one field should be provided")
                 else if (patchRequest.displayName != null && patchRequest.displayName.isBlank())
                     ValidationResult.Invalid("displayName is invalid")
@@ -372,6 +373,7 @@ private fun Route.imageManagePatch(controller: ImageController) {
                     && managePatchRequest.displayName == null
                     && managePatchRequest.description == null
                     && managePatchRequest.isPrivate == null
+                    && managePatchRequest.isAllowedRandomFetch == null
                 ) ValidationResult.Invalid("at least one field should be provided")
                 else if (managePatchRequest.displayName != null && managePatchRequest.displayName.isBlank())
                     ValidationResult.Invalid("displayName is invalid")
