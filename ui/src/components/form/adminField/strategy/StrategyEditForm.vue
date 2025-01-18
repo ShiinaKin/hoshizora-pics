@@ -314,6 +314,7 @@ const onCancel = () => {
           name="config.accessKey"
           :label="t('adminStrategyManageView.edit.dialog.form.config.s3.accessKey')"
           :placeholder="strategyDetail.config.accessKey"
+          :autocomplete="'off'"
         />
       </div>
       <div v-if="strategyDetail.type === StrategyTypeEnum.S3" class="flex flex-col gap-1">
@@ -322,6 +323,7 @@ const onCancel = () => {
           name="config.secretKey"
           :label="t('adminStrategyManageView.edit.dialog.form.config.s3.secretKey')"
           :placeholder="strategyDetail.config.secretKey"
+          :autocomplete="'off'"
         />
       </div>
       <div v-if="strategyDetail.type === StrategyTypeEnum.S3" class="flex flex-col gap-1">
