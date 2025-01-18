@@ -12,6 +12,7 @@ import io.sakurasou.util.S3Utils
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.reflect.KClass
 
 /**
  * @author Shiina Kin
@@ -21,17 +22,27 @@ import javax.imageio.ImageIO
 private const val THUMBNAIL_HEIGHT = 256
 private const val THUMBNAIL_QUALITY = 0.9
 
-sealed class ImageTask() {
+sealed class ImageTask(
+    val opImageId: Long,
+    val taskType: KClass<out ImageTask>,
+    private val cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit
+) {
     protected val logger = KotlinLogging.logger {}
     abstract fun execute()
+    fun submit() {
+        execute()
+        cleanUp(opImageId, taskType)
+    }
 }
 
 class PersistImageThumbnailTask(
+    opImageId: Long,
+    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
     private val subFolder: String,
     private val fileName: String,
     private val image: BufferedImage
-) : ImageTask() {
+) : ImageTask(opImageId, taskType = PersistImageThumbnailTask::class, cleanUp) {
     override fun execute() {
         val relativePath = "$subFolder/$fileName"
         val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
@@ -42,9 +53,11 @@ class PersistImageThumbnailTask(
 }
 
 class RePersistImageThumbnailTask(
+    opImageId: Long,
+    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
     private val relativePath: String
-) : ImageTask() {
+) : ImageTask(opImageId, taskType = RePersistImageThumbnailTask::class, cleanUp) {
     override fun execute() {
         val fileName = relativePath.substringAfterLast('/')
         when (val strategyConfig = strategy.config) {
@@ -72,9 +85,11 @@ class RePersistImageThumbnailTask(
 }
 
 class DeleteImageTask(
+    opImageId: Long,
+    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
     private val relativePath: String
-) : ImageTask() {
+) : ImageTask(opImageId, taskType = DeleteImageTask::class, cleanUp) {
     override fun execute() {
         when (val strategyConfig = strategy.config) {
             is LocalStrategy -> {
@@ -98,9 +113,11 @@ class DeleteImageTask(
 }
 
 class DeleteThumbnailTask(
+    opImageId: Long,
+    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
     private val relativePath: String
-) : ImageTask() {
+) : ImageTask(opImageId, taskType = DeleteThumbnailTask::class, cleanUp) {
     override fun execute() {
         when (val strategyConfig = strategy.config) {
             is LocalStrategy -> {
