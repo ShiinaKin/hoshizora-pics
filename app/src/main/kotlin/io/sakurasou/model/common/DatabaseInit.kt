@@ -29,6 +29,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.semver4j.Semver
 
 /**
@@ -249,14 +250,13 @@ object DatabaseInit {
         val oldVersion = Semver.parse(oldSystemStatus.version) ?: throw IllegalArgumentException("Invalid version")
         val version = Semver.parse(version) ?: throw IllegalArgumentException("Invalid version")
         if (oldVersion.isGreaterThan(version)) {
-            logger.warn { "New version is older than current version." }
+            logger.warn { "Cur version is older than previous version." }
             return
         }
         if (oldVersion.isEqualTo(version)) {
-            if (!oldVersion.isStable) logger.warn { "Cur version is not stable." }
+            if (!version.isStable) logger.warn { "Cur version is not stable." }
             return
         }
-        if (!version.isStable) logger.warn { "Cur version is not stable." }
         dbQuery {
             val systemStatus = SystemStatus(
                 isInit = InstanceCenter.systemStatus.isInit,
@@ -265,6 +265,12 @@ object DatabaseInit {
             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             val updateDTO = SettingUpdateDTO(SETTING_STATUS, systemStatus, now)
             InstanceCenter.settingDao.updateSettingByName(updateDTO)
+
+            // v0.3.0 breaking update
+            if (oldVersion.isLowerThanOrEqualTo("0.3.0")) {
+                logger.info { "exec breaking update after v0.3.0" }
+                SchemaUtils.addMissingColumnsStatements(Images).forEach { TransactionManager.current().exec(it) }
+            }
         }
     }
 }
