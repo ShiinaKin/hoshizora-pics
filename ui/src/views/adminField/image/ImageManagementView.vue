@@ -313,6 +313,20 @@ const singleImageContextMenuItems = ref<MenuItem[]>([
     }
   },
   {
+    label: t("adminImageManageView.contextMenu.single.allowedRandomFetch"),
+    icon: "el:random",
+    command: () => {
+      handleSingleAllowedRandomFetch(true);
+    }
+  },
+  {
+    label: t("adminImageManageView.contextMenu.single.disallowedRandomFetch"),
+    icon: "mdi:autorenew-off",
+    command: () => {
+      handleSingleAllowedRandomFetch(false);
+    }
+  },
+  {
     label: t("adminImageManageView.contextMenu.single.detail"),
     icon: "mdi:information-slab-box-outline",
     command: () => {
@@ -336,14 +350,28 @@ const multiImageContextMenuItems = ref<MenuItem[]>([
     label: t("adminImageManageView.contextMenu.multi.settingAsPublic"),
     icon: "mdi:visibility-outline",
     command: () => {
-      handleMultiChangeVisibility(false);
+      handleMultiChangeVisibility(true);
     }
   },
   {
     label: t("adminImageManageView.contextMenu.multi.settingAsPrivate"),
     icon: "mdi:visibility-off-outline",
     command: () => {
-      handleMultiChangeVisibility(true);
+      handleMultiChangeVisibility(false);
+    }
+  },
+  {
+    label: t("adminImageManageView.contextMenu.multi.allowedRandomFetch"),
+    icon: "el:random",
+    command: () => {
+      handleMultiAllowedRandomFetch(true);
+    }
+  },
+  {
+    label: t("adminImageManageView.contextMenu.multi.disallowedRandomFetch"),
+    icon: "mdi:autorenew-off",
+    command: () => {
+      handleMultiAllowedRandomFetch(false);
     }
   },
   {
@@ -502,6 +530,76 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
             toast.add({
               severity: "warn",
               summary: t("adminImageManageView.changeVisible.toast.failedTitle"),
+              detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
+              life: 3000
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          toast.add({ severity: "error", summary: "Error", detail: e.message, life: 3000 });
+        });
+    })
+  ).then(() => {
+    selectedImageIds.value = [];
+    pageImage(imagePageRequest.value);
+  });
+}
+
+function handleSingleAllowedRandomFetch(isAllowed: boolean) {
+  imageApi
+    .apiImageManageImageIdPatch({
+      imageId: curRightClickImageId.value,
+      imageManagePatchRequest: {
+        isAllowedRandomFetch: isAllowed
+      }
+    })
+    .then((response) => {
+      const resp = response.data;
+      if (resp.isSuccessful) {
+        toast.add({
+          severity: "success",
+          summary: t("adminImageManageView.changeAllowedRandomFetch.toast.successTitle"),
+          life: 3000
+        });
+        pageImage(imagePageRequest.value);
+      } else {
+        toast.add({
+          severity: "warn",
+          summary: t("adminImageManageView.changeAllowedRandomFetch.toast.failedTitle"),
+          detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
+          life: 3000
+        });
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+      toast.add({ severity: "error", summary: "Error", detail: e.message, life: 3000 });
+    });
+}
+
+function handleMultiAllowedRandomFetch(isAllowed: boolean) {
+  Promise.all(
+    selectedImageIds.value.map(async (imageId) => {
+      await imageApi
+        .apiImageManageImageIdPatch({
+          imageId: imageId,
+          imageManagePatchRequest: {
+            isAllowedRandomFetch: isAllowed
+          }
+        })
+        .then((response) => {
+          const resp = response.data;
+          if (resp.isSuccessful) {
+            toast.add({
+              severity: "success",
+              summary: t("adminImageManageView.changeAllowedRandomFetch.toast.successTitle"),
+              life: 3000
+            });
+          } else {
+            toast.add({
+              severity: "warn",
+              summary: t("adminImageManageView.changeAllowedRandomFetch.toast.failedTitle"),
               detail: `imageId: ${imageDisplayList.value[curRightClickImageIdx.value].id}, ${resp.message}`,
               life: 3000
             });
@@ -1031,12 +1129,23 @@ async function fetchImageThumbnails() {
           </div>
 
           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.imageIsPublic") }}</dt>
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.isPrivate.title") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{
                 imageInfo?.isPrivate
-                  ? t("adminImageManageView.detail.imageIsPublicNo")
-                  : t("adminImageManageView.detail.imageIsPublicYes")
+                  ? t("adminImageManageView.detail.isPrivate.true")
+                  : t("adminImageManageView.detail.isPrivate.false")
+              }}
+            </dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">{{ t("adminImageManageView.detail.isAllowedRandomFetch.title") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{
+                imageInfo?.isAllowedRandomFetch
+                  ? t("myImageView.detail.dialog.isAllowedRandomFetch.true")
+                  : t("myImageView.detail.dialog.isAllowedRandomFetch.false")
               }}
             </dd>
           </div>
