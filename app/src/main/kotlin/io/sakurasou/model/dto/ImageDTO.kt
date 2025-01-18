@@ -24,6 +24,7 @@ data class ImageInsertDTO(
     val md5: String,
     val sha256: String,
     val isPrivate: Boolean,
+    val isAllowedRandomFetch: Boolean,
     val createTime: LocalDateTime
 )
 
@@ -37,7 +38,8 @@ data class ImageUpdateDTO(
     val albumId: Long,
     val displayName: String,
     val description: String? = null,
-    val isPrivate: Boolean
+    val isPrivate: Boolean,
+    val isAllowedRandomFetch: Boolean
 )
 
 data class ImageFileDTO(

@@ -36,6 +36,7 @@ class ImageDaoImpl : ImageDao {
             it[md5] = insertDTO.md5
             it[sha256] = insertDTO.sha256
             it[isPrivate] = insertDTO.isPrivate
+            it[isAllowedRandomFetch] = insertDTO.isAllowedRandomFetch
             it[createTime] = insertDTO.createTime
         }
         return entityID.value
@@ -55,6 +56,7 @@ class ImageDaoImpl : ImageDao {
             it[displayName] = imageUpdateDTO.displayName
             it[description] = imageUpdateDTO.description
             it[isPrivate] = imageUpdateDTO.isPrivate
+            it[isAllowedRandomFetch] = imageUpdateDTO.isAllowedRandomFetch
         }
     }
 
@@ -214,6 +216,7 @@ class ImageDaoImpl : ImageDao {
         it[Images.md5],
         it[Images.sha256],
         it[Images.isPrivate],
+        it[Images.isAllowedRandomFetch],
         it[Images.createTime]
     )
 }

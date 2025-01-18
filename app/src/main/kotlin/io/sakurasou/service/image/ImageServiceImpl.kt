@@ -142,6 +142,7 @@ class ImageServiceImpl(
                     md5 = md5,
                     sha256 = sha256,
                     isPrivate = user.isDefaultImagePrivate,
+                    isAllowedRandomFetch = false,
                     createTime = now
                 )
 
@@ -209,7 +210,8 @@ class ImageServiceImpl(
                     albumId = selfPatchRequest.albumId ?: image.albumId,
                     displayName = selfPatchRequest.displayName ?: image.displayName,
                     description = selfPatchRequest.description ?: image.description,
-                    isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate
+                    isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate,
+                    isAllowedRandomFetch = selfPatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
                 )
 
                 imageDao.updateImageById(imageUpdateDTO)
@@ -235,7 +237,8 @@ class ImageServiceImpl(
                     albumId = managePatchRequest.albumId ?: image.albumId,
                     displayName = managePatchRequest.displayName ?: image.displayName,
                     description = managePatchRequest.description ?: image.description,
-                    isPrivate = managePatchRequest.isPrivate ?: image.isPrivate
+                    isPrivate = managePatchRequest.isPrivate ?: image.isPrivate,
+                    isAllowedRandomFetch = managePatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
                 )
 
                 imageDao.updateImageById(imageUpdateDTO)
@@ -271,6 +274,7 @@ class ImageServiceImpl(
                 md5 = image.md5,
                 sha256 = image.sha256,
                 isPrivate = image.isPrivate,
+                isAllowedRandomFetch = image.isAllowedRandomFetch,
                 createTime = image.createTime
             )
         }
@@ -307,6 +311,7 @@ class ImageServiceImpl(
                 md5 = image.md5,
                 sha256 = image.sha256,
                 isPrivate = image.isPrivate,
+                isAllowedRandomFetch = image.isAllowedRandomFetch,
                 createTime = image.createTime
             )
         }

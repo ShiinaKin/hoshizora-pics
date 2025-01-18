@@ -42,7 +42,8 @@ data class ImagePatchRequest(
     val albumId: Long? = null,
     val displayName: String? = null,
     val description: String? = null,
-    val isPrivate: Boolean? = null
+    val isPrivate: Boolean? = null,
+    val isAllowedRandomFetch: Boolean? = null
 )
 
 @Serializable
@@ -52,5 +53,6 @@ data class ImageManagePatchRequest(
     val albumId: Long? = null,
     val displayName: String? = null,
     val description: String? = null,
-    val isPrivate: Boolean? = null
+    val isPrivate: Boolean? = null,
+    val isAllowedRandomFetch: Boolean? = null
 )

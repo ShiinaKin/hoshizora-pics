@@ -26,6 +26,7 @@ data class ImageVO(
     val md5: String,
     val sha256: String,
     val isPrivate: Boolean,
+    val isAllowedRandomFetch: Boolean,
     val createTime: LocalDateTime
 )
 
@@ -52,6 +53,7 @@ data class ImageManageVO(
     val md5: String,
     val sha256: String,
     val isPrivate: Boolean,
+    val isAllowedRandomFetch: Boolean,
     val createTime: LocalDateTime
 )
 
