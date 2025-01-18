@@ -114,6 +114,7 @@ class ImageDaoImpl : ImageDao {
     override fun findRandomImage(): Image? {
         return Images.selectAll()
             .where { Images.isPrivate eq false }
+            .andWhere { Images.isAllowedRandomFetch eq true }
             .orderBy(Random())
             .limit(1)
             .map { toImage(it) }
