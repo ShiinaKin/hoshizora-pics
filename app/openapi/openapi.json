@@ -3132,6 +3132,9 @@
           "displayName" : {
             "type" : [ "null", "string" ]
           },
+          "isAllowedRandomFetch" : {
+            "type" : [ "null", "boolean" ]
+          },
           "isPrivate" : {
             "type" : [ "null", "boolean" ]
           }
@@ -3164,6 +3167,9 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "isAllowedRandomFetch" : {
+            "type" : "boolean"
+          },
           "isPrivate" : {
             "type" : "boolean"
           },
@@ -3195,7 +3201,7 @@
             "format" : "int32"
           }
         },
-        "required" : [ "albumId", "albumName", "createTime", "displayName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
+        "required" : [ "albumId", "albumName", "createTime", "displayName", "height", "id", "isAllowedRandomFetch", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "width" ]
       },
       "CommonResponse_ImageVO" : {
         "type" : "object",
@@ -3306,6 +3312,9 @@
           "displayName" : {
             "type" : [ "null", "string" ]
           },
+          "isAllowedRandomFetch" : {
+            "type" : [ "null", "boolean" ]
+          },
           "isPrivate" : {
             "type" : [ "null", "boolean" ]
           },
@@ -3349,6 +3358,9 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "isAllowedRandomFetch" : {
+            "type" : "boolean"
+          },
           "isPrivate" : {
             "type" : "boolean"
           },
@@ -3390,7 +3402,7 @@
             "format" : "int32"
           }
         },
-        "required" : [ "albumId", "albumName", "createTime", "displayName", "groupId", "groupName", "height", "id", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "strategyId", "strategyName", "strategyType", "width" ]
+        "required" : [ "albumId", "albumName", "createTime", "displayName", "groupId", "groupName", "height", "id", "isAllowedRandomFetch", "isPrivate", "md5", "mimeType", "originName", "ownerId", "ownerName", "sha256", "size", "strategyId", "strategyName", "strategyType", "width" ]
       },
       "CommonResponse_ImageManageVO" : {
         "type" : "object",
