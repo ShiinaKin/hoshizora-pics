@@ -20,14 +20,16 @@ val swaggerUIVersion: String by project
 
 val awsS3Version: String by project
 
+val gsonVersion: String by project
+
 val commonsIOVersion: String by project
 val commonsCodecVersion: String by project
 
 val mockkVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
     id("io.ktor.plugin") version "3.0.3"
 }
 
@@ -75,7 +77,7 @@ dependencies {
     implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.code.gson:gson:$gsonVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$kotlinCoroutineVersion")
