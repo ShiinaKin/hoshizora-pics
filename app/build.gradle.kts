@@ -22,6 +22,8 @@ val awsS3Version: String by project
 
 val gsonVersion: String by project
 
+val semver4jVersion: String by project
+
 val commonsIOVersion: String by project
 val commonsCodecVersion: String by project
 
@@ -104,7 +106,7 @@ dependencies {
 
     implementation("software.amazon.awssdk:s3:$awsS3Version")
 
-    implementation("org.semver4j:semver4j:5.4.1")
+    implementation("org.semver4j:semver4j:$semver4jVersion")
 
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
