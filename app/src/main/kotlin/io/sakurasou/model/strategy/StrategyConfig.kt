@@ -19,5 +19,6 @@ sealed class StrategyConfig(
 @Name("StrategyTypeEnum")
 enum class StrategyType {
     LOCAL,
-    S3
+    S3,
+    WEBDAV
 }
