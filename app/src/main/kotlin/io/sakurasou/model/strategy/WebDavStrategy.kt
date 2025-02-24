@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 /**
  * @author Shiina Kin
- * 2024/9/9 09:27
+ * 2025/1/28 14:17
  */
 @Serializable
-@SerialName("WebDav")
+@SerialName("WEBDAV")
 @Name("WebDavStrategy")
 data class WebDavStrategy(
     val serverUrl: String,

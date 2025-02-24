@@ -8,6 +8,7 @@ import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
+import io.sakurasou.model.strategy.WebDavStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.coobird.thumbnailator.Thumbnails
@@ -27,7 +28,7 @@ object ImageUtils {
         strategy: Strategy,
         subFolder: String,
         fileName: String,
-        bytes: ByteArray
+        imageBytes: ByteArray
     ): String {
         return withContext(Dispatchers.IO) {
             val relativePath = "$subFolder/$fileName"
@@ -40,7 +41,7 @@ object ImageUtils {
                     }
                     val uploadFile = File(uploadFolder, fileName)
                     runCatching {
-                        uploadFile.writeBytes(bytes)
+                        uploadFile.writeBytes(imageBytes)
                     }.onFailure {
                         logger.error(it) { "Failed to save image $fileName at ${uploadFile.absolutePath}" }
                         throw ImageFileCreateFailedException()
@@ -51,7 +52,12 @@ object ImageUtils {
 
                 is S3Strategy -> {
                     val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                    S3Utils.uploadImage(filePath, bytes, strategy)
+                    S3Utils.uploadImage(filePath, imageBytes, strategy)
+                }
+
+                is WebDavStrategy -> {
+                    val filePath = "${strategyConfig.uploadFolder}/$relativePath"
+                    WebDavUtils.uploadImage(filePath, imageBytes, strategyConfig)
                 }
             }
             relativePath
@@ -78,7 +84,6 @@ object ImageUtils {
                     thumbnailFile.writeBytes(thumbnailBytes)
                 }.onFailure {
                     logger.error(it) { "Failed to save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
-                    return
                 }.onSuccess {
                     logger.debug { "save thumbnail of image $fileName at ${thumbnailFile.absolutePath}" }
                 }
@@ -88,6 +93,12 @@ object ImageUtils {
                 val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
                 S3Utils.uploadImage(filePath, thumbnailBytes, strategy)
             }
+
+            is WebDavStrategy -> {
+                var filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
+                filePath = WebDavUtils.addThumbnailIdentifierToFileName(filePath)
+                WebDavUtils.uploadImage(filePath, thumbnailBytes, strategyConfig)
+            }
         }
     }
 
@@ -95,6 +106,8 @@ object ImageUtils {
         return withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
                 is S3Strategy -> throw RuntimeException("Not supported")
+
+                is WebDavStrategy -> throw RuntimeException("Not supported")
 
                 is LocalStrategy -> {
                     val parentFolderStr =
@@ -111,14 +124,34 @@ object ImageUtils {
             when (val strategyConfig = strategy.config) {
                 is LocalStrategy -> throw RuntimeException("Not supported")
 
+                is WebDavStrategy -> throw RuntimeException("Not supported")
+
                 is S3Strategy -> {
                     val folder = if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
-                    val relativePath = "$folder/$relativePath"
-                    if (!S3Utils.isImageExist(relativePath, strategy)) {
+                    val s3RelativePath = "$folder/$relativePath"
+                    if (!S3Utils.isImageExist(s3RelativePath, strategy)) {
                         if (isThumbnail) return@withContext ""
                         throw ImageFileNotFoundException()
                     }
-                    "${strategyConfig.publicUrl}/$relativePath"
+                    "${strategyConfig.publicUrl}/$s3RelativePath"
+                }
+            }
+        }
+    }
+
+    suspend fun fetchWebDavImage(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): ByteArray? {
+        return withContext(Dispatchers.IO) {
+            when (val strategyConfig = strategy.config) {
+                is LocalStrategy -> throw RuntimeException("Not supported")
+
+                is S3Strategy -> throw RuntimeException("Not supported")
+
+                is WebDavStrategy -> {
+                    val folder = if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
+                    val fileRelativePath = "$folder/$relativePath"
+                    val filePath =
+                        if (isThumbnail) WebDavUtils.addThumbnailIdentifierToFileName(fileRelativePath) else fileRelativePath
+                    WebDavUtils.fetchImage(filePath, strategyConfig)
                 }
             }
         }

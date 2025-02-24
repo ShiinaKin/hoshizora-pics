@@ -32,6 +32,7 @@ import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
+import io.sakurasou.model.strategy.WebDavStrategy
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.util.ImageUtils
 import io.sakurasou.util.PlaceholderUtils
@@ -326,6 +327,7 @@ class ImageServiceImpl(
             when (strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+                is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
     }
@@ -348,6 +350,7 @@ class ImageServiceImpl(
             when (strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+                is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
     }
@@ -401,6 +404,7 @@ class ImageServiceImpl(
     private suspend fun fetchThumbnailFile(strategy: Strategy, image: Image) = when (strategy.config) {
         is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
         is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+        is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path, true))
     }.also {
         if (it.bytes == null && it.url.isNullOrBlank()) {
             logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }

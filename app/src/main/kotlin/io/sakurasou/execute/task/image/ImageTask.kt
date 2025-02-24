@@ -7,8 +7,10 @@ import io.sakurasou.model.entity.Strategy
 import io.sakurasou.model.group.ImageType
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
+import io.sakurasou.model.strategy.WebDavStrategy
 import io.sakurasou.util.ImageUtils
 import io.sakurasou.util.S3Utils
+import io.sakurasou.util.WebDavUtils
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -72,6 +74,12 @@ class RePersistImageThumbnailTask(
                 val filePath = "${strategyConfig.uploadFolder}/$relativePath"
                 S3Utils.fetchImage(filePath, strategy)
             }
+
+            is WebDavStrategy -> {
+                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
+                val bytes = WebDavUtils.fetchImage(filePath, strategyConfig)
+                bytes?.inputStream() ?: throw ImageFileNotFoundException()
+            }
         }.use { rawImageInputStream ->
             val rawImage = ImageIO.read(rawImageInputStream)
             val subFolder = relativePath.substringBeforeLast('/')
@@ -106,6 +114,11 @@ class DeleteImageTask(
                 val filePath = "${strategyConfig.uploadFolder}/$relativePath"
                 S3Utils.deleteImage(filePath, strategy)
             }
+
+            is WebDavStrategy -> {
+                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
+                WebDavUtils.deleteImage(filePath, strategyConfig)
+            }
         }
         val fileName = relativePath.substringAfterLast('/')
         logger.debug { "delete image $fileName from strategy(id ${strategy.id})" }
@@ -132,6 +145,12 @@ class DeleteThumbnailTask(
             is S3Strategy -> {
                 val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
                 S3Utils.deleteImage(filePath, strategy)
+            }
+
+            is WebDavStrategy -> {
+                var filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
+                filePath = WebDavUtils.addThumbnailIdentifierToFileName(filePath)
+                WebDavUtils.deleteImage(filePath, strategyConfig)
             }
         }
         val fileName = relativePath.substringAfterLast('/')
