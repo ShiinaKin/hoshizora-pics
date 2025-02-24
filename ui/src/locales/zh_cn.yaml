@@ -932,7 +932,11 @@ adminStrategyManageView:
         publicUrl: "公开访问URL"
         uploadFolder: "上传目录"
         thumbnailFolder: "缩略图目录"
-    email: "邮箱"
+      webdav:
+        serverUrl: "服务器地址"
+        username: "用户名"
+        uploadFolder: "上传目录"
+        thumbnailFolder: "缩略图目录"
     createTime: "创建时间"
   create:
     dialog:
@@ -943,6 +947,7 @@ adminStrategyManageView:
         typeOptions:
           local: "本地"
           s3: "S3"
+          webdav: "WebDav"
         config:
           local:
             uploadFolder: "上传目录"
@@ -954,6 +959,12 @@ adminStrategyManageView:
             accessKey: "访问密钥"
             secretKey: "私密密钥"
             publicUrl: "公开访问URL"
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+          webdav:
+            serverUrl: "服务器地址"
+            username: "用户名"
+            password: "密码"
             uploadFolder: "上传目录"
             thumbnailFolder: "缩略图目录"
         submitButton: "创建"
@@ -995,6 +1006,21 @@ adminStrategyManageView:
               thumbnailFolder:
                 dontStartWithSlash: "缩略图目录不能以 / 开头"
                 required: "缩略图目录不能为空"
+            webdav:
+              serverUrl:
+                invalid: "WebDav服务地址必须是URL格式: http(s)://~"
+                dontEndWithSlash: "WebDav服务地址不能以 / 结尾"
+                required: "WebDav服务地址不能为空"
+              username:
+                required: "用户名不能为空"
+              password:
+                required: "密码不能为空"
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+                required: "上传目录不能为空"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+                required: "缩略图目录不能为空"
     toast:
       successTitle: "创建成功"
       failedTitle: "创建失败"
@@ -1014,6 +1040,12 @@ adminStrategyManageView:
             accessKey: "访问密钥"
             secretKey: "私密密钥"
             publicUrl: "公开访问URL"
+            uploadFolder: "上传目录"
+            thumbnailFolder: "缩略图目录"
+          webdav:
+            serverUrl: "服务器地址"
+            username: "用户名"
+            password: "密码"
             uploadFolder: "上传目录"
             thumbnailFolder: "缩略图目录"
         submitButton: "创建"
@@ -1037,6 +1069,16 @@ adminStrategyManageView:
               publicUrl:
                 invalid: "公开访问URL必须是URL格式: http(s)://~"
                 dontEndWithSlash: "公开访问URL不能以 / 结尾"
+              uploadFolder:
+                dontStartWithSlash: "上传目录不能以 / 开头"
+              thumbnailFolder:
+                dontStartWithSlash: "缩略图目录不能以 / 开头"
+            webdav:
+              serverUrl:
+                invalid: "WebDav服务地址必须是URL格式: http(s)://~"
+                dontEndWithSlash: "WebDav服务地址不能以 / 结尾"
+              username:
+              password:
               uploadFolder:
                 dontStartWithSlash: "上传目录不能以 / 开头"
               thumbnailFolder:

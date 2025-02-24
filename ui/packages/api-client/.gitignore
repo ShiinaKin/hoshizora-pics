@@ -1,2 +1,5 @@
 .node_modules
 .openapi-generator
+src/git_push.sh
+src/.gitignore
+src/.npmignore

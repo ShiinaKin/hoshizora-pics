@@ -22,7 +22,8 @@
 
 export const StrategyTypeEnum = {
     Local: 'LOCAL',
-    S3: 'S3'
+    S3: 'S3',
+    Webdav: 'WEBDAV'
 } as const;
 
 export type StrategyTypeEnum = typeof StrategyTypeEnum[keyof typeof StrategyTypeEnum];

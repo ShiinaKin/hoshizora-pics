@@ -22,6 +22,9 @@ import type { S3Strategy } from './s3-strategy';
 // May contain unused imports in some cases
 // @ts-ignore
 import type { StrategyTypeEnum } from './strategy-type-enum';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { WebDavStrategy } from './web-dav-strategy';
 
 /**
  * 
@@ -29,6 +32,12 @@ import type { StrategyTypeEnum } from './strategy-type-enum';
  * @interface StrategyConfigSealed
  */
 export interface StrategyConfigSealed {
+    /**
+     * 
+     * @type {StrategyTypeEnum}
+     * @memberof StrategyConfigSealed
+     */
+    'strategyType': StrategyTypeEnum;
     /**
      * 
      * @type {string}
@@ -41,12 +50,6 @@ export interface StrategyConfigSealed {
      * @memberof StrategyConfigSealed
      */
     'uploadFolder': string;
-    /**
-     * 
-     * @type {StrategyTypeEnum}
-     * @memberof StrategyConfigSealed
-     */
-    'strategyType': StrategyTypeEnum;
     /**
      * 
      * @type {string}
@@ -83,6 +86,24 @@ export interface StrategyConfigSealed {
      * @memberof StrategyConfigSealed
      */
     'secretKey': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StrategyConfigSealed
+     */
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StrategyConfigSealed
+     */
+    'serverUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StrategyConfigSealed
+     */
+    'username': string;
 }
 
 

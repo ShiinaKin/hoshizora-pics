@@ -932,7 +932,11 @@ adminStrategyManageView:
         publicUrl: "Public Access URL"
         uploadFolder: "Upload Folder"
         thumbnailFolder: "Thumbnail Folder"
-    email: "Email"
+      webdav:
+        serverUrl: "Server URL"
+        username: "Username"
+        uploadFolder: "Upload Folder"
+        thumbnailFolder: "Thumbnail Folder"
     createTime: "Create Time"
   create:
     dialog:
@@ -943,6 +947,7 @@ adminStrategyManageView:
         typeOptions:
           local: "Local"
           s3: "S3"
+          webdav: "WebDav"
         config:
           local:
             uploadFolder: "Upload Folder"
@@ -954,6 +959,12 @@ adminStrategyManageView:
             accessKey: "Access Key"
             secretKey: "Secret Key"
             publicUrl: "Public Access URL"
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+          webdav:
+            serverUrl: "Server URL"
+            username: "Username"
+            password: "Password"
             uploadFolder: "Upload Folder"
             thumbnailFolder: "Thumbnail Folder"
         submitButton: "Create"
@@ -995,6 +1006,21 @@ adminStrategyManageView:
               thumbnailFolder:
                 dontStartWithSlash: "Thumbnail folder cannot start with /"
                 required: "Thumbnail folder cannot be empty"
+            webdav:
+              serverUrl:
+                invalid: "Server URL must be in URL format: http(s)://~"
+                dontEndWithSlash: "Server URL cannot end with /"
+                required: "Server URL cannot be empty"
+              username:
+                required: "Username cannot be empty"
+              password:
+                required: "Password cannot be empty"
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+                required: "Upload folder cannot be empty"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+                required: "Thumbnail folder cannot be empty"
     toast:
       successTitle: "Creation successful"
       failedTitle: "Creation failed"
@@ -1014,6 +1040,12 @@ adminStrategyManageView:
             accessKey: "Access Key"
             secretKey: "Secret Key"
             publicUrl: "Public Access URL"
+            uploadFolder: "Upload Folder"
+            thumbnailFolder: "Thumbnail Folder"
+          webdav:
+            serverUrl: "Server URL"
+            username: "Username"
+            password: "Password"
             uploadFolder: "Upload Folder"
             thumbnailFolder: "Thumbnail Folder"
         submitButton: "Create"
@@ -1037,6 +1069,16 @@ adminStrategyManageView:
               publicUrl:
                 invalid: "Public access URL must be in URL format: http(s)://~"
                 dontEndWithSlash: "Public access URL cannot end with /"
+              uploadFolder:
+                dontStartWithSlash: "Upload folder cannot start with /"
+              thumbnailFolder:
+                dontStartWithSlash: "Thumbnail folder cannot start with /"
+            webdav:
+              serverUrl:
+                invalid: "Server URL must be in URL format: http(s)://~"
+                dontEndWithSlash: "Server URL cannot end with /"
+              username:
+              password:
               uploadFolder:
                 dontStartWithSlash: "Upload folder cannot start with /"
               thumbnailFolder:

@@ -132,7 +132,6 @@ const handleStrategyEditSubmit = (values: any) => {
       };
       break;
     case StrategyTypeEnum.S3:
-    default:
       patchReqConfig = {
         type: strategyDetail.value?.type,
         strategyType: strategyDetail.value?.type,
@@ -149,6 +148,24 @@ const handleStrategyEditSubmit = (values: any) => {
           ? values.config.thumbnailFolder
           : strategyDetail.value?.config.thumbnailFolder
       };
+      break;
+    case StrategyTypeEnum.Webdav:
+      patchReqConfig = {
+        type: strategyDetail.value?.type,
+        strategyType: strategyDetail.value?.type,
+        serverUrl: values.config.serverUrl ? values.config.serverUrl : strategyDetail.value?.config.serverUrl,
+        username: values.config.username ? values.config.username : strategyDetail.value?.config.username,
+        password: values.config.password ? values.config.password : strategyDetail.value?.config.password,
+        uploadFolder: values.config.uploadFolder
+          ? values.config.uploadFolder
+          : strategyDetail.value?.config.uploadFolder,
+        thumbnailFolder: values.config.thumbnailFolder
+          ? values.config.thumbnailFolder
+          : strategyDetail.value?.config.thumbnailFolder
+      };
+      break;
+    default:
+      throw new Error("Unknown strategy type");
   }
   const patchReq: StrategyPatchRequest = {
     name: values.name ? values.name : strategyDetail.value?.name,
@@ -456,6 +473,7 @@ async function fetchStrategyDetail(strategyId: number) {
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.type }}</dd>
           </div>
 
+          <!-- Local -->
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.Local"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -465,7 +483,6 @@ async function fetchStrategyDetail(strategyId: number) {
             </dt>
             <dd class="text-gray-700 sm:col-span-2">/{{ strategyDetail?.config.uploadFolder }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.Local"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -476,6 +493,7 @@ async function fetchStrategyDetail(strategyId: number) {
             <dd class="text-gray-700 sm:col-span-2">/{{ strategyDetail?.config.thumbnailFolder }}</dd>
           </div>
 
+          <!-- S3 -->
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -483,7 +501,6 @@ async function fetchStrategyDetail(strategyId: number) {
             <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.s3.endpoint") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.endpoint }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -491,7 +508,6 @@ async function fetchStrategyDetail(strategyId: number) {
             <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.s3.bucketName") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.bucketName }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -499,7 +515,6 @@ async function fetchStrategyDetail(strategyId: number) {
             <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.s3.region") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.region }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -507,7 +522,6 @@ async function fetchStrategyDetail(strategyId: number) {
             <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.s3.publicUrl") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.publicUrl }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
@@ -515,13 +529,44 @@ async function fetchStrategyDetail(strategyId: number) {
             <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.s3.uploadFolder") }}</dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.uploadFolder }}</dd>
           </div>
-
           <div
             v-if="strategyDetail?.type === StrategyTypeEnum.S3"
             class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
           >
             <dt class="font-medium text-gray-900">
               {{ t("adminStrategyManageView.detail.config.s3.thumbnailFolder") }}
+            </dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.thumbnailFolder }}</dd>
+          </div>
+
+          <!-- WebDav -->
+          <div
+            v-if="strategyDetail?.type === StrategyTypeEnum.Webdav"
+            class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.webdav.serverUrl") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.serverUrl }}</dd>
+          </div>
+          <div
+            v-if="strategyDetail?.type === StrategyTypeEnum.Webdav"
+            class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.webdav.username") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.username }}</dd>
+          </div>
+          <div
+            v-if="strategyDetail?.type === StrategyTypeEnum.Webdav"
+            class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">{{ t("adminStrategyManageView.detail.config.webdav.uploadFolder") }}</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.uploadFolder }}</dd>
+          </div>
+          <div
+            v-if="strategyDetail?.type === StrategyTypeEnum.Webdav"
+            class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">
+              {{ t("adminStrategyManageView.detail.config.webdav.thumbnailFolder") }}
             </dt>
             <dd class="text-gray-700 sm:col-span-2">{{ strategyDetail?.config.thumbnailFolder }}</dd>
           </div>

@@ -20,63 +20,45 @@ import type { StrategyTypeEnum } from './strategy-type-enum';
 /**
  * 
  * @export
- * @interface S3Strategy
+ * @interface WebDavStrategy
  */
-export interface S3Strategy {
+export interface WebDavStrategy {
     /**
      * 
      * @type {StrategyTypeEnum}
-     * @memberof S3Strategy
+     * @memberof WebDavStrategy
      */
     'strategyType': StrategyTypeEnum;
     /**
      * 
      * @type {string}
-     * @memberof S3Strategy
+     * @memberof WebDavStrategy
      */
-    'accessKey': string;
+    'password': string;
     /**
      * 
      * @type {string}
-     * @memberof S3Strategy
+     * @memberof WebDavStrategy
      */
-    'bucketName': string;
+    'serverUrl': string;
     /**
      * 
      * @type {string}
-     * @memberof S3Strategy
-     */
-    'endpoint': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof S3Strategy
-     */
-    'publicUrl': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof S3Strategy
-     */
-    'region': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof S3Strategy
-     */
-    'secretKey': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof S3Strategy
+     * @memberof WebDavStrategy
      */
     'thumbnailFolder': string;
     /**
      * 
      * @type {string}
-     * @memberof S3Strategy
+     * @memberof WebDavStrategy
      */
     'uploadFolder': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebDavStrategy
+     */
+    'username': string;
 }
 
 
