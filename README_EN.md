@@ -31,6 +31,7 @@ to providing convenient image management and sharing functionality.
 - 💾 Multiple Storage Solutions
     - Local storage
     - S3-compatible storage
+    - WebDav
 
 ## Preview
 
