@@ -9,7 +9,7 @@
     "url" : "/"
   },
   "servers" : [ {
-    "url" : "localhost:8080",
+    "url" : "http://localhost:8080",
     "description" : "Server"
   } ],
   "tags" : [ ],
@@ -1315,6 +1315,20 @@
                         }
                       },
                       "title" : "StrategyRequestS3StrategyConfig"
+                    }, {
+                      "description" : "WebDav strategy configuration",
+                      "properties" : {
+                        "serverUrl" : { },
+                        "username" : { },
+                        "password" : { },
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestWebDavStrategyConfig"
                     } ]
                   },
                   "name" : { }
@@ -1480,6 +1494,20 @@
                         }
                       },
                       "title" : "StrategyRequestS3StrategyConfig"
+                    }, {
+                      "description" : "WebDav strategy configuration",
+                      "properties" : {
+                        "serverUrl" : { },
+                        "username" : { },
+                        "password" : { },
+                        "uploadFolder" : { },
+                        "thumbnailFolder" : { },
+                        "strategyType" : { },
+                        "type" : {
+                          "description" : "same to strategyType"
+                        }
+                      },
+                      "title" : "StrategyRequestWebDavStrategyConfig"
                     } ],
                     "description" : "io/sakurasou/model/strategy/StrategyConfig.kt",
                     "required" : [ "false" ]
@@ -3867,30 +3895,35 @@
           "$ref" : "#/components/schemas/LocalStrategy"
         }, {
           "$ref" : "#/components/schemas/S3Strategy"
+        }, {
+          "$ref" : "#/components/schemas/WebDavStrategy"
         } ]
       },
       "LocalStrategy" : {
         "type" : "object",
         "properties" : {
+          "strategyType" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          },
           "thumbnailFolder" : {
             "type" : "string"
           },
           "uploadFolder" : {
             "type" : "string"
-          },
-          "strategyType" : {
-            "$ref" : "#/components/schemas/StrategyTypeEnum"
           }
         },
         "required" : [ "strategyType", "thumbnailFolder", "uploadFolder" ]
       },
       "StrategyTypeEnum" : {
         "type" : "string",
-        "enum" : [ "LOCAL", "S3" ]
+        "enum" : [ "LOCAL", "S3", "WEBDAV" ]
       },
       "S3Strategy" : {
         "type" : "object",
         "properties" : {
+          "strategyType" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          },
           "accessKey" : {
             "type" : "string"
           },
@@ -3914,12 +3947,33 @@
           },
           "uploadFolder" : {
             "type" : "string"
-          },
-          "strategyType" : {
-            "$ref" : "#/components/schemas/StrategyTypeEnum"
           }
         },
         "required" : [ "accessKey", "bucketName", "endpoint", "publicUrl", "region", "secretKey", "strategyType", "thumbnailFolder", "uploadFolder" ]
+      },
+      "WebDavStrategy" : {
+        "type" : "object",
+        "properties" : {
+          "strategyType" : {
+            "$ref" : "#/components/schemas/StrategyTypeEnum"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "serverUrl" : {
+            "type" : "string"
+          },
+          "thumbnailFolder" : {
+            "type" : "string"
+          },
+          "uploadFolder" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "password", "serverUrl", "strategyType", "thumbnailFolder", "uploadFolder", "username" ]
       },
       "CommonResponse_StrategyVO" : {
         "type" : "object",
