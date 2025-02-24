@@ -20,6 +20,7 @@ import io.sakurasou.extension.success
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
 import io.sakurasou.model.strategy.StrategyConfig
+import io.sakurasou.model.strategy.WebDavStrategy
 import io.sakurasou.plugins.AuthorizationPlugin
 import io.sakurasou.service.strategy.StrategyService
 import io.swagger.v3.oas.models.media.Schema
@@ -74,6 +75,8 @@ private fun Route.insertStrategy(controller: StrategyController) {
                     ValidationResult.Invalid("region is invalid")
                 else if (insertRequest.config is S3Strategy && !insertRequest.config.publicUrl.matches(Regex(REGEX_URL)))
                     ValidationResult.Invalid("publicUrl is invalid")
+                else if (insertRequest.config is WebDavStrategy && !insertRequest.config.serverUrl.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("serverUrl is invalid")
                 else ValidationResult.Valid
             }
         }
@@ -128,6 +131,32 @@ private fun Route.insertStrategy(controller: StrategyController) {
                                         type = "string"
                                     })
                                     addProperty("publicUrl", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("strategyType", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("type", Schema<Any>().apply {
+                                        type = "string"
+                                        description = "same to strategyType"
+                                    })
+                                },
+                                Schema<WebDavStrategy>().apply {
+                                    title = "StrategyRequestWebDavStrategyConfig"
+                                    description = "WebDav strategy configuration"
+                                    addProperty("serverUrl", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("username", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("password", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("uploadFolder", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("thumbnailFolder", Schema<Any>().apply {
                                         type = "string"
                                     })
                                     addProperty("strategyType", Schema<Any>().apply {
@@ -202,6 +231,8 @@ private fun Route.patchStrategy(controller: StrategyController) {
                     ValidationResult.Invalid("region is invalid")
                 else if (patchRequest.config is S3Strategy && !patchRequest.config.publicUrl.matches(Regex(REGEX_URL)))
                     ValidationResult.Invalid("publicUrl is invalid")
+                else if (patchRequest.config is WebDavStrategy && !patchRequest.config.serverUrl.matches(Regex(REGEX_URL)))
+                    ValidationResult.Invalid("serverUrl is invalid")
                 else ValidationResult.Valid
             }
         }
@@ -255,6 +286,32 @@ private fun Route.patchStrategy(controller: StrategyController) {
                                         type = "string"
                                     })
                                     addProperty("publicUrl", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("strategyType", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("type", Schema<Any>().apply {
+                                        type = "string"
+                                        description = "same to strategyType"
+                                    })
+                                },
+                                Schema<WebDavStrategy>().apply {
+                                    title = "StrategyRequestWebDavStrategyConfig"
+                                    description = "WebDav strategy configuration"
+                                    addProperty("serverUrl", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("username", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("password", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("uploadFolder", Schema<Any>().apply {
+                                        type = "string"
+                                    })
+                                    addProperty("thumbnailFolder", Schema<Any>().apply {
                                         type = "string"
                                     })
                                     addProperty("strategyType", Schema<Any>().apply {
