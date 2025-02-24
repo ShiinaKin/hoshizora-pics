@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { StrategyTypeEnum, type StrategyVO } from "api-client";
 import Button from "primevue/button";
 import VeeIftaInputText from "@/components/vee-input/VeeIftaInputText.vue";
+import VeeFloatInputText from "@/components/vee-input/VeeFloatInputText.vue";
 
 const { t } = useI18n();
 
@@ -224,13 +225,118 @@ const strategyEditFormS3Schema = yup.object({
   })
 });
 
+const strategyEditFormWebDavSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function () {
+      return !!(
+        this.parent.name ||
+        this.parent.config?.serverUrl ||
+        this.parent.config?.username ||
+        this.parent.config?.password ||
+        this.parent.config?.uploadFolder ||
+        this.parent.config?.thumbnailFolder
+      );
+    }),
+  config: yup.object({
+    serverUrl: yup
+      .string()
+      .trim()
+      .url(t("adminStrategyManageView.edit.dialog.form.verify.config.webdav.serverUrl.invalid"))
+      .matches(/^(?!.*\/$).*/, t("adminStrategyManageView.edit.dialog.form.verify.config.webdav.serverUrl.dontEndWithSlash"))
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
+        const { from } = context;
+        const formValues = from && from.length > 0 ? from[1].value : {};
+        return !!(
+          formValues.name ||
+          formValues.config?.serverUrl ||
+          formValues.config?.username ||
+          formValues.config?.password ||
+          formValues.config?.uploadFolder ||
+          formValues.config?.thumbnailFolder
+        );
+      }),
+    username: yup
+      .string()
+      .trim()
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
+        const { from } = context;
+        const formValues = from && from.length > 0 ? from[1].value : {};
+        return !!(
+          formValues.name ||
+          formValues.config?.serverUrl ||
+          formValues.config?.username ||
+          formValues.config?.password ||
+          formValues.config?.uploadFolder ||
+          formValues.config?.thumbnailFolder
+        );
+      }),
+    password: yup
+      .string()
+      .trim()
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
+        const { from } = context;
+        const formValues = from && from.length > 0 ? from[1].value : {};
+        return !!(
+          formValues.name ||
+          formValues.config?.serverUrl ||
+          formValues.config?.username ||
+          formValues.config?.secretKey ||
+          formValues.config?.uploadFolder ||
+          formValues.config?.thumbnailFolder
+        );
+      }),
+    uploadFolder: yup
+      .string()
+      .trim()
+      .matches(
+        /^[^/].*$/,
+        t("adminStrategyManageView.edit.dialog.form.verify.config.webdav.uploadFolder.dontStartWithSlash")
+      )
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
+        const { from } = context;
+        const formValues = from && from.length > 0 ? from[1].value : {};
+        return !!(
+          formValues.name ||
+          formValues.config?.serverUrl ||
+          formValues.config?.username ||
+          formValues.config?.secretKey ||
+          formValues.config?.uploadFolder ||
+          formValues.config?.thumbnailFolder
+        );
+      }),
+    thumbnailFolder: yup
+      .string()
+      .trim()
+      .matches(
+        /^[^/].*$/,
+        t("adminStrategyManageView.edit.dialog.form.verify.config.webdav.uploadFolder.dontStartWithSlash")
+      )
+      .test("at-least-one-field", t("adminStrategyManageView.edit.dialog.form.verify.atLeastOneField"), function (_, context) {
+        const { from } = context;
+        const formValues = from && from.length > 0 ? from[1].value : {};
+        return !!(
+          formValues.name ||
+          formValues.config?.serverUrl ||
+          formValues.config?.username ||
+          formValues.config?.password ||
+          formValues.config?.uploadFolder ||
+          formValues.config?.thumbnailFolder
+        );
+      })
+  })
+});
+
 const chooseSchema = (strategyType: StrategyTypeEnum) => {
   switch (strategyType) {
-    case StrategyTypeEnum.Local:
-      return strategyEditFormLocalSchema;
     case StrategyTypeEnum.S3:
-    default:
       return strategyEditFormS3Schema;
+    case StrategyTypeEnum.Webdav:
+      return strategyEditFormWebDavSchema;
+    case StrategyTypeEnum.Local:
+    default:
+      return strategyEditFormLocalSchema;
   }
 };
 
@@ -267,6 +373,8 @@ const onCancel = () => {
           :placeholder="strategyDetail.name"
         />
       </div>
+
+      <!-- Local -->
       <div v-if="strategyDetail.type === StrategyTypeEnum.Local" class="flex flex-col gap-1">
         <VeeIftaInputText
           id="editFormUploadFolder"
@@ -284,6 +392,7 @@ const onCancel = () => {
         />
       </div>
 
+      <!-- S3 -->
       <div v-if="strategyDetail.type === StrategyTypeEnum.S3" class="flex flex-col gap-1">
         <VeeIftaInputText
           id="editFormEndpoint"
@@ -347,6 +456,49 @@ const onCancel = () => {
           id="editFormThumbnailFolder"
           name="config.thumbnailFolder"
           :label="t('adminStrategyManageView.edit.dialog.form.config.s3.thumbnailFolder')"
+          :placeholder="strategyDetail.config.thumbnailFolder"
+        />
+      </div>
+
+      <!-- WebDav -->
+      <div v-if="strategyDetail.type === StrategyTypeEnum.Webdav" class="flex flex-col gap-1">
+        <VeeIftaInputText
+          id="editFormServerUrl"
+          name="config.serverUrl"
+          :label="t('adminStrategyManageView.edit.dialog.form.config.webdav.serverUrl')"
+          :placeholder="strategyDetail.config.serverUrl"
+        />
+      </div>
+      <div v-if="strategyDetail.type === StrategyTypeEnum.Webdav" class="flex flex-col gap-1">
+        <VeeIftaInputText
+          id="editFormUsername"
+          name="config.username"
+          :label="t('adminStrategyManageView.edit.dialog.form.config.webdav.username')"
+          :placeholder="strategyDetail.config.username"
+        />
+      </div>
+      <div v-if="strategyDetail.type === StrategyTypeEnum.Webdav" class="flex flex-col gap-1">
+        <VeeIftaInputText
+          id="editFormPassword"
+          name="config.password"
+          :label="t('adminStrategyManageView.edit.dialog.form.config.webdav.password')"
+          :placeholder="strategyDetail.config.password"
+          :autocomplete="'off'"
+        />
+      </div>
+      <div v-if="strategyDetail.type === StrategyTypeEnum.Webdav" class="flex flex-col gap-1">
+        <VeeIftaInputText
+          id="editFormUploadFolder"
+          name="config.uploadFolder"
+          :label="t('adminStrategyManageView.edit.dialog.form.config.webdav.uploadFolder')"
+          :placeholder="strategyDetail.config.uploadFolder"
+        />
+      </div>
+      <div v-if="strategyDetail.type === StrategyTypeEnum.Webdav" class="flex flex-col gap-1">
+        <VeeIftaInputText
+          id="editFormThumbnailFolder"
+          name="config.thumbnailFolder"
+          :label="t('adminStrategyManageView.edit.dialog.form.config.webdav.thumbnailFolder')"
           :placeholder="strategyDetail.config.thumbnailFolder"
         />
       </div>

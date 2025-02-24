@@ -25,6 +25,12 @@ import type { StrategyTypeEnum } from './strategy-type-enum';
 export interface LocalStrategy {
     /**
      * 
+     * @type {StrategyTypeEnum}
+     * @memberof LocalStrategy
+     */
+    'strategyType': StrategyTypeEnum;
+    /**
+     * 
      * @type {string}
      * @memberof LocalStrategy
      */
@@ -35,12 +41,6 @@ export interface LocalStrategy {
      * @memberof LocalStrategy
      */
     'uploadFolder': string;
-    /**
-     * 
-     * @type {StrategyTypeEnum}
-     * @memberof LocalStrategy
-     */
-    'strategyType': StrategyTypeEnum;
 }
 
 

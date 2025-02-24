@@ -19,6 +19,9 @@ import type { StrategyRequestLocalStrategyConfig } from './strategy-request-loca
 // May contain unused imports in some cases
 // @ts-ignore
 import type { StrategyRequestS3StrategyConfig } from './strategy-request-s3-strategy-config';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { StrategyRequestWebDavStrategyConfig } from './strategy-request-web-dav-strategy-config';
 
 /**
  * io/sakurasou/model/strategy/StrategyConfig.kt
@@ -86,5 +89,23 @@ export interface StrategyPatchRequestConfig {
      * @memberof StrategyPatchRequestConfig
      */
     'publicUrl'?: any;
+    /**
+     * 
+     * @type {any}
+     * @memberof StrategyPatchRequestConfig
+     */
+    'serverUrl'?: any;
+    /**
+     * 
+     * @type {any}
+     * @memberof StrategyPatchRequestConfig
+     */
+    'username'?: any;
+    /**
+     * 
+     * @type {any}
+     * @memberof StrategyPatchRequestConfig
+     */
+    'password'?: any;
 }
 

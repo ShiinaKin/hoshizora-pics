@@ -23,6 +23,10 @@ const strategyTypeArr = ref<StrategyType[]>([
   {
     name: t("adminStrategyManageView.create.dialog.form.typeOptions.s3"),
     strategyTypeValue: StrategyTypeEnum.S3
+  },
+  {
+    name: t("adminStrategyManageView.create.dialog.form.typeOptions.webdav"),
+    strategyTypeValue: StrategyTypeEnum.Webdav
   }
 ]);
 
@@ -115,6 +119,45 @@ const strategyCreateFormSchema = yup.object({
             .required(t("adminStrategyManageView.create.dialog.form.verify.config.s3.thumbnailFolder.required"))
         })
     })
+    .when("strategyType", {
+      is: (type: StrategyType) => type.strategyTypeValue === StrategyTypeEnum.Webdav,
+      then: () =>
+        yup.object({
+          serverUrl: yup
+            .string()
+            .trim()
+            .url(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.serverUrl.invalid"))
+            .matches(
+              /^(?!.*\/$).*/,
+              t("adminStrategyManageView.create.dialog.form.verify.config.webdav.serverUrl.dontEndWithSlash")
+            )
+            .required(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.serverUrl.required")),
+          username: yup
+            .string()
+            .trim()
+            .required(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.username.required")),
+          password: yup
+            .string()
+            .trim()
+            .required(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.password.required")),
+          uploadFolder: yup
+            .string()
+            .trim()
+            .matches(
+              /^[^/].*$/,
+              t("adminStrategyManageView.create.dialog.form.verify.config.webdav.uploadFolder.dontStartWithSlash")
+            )
+            .required(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.uploadFolder.required")),
+          thumbnailFolder: yup
+            .string()
+            .trim()
+            .matches(
+              /^[^/].*$/,
+              t("adminStrategyManageView.create.dialog.form.verify.config.webdav.thumbnailFolder.dontStartWithSlash")
+            )
+            .required(t("adminStrategyManageView.create.dialog.form.verify.config.webdav.thumbnailFolder.required"))
+        })
+    })
 });
 
 const {
@@ -156,6 +199,7 @@ const onCancel = () => {
         />
       </div>
 
+      <!-- Local -->
       <div
         v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Local"
         class="flex flex-col gap-1"
@@ -177,6 +221,7 @@ const onCancel = () => {
         />
       </div>
 
+      <!-- S3 -->
       <div v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.S3" class="flex flex-col gap-1">
         <VeeFloatInputText
           id="createFormEndpoint"
@@ -233,6 +278,59 @@ const onCancel = () => {
           id="createFormThumbnailFolder"
           name="config.thumbnailFolder"
           :label="t('adminStrategyManageView.create.dialog.form.config.s3.thumbnailFolder')"
+        />
+      </div>
+
+      <!-- WebDav -->
+      <div
+        v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Webdav"
+        class="flex flex-col gap-1"
+      >
+        <VeeFloatInputText
+          id="createFormServerUrl"
+          name="config.serverUrl"
+          :label="t('adminStrategyManageView.create.dialog.form.config.webdav.serverUrl')"
+        />
+      </div>
+      <div
+        v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Webdav"
+        class="flex flex-col gap-1"
+      >
+        <VeeFloatInputText
+          id="createFormUsername"
+          name="config.username"
+          :label="t('adminStrategyManageView.create.dialog.form.config.webdav.username')"
+        />
+      </div>
+      <div
+        v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Webdav"
+        class="flex flex-col gap-1"
+      >
+        <VeeFloatInputText
+          id="createFormPassword"
+          name="config.password"
+          :label="t('adminStrategyManageView.create.dialog.form.config.webdav.password')"
+          :autocomplete="'off'"
+        />
+      </div>
+      <div
+        v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Webdav"
+        class="flex flex-col gap-1"
+      >
+        <VeeFloatInputText
+          id="createFormUploadFolder"
+          name="config.uploadFolder"
+          :label="t('adminStrategyManageView.create.dialog.form.config.webdav.uploadFolder')"
+        />
+      </div>
+      <div
+        v-if="createFormValues.strategyType?.strategyTypeValue === StrategyTypeEnum.Webdav"
+        class="flex flex-col gap-1"
+      >
+        <VeeFloatInputText
+          id="createFormThumbnailFolder"
+          name="config.thumbnailFolder"
+          :label="t('adminStrategyManageView.create.dialog.form.config.webdav.thumbnailFolder')"
         />
       </div>
     </div>
