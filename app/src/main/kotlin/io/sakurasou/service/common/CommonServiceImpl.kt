@@ -20,6 +20,7 @@ import io.sakurasou.model.setting.SiteSetting
 import io.sakurasou.model.setting.SystemStatus
 import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
+import io.sakurasou.model.strategy.WebDavStrategy
 import io.sakurasou.service.setting.SettingService
 import io.sakurasou.util.ImageUtils
 import kotlinx.datetime.Clock
@@ -103,6 +104,7 @@ class CommonServiceImpl(
             when(strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+                is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
     }
@@ -117,6 +119,7 @@ class CommonServiceImpl(
             when(strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
+                is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
     }
