@@ -16,8 +16,8 @@
         </rollingPolicy>
     </appender>
 
-    <root level="info">
         <!-- <appender-ref ref="STDOUT"/> -->
+    <root level="INFO">
         <appender-ref ref="FILE"/>
     </root>
     <logger name="io.netty" level="INFO"/>

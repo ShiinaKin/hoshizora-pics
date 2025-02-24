@@ -91,7 +91,7 @@ object S3Utils {
         }.onFailure {
             when (it) {
                 is S3Exception -> throw S3ClientException(it)
-                else -> it
+                else -> throw it
             }
         }.getOrThrow()
     }
