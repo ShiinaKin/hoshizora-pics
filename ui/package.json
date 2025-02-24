@@ -1,10 +1,10 @@
 {
   "name": "ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "author": "ShiinaKin",
   "type": "module",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@10.4.1",
   "workspaces": [
     "packages/*"
   ],
@@ -42,34 +42,40 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.5",
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.19.0",
+    "@eslint/compat": "^1.2.7",
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.21.0",
     "@iconify/vue": "^4.3.0",
     "@rollup/plugin-yaml": "^4.1.2",
     "@rushstack/eslint-patch": "^1.10.5",
     "@tsconfig/node20": "^20.1.4",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.17.16",
+    "@types/node": "^20.17.19",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-prettier": "^10.2.0",
-    "@vue/eslint-config-typescript": "^14.3.0",
+    "@vue/eslint-config-typescript": "^14.4.0",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
-    "eslint": "^9.19.0",
+    "esbuild": "0.25.0",
+    "eslint": "^9.21.0",
     "eslint-plugin-vue": "^9.32.0",
-    "globals": "^15.14.0",
+    "globals": "^15.15.0",
     "npm-run-all2": "^6.2.6",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.2",
     "tailwindcss": "^3.4.17",
-    "typescript": "~5.6.3",
-    "typescript-eslint": "^8.22.0",
+    "typescript": "~5.7.3",
+    "typescript-eslint": "^8.24.1",
     "vite": "^5.4.14",
-    "vite-plugin-vue-devtools": "^7.7.1",
-    "vue-tsc": "^2.1.10"
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vue-tsc": "^2.2.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "vue-demi"
+    ]
   }
 }
