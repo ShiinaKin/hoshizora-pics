@@ -101,8 +101,8 @@ dependencies {
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("at.favre.lib:bcrypt:0.10.2")
 
-    implementation("net.coobird:thumbnailator:0.4.20")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
+    implementation("org.im4java:im4java:1.4.0")
 
     implementation("software.amazon.awssdk:s3:$awsS3Version")
 

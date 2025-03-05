@@ -65,7 +65,6 @@ object ImageExecutor {
     }
 
     private suspend fun submitTask(task: ImageTask) {
-        println(taskMap)
         if (taskMap.putIfAbsent(task.opImageId to task.taskType, Unit) != null) {
             logger.debug { "task of imageId: ${task.opImageId} already exists" }
             return

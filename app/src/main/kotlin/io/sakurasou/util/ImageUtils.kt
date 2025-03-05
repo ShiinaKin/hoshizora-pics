@@ -10,17 +10,20 @@ import io.sakurasou.model.strategy.LocalStrategy
 import io.sakurasou.model.strategy.S3Strategy
 import io.sakurasou.model.strategy.WebDavStrategy
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import net.coobird.thumbnailator.Thumbnails
+import org.im4java.core.ConvertCmd
+import org.im4java.core.IMOperation
+import org.im4java.process.OutputConsumer
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 
 /**
  * @author Shiina Kin
  * 2024/10/12 08:52
  */
-
 object ImageUtils {
     private val logger = KotlinLogging.logger {}
 
@@ -159,40 +162,52 @@ object ImageUtils {
 
     suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType): ByteArray {
         return withContext(Dispatchers.IO) {
-            ByteArrayOutputStream().apply {
-                Thumbnails.of(rawImage)
-                    .outputFormat(targetImageType.name)
-                    .toOutputStream(this)
-            }.use { it.toByteArray() }
+            val imageOp = IMOperation().apply {
+                addImage()
+                addImage("${targetImageType.name}:-")
+            }
+            execTransform(imageOp, rawImage)
         }
     }
 
     suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType, quality: Double): ByteArray {
         return withContext(Dispatchers.IO) {
-            ByteArrayOutputStream().apply {
-                Thumbnails.of(rawImage)
-                    .outputFormat(targetImageType.name)
-                    .outputQuality(quality)
-                    .toOutputStream(this)
-            }.use { it.toByteArray() }
+            val imageOp = IMOperation().apply {
+                addImage()
+                quality(quality)
+                addImage("${targetImageType.name}:-")
+            }
+            execTransform(imageOp, rawImage)
         }
     }
 
-    private fun transformImage(
+    private suspend fun transformImage(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
         newHeight: Int,
         quality: Double
-    ): ByteArray = ByteArrayOutputStream()
-        .apply {
-            Thumbnails.of(rawImage)
-                .size(newWidth, newHeight)
-                .outputFormat(targetImageType.name)
-                .outputQuality(quality)
-                .toOutputStream(this)
-        }.use { it.toByteArray() }
+    ): ByteArray = withContext(Dispatchers.IO) {
+        val imageOp = IMOperation().apply {
+            addImage()
+            resize(newWidth, newHeight)
+            quality(quality)
+            addImage("${targetImageType.name}:-")
+        }
+        execTransform(imageOp, rawImage)
+    }
 
+    private fun execTransform(imageOp: IMOperation, rawImage: BufferedImage): ByteArray =
+        ConvertCmd().let { cmd ->
+            val outputConverter = CustomOutputConsumer()
+            cmd.setOutputConsumer(outputConverter)
+            cmd.run(imageOp, rawImage)
+            outputConverter.getBytes()
+        }
+
+    /**
+     * will block cur thread
+     */
     fun transformImageByWidth(
         rawImage: BufferedImage,
         targetImageType: ImageType,
@@ -202,9 +217,12 @@ object ImageUtils {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
         val newHeight = (originalHeight * newWidth) / originalWidth
-        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
+        return runBlocking { transformImage(rawImage, targetImageType, newWidth, newHeight, quality) }
     }
 
+    /**
+     * will block cur thread
+     */
     fun transformImageByHeight(
         rawImage: BufferedImage,
         targetImageType: ImageType,
@@ -214,6 +232,16 @@ object ImageUtils {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
         val newWidth = (originalWidth * newHeight) / originalHeight
-        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
+        return runBlocking { transformImage(rawImage, targetImageType, newWidth, newHeight, quality) }
+    }
+
+    class CustomOutputConsumer : OutputConsumer {
+        private val outputStream = ByteArrayOutputStream()
+        override fun consumeOutput(inputStream: InputStream) {
+            inputStream.copyTo(outputStream)
+            inputStream.close()
+        }
+
+        fun getBytes(): ByteArray = outputStream.toByteArray().also { outputStream.close() }
     }
 }
