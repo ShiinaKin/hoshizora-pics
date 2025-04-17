@@ -10,7 +10,7 @@ node {
     version = "20.18.2"
     workDir = file("$projectDir/.cache/node")
     download = true
-    pnpmVersion = "10.5.2"
+    pnpmVersion = "10.8.1"
     pnpmWorkDir = file("$projectDir/.cache/pnpm")
 }
 
