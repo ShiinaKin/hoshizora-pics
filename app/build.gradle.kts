@@ -128,10 +128,24 @@ tasks.shadowJar {
     mergeServiceFiles()
 
     exclude(
-        "ASL-2.0.txt", "custom.config.conf", "custom.config.yaml",
-        "LICENSE", "LICENSE.txt", "LGPL-3.0.txt", "README",
-        "INFO_BIN", "INFO_SRC", "sqlite-jdbc.properties", "VersionInfo.java",
-        "draftv3", "draftv4", "google", "mozilla", "patches", "samples", "schemas"
+        "ASL-2.0.txt",
+        "custom.config.conf",
+        "custom.config.yaml",
+        "LICENSE",
+        "LICENSE.txt",
+        "LGPL-3.0.txt",
+        "README",
+        "INFO_BIN",
+        "INFO_SRC",
+        "sqlite-jdbc.properties",
+        "VersionInfo.java",
+        "draftv3",
+        "draftv4",
+        "google",
+        "mozilla",
+        "patches",
+        "samples",
+        "schemas",
     )
 
     from(rootProject.projectDir) {
@@ -163,11 +177,12 @@ tasks.register("generateBuildRecord") {
     doLast {
         val buildTime = LocalDateTime.now(ZoneId.of("UTC")).toString()
         val commitId = getCheckedOutGitCommitHash()
-        val buildRecord = """
+        val buildRecord =
+            """
             buildTime=$buildTime
             commitId=$commitId
             version=$version
-        """.trimIndent()
+            """.trimIndent()
         val file = file("src/main/resources/buildRecord.properties")
         file.writeText(buildRecord)
     }

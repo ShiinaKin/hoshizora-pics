@@ -17,8 +17,9 @@ object Strategies : LongIdTable("strategies") {
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
 
-    val columnMap = mapOf(
-        "createTime" to createTime,
-        "updateTime" to updateTime
-    )
+    val columnMap =
+        mapOf(
+            "createTime" to createTime,
+            "updateTime" to updateTime,
+        )
 }

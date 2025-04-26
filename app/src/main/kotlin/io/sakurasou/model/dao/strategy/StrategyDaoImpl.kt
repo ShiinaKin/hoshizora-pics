@@ -18,30 +18,29 @@ import org.jetbrains.exposed.sql.update
  */
 class StrategyDaoImpl : StrategyDao {
     override fun saveStrategy(insertDTO: StrategyInsertDTO): Long {
-        val entityID = Strategies.insertAndGetId {
-            it[name] = insertDTO.name
-            it[isSystemReserved] = insertDTO.isSystemReserved
-            it[config] = insertDTO.config
-            it[createTime] = insertDTO.createTime
-            it[updateTime] = insertDTO.updateTime
-        }
+        val entityID =
+            Strategies.insertAndGetId {
+                it[name] = insertDTO.name
+                it[isSystemReserved] = insertDTO.isSystemReserved
+                it[config] = insertDTO.config
+                it[createTime] = insertDTO.createTime
+                it[updateTime] = insertDTO.updateTime
+            }
         return entityID.value
     }
 
-    override fun deleteStrategyById(id: Long): Int {
-        return Strategies.deleteWhere { Strategies.id eq id }
-    }
+    override fun deleteStrategyById(id: Long): Int = Strategies.deleteWhere { Strategies.id eq id }
 
-    override fun updateStrategyById(updateDTO: StrategyUpdateDTO): Int {
-        return Strategies.update({ Strategies.id eq updateDTO.id }) {
+    override fun updateStrategyById(updateDTO: StrategyUpdateDTO): Int =
+        Strategies.update({ Strategies.id eq updateDTO.id }) {
             it[name] = updateDTO.name
             it[config] = updateDTO.config
             it[updateTime] = updateDTO.updateTime
         }
-    }
 
-    override fun findStrategyById(id: Long): Strategy? {
-        return Strategies.selectAll()
+    override fun findStrategyById(id: Long): Strategy? =
+        Strategies
+            .selectAll()
             .where(Strategies.id eq id)
             .map {
                 Strategy(
@@ -50,13 +49,12 @@ class StrategyDaoImpl : StrategyDao {
                     isSystemReserved = it[Strategies.isSystemReserved],
                     config = it[Strategies.config],
                     createTime = it[Strategies.createTime],
-                    updateTime = it[Strategies.updateTime]
+                    updateTime = it[Strategies.updateTime],
                 )
             }.firstOrNull()
-    }
 
-    override fun pagination(pageRequest: PageRequest): PageResult<StrategyPageVO> {
-        return fetchPage(Strategies, pageRequest) { row ->
+    override fun pagination(pageRequest: PageRequest): PageResult<StrategyPageVO> =
+        fetchPage(Strategies, pageRequest) { row ->
             StrategyPageVO(
                 id = row[Strategies.id].value,
                 name = row[Strategies.name],
@@ -65,5 +63,4 @@ class StrategyDaoImpl : StrategyDao {
                 createTime = row[Strategies.createTime],
             )
         }
-    }
 }
