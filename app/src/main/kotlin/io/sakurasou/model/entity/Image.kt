@@ -28,5 +28,5 @@ data class Image(
     val sha256: String,
     val isPrivate: Boolean,
     val isAllowedRandomFetch: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

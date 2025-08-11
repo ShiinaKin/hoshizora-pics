@@ -8,13 +8,20 @@ import io.sakurasou.exception.ServiceThrowable
  */
 class RoleDeleteFailedException(
     cause: ServiceThrowable? = null,
-    reason: String? = null
+    reason: String? = null,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 4000
     override var message: String = "Role Delete Failed"
 
     init {
-        message += if (cause != null) ", ${cause.message}" else if (reason != null) ", $reason" else ""
+        message +=
+            if (cause != null) {
+                ", ${cause.message}"
+            } else if (reason != null) {
+                ", $reason"
+            } else {
+                ""
+            }
     }
 }

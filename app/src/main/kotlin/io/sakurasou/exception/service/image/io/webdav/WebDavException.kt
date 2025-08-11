@@ -7,7 +7,7 @@ import io.sakurasou.exception.ServiceThrowable
  * 2025/2/24 13:07
  */
 class WebDavException(
-    reason: String? = null
+    reason: String? = null,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 5000

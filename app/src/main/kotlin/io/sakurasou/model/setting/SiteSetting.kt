@@ -13,5 +13,5 @@ data class SiteSetting(
     val siteExternalUrl: String,
     val siteTitle: String,
     val siteSubtitle: String,
-    val siteDescription: String
+    val siteDescription: String,
 ) : SettingConfig()

@@ -14,7 +14,7 @@ data class PageResult<T>(
     val pageSize: Int,
     val total: Long,
     val totalPage: Long,
-    val data: List<T>
+    val data: List<T>,
 )
 
 @Serializable
@@ -28,13 +28,12 @@ data class CommonResponse<T>(
     constructor(code: Int, message: String) : this(code, message, null)
 
     companion object {
-        inline fun <reified T> success(data: T): CommonResponse<T> {
-            return CommonResponse(0, "success", data)
-        }
+        inline fun <reified T> success(data: T): CommonResponse<T> = CommonResponse(0, "success", data)
 
-        fun <T> error(code: Int, message: String): CommonResponse<T> {
-            return CommonResponse(code, message)
-        }
+        fun <T> error(
+            code: Int,
+            message: String,
+        ): CommonResponse<T> = CommonResponse(code, message)
     }
 }
 

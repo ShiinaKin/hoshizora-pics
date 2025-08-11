@@ -13,7 +13,7 @@ data class GroupInsertDTO(
     val strategyId: Long,
     val config: GroupConfig,
     val isSystemReserved: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 data class GroupUpdateDTO(
@@ -21,5 +21,5 @@ data class GroupUpdateDTO(
     val name: String,
     val description: String?,
     val strategyId: Long,
-    val config: GroupConfig
+    val config: GroupConfig,
 )

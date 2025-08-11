@@ -9,16 +9,15 @@ import io.sakurasou.model.dao.permission.PermissionDao
  * 2024/12/2 17:58
  */
 class PermissionServiceImpl(
-    private val permissionDao: PermissionDao
+    private val permissionDao: PermissionDao,
 ) : PermissionService {
-    override suspend fun fetchAllPermissions(): List<PermissionVO> {
-        return dbQuery {
+    override suspend fun fetchAllPermissions(): List<PermissionVO> =
+        dbQuery {
             permissionDao.findAllPermissions().map {
                 PermissionVO(
                     name = it.name,
-                    description = it.description
+                    description = it.description,
                 )
             }
         }
-    }
 }

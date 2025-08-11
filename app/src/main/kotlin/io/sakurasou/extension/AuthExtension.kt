@@ -16,6 +16,4 @@ data class Principal(
     val username: String,
 )
 
-fun ApplicationCall.getPrincipal(): Principal {
-    return attributes.getOrNull(AttributeKey("principal")) ?: throw PrincipalNotFoundException()
-}
+fun ApplicationCall.getPrincipal(): Principal = attributes.getOrNull(AttributeKey("principal")) ?: throw PrincipalNotFoundException()

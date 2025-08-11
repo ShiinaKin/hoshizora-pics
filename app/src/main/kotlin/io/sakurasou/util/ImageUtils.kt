@@ -31,9 +31,9 @@ object ImageUtils {
         strategy: Strategy,
         subFolder: String,
         fileName: String,
-        imageBytes: ByteArray
-    ): String {
-        return withContext(Dispatchers.IO) {
+        imageBytes: ByteArray,
+    ): String =
+        withContext(Dispatchers.IO) {
             val relativePath = "$subFolder/$fileName"
             when (val strategyConfig = strategy.config) {
                 is LocalStrategy -> {
@@ -65,14 +65,13 @@ object ImageUtils {
             }
             relativePath
         }
-    }
 
     fun saveThumbnail(
         strategy: Strategy,
         subFolder: String,
         fileName: String,
         thumbnailBytes: ByteArray,
-        relativePath: String
+        relativePath: String,
     ) {
         when (val strategyConfig = strategy.config) {
             is LocalStrategy -> {
@@ -105,8 +104,12 @@ object ImageUtils {
         }
     }
 
-    suspend fun fetchLocalImage(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): ByteArray? {
-        return withContext(Dispatchers.IO) {
+    suspend fun fetchLocalImage(
+        strategy: Strategy,
+        relativePath: String,
+        isThumbnail: Boolean = false,
+    ): ByteArray? =
+        withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
                 is S3Strategy -> throw RuntimeException("Not supported")
 
@@ -120,9 +123,12 @@ object ImageUtils {
                 }
             }
         }
-    }
 
-    suspend fun fetchS3Image(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): String {
+    suspend fun fetchS3Image(
+        strategy: Strategy,
+        relativePath: String,
+        isThumbnail: Boolean = false,
+    ): String {
         return withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
                 is LocalStrategy -> throw RuntimeException("Not supported")
@@ -142,8 +148,12 @@ object ImageUtils {
         }
     }
 
-    suspend fun fetchWebDavImage(strategy: Strategy, relativePath: String, isThumbnail: Boolean = false): ByteArray? {
-        return withContext(Dispatchers.IO) {
+    suspend fun fetchWebDavImage(
+        strategy: Strategy,
+        relativePath: String,
+        isThumbnail: Boolean = false,
+    ): ByteArray? =
+        withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
                 is LocalStrategy -> throw RuntimeException("Not supported")
 
@@ -158,46 +168,57 @@ object ImageUtils {
                 }
             }
         }
-    }
 
-    suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType): ByteArray {
-        return withContext(Dispatchers.IO) {
-            val imageOp = IMOperation().apply {
-                addImage()
-                addImage("${targetImageType.name}:-")
-            }
+    suspend fun transformImage(
+        rawImage: BufferedImage,
+        targetImageType: ImageType,
+    ): ByteArray =
+        withContext(Dispatchers.IO) {
+            val imageOp =
+                IMOperation().apply {
+                    addImage()
+                    addImage("${targetImageType.name}:-")
+                }
             execTransform(imageOp, rawImage)
         }
-    }
 
-    suspend fun transformImage(rawImage: BufferedImage, targetImageType: ImageType, quality: Double): ByteArray {
-        return withContext(Dispatchers.IO) {
-            val imageOp = IMOperation().apply {
-                addImage()
-                quality(quality)
-                addImage("${targetImageType.name}:-")
-            }
+    suspend fun transformImage(
+        rawImage: BufferedImage,
+        targetImageType: ImageType,
+        quality: Double,
+    ): ByteArray =
+        withContext(Dispatchers.IO) {
+            val imageOp =
+                IMOperation().apply {
+                    addImage()
+                    quality(quality)
+                    addImage("${targetImageType.name}:-")
+                }
             execTransform(imageOp, rawImage)
         }
-    }
 
     private suspend fun transformImage(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
         newHeight: Int,
-        quality: Double
-    ): ByteArray = withContext(Dispatchers.IO) {
-        val imageOp = IMOperation().apply {
-            addImage()
-            resize(newWidth, newHeight)
-            quality(quality)
-            addImage("${targetImageType.name}:-")
+        quality: Double,
+    ): ByteArray =
+        withContext(Dispatchers.IO) {
+            val imageOp =
+                IMOperation().apply {
+                    addImage()
+                    resize(newWidth, newHeight)
+                    quality(quality)
+                    addImage("${targetImageType.name}:-")
+                }
+            execTransform(imageOp, rawImage)
         }
-        execTransform(imageOp, rawImage)
-    }
 
-    private fun execTransform(imageOp: IMOperation, rawImage: BufferedImage): ByteArray =
+    private fun execTransform(
+        imageOp: IMOperation,
+        rawImage: BufferedImage,
+    ): ByteArray =
         ConvertCmd().let { cmd ->
             val outputConverter = CustomOutputConsumer()
             cmd.setOutputConsumer(outputConverter)
@@ -212,7 +233,7 @@ object ImageUtils {
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
-        quality: Double
+        quality: Double,
     ): ByteArray {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
@@ -227,7 +248,7 @@ object ImageUtils {
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newHeight: Int,
-        quality: Double
+        quality: Double,
     ): ByteArray {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
@@ -237,6 +258,7 @@ object ImageUtils {
 
     class CustomOutputConsumer : OutputConsumer {
         private val outputStream = ByteArrayOutputStream()
+
         override fun consumeOutput(inputStream: InputStream) {
             inputStream.copyTo(outputStream)
             inputStream.close()

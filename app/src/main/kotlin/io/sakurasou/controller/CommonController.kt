@@ -45,16 +45,19 @@ fun Route.siteInitRoute() {
     route {
         install(RequestValidation) {
             validate<SiteInitRequest> { siteInitRequest ->
-                if (siteInitRequest.siteTitle.isBlank()) ValidationResult.Invalid("siteTitle is invalid")
-                else if (!siteInitRequest.siteExternalUrl.matches(Regex(REGEX_URL)))
+                if (siteInitRequest.siteTitle.isBlank()) {
+                    ValidationResult.Invalid("siteTitle is invalid")
+                } else if (!siteInitRequest.siteExternalUrl.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("siteExternalUrl is invalid")
-                else if (!siteInitRequest.username.matches(Regex(REGEX_USERNAME)))
+                } else if (!siteInitRequest.username.matches(Regex(REGEX_USERNAME))) {
                     ValidationResult.Invalid("username is invalid")
-                else if (!siteInitRequest.password.matches(Regex(REGEX_PASSWORD)))
+                } else if (!siteInitRequest.password.matches(Regex(REGEX_PASSWORD))) {
                     ValidationResult.Invalid("password is invalid")
-                else if (!siteInitRequest.email.matches(Regex(REGEX_EMAIL)))
+                } else if (!siteInitRequest.email.matches(Regex(REGEX_EMAIL))) {
                     ValidationResult.Invalid("email is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post("site/init", {
@@ -109,8 +112,11 @@ private fun Route.randomFetchImage(commonController: CommonController) {
         }
     }) {
         val fileDTO = commonController.handleRandomFetchImage()
-        if (fileDTO.bytes != null) call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
-        else call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        if (fileDTO.bytes != null) {
+            call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
+        } else {
+            call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        }
     }
 }
 
@@ -132,13 +138,16 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
         if (imageUniqueName == null || imageUniqueName.length != 32) throw WrongParameterException()
 
         val fileDTO = commonController.handleFetchImage(imageUniqueName)
-        if (fileDTO.bytes != null) call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
-        else call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        if (fileDTO.bytes != null) {
+            call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
+        } else {
+            call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        }
     }
 }
 
 class CommonController(
-    private val commonService: CommonService
+    private val commonService: CommonService,
 ) {
     suspend fun handleInit(siteInitRequest: SiteInitRequest) {
         commonService.initSite(siteInitRequest)

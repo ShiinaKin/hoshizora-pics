@@ -11,8 +11,24 @@ import io.sakurasou.controller.vo.PersonalAccessTokenPageVO
  * 2024/11/16 02:08
  */
 interface PersonalAccessTokenService {
-    suspend fun savePAT(userId: Long, insertRequest: PersonalAccessTokenInsertRequest): String
-    suspend fun deletePAT(userId: Long, patId: Long)
-    suspend fun patchPAT(userId: Long, patId: Long, updateRequest: PersonalAccessTokenPatchRequest)
-    suspend fun pagePAT(userId: Long, pageRequest: PageRequest): PageResult<PersonalAccessTokenPageVO>
+    suspend fun savePAT(
+        userId: Long,
+        insertRequest: PersonalAccessTokenInsertRequest,
+    ): String
+
+    suspend fun deletePAT(
+        userId: Long,
+        patId: Long,
+    )
+
+    suspend fun patchPAT(
+        userId: Long,
+        patId: Long,
+        updateRequest: PersonalAccessTokenPatchRequest,
+    )
+
+    suspend fun pagePAT(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<PersonalAccessTokenPageVO>
 }

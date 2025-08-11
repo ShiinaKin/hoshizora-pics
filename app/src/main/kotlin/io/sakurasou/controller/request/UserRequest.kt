@@ -12,14 +12,14 @@ import kotlinx.serialization.Serializable
 data class UserInsertRequest(
     val username: String,
     val email: String,
-    val password: String
+    val password: String,
 )
 
 @Serializable
 @Name("UserLoginRequest")
 data class UserLoginRequest(
     val username: String,
-    val password: String
+    val password: String,
 )
 
 @Serializable
@@ -28,7 +28,7 @@ data class UserSelfPatchRequest(
     val email: String? = null,
     val password: String? = null,
     val isDefaultImagePrivate: Boolean? = null,
-    val defaultAlbumId: Long? = null
+    val defaultAlbumId: Long? = null,
 )
 
 @Serializable
@@ -38,7 +38,7 @@ data class UserManagePatchRequest(
     val email: String? = null,
     val password: String? = null,
     val isDefaultImagePrivate: Boolean? = null,
-    val defaultAlbumId: Long? = null
+    val defaultAlbumId: Long? = null,
 )
 
 @Serializable

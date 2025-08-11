@@ -28,17 +28,18 @@ import kotlinx.datetime.toLocalDateTime
 class RoleServiceImpl(
     private val roleDao: RoleDao,
     private val permissionDao: PermissionDao,
-    private val relationDao: RelationDao
+    private val relationDao: RelationDao,
 ) : RoleService {
     override suspend fun saveRole(insertRequest: RoleInsertRequest) {
         dbQuery {
-            val insertDTO = RoleInsertDTO(
-                name = insertRequest.name,
-                displayName = insertRequest.displayName,
-                isSystemReserved = false,
-                description = insertRequest.description,
-                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-            )
+            val insertDTO =
+                RoleInsertDTO(
+                    name = insertRequest.name,
+                    displayName = insertRequest.displayName,
+                    isSystemReserved = false,
+                    description = insertRequest.description,
+                    createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                )
             roleDao.saveRole(insertDTO)
 
             insertRequest.permissions.forEach { permission ->
@@ -48,20 +49,27 @@ class RoleServiceImpl(
         }
     }
 
-    override suspend fun patchRole(roleName: String, patchRequest: RolePatchRequest) {
+    override suspend fun patchRole(
+        roleName: String,
+        patchRequest: RolePatchRequest,
+    ) {
         runCatching {
             dbQuery {
                 val oldRole = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
-                val updateDTO = RoleUpdateDTO(
-                    displayName = patchRequest.displayName ?: oldRole.displayName,
-                    description = patchRequest.description ?: oldRole.description
-                )
+                val updateDTO =
+                    RoleUpdateDTO(
+                        displayName = patchRequest.displayName ?: oldRole.displayName,
+                        description = patchRequest.description ?: oldRole.description,
+                    )
                 val influenceRowCnt = roleDao.patchRole(roleName, updateDTO)
                 if (influenceRowCnt < 1) throw RoleNotFoundException()
             }
         }.onFailure { e ->
-            if (e is RoleNotFoundException) throw RoleUpdateFailedException(e)
-            else throw e
+            if (e is RoleNotFoundException) {
+                throw RoleUpdateFailedException(e)
+            } else {
+                throw e
+            }
         }
     }
 
@@ -72,25 +80,30 @@ class RoleServiceImpl(
                 if (influenceRowCnt < 1) throw RoleNotFoundException()
             }
         }.onFailure { e ->
-            if (e is RoleNotFoundException) throw RoleDeleteFailedException(e)
-            else throw e
+            if (e is RoleNotFoundException) {
+                throw RoleDeleteFailedException(e)
+            } else {
+                throw e
+            }
         }
     }
 
-    override suspend fun listRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> {
-        return dbQuery {
+    override suspend fun listRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> =
+        dbQuery {
             val roleNames = relationDao.listRoleByGroupId(groupId)
             roleNames.map { roleName ->
                 val role = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
                 val permissionNames = relationDao.listPermissionByRole(roleName)
-                val permissionVOList = permissionNames.map { permissionName ->
-                    val permission = permissionDao.findPermissionByName(permissionName)
-                        ?: throw PermissionNotFoundException()
-                    PermissionVO(
-                        permission.name,
-                        permission.description
-                    )
-                }
+                val permissionVOList =
+                    permissionNames.map { permissionName ->
+                        val permission =
+                            permissionDao.findPermissionByName(permissionName)
+                                ?: throw PermissionNotFoundException()
+                        PermissionVO(
+                            permission.name,
+                            permission.description,
+                        )
+                    }
                 RoleVO(
                     name = role.name,
                     displayName = role.displayName,
@@ -99,20 +112,21 @@ class RoleServiceImpl(
                 )
             }
         }
-    }
 
-    override suspend fun fetchRole(roleName: String): RoleVO {
-        return dbQuery {
+    override suspend fun fetchRole(roleName: String): RoleVO =
+        dbQuery {
             val role = roleDao.findRoleByName(roleName) ?: throw RoleNotFoundException()
             val permissionNames = relationDao.listPermissionByRole(roleName)
-            val permissionVOList = permissionNames.map { permissionName ->
-                val permission = permissionDao.findPermissionByName(permissionName)
-                    ?: throw PermissionNotFoundException()
-                PermissionVO(
-                    permission.name,
-                    permission.description
-                )
-            }
+            val permissionVOList =
+                permissionNames.map { permissionName ->
+                    val permission =
+                        permissionDao.findPermissionByName(permissionName)
+                            ?: throw PermissionNotFoundException()
+                    PermissionVO(
+                        permission.name,
+                        permission.description,
+                    )
+                }
             RoleVO(
                 name = role.name,
                 displayName = role.displayName,
@@ -120,9 +134,6 @@ class RoleServiceImpl(
                 permissions = permissionVOList,
             )
         }
-    }
 
-    override suspend fun pageRoles(pageRequest: PageRequest): PageResult<RolePageVO> {
-        return dbQuery { roleDao.pagination(pageRequest) }
-    }
+    override suspend fun pageRoles(pageRequest: PageRequest): PageResult<RolePageVO> = dbQuery { roleDao.pagination(pageRequest) }
 }

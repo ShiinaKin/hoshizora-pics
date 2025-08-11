@@ -22,7 +22,7 @@ data class UserVO(
     val imageCount: Long,
     val albumCount: Long,
     val totalImageSize: Double,
-    val allSize: Double
+    val allSize: Double,
 )
 
 @Serializable
@@ -35,5 +35,5 @@ data class UserPageVO(
     val createTime: LocalDateTime,
     val imageCount: Long,
     val albumCount: Long,
-    val totalImageSize: Double
+    val totalImageSize: Double,
 )

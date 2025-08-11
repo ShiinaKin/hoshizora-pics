@@ -3,9 +3,9 @@ package io.sakurasou.extension
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import io.sakurasou.di.InstanceCenter
 import io.sakurasou.controller.request.PageRequest
 import io.sakurasou.controller.vo.CommonResponse
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.exception.ServiceThrowable
 import io.sakurasou.exception.controller.param.WrongParameterException
 
@@ -25,9 +25,7 @@ fun ApplicationCall.pageRequest(): PageRequest {
     return PageRequest(page, pageSize, order, orderBy)
 }
 
-fun ApplicationCall.id(): Long {
-    return parameters["id"]?.toLong() ?: throw WrongParameterException()
-}
+fun ApplicationCall.id(): Long = parameters["id"]?.toLong() ?: throw WrongParameterException()
 
 fun OpenApiRoute.pageRequestSpec() {
     request {

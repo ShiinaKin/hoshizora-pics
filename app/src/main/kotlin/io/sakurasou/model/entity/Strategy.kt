@@ -15,5 +15,5 @@ data class Strategy(
     val isSystemReserved: Boolean,
     val config: StrategyConfig,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )

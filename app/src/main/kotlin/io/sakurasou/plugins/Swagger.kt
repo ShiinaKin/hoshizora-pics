@@ -58,8 +58,7 @@ fun Application.configureSwagger(baseUrl: String) {
                                 qualifiedName = String::class.qualifiedName!!,
                             )
                         }
-                    }
-                    .handleNameAnnotation()
+                    }.handleNameAnnotation()
                     .generateSwaggerSchema()
                     .compileReferencingRoot()
             }

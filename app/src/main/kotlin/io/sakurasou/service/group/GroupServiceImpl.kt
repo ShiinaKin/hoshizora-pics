@@ -33,17 +33,18 @@ class GroupServiceImpl(
     private val groupDao: GroupDao,
     private val userDao: UserDao,
     private val strategyDao: StrategyDao,
-    private val relationDao: RelationDao
+    private val relationDao: RelationDao,
 ) : GroupService {
     override suspend fun saveGroup(insertRequest: GroupInsertRequest) {
-        val groupInsertDTO = GroupInsertDTO(
-            name = insertRequest.name,
-            description = insertRequest.description,
-            strategyId = insertRequest.strategyId,
-            config = insertRequest.config,
-            isSystemReserved = false,
-            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        )
+        val groupInsertDTO =
+            GroupInsertDTO(
+                name = insertRequest.name,
+                description = insertRequest.description,
+                strategyId = insertRequest.strategyId,
+                config = insertRequest.config,
+                isSystemReserved = false,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            )
         val groupRoles = insertRequest.roles
 
         runCatching {
@@ -54,8 +55,11 @@ class GroupServiceImpl(
                 Unit
             }
         }.onFailure {
-            if (it is RoleNotFoundException) throw GroupInsertFailedException(it)
-            else throw GroupInsertFailedException(null, "Possibly due to duplicate GroupName")
+            if (it is RoleNotFoundException) {
+                throw GroupInsertFailedException(it)
+            } else {
+                throw GroupInsertFailedException(null, "Possibly due to duplicate GroupName")
+            }
         }
     }
 
@@ -63,79 +67,105 @@ class GroupServiceImpl(
         runCatching {
             dbQuery {
                 val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-                if (group.isSystemReserved)
+                if (group.isSystemReserved) {
                     throw GroupDeleteFailedException(null, "Cannot delete system reserved group")
-                if (userDao.doesUsersBelongToUserGroup(group.id))
+                }
+                if (userDao.doesUsersBelongToUserGroup(group.id)) {
                     throw GroupDeleteFailedException(null, "Group is not empty")
+                }
                 relationDao.deleteGroupToRolesByGroupId(group.id)
                 groupDao.deleteGroupById(group.id)
             }
         }.onFailure {
-            if (it is GroupNotFoundException) throw GroupDeleteFailedException(it)
-            else throw it
-        }
-    }
-
-    override suspend fun updateGroup(id: Long, putRequest: GroupPutRequest) {
-        dbQuery {
-            runCatching {
-                val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-                if (oldGroup.isSystemReserved && putRequest.name != oldGroup.name)
-                    throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
-
-                if (putRequest.strategyId != oldGroup.strategyId)
-                    strategyDao.findStrategyById(putRequest.strategyId) ?: throw StrategyNotFoundException()
-
-                val groupUpdateDTO = GroupUpdateDTO(
-                    id = id,
-                    name = putRequest.name,
-                    description = putRequest.description,
-                    strategyId = putRequest.strategyId,
-                    config = putRequest.config
-                )
-
-                val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
-                if (influenceRow < 1) throw GroupNotFoundException()
-            }.onFailure {
-                if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
-                else throw it
+            if (it is GroupNotFoundException) {
+                throw GroupDeleteFailedException(it)
+            } else {
+                throw it
             }
         }
     }
 
-    override suspend fun patchGroup(id: Long, patchRequest: GroupPatchRequest) {
+    override suspend fun updateGroup(
+        id: Long,
+        putRequest: GroupPutRequest,
+    ) {
         dbQuery {
             runCatching {
                 val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
-                if (oldGroup.isSystemReserved && patchRequest.name != null)
+                if (oldGroup.isSystemReserved && putRequest.name != oldGroup.name) {
                     throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
+                }
+
+                if (putRequest.strategyId != oldGroup.strategyId) {
+                    strategyDao.findStrategyById(putRequest.strategyId) ?: throw StrategyNotFoundException()
+                }
+
+                val groupUpdateDTO =
+                    GroupUpdateDTO(
+                        id = id,
+                        name = putRequest.name,
+                        description = putRequest.description,
+                        strategyId = putRequest.strategyId,
+                        config = putRequest.config,
+                    )
+
+                val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
+                if (influenceRow < 1) throw GroupNotFoundException()
+            }.onFailure {
+                if (it is GroupNotFoundException) {
+                    throw GroupUpdateFailedException(it)
+                } else {
+                    throw it
+                }
+            }
+        }
+    }
+
+    override suspend fun patchGroup(
+        id: Long,
+        patchRequest: GroupPatchRequest,
+    ) {
+        dbQuery {
+            runCatching {
+                val oldGroup = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
+                if (oldGroup.isSystemReserved && patchRequest.name != null) {
+                    throw GroupUpdateFailedException(null, "Cannot update system reserved group name")
+                }
 
                 patchRequest.strategyId?.let { strategyDao.findStrategyById(it) ?: throw StrategyNotFoundException() }
 
-                val groupUpdateDTO = GroupUpdateDTO(
-                    id = id,
-                    name = patchRequest.name ?: oldGroup.name,
-                    description = patchRequest.description ?: oldGroup.description,
-                    strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
-                    config = if (patchRequest.config != null) {
-                        GroupConfig(
-                            groupStrategyConfig = patchRequest.config.groupStrategyConfig
-                                ?: oldGroup.config.groupStrategyConfig
-                        )
-                    } else oldGroup.config
-                )
+                val groupUpdateDTO =
+                    GroupUpdateDTO(
+                        id = id,
+                        name = patchRequest.name ?: oldGroup.name,
+                        description = patchRequest.description ?: oldGroup.description,
+                        strategyId = patchRequest.strategyId ?: oldGroup.strategyId,
+                        config =
+                            if (patchRequest.config != null) {
+                                GroupConfig(
+                                    groupStrategyConfig =
+                                        patchRequest.config.groupStrategyConfig
+                                            ?: oldGroup.config.groupStrategyConfig,
+                                )
+                            } else {
+                                oldGroup.config
+                            },
+                    )
 
                 val influenceRow = groupDao.updateGroupById(groupUpdateDTO)
                 if (influenceRow < 1) throw GroupNotFoundException()
             }.onFailure {
-                if (it is GroupNotFoundException) throw GroupUpdateFailedException(it)
-                else throw it
+                if (it is GroupNotFoundException) {
+                    throw GroupUpdateFailedException(it)
+                } else {
+                    throw it
+                }
             }
         }
     }
 
-    override suspend fun fetchGroup(id: Long): GroupVO {
-        return dbQuery {
+    override suspend fun fetchGroup(id: Long): GroupVO =
+        dbQuery {
             val group = groupDao.findGroupById(id) ?: throw GroupNotFoundException()
             val strategy = strategyDao.findStrategyById(group.strategyId) ?: throw GroupNotFoundException()
             val roles = relationDao.listRoleByGroupId(group.id)
@@ -148,10 +178,9 @@ class GroupServiceImpl(
                 strategyName = strategy.name,
                 roles = roles,
                 isSystemReserved = group.isSystemReserved,
-                createTime = group.createTime
+                createTime = group.createTime,
             )
         }
-    }
 
     override suspend fun pageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {
         val pageResult = dbQuery { groupDao.pagination(pageRequest) }

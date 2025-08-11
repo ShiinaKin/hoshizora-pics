@@ -17,7 +17,7 @@ data class AlbumVO(
     val imageCount: Long,
     val isUncategorized: Boolean,
     val isDefault: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -31,7 +31,7 @@ data class AlbumManageVO(
     val imageCount: Long,
     val isUncategorized: Boolean,
     val isDefault: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -42,7 +42,7 @@ data class AlbumPageVO(
     val imageCount: Long,
     val isUncategorized: Boolean,
     val isDefault: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -54,5 +54,5 @@ data class AlbumManagePageVO(
     val username: String,
     val userEmail: String,
     val imageCount: Long,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

@@ -1,9 +1,9 @@
 package io.sakurasou.service.common
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import io.sakurasou.di.InstanceCenter
 import io.sakurasou.controller.request.SiteInitRequest
 import io.sakurasou.controller.vo.CommonSiteSetting
+import io.sakurasou.di.InstanceCenter
 import io.sakurasou.exception.controller.access.RandomFetchAllowedException
 import io.sakurasou.exception.controller.status.SiteRepeatedInitializationException
 import io.sakurasou.exception.service.image.ImageAccessDeniedException
@@ -36,7 +36,7 @@ class CommonServiceImpl(
     private val albumDao: AlbumDao,
     private val strategyDao: StrategyDao,
     private val imageDao: ImageDao,
-    private val settingService: SettingService
+    private val settingService: SettingService,
 ) : CommonService {
     override suspend fun initSite(siteInitRequest: SiteInitRequest) {
         val status = settingService.getSystemStatus()
@@ -46,30 +46,33 @@ class CommonServiceImpl(
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val userInsertDTO = UserInsertDTO(
-            groupId = 1,
-            username = siteInitRequest.username,
-            password = encodePassword,
-            email = siteInitRequest.email,
-            isDefaultImagePrivate = true,
-            defaultAlbumId = null,
-            isBanned = false,
-            createTime = now,
-            updateTime = now
-        )
+        val userInsertDTO =
+            UserInsertDTO(
+                groupId = 1,
+                username = siteInitRequest.username,
+                password = encodePassword,
+                email = siteInitRequest.email,
+                isDefaultImagePrivate = true,
+                defaultAlbumId = null,
+                isBanned = false,
+                createTime = now,
+                updateTime = now,
+            )
 
         val oldSiteSetting = settingService.getSiteSetting()
-        val siteSettingConfig = SiteSetting(
-            siteExternalUrl = siteInitRequest.siteExternalUrl,
-            siteTitle = siteInitRequest.siteTitle,
-            siteSubtitle = siteInitRequest.siteSubtitle,
-            siteDescription = siteInitRequest.siteDescription
-        )
+        val siteSettingConfig =
+            SiteSetting(
+                siteExternalUrl = siteInitRequest.siteExternalUrl,
+                siteTitle = siteInitRequest.siteTitle,
+                siteSubtitle = siteInitRequest.siteSubtitle,
+                siteDescription = siteInitRequest.siteDescription,
+            )
 
-        val systemStatus = SystemStatus(
-            isInit = true,
-            version = status.version
-        )
+        val systemStatus =
+            SystemStatus(
+                isInit = true,
+                version = status.version,
+            )
 
         dbQuery {
             val userId = userDao.saveUser(userInsertDTO)
@@ -94,29 +97,27 @@ class CommonServiceImpl(
         )
     }
 
-    override suspend fun fetchImage(imageUniqueName: String): ImageFileDTO {
-        return dbQuery {
+    override suspend fun fetchImage(imageUniqueName: String): ImageFileDTO =
+        dbQuery {
             val image = imageDao.findImageByUniqueName(imageUniqueName) ?: throw ImageNotFoundException()
             if (image.isPrivate) throw ImageAccessDeniedException()
 
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
-            when(strategy.config) {
+            when (strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
                 is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
-    }
 
     override suspend fun fetchRandomImage(): ImageFileDTO {
         if (!settingService.getSystemSetting().allowRandomFetch) throw RandomFetchAllowedException()
         return dbQuery {
-
             val image = imageDao.findRandomImage() ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
-            when(strategy.config) {
+            when (strategy.config) {
                 is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path))
                 is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path))
                 is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))

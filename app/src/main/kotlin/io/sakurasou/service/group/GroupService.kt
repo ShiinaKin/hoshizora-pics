@@ -14,9 +14,20 @@ import io.sakurasou.controller.vo.PageResult
  */
 interface GroupService {
     suspend fun saveGroup(insertRequest: GroupInsertRequest)
+
     suspend fun deleteGroup(id: Long)
-    suspend fun updateGroup(id: Long, putRequest: GroupPutRequest)
-    suspend fun patchGroup(id: Long, patchRequest: GroupPatchRequest)
+
+    suspend fun updateGroup(
+        id: Long,
+        putRequest: GroupPutRequest,
+    )
+
+    suspend fun patchGroup(
+        id: Long,
+        patchRequest: GroupPatchRequest,
+    )
+
     suspend fun fetchGroup(id: Long): GroupVO
+
     suspend fun pageGroups(pageRequest: PageRequest): PageResult<GroupPageVO>
 }

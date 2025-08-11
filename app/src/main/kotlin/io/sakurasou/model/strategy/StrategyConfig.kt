@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @SerialName("StrategyConfig")
 @Name("StrategyConfigSealed")
 sealed class StrategyConfig(
-    val strategyType: StrategyType
+    val strategyType: StrategyType,
 )
 
 @Serializable
@@ -20,5 +20,5 @@ sealed class StrategyConfig(
 enum class StrategyType {
     LOCAL,
     S3,
-    WEBDAV
+    WEBDAV,
 }

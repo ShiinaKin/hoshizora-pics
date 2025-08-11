@@ -13,16 +13,23 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
  * 2024/9/5 14:33
  */
 object DatabaseSingleton {
-    fun init(jdbcURL: String, driverClassName: String, username: String, password: String, version: String) {
-        val hikariConfig = HikariConfig().apply {
-            jdbcUrl = jdbcURL
-            this.driverClassName = driverClassName
-            this.username = username
-            this.password = password
-            maximumPoolSize = 5
-            isReadOnly = false
-            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-        }
+    fun init(
+        jdbcURL: String,
+        driverClassName: String,
+        username: String,
+        password: String,
+        version: String,
+    ) {
+        val hikariConfig =
+            HikariConfig().apply {
+                jdbcUrl = jdbcURL
+                this.driverClassName = driverClassName
+                this.username = username
+                this.password = password
+                maximumPoolSize = 5
+                isReadOnly = false
+                transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+            }
         val dataSource = HikariDataSource(hikariConfig)
 
         InstanceCenter.database = Database.connect(dataSource)

@@ -17,25 +17,24 @@ class PermissionDaoImpl : PermissionDao {
         }
     }
 
-    override fun findPermissionByName(name: String): Permission? {
-        return Permissions.selectAll()
+    override fun findPermissionByName(name: String): Permission? =
+        Permissions
+            .selectAll()
             .where { Permissions.name eq name }
             .map {
                 Permission(
                     it[Permissions.name],
-                    it[Permissions.description]
+                    it[Permissions.description],
                 )
-            }
-            .firstOrNull()
-    }
+            }.firstOrNull()
 
-    override fun findAllPermissions(): List<Permission> {
-        return Permissions.selectAll()
+    override fun findAllPermissions(): List<Permission> =
+        Permissions
+            .selectAll()
             .map {
                 Permission(
                     it[Permissions.name],
-                    it[Permissions.description]
+                    it[Permissions.description],
                 )
             }
-    }
 }

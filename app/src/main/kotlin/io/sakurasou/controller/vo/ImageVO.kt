@@ -27,7 +27,7 @@ data class ImageVO(
     val sha256: String,
     val isPrivate: Boolean,
     val isAllowedRandomFetch: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -54,7 +54,7 @@ data class ImageManageVO(
     val sha256: String,
     val isPrivate: Boolean,
     val isAllowedRandomFetch: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -64,7 +64,7 @@ data class ImagePageVO(
     val displayName: String,
     val isPrivate: Boolean,
     val externalUrl: String,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -77,5 +77,5 @@ data class ImageManagePageVO(
     val userEmail: String,
     val isPrivate: Boolean,
     val externalUrl: String,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

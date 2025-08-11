@@ -10,7 +10,10 @@ import io.sakurasou.model.dto.ImageFileDTO
  */
 interface CommonService {
     suspend fun initSite(siteInitRequest: SiteInitRequest)
+
     suspend fun fetchCommonSiteSetting(): CommonSiteSetting
+
     suspend fun fetchImage(imageUniqueName: String): ImageFileDTO
+
     suspend fun fetchRandomImage(): ImageFileDTO
 }

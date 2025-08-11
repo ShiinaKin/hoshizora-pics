@@ -53,11 +53,14 @@ class ImageServiceImpl(
     private val userDao: UserDao,
     private val groupDao: GroupDao,
     private val strategyDao: StrategyDao,
-    private val settingService: SettingService
+    private val settingService: SettingService,
 ) : ImageService {
     private val logger = KotlinLogging.logger {}
 
-    override suspend fun saveImage(userId: Long, imageRawFile: ImageRawFile): String {
+    override suspend fun saveImage(
+        userId: Long,
+        imageRawFile: ImageRawFile,
+    ): String {
         val siteSetting = settingService.getSiteSetting()
         return runCatching {
             dbQuery {
@@ -100,19 +103,22 @@ class ImageServiceImpl(
                 var imageBytes = imageRawFile.bytes
                 var image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
                 if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
-                    imageBytes = if (groupConfig.groupStrategyConfig.imageQuality != 100) {
-                        val quality = groupConfig.groupStrategyConfig.imageQuality
-                        if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
-                        val imageQuality = quality / 1.0
-                        ImageUtils.transformImage(
-                            image,
-                            groupConfig.groupStrategyConfig.imageAutoTransformTarget,
-                            imageQuality
-                        )
-                    } else {
-                        ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
-                    }
-                    extension = groupConfig.groupStrategyConfig.imageAutoTransformTarget.name.lowercase()
+                    imageBytes =
+                        if (groupConfig.groupStrategyConfig.imageQuality != 100) {
+                            val quality = groupConfig.groupStrategyConfig.imageQuality
+                            if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
+                            val imageQuality = quality / 1.0
+                            ImageUtils.transformImage(
+                                image,
+                                groupConfig.groupStrategyConfig.imageAutoTransformTarget,
+                                imageQuality,
+                            )
+                        } else {
+                            ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
+                        }
+                    extension =
+                        groupConfig.groupStrategyConfig.imageAutoTransformTarget.name
+                            .lowercase()
                     size = imageBytes.size.toLong()
                     image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
                 }
@@ -126,41 +132,51 @@ class ImageServiceImpl(
                 val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
                 val displayName = "$fileNamePrefix.$extension"
-                val imageInsertDTO = ImageInsertDTO(
-                    userId = user.id,
-                    groupId = group.id,
-                    albumId = defaultAlbum.id,
-                    uniqueName = uniqueName,
-                    displayName = displayName,
-                    path = relativePath,
-                    strategyId = group.strategyId,
-                    originName = imageRawFile.name,
-                    mimeType = imageRawFile.mimeType,
-                    extension = extension,
-                    size = size,
-                    width = image.width,
-                    height = image.height,
-                    md5 = md5,
-                    sha256 = sha256,
-                    isPrivate = user.isDefaultImagePrivate,
-                    isAllowedRandomFetch = false,
-                    createTime = now
-                )
+                val imageInsertDTO =
+                    ImageInsertDTO(
+                        userId = user.id,
+                        groupId = group.id,
+                        albumId = defaultAlbum.id,
+                        uniqueName = uniqueName,
+                        displayName = displayName,
+                        path = relativePath,
+                        strategyId = group.strategyId,
+                        originName = imageRawFile.name,
+                        mimeType = imageRawFile.mimeType,
+                        extension = extension,
+                        size = size,
+                        width = image.width,
+                        height = image.height,
+                        md5 = md5,
+                        sha256 = sha256,
+                        isPrivate = user.isDefaultImagePrivate,
+                        isAllowedRandomFetch = false,
+                        createTime = now,
+                    )
 
                 val imageId = imageDao.saveImage(imageInsertDTO)
 
                 ImageExecutor.persistThumbnail(imageId, strategy, subFolder, storageFileName, image)
 
-                if (user.isDefaultImagePrivate) ""
-                else "${siteSetting.siteExternalUrl}/s/$uniqueName"
+                if (user.isDefaultImagePrivate) {
+                    ""
+                } else {
+                    "${siteSetting.siteExternalUrl}/s/$uniqueName"
+                }
             }
         }.onFailure {
-            if (it is ServiceThrowable) throw ImageInsertFailedException(it)
-            else throw it
+            if (it is ServiceThrowable) {
+                throw ImageInsertFailedException(it)
+            } else {
+                throw it
+            }
         }.getOrThrow()
     }
 
-    override suspend fun deleteSelfImage(userId: Long, imageId: Long) {
+    override suspend fun deleteSelfImage(
+        userId: Long,
+        imageId: Long,
+    ) {
         runCatching {
             dbQuery {
                 val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
@@ -174,8 +190,11 @@ class ImageServiceImpl(
                 ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
-            if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
-            else throw it
+            if (it is ServiceThrowable) {
+                throw ImageDeleteFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
@@ -190,12 +209,19 @@ class ImageServiceImpl(
                 ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
-            if (it is ServiceThrowable) throw ImageDeleteFailedException(it)
-            else throw it
+            if (it is ServiceThrowable) {
+                throw ImageDeleteFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun patchSelfImage(userId: Long, imageId: Long, selfPatchRequest: ImagePatchRequest) {
+    override suspend fun patchSelfImage(
+        userId: Long,
+        imageId: Long,
+        selfPatchRequest: ImagePatchRequest,
+    ) {
         runCatching {
             dbQuery {
                 val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
@@ -206,24 +232,31 @@ class ImageServiceImpl(
                     if (album.userId != userId) throw AlbumAccessDeniedException()
                 }
 
-                val imageUpdateDTO = ImageUpdateDTO(
-                    id = imageId,
-                    albumId = selfPatchRequest.albumId ?: image.albumId,
-                    displayName = selfPatchRequest.displayName ?: image.displayName,
-                    description = selfPatchRequest.description ?: image.description,
-                    isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate,
-                    isAllowedRandomFetch = selfPatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
-                )
+                val imageUpdateDTO =
+                    ImageUpdateDTO(
+                        id = imageId,
+                        albumId = selfPatchRequest.albumId ?: image.albumId,
+                        displayName = selfPatchRequest.displayName ?: image.displayName,
+                        description = selfPatchRequest.description ?: image.description,
+                        isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate,
+                        isAllowedRandomFetch = selfPatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch,
+                    )
 
                 imageDao.updateImageById(imageUpdateDTO)
             }
         }.onFailure {
-            if (it is ServiceThrowable) throw ImageUpdateFailedException(it)
-            else throw it
+            if (it is ServiceThrowable) {
+                throw ImageUpdateFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun patchImage(imageId: Long, managePatchRequest: ImageManagePatchRequest) {
+    override suspend fun patchImage(
+        imageId: Long,
+        managePatchRequest: ImageManagePatchRequest,
+    ) {
         runCatching {
             dbQuery {
                 val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
@@ -233,25 +266,32 @@ class ImageServiceImpl(
                     if (album.userId != image.userId) throw AlbumAccessDeniedException()
                 }
 
-                val imageUpdateDTO = ImageUpdateDTO(
-                    id = imageId,
-                    albumId = managePatchRequest.albumId ?: image.albumId,
-                    displayName = managePatchRequest.displayName ?: image.displayName,
-                    description = managePatchRequest.description ?: image.description,
-                    isPrivate = managePatchRequest.isPrivate ?: image.isPrivate,
-                    isAllowedRandomFetch = managePatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
-                )
+                val imageUpdateDTO =
+                    ImageUpdateDTO(
+                        id = imageId,
+                        albumId = managePatchRequest.albumId ?: image.albumId,
+                        displayName = managePatchRequest.displayName ?: image.displayName,
+                        description = managePatchRequest.description ?: image.description,
+                        isPrivate = managePatchRequest.isPrivate ?: image.isPrivate,
+                        isAllowedRandomFetch = managePatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch,
+                    )
 
                 imageDao.updateImageById(imageUpdateDTO)
             }
         }.onFailure {
-            if (it is ServiceThrowable) throw ImageUpdateFailedException(it)
-            else throw it
+            if (it is ServiceThrowable) {
+                throw ImageUpdateFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun fetchSelfImageInfo(userId: Long, imageId: Long): ImageVO {
-        return dbQuery {
+    override suspend fun fetchSelfImageInfo(
+        userId: Long,
+        imageId: Long,
+    ): ImageVO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             if (image.userId != userId) throw ImageAccessDeniedException()
             val user = userDao.findUserById(image.userId) ?: throw UserNotFoundException()
@@ -276,13 +316,12 @@ class ImageServiceImpl(
                 sha256 = image.sha256,
                 isPrivate = image.isPrivate,
                 isAllowedRandomFetch = image.isAllowedRandomFetch,
-                createTime = image.createTime
+                createTime = image.createTime,
             )
         }
-    }
 
-    override suspend fun fetchImageInfo(imageId: Long): ImageManageVO {
-        return dbQuery {
+    override suspend fun fetchImageInfo(imageId: Long): ImageManageVO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val user = userDao.findUserById(image.userId) ?: throw UserNotFoundException()
             val group = groupDao.findGroupById(user.groupId) ?: throw GroupNotFoundException()
@@ -313,13 +352,15 @@ class ImageServiceImpl(
                 sha256 = image.sha256,
                 isPrivate = image.isPrivate,
                 isAllowedRandomFetch = image.isAllowedRandomFetch,
-                createTime = image.createTime
+                createTime = image.createTime,
             )
         }
-    }
 
-    override suspend fun fetchSelfImageFile(userId: Long, imageId: Long): ImageFileDTO {
-        return dbQuery {
+    override suspend fun fetchSelfImageFile(
+        userId: Long,
+        imageId: Long,
+    ): ImageFileDTO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             if (image.userId != userId) throw ImageAccessDeniedException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
@@ -330,20 +371,21 @@ class ImageServiceImpl(
                 is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
-    }
 
-    override suspend fun fetchSelfImageThumbnailFile(userId: Long, imageId: Long): ImageFileDTO {
-        return dbQuery {
+    override suspend fun fetchSelfImageThumbnailFile(
+        userId: Long,
+        imageId: Long,
+    ): ImageFileDTO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             if (image.userId != userId) throw ImageAccessDeniedException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
             fetchThumbnailFile(strategy, image)
         }
-    }
 
-    override suspend fun fetchImageFile(imageId: Long): ImageFileDTO {
-        return dbQuery {
+    override suspend fun fetchImageFile(imageId: Long): ImageFileDTO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
@@ -353,30 +395,32 @@ class ImageServiceImpl(
                 is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path))
             }
         }
-    }
 
-    override suspend fun fetchImageThumbnailFile(imageId: Long): ImageFileDTO {
-        return dbQuery {
+    override suspend fun fetchImageThumbnailFile(imageId: Long): ImageFileDTO =
+        dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
 
             fetchThumbnailFile(strategy, image)
         }
-    }
 
-    override suspend fun pageSelfImage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
+    override suspend fun pageSelfImage(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<ImagePageVO> {
         val siteExternalUrl = settingService.getSiteSetting().siteExternalUrl
         return dbQuery { imageDao.pagination(userId, pageRequest) }.let {
             it.copy(
-                data = it.data.map { image ->
-                    ImagePageVO(
-                        id = image.id,
-                        displayName = image.displayName,
-                        isPrivate = image.isPrivate,
-                        externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
-                        createTime = image.createTime
-                    )
-                }
+                data =
+                    it.data.map { image ->
+                        ImagePageVO(
+                            id = image.id,
+                            displayName = image.displayName,
+                            isPrivate = image.isPrivate,
+                            externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
+                            createTime = image.createTime,
+                        )
+                    },
             )
         }
     }
@@ -385,23 +429,27 @@ class ImageServiceImpl(
         val siteExternalUrl = settingService.getSiteSetting().siteExternalUrl
         return dbQuery { imageDao.paginationForManage(pageRequest) }.let {
             it.copy(
-                data = it.data.map { image ->
-                    ImageManagePageVO(
-                        id = image.id,
-                        displayName = image.displayName,
-                        userId = image.userId,
-                        username = image.username,
-                        userEmail = image.userEmail,
-                        isPrivate = image.isPrivate,
-                        externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
-                        createTime = image.createTime
-                    )
-                }
+                data =
+                    it.data.map { image ->
+                        ImageManagePageVO(
+                            id = image.id,
+                            displayName = image.displayName,
+                            userId = image.userId,
+                            username = image.username,
+                            userEmail = image.userEmail,
+                            isPrivate = image.isPrivate,
+                            externalUrl = if (image.isPrivate) "" else "$siteExternalUrl/s/${image.externalUrl}",
+                            createTime = image.createTime,
+                        )
+                    },
             )
         }
     }
 
-    private suspend fun fetchThumbnailFile(strategy: Strategy, image: Image) = when (strategy.config) {
+    private suspend fun fetchThumbnailFile(
+        strategy: Strategy,
+        image: Image,
+    ) = when (strategy.config) {
         is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
         is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
         is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path, true))

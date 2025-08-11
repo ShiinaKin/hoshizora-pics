@@ -59,8 +59,11 @@ private fun Route.albumSelfInsert(controller: AlbumController) {
         }
         install(RequestValidation) {
             validate<AlbumSelfInsertRequest> { selfInsertRequest ->
-                if (selfInsertRequest.name.isBlank()) ValidationResult.Invalid("albumName is invalid")
-                else ValidationResult.Valid
+                if (selfInsertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("albumName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -112,13 +115,16 @@ private fun Route.albumSelfPatch(controller: AlbumController) {
         }
         install(RequestValidation) {
             validate<AlbumSelfPatchRequest> { selfPatchRequest ->
-                if (selfPatchRequest.name == null
-                    && selfPatchRequest.description == null
-                    && selfPatchRequest.isDefault == null
-                )
+                if (selfPatchRequest.name == null &&
+                    selfPatchRequest.description == null &&
+                    selfPatchRequest.isDefault == null
+                ) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (selfPatchRequest.name?.isBlank() == true) ValidationResult.Invalid("albumName is invalid")
-                else ValidationResult.Valid
+                } else if (selfPatchRequest.name?.isBlank() == true) {
+                    ValidationResult.Invalid("albumName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -192,9 +198,10 @@ private fun Route.albumSelfPage(controller: AlbumController) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
             val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                albumNamePair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    albumNamePair?.let { put(it.first, it.second) }
+                }
 
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
@@ -237,8 +244,11 @@ private fun Route.albumManageInsert(controller: AlbumController) {
         }
         install(RequestValidation) {
             validate<AlbumManageInsertRequest> { manageInsertRequest ->
-                if (manageInsertRequest.name.isBlank()) ValidationResult.Invalid("albumName is invalid")
-                else ValidationResult.Valid
+                if (manageInsertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("albumName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -288,14 +298,17 @@ private fun Route.albumManagePatch(controller: AlbumController) {
         }
         install(RequestValidation) {
             validate<AlbumManagePatchRequest> { managePatchRequest ->
-                if (managePatchRequest.name == null
-                    && managePatchRequest.description == null
-                    && managePatchRequest.isDefault == null
-                    && managePatchRequest.userId == null
-                )
+                if (managePatchRequest.name == null &&
+                    managePatchRequest.description == null &&
+                    managePatchRequest.isDefault == null &&
+                    managePatchRequest.userId == null
+                ) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (managePatchRequest.name?.isBlank() == true) ValidationResult.Invalid("albumName is invalid")
-                else ValidationResult.Valid
+                } else if (managePatchRequest.name?.isBlank() == true) {
+                    ValidationResult.Invalid("albumName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -371,10 +384,11 @@ private fun Route.albumManagePage(controller: AlbumController) {
             val pageRequest = call.pageRequest()
             val userIdPair = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
             val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                userIdPair?.let { put(it.first, it.second) }
-                albumNamePair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    userIdPair?.let { put(it.first, it.second) }
+                    albumNamePair?.let { put(it.first, it.second) }
+                }
 
             val pageResult = controller.handleManagePage(pageRequest)
             call.success(pageResult)
@@ -385,26 +399,42 @@ private fun Route.albumManagePage(controller: AlbumController) {
 private fun ApplicationCall.albumId() = parameters["albumId"]?.toLongOrNull() ?: throw WrongParameterException()
 
 class AlbumController(
-    private val albumService: AlbumService
+    private val albumService: AlbumService,
 ) {
-    suspend fun handleSelfInsert(userId: Long, selfInsertRequest: AlbumSelfInsertRequest) {
+    suspend fun handleSelfInsert(
+        userId: Long,
+        selfInsertRequest: AlbumSelfInsertRequest,
+    ) {
         albumService.saveSelf(userId, selfInsertRequest)
     }
 
-    suspend fun handleSelfPatch(userId: Long, albumId: Long, selfPatchRequest: AlbumSelfPatchRequest) {
+    suspend fun handleSelfPatch(
+        userId: Long,
+        albumId: Long,
+        selfPatchRequest: AlbumSelfPatchRequest,
+    ) {
         albumService.patchSelf(userId, albumId, selfPatchRequest)
     }
 
-    suspend fun handleSelfDelete(userId: Long, albumId: Long) {
+    suspend fun handleSelfDelete(
+        userId: Long,
+        albumId: Long,
+    ) {
         albumService.deleteSelf(userId, albumId)
     }
 
-    suspend fun handleSelfFetch(userId: Long, albumId: Long): AlbumVO {
+    suspend fun handleSelfFetch(
+        userId: Long,
+        albumId: Long,
+    ): AlbumVO {
         val albumVO = albumService.fetchSelf(userId, albumId)
         return albumVO
     }
 
-    suspend fun handleSelfPage(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO> {
+    suspend fun handleSelfPage(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<AlbumPageVO> {
         val pageResult = albumService.pageSelf(userId, pageRequest)
         return pageResult
     }
@@ -413,7 +443,10 @@ class AlbumController(
         albumService.saveAlbum(manageInsertRequest)
     }
 
-    suspend fun handleManagePatch(albumId: Long, managePatchRequest: AlbumManagePatchRequest) {
+    suspend fun handleManagePatch(
+        albumId: Long,
+        managePatchRequest: AlbumManagePatchRequest,
+    ) {
         albumService.patchAlbum(albumId, managePatchRequest)
     }
 

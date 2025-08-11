@@ -69,10 +69,13 @@ private fun Route.patInsert(controller: PersonalAccessTokenController) {
         }
         install(RequestValidation) {
             validate<PersonalAccessTokenInsertRequest> { insertRequest ->
-                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
-                else if (insertRequest.expireTime < Clock.System.now().toLocalDateTime(TimeZone.UTC))
+                if (insertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("name is invalid")
+                } else if (insertRequest.expireTime < Clock.System.now().toLocalDateTime(TimeZone.UTC)) {
                     ValidationResult.Invalid("expireTime is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -119,11 +122,13 @@ private fun Route.patPatch(controller: PersonalAccessTokenController) {
         }
         install(RequestValidation) {
             validate<PersonalAccessTokenPatchRequest> { patchRequest ->
-                if (patchRequest.name == null && patchRequest.description == null)
+                if (patchRequest.name == null && patchRequest.description == null) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                } else if (patchRequest.name != null && patchRequest.name.isBlank()) {
                     ValidationResult.Invalid("name is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -167,13 +172,15 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
 
-            val isExpiredPair = call.parameters["isExpired"]?.toBoolean()?.let {
-                "isExpired" to it.toString()
-            }
+            val isExpiredPair =
+                call.parameters["isExpired"]?.toBoolean()?.let {
+                    "isExpired" to it.toString()
+                }
 
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                isExpiredPair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    isExpiredPair?.let { put(it.first, it.second) }
+                }
 
             val pageResult = controller.handlePage(userId, pageRequest)
             call.success(pageResult)
@@ -181,26 +188,38 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
     }
 }
 
-private fun ApplicationCall.patId() =
-    parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
+private fun ApplicationCall.patId() = parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
 
 class PersonalAccessTokenController(
-    private val personalAccessTokenService: PersonalAccessTokenService
+    private val personalAccessTokenService: PersonalAccessTokenService,
 ) {
-    suspend fun handleInsert(userId: Long, insertRequest: PersonalAccessTokenInsertRequest): String {
+    suspend fun handleInsert(
+        userId: Long,
+        insertRequest: PersonalAccessTokenInsertRequest,
+    ): String {
         val token = personalAccessTokenService.savePAT(userId, insertRequest)
         return token
     }
 
-    suspend fun handleDelete(userId: Long, patId: Long) {
+    suspend fun handleDelete(
+        userId: Long,
+        patId: Long,
+    ) {
         personalAccessTokenService.deletePAT(userId, patId)
     }
 
-    suspend fun handlePatch(userId: Long, patId: Long, patchRequest: PersonalAccessTokenPatchRequest) {
+    suspend fun handlePatch(
+        userId: Long,
+        patId: Long,
+        patchRequest: PersonalAccessTokenPatchRequest,
+    ) {
         personalAccessTokenService.patchPAT(userId, patId, patchRequest)
     }
 
-    suspend fun handlePage(userId: Long, pageRequest: PageRequest): PageResult<PersonalAccessTokenPageVO> {
+    suspend fun handlePage(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<PersonalAccessTokenPageVO> {
         val pageResult = personalAccessTokenService.pagePAT(userId, pageRequest)
         return pageResult
     }

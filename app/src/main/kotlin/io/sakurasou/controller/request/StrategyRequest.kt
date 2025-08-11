@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @Name("StrategyInsertRequest")
 data class StrategyInsertRequest(
     val name: String,
-    val config: StrategyConfig
+    val config: StrategyConfig,
 )
 
 @Serializable

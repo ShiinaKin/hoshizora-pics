@@ -12,7 +12,7 @@ data class AlbumInsertDTO(
     val description: String? = null,
     val imageCount: Int,
     val isUncategorized: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 data class AlbumUpdateDTO(

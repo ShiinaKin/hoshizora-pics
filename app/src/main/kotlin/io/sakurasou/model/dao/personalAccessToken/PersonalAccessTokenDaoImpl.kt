@@ -18,50 +18,55 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
  */
 class PersonalAccessTokenDaoImpl : PersonalAccessTokenDao {
     override fun savePAT(insertDTO: PersonalAccessTokenInsertDTO): Long {
-        val entityId = PersonalAccessTokens.insertAndGetId {
-            it[userId] = insertDTO.userId
-            it[name] = insertDTO.name
-            it[description] = insertDTO.description
-            it[createTime] = insertDTO.createTime
-            it[expireTime] = insertDTO.expireTime
-        }
+        val entityId =
+            PersonalAccessTokens.insertAndGetId {
+                it[userId] = insertDTO.userId
+                it[name] = insertDTO.name
+                it[description] = insertDTO.description
+                it[createTime] = insertDTO.createTime
+                it[expireTime] = insertDTO.expireTime
+            }
         return entityId.value
     }
 
-    override fun deletePATById(patId: Long): Int {
-        return PersonalAccessTokens.deleteWhere { id eq patId }
-    }
+    override fun deletePATById(patId: Long): Int = PersonalAccessTokens.deleteWhere { id eq patId }
 
-    override fun updatePATById(updateDTO: PersonalAccessTokenUpdateDTO): Int {
-        return PersonalAccessTokens.update({ PersonalAccessTokens.id eq updateDTO.id }) {
+    override fun updatePATById(updateDTO: PersonalAccessTokenUpdateDTO): Int =
+        PersonalAccessTokens.update({ PersonalAccessTokens.id eq updateDTO.id }) {
             it[name] = updateDTO.name
             it[description] = updateDTO.description
         }
-    }
 
-    override fun findPATById(patId: Long): PersonalAccessToken? {
-        return PersonalAccessTokens.selectAll()
+    override fun findPATById(patId: Long): PersonalAccessToken? =
+        PersonalAccessTokens
+            .selectAll()
             .where { PersonalAccessTokens.id eq patId }
             .map(::toPersonalAccessToken)
             .firstOrNull()
-    }
 
-    override fun findPATByUserId(userId: Long): List<PersonalAccessToken> {
-        return PersonalAccessTokens.selectAll()
+    override fun findPATByUserId(userId: Long): List<PersonalAccessToken> =
+        PersonalAccessTokens
+            .selectAll()
             .where { PersonalAccessTokens.userId eq userId }
             .map(::toPersonalAccessToken)
-    }
 
-    override fun pagination(userId: Long, pageRequest: PageRequest): PageResult<PersonalAccessTokenPageVO> {
+    override fun pagination(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<PersonalAccessTokenPageVO> {
         val query = { query: Query ->
-            query.adjustWhere { PersonalAccessTokens.userId eq userId }
+            query
+                .adjustWhere { PersonalAccessTokens.userId eq userId }
                 .also {
                     pageRequest.additionalCondition?.let { condition ->
                         condition["isExpired"]?.let { isExpired ->
                             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                             query.andWhere {
-                                if (isExpired == "true") PersonalAccessTokens.expireTime lessEq now
-                                else PersonalAccessTokens.expireTime greater now
+                                if (isExpired == "true") {
+                                    PersonalAccessTokens.expireTime lessEq now
+                                } else {
+                                    PersonalAccessTokens.expireTime greater now
+                                }
                             }
                         }
                     }
@@ -75,17 +80,18 @@ class PersonalAccessTokenDaoImpl : PersonalAccessTokenDao {
                 description = resultRow[PersonalAccessTokens.description],
                 createTime = resultRow[PersonalAccessTokens.createTime],
                 expireTime = resultRow[PersonalAccessTokens.expireTime],
-                isExpired = resultRow[PersonalAccessTokens.expireTime] <= now
+                isExpired = resultRow[PersonalAccessTokens.expireTime] <= now,
             )
         }
     }
 
-    private fun toPersonalAccessToken(resultRow: ResultRow) = PersonalAccessToken(
-        resultRow[PersonalAccessTokens.id].value,
-        resultRow[PersonalAccessTokens.userId],
-        resultRow[PersonalAccessTokens.name],
-        resultRow[PersonalAccessTokens.description],
-        resultRow[PersonalAccessTokens.createTime],
-        resultRow[PersonalAccessTokens.expireTime]
-    )
+    private fun toPersonalAccessToken(resultRow: ResultRow) =
+        PersonalAccessToken(
+            resultRow[PersonalAccessTokens.id].value,
+            resultRow[PersonalAccessTokens.userId],
+            resultRow[PersonalAccessTokens.name],
+            resultRow[PersonalAccessTokens.description],
+            resultRow[PersonalAccessTokens.createTime],
+            resultRow[PersonalAccessTokens.expireTime],
+        )
 }

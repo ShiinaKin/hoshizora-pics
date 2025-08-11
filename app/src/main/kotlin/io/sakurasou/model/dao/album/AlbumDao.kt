@@ -13,8 +13,9 @@ import io.sakurasou.model.entity.Album
  * @author ShiinaKin
  * 2024/9/7 14:09
  */
-interface AlbumDao: PaginationDao {
+interface AlbumDao : PaginationDao {
     fun initAlbumForUser(userId: Long): Long
+
     fun saveAlbum(insertDTO: AlbumInsertDTO): Long
 
     fun deleteAlbumById(albumId: Long): Int
@@ -22,11 +23,19 @@ interface AlbumDao: PaginationDao {
     fun updateAlbumById(updateDTO: AlbumUpdateDTO): Int
 
     fun findAlbumById(albumId: Long): Album?
+
     fun findDefaultAlbumByUserId(userId: Long): Album
+
     fun countAlbum(): Long
+
     fun countAlbumByUserId(id: Long): Long
+
     fun listAlbumByUserId(userId: Long): List<Album>
 
-    fun pagination(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO>
+    fun pagination(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<AlbumPageVO>
+
     fun paginationForManage(pageRequest: PageRequest): PageResult<AlbumManagePageVO>
 }

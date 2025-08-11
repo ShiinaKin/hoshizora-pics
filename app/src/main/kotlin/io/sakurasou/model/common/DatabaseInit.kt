@@ -68,24 +68,22 @@ object DatabaseInit {
         }
     }
 
-    private fun isFirstRunning(): Boolean {
-        return SchemaUtils.listTables().size == 12
-    }
+    private fun isFirstRunning(): Boolean = SchemaUtils.listTables().size == 12
 
     private fun initPermission() {
-        val allPermissions = listOf(
-            userOpsPermissions,
-            groupOpsPermissions,
-            roleOpsPermissions,
-            permissionOpsPermissions,
-            settingOpsPermissions,
-            strategyOpsPermissions,
-            imageOpsPermissions,
-            albumOpsPermissions,
-            personalAccessTokenOpsPermissions
-        )
-            .flatten()
-            .map { PermissionInsertDTO(it, null) }
+        val allPermissions =
+            listOf(
+                userOpsPermissions,
+                groupOpsPermissions,
+                roleOpsPermissions,
+                permissionOpsPermissions,
+                settingOpsPermissions,
+                strategyOpsPermissions,
+                imageOpsPermissions,
+                albumOpsPermissions,
+                personalAccessTokenOpsPermissions,
+            ).flatten()
+                .map { PermissionInsertDTO(it, null) }
 
         InstanceCenter.permissionDao.batchSavePermission(allPermissions)
 
@@ -93,20 +91,22 @@ object DatabaseInit {
     }
 
     private fun initRole() {
-        val adminRoleInsertDTO = RoleInsertDTO(
-            name = ROLE_ADMIN,
-            displayName = "Role for admin",
-            isSystemReserved = true,
-            description = null,
-            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        )
-        val userRoleInsertDTO = RoleInsertDTO(
-            name = ROLE_USER,
-            displayName = "Role for user",
-            isSystemReserved = true,
-            description = null,
-            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        )
+        val adminRoleInsertDTO =
+            RoleInsertDTO(
+                name = ROLE_ADMIN,
+                displayName = "Role for admin",
+                isSystemReserved = true,
+                description = null,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            )
+        val userRoleInsertDTO =
+            RoleInsertDTO(
+                name = ROLE_USER,
+                displayName = "Role for user",
+                isSystemReserved = true,
+                description = null,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            )
         InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
         InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
 
@@ -116,57 +116,64 @@ object DatabaseInit {
     private fun initStrategy() {
         val localStrategyConfig = LocalStrategy("images/uploads", "images/thumbnails")
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val strategyInsertDTO = StrategyInsertDTO(
-            name = "local",
-            isSystemReserved = true,
-            config = localStrategyConfig,
-            createTime = now,
-            updateTime = now
-        )
+        val strategyInsertDTO =
+            StrategyInsertDTO(
+                name = "local",
+                isSystemReserved = true,
+                config = localStrategyConfig,
+                createTime = now,
+                updateTime = now,
+            )
         InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
 
         logger.info { "strategy init success" }
     }
 
     private fun initGroup() {
-        val adminGroupConfig = GroupConfig(
-            groupStrategyConfig = GroupStrategyConfig(
-                singleFileMaxSize = 12 * 1024 * 1024L,
-                maxSize = 16 * 1024 * 1024 * 1024L,
-                pathNamingRule = "{yyyy}/{MM}/{dd}",
-                fileNamingRule = "{uniq}",
-                imageQuality = 100,
-                imageAutoTransformTarget = null,
-                allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP)
+        val adminGroupConfig =
+            GroupConfig(
+                groupStrategyConfig =
+                    GroupStrategyConfig(
+                        singleFileMaxSize = 12 * 1024 * 1024L,
+                        maxSize = 16 * 1024 * 1024 * 1024L,
+                        pathNamingRule = "{yyyy}/{MM}/{dd}",
+                        fileNamingRule = "{uniq}",
+                        imageQuality = 100,
+                        imageAutoTransformTarget = null,
+                        allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP),
+                    ),
             )
-        )
-        val adminGroup = GroupInsertDTO(
-            name = GROUP_ADMIN,
-            description = "admin group",
-            strategyId = 1,
-            config = adminGroupConfig,
-            isSystemReserved = true,
-            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        )
-        val userGroupConfig = GroupConfig(
-            groupStrategyConfig = GroupStrategyConfig(
-                singleFileMaxSize = 12 * 1024 * 1024L,
-                maxSize = 8 * 1024 * 1024 * 1024L,
-                pathNamingRule = "{yyyy}/{MM}/{dd}",
-                fileNamingRule = "{uniq}",
-                imageQuality = 100,
-                imageAutoTransformTarget = null,
-                allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP)
+        val adminGroup =
+            GroupInsertDTO(
+                name = GROUP_ADMIN,
+                description = "admin group",
+                strategyId = 1,
+                config = adminGroupConfig,
+                isSystemReserved = true,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
             )
-        )
-        val userGroup = GroupInsertDTO(
-            name = GROUP_USER,
-            description = "user group",
-            strategyId = 1,
-            config = userGroupConfig,
-            isSystemReserved = true,
-            createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        )
+        val userGroupConfig =
+            GroupConfig(
+                groupStrategyConfig =
+                    GroupStrategyConfig(
+                        singleFileMaxSize = 12 * 1024 * 1024L,
+                        maxSize = 8 * 1024 * 1024 * 1024L,
+                        pathNamingRule = "{yyyy}/{MM}/{dd}",
+                        fileNamingRule = "{uniq}",
+                        imageQuality = 100,
+                        imageAutoTransformTarget = null,
+                        allowedImageTypes = setOf(ImageType.JPEG, ImageType.JPG, ImageType.PNG, ImageType.GIF, ImageType.WEBP),
+                    ),
+            )
+        val userGroup =
+            GroupInsertDTO(
+                name = GROUP_USER,
+                description = "user group",
+                strategyId = 1,
+                config = userGroupConfig,
+                isSystemReserved = true,
+                createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            )
         InstanceCenter.groupDao.saveGroup(adminGroup)
         InstanceCenter.groupDao.saveGroup(userGroup)
 
@@ -175,31 +182,33 @@ object DatabaseInit {
 
     private fun initRelation() {
         // role-permission
-        val adminPermissions = listOf(
-            userOpsPermissions,
-            groupOpsPermissions,
-            settingOpsPermissions,
-            roleOpsPermissions,
-            strategyOpsPermissions,
-            imageOpsPermissions,
-            albumOpsPermissions,
-            personalAccessTokenOpsPermissions
-        ).flatten()
-        val userPermissions = listOf(
-            USER_READ_SELF,
-            USER_WRITE_SELF,
-            ROLE_READ_SELF,
-            IMAGE_READ_SELF_SINGLE,
-            IMAGE_READ_SELF_ALL,
-            IMAGE_WRITE_SELF,
-            IMAGE_DELETE_SELF,
-            ALBUM_READ_SELF_SINGLE,
-            ALBUM_READ_SELF_ALL,
-            ALBUM_WRITE_SELF,
-            ALBUM_DELETE_SELF,
-            PERSONAL_ACCESS_TOKEN_READ_SELF,
-            PERSONAL_ACCESS_TOKEN_WRITE_SELF
-        )
+        val adminPermissions =
+            listOf(
+                userOpsPermissions,
+                groupOpsPermissions,
+                settingOpsPermissions,
+                roleOpsPermissions,
+                strategyOpsPermissions,
+                imageOpsPermissions,
+                albumOpsPermissions,
+                personalAccessTokenOpsPermissions,
+            ).flatten()
+        val userPermissions =
+            listOf(
+                USER_READ_SELF,
+                USER_WRITE_SELF,
+                ROLE_READ_SELF,
+                IMAGE_READ_SELF_SINGLE,
+                IMAGE_READ_SELF_ALL,
+                IMAGE_WRITE_SELF,
+                IMAGE_DELETE_SELF,
+                ALBUM_READ_SELF_SINGLE,
+                ALBUM_READ_SELF_ALL,
+                ALBUM_WRITE_SELF,
+                ALBUM_DELETE_SELF,
+                PERSONAL_ACCESS_TOKEN_READ_SELF,
+                PERSONAL_ACCESS_TOKEN_WRITE_SELF,
+            )
 
         InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
         InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
@@ -216,21 +225,24 @@ object DatabaseInit {
     }
 
     private fun initSetting(version: String) {
-        val siteSettingConfig = SiteSetting(
-            siteExternalUrl = "http://localhost:8080",
-            siteTitle = "HoshizoraPics",
-            siteSubtitle = "A simple pic management",
-            siteDescription = "A simple pic management"
-        )
-        val systemSettingConfig = SystemSetting(
-            defaultGroupId = 2,
-            allowSignup = false,
-            allowRandomFetch = false
-        )
-        val systemStatus = SystemStatus(
-            isInit = false,
-            version = version
-        )
+        val siteSettingConfig =
+            SiteSetting(
+                siteExternalUrl = "http://localhost:8080",
+                siteTitle = "HoshizoraPics",
+                siteSubtitle = "A simple pic management",
+                siteDescription = "A simple pic management",
+            )
+        val systemSettingConfig =
+            SystemSetting(
+                defaultGroupId = 2,
+                allowSignup = false,
+                allowRandomFetch = false,
+            )
+        val systemStatus =
+            SystemStatus(
+                isInit = false,
+                version = version,
+            )
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
@@ -258,10 +270,11 @@ object DatabaseInit {
             return
         }
         dbQuery {
-            val systemStatus = SystemStatus(
-                isInit = InstanceCenter.systemStatus.isInit,
-                version = version.version
-            )
+            val systemStatus =
+                SystemStatus(
+                    isInit = InstanceCenter.systemStatus.isInit,
+                    version = version.version,
+                )
             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             val updateDTO = SettingUpdateDTO(SETTING_STATUS, systemStatus, now)
             InstanceCenter.settingDao.updateSettingByName(updateDTO)
@@ -275,70 +288,79 @@ object DatabaseInit {
     }
 }
 
-private val userOpsPermissions = listOf(
-    USER_READ_SELF,
-    USER_READ_ALL_SINGLE,
-    USER_READ_ALL_ALL,
-    USER_WRITE_SELF,
-    USER_WRITE_ALL,
-    USER_DELETE,
-    USER_BAN
-)
+private val userOpsPermissions =
+    listOf(
+        USER_READ_SELF,
+        USER_READ_ALL_SINGLE,
+        USER_READ_ALL_ALL,
+        USER_WRITE_SELF,
+        USER_WRITE_ALL,
+        USER_DELETE,
+        USER_BAN,
+    )
 
-private val groupOpsPermissions = listOf(
-    GROUP_READ_SINGLE,
-    GROUP_READ_ALL,
-    GROUP_WRITE,
-    GROUP_DELETE
-)
+private val groupOpsPermissions =
+    listOf(
+        GROUP_READ_SINGLE,
+        GROUP_READ_ALL,
+        GROUP_WRITE,
+        GROUP_DELETE,
+    )
 
-private val roleOpsPermissions = listOf(
-    ROLE_READ_SELF,
-    ROLE_READ_ALL,
-    ROLE_WRITE_ALL
-)
+private val roleOpsPermissions =
+    listOf(
+        ROLE_READ_SELF,
+        ROLE_READ_ALL,
+        ROLE_WRITE_ALL,
+    )
 
-private val permissionOpsPermissions = listOf(
-    PERMISSION_READ,
-    PERMISSION_WRITE,
-    PERMISSION_DELETE
-)
+private val permissionOpsPermissions =
+    listOf(
+        PERMISSION_READ,
+        PERMISSION_WRITE,
+        PERMISSION_DELETE,
+    )
 
-private val settingOpsPermissions = listOf(
-    SETTING_READ,
-    SETTING_WRITE
-)
+private val settingOpsPermissions =
+    listOf(
+        SETTING_READ,
+        SETTING_WRITE,
+    )
 
-private val strategyOpsPermissions = listOf(
-    STRATEGY_READ_ALL,
-    STRATEGY_READ_SINGLE,
-    STRATEGY_WRITE,
-    STRATEGY_DELETE
-)
+private val strategyOpsPermissions =
+    listOf(
+        STRATEGY_READ_ALL,
+        STRATEGY_READ_SINGLE,
+        STRATEGY_WRITE,
+        STRATEGY_DELETE,
+    )
 
-private val imageOpsPermissions = listOf(
-    IMAGE_READ_SELF_SINGLE,
-    IMAGE_READ_SELF_ALL,
-    IMAGE_READ_ALL_SINGLE,
-    IMAGE_READ_ALL_ALL,
-    IMAGE_WRITE_SELF,
-    IMAGE_WRITE_ALL,
-    IMAGE_DELETE_SELF,
-    IMAGE_DELETE_ALL
-)
+private val imageOpsPermissions =
+    listOf(
+        IMAGE_READ_SELF_SINGLE,
+        IMAGE_READ_SELF_ALL,
+        IMAGE_READ_ALL_SINGLE,
+        IMAGE_READ_ALL_ALL,
+        IMAGE_WRITE_SELF,
+        IMAGE_WRITE_ALL,
+        IMAGE_DELETE_SELF,
+        IMAGE_DELETE_ALL,
+    )
 
-private val albumOpsPermissions = listOf(
-    ALBUM_READ_SELF_SINGLE,
-    ALBUM_READ_SELF_ALL,
-    ALBUM_READ_ALL_SINGLE,
-    ALBUM_READ_ALL_ALL,
-    ALBUM_WRITE_SELF,
-    ALBUM_WRITE_ALL,
-    ALBUM_DELETE_SELF,
-    ALBUM_DELETE_ALL
-)
+private val albumOpsPermissions =
+    listOf(
+        ALBUM_READ_SELF_SINGLE,
+        ALBUM_READ_SELF_ALL,
+        ALBUM_READ_ALL_SINGLE,
+        ALBUM_READ_ALL_ALL,
+        ALBUM_WRITE_SELF,
+        ALBUM_WRITE_ALL,
+        ALBUM_DELETE_SELF,
+        ALBUM_DELETE_ALL,
+    )
 
-private val personalAccessTokenOpsPermissions = listOf(
-    PERSONAL_ACCESS_TOKEN_READ_SELF,
-    PERSONAL_ACCESS_TOKEN_WRITE_SELF
-)
+private val personalAccessTokenOpsPermissions =
+    listOf(
+        PERSONAL_ACCESS_TOKEN_READ_SELF,
+        PERSONAL_ACCESS_TOKEN_WRITE_SELF,
+    )

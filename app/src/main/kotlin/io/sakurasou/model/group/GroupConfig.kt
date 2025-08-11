@@ -10,11 +10,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Name("GroupConfig")
 data class GroupConfig(
-    val groupStrategyConfig: GroupStrategyConfig
+    val groupStrategyConfig: GroupStrategyConfig,
 )
 
 @Serializable
 @Name("ImageTypeEnum")
 enum class ImageType {
-    JPEG, JPG, PNG, GIF, TIF, BMP, ICO, PSD, WEBP
+    JPEG,
+    JPG,
+    PNG,
+    GIF,
+    TIF,
+    BMP,
+    ICO,
+    PSD,
+    WEBP,
 }

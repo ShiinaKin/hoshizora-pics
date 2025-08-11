@@ -14,7 +14,7 @@ data class PageRequest(
     val pageSize: Int,
     val order: String? = null,
     val orderBy: String? = null,
-    var additionalCondition: Map<String, String>? = null
+    var additionalCondition: Map<String, String>? = null,
 )
 
 @Serializable
@@ -26,5 +26,5 @@ data class SiteInitRequest(
     val siteExternalUrl: String,
     val siteTitle: String,
     val siteSubtitle: String,
-    val siteDescription: String
+    val siteDescription: String,
 )

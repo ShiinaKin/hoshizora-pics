@@ -21,24 +21,22 @@ class SettingDaoImpl : SettingDao {
         }
     }
 
-    override fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO): Int {
-        return Settings.update({ Settings.name eq settingUpdateDTO.name }) {
+    override fun updateSettingByName(settingUpdateDTO: SettingUpdateDTO): Int =
+        Settings.update({ Settings.name eq settingUpdateDTO.name }) {
             it[config] = settingUpdateDTO.config
             it[updateTime] = settingUpdateDTO.updateTime
         }
-    }
 
-    override fun getSettingByName(name: String): Setting? {
-        return Settings.selectAll()
+    override fun getSettingByName(name: String): Setting? =
+        Settings
+            .selectAll()
             .where { Settings.name eq name }
             .map {
                 Setting(
                     it[Settings.name],
                     it[Settings.config],
                     it[Settings.createTime],
-                    it[Settings.updateTime]
+                    it[Settings.updateTime],
                 )
-            }
-            .firstOrNull()
-    }
+            }.firstOrNull()
 }

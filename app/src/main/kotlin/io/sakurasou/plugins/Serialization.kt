@@ -11,9 +11,10 @@ fun Application.configureSerialization() {
     }
 }
 
-val jsonFormat = Json {
-    encodeDefaults = true
-    prettyPrint = false
-    isLenient = false
-    ignoreUnknownKeys = false
-}
+val jsonFormat =
+    Json {
+        encodeDefaults = true
+        prettyPrint = false
+        isLenient = false
+        ignoreUnknownKeys = false
+    }

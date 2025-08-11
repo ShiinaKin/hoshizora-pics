@@ -6,5 +6,5 @@ package io.sakurasou.model.dto
  */
 data class PermissionInsertDTO(
     val name: String,
-    val description: String?
+    val description: String?,
 )

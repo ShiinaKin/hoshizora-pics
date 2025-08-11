@@ -13,8 +13,15 @@ import io.sakurasou.controller.vo.StrategyVO
  */
 interface StrategyService {
     suspend fun saveStrategy(insertRequest: StrategyInsertRequest)
+
     suspend fun deleteStrategy(id: Long)
-    suspend fun updateStrategy(id: Long, patchRequest: StrategyPatchRequest)
+
+    suspend fun updateStrategy(
+        id: Long,
+        patchRequest: StrategyPatchRequest,
+    )
+
     suspend fun fetchStrategy(id: Long): StrategyVO
+
     suspend fun pageStrategies(pageRequest: PageRequest): PageResult<StrategyPageVO>
 }

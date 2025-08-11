@@ -21,7 +21,7 @@ data class SystemStatisticsVO(
 @Name("SystemOverviewVO")
 data class SystemOverviewVO(
     val hoshizoraStatus: HoshizoraStatusVO,
-    val systemStatus: SystemStatusVO
+    val systemStatus: SystemStatusVO,
 )
 
 @Serializable
@@ -29,7 +29,7 @@ data class SystemOverviewVO(
 data class HoshizoraStatusVO(
     val version: String,
     val buildTime: String,
-    val commitId: String
+    val commitId: String,
 )
 
 @Serializable
@@ -39,5 +39,5 @@ data class SystemStatusVO(
     val databaseVersion: String,
     val operatingSystem: String,
     val serverTimeZone: String,
-    val serverLanguage: String
+    val serverLanguage: String,
 )

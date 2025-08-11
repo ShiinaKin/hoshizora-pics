@@ -84,8 +84,7 @@ private fun Route.imageSelfUpload(controller: ImageController) {
                     body<CommonResponse<String>> { }
                 }
             }
-        })
-        {
+        }) {
             val userId = call.getPrincipal().id
 
             val multipartData = call.receiveMultipart()
@@ -107,12 +106,13 @@ private fun Route.imageSelfUpload(controller: ImageController) {
                         val bytes = part.provider().readRemaining().readByteArray()
                         val contentLength = bytes.size.toLong()
 
-                        imageRawFile = ImageRawFile(
-                            name = fileName,
-                            mimeType = mimeType,
-                            size = contentLength,
-                            bytes = bytes
-                        )
+                        imageRawFile =
+                            ImageRawFile(
+                                name = fileName,
+                                mimeType = mimeType,
+                                size = contentLength,
+                                bytes = bytes,
+                            )
 
                         isMoreThanOne++
                     }
@@ -161,15 +161,18 @@ private fun Route.imageSelfPatch(controller: ImageController) {
         }
         install(RequestValidation) {
             validate<ImagePatchRequest> { patchRequest ->
-                if (patchRequest.albumId == null
-                    && patchRequest.displayName == null
-                    && patchRequest.description == null
-                    && patchRequest.isPrivate == null
-                    && patchRequest.isAllowedRandomFetch == null
-                ) ValidationResult.Invalid("at least one field should be provided")
-                else if (patchRequest.displayName != null && patchRequest.displayName.isBlank())
+                if (patchRequest.albumId == null &&
+                    patchRequest.displayName == null &&
+                    patchRequest.description == null &&
+                    patchRequest.isPrivate == null &&
+                    patchRequest.isAllowedRandomFetch == null
+                ) {
+                    ValidationResult.Invalid("at least one field should be provided")
+                } else if (patchRequest.displayName != null && patchRequest.displayName.isBlank()) {
                     ValidationResult.Invalid("displayName is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -233,8 +236,11 @@ private fun Route.imageSelfFileFetch(controller: ImageController) {
             val userId = call.getPrincipal().id
             val imageId = call.imageId()
             val imageFileDTO = controller.handleSelfFileFetch(userId, imageId)
-            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
-            else call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            if (imageFileDTO.bytes != null) {
+                call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            } else {
+                call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            }
         }
     }
 }
@@ -257,8 +263,11 @@ private fun Route.imageSelfThumbnailFileFetch(controller: ImageController) {
             val userId = call.getPrincipal().id
             val imageId = call.imageId()
             val imageFileDTO = controller.handleSelfThumbnailFileFetch(userId, imageId)
-            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
-            else call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            if (imageFileDTO.bytes != null) {
+                call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            } else {
+                call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            }
         }
     }
 }
@@ -301,11 +310,12 @@ private fun Route.imageSelfPage(controller: ImageController) {
             val albumIdPair = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
             val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                albumIdPair?.let { put(it.first, it.second) }
-                isPrivatePair?.let { put(it.first, it.second) }
-                searchPair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    albumIdPair?.let { put(it.first, it.second) }
+                    isPrivatePair?.let { put(it.first, it.second) }
+                    searchPair?.let { put(it.first, it.second) }
+                }
 
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
@@ -368,16 +378,19 @@ private fun Route.imageManagePatch(controller: ImageController) {
         }
         install(RequestValidation) {
             validate<ImageManagePatchRequest> { managePatchRequest ->
-                if (managePatchRequest.userId == null
-                    && managePatchRequest.albumId == null
-                    && managePatchRequest.displayName == null
-                    && managePatchRequest.description == null
-                    && managePatchRequest.isPrivate == null
-                    && managePatchRequest.isAllowedRandomFetch == null
-                ) ValidationResult.Invalid("at least one field should be provided")
-                else if (managePatchRequest.displayName != null && managePatchRequest.displayName.isBlank())
+                if (managePatchRequest.userId == null &&
+                    managePatchRequest.albumId == null &&
+                    managePatchRequest.displayName == null &&
+                    managePatchRequest.description == null &&
+                    managePatchRequest.isPrivate == null &&
+                    managePatchRequest.isAllowedRandomFetch == null
+                ) {
+                    ValidationResult.Invalid("at least one field should be provided")
+                } else if (managePatchRequest.displayName != null && managePatchRequest.displayName.isBlank()) {
                     ValidationResult.Invalid("displayName is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -438,8 +451,11 @@ private fun Route.imageManageFileFetch(controller: ImageController) {
         }) {
             val imageId = call.imageId()
             val imageFileDTO = controller.handleManageFileFetch(imageId)
-            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
-            else call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            if (imageFileDTO.bytes != null) {
+                call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            } else {
+                call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            }
         }
     }
 }
@@ -461,8 +477,11 @@ private fun Route.imageManageThumbnailFileFetch(controller: ImageController) {
         }) {
             val imageId = call.imageId()
             val imageFileDTO = controller.handleManageThumbnailFileFetch(imageId)
-            if (imageFileDTO.bytes != null) call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
-            else call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            if (imageFileDTO.bytes != null) {
+                call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
+            } else {
+                call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            }
         }
     }
 }
@@ -509,12 +528,13 @@ private fun Route.imageManagePage(controller: ImageController) {
             val albumIdPair = call.parameters["albumId"]?.toLongOrNull()?.let { "albumId" to it.toString() }
             val isPrivatePair = call.parameters["isPrivate"]?.toBoolean()?.let { "isPrivate" to it.toString() }
             val searchPair = call.parameters["search"]?.let { "search" to it }
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                userIdPair?.let { put(it.first, it.second) }
-                albumIdPair?.let { put(it.first, it.second) }
-                isPrivatePair?.let { put(it.first, it.second) }
-                searchPair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    userIdPair?.let { put(it.first, it.second) }
+                    albumIdPair?.let { put(it.first, it.second) }
+                    isPrivatePair?.let { put(it.first, it.second) }
+                    searchPair?.let { put(it.first, it.second) }
+                }
 
             val pageResult = controller.handleManagePage(pageRequest)
             call.success(pageResult)
@@ -522,41 +542,62 @@ private fun Route.imageManagePage(controller: ImageController) {
     }
 }
 
-private fun ApplicationCall.imageId() =
-    parameters["imageId"]?.toLongOrNull() ?: throw IllegalArgumentException("imageId")
+private fun ApplicationCall.imageId() = parameters["imageId"]?.toLongOrNull() ?: throw IllegalArgumentException("imageId")
 
 class ImageController(
-    private val imageService: ImageService
+    private val imageService: ImageService,
 ) {
-    suspend fun handleSelfUpload(userId: Long, imageRawFile: ImageRawFile): String {
+    suspend fun handleSelfUpload(
+        userId: Long,
+        imageRawFile: ImageRawFile,
+    ): String {
         val imageName = imageService.saveImage(userId, imageRawFile)
         return imageName
     }
 
-    suspend fun handleSelfDelete(userId: Long, imageId: Long) {
+    suspend fun handleSelfDelete(
+        userId: Long,
+        imageId: Long,
+    ) {
         imageService.deleteSelfImage(userId, imageId)
     }
 
-    suspend fun handleSelfUpdate(userId: Long, imageId: Long, imagePatchRequest: ImagePatchRequest) {
+    suspend fun handleSelfUpdate(
+        userId: Long,
+        imageId: Long,
+        imagePatchRequest: ImagePatchRequest,
+    ) {
         imageService.patchSelfImage(userId, imageId, imagePatchRequest)
     }
 
-    suspend fun handleSelfFetch(userId: Long, imageId: Long): ImageVO {
+    suspend fun handleSelfFetch(
+        userId: Long,
+        imageId: Long,
+    ): ImageVO {
         val imageVO = imageService.fetchSelfImageInfo(userId, imageId)
         return imageVO
     }
 
-    suspend fun handleSelfFileFetch(userId: Long, imageId: Long): ImageFileDTO {
+    suspend fun handleSelfFileFetch(
+        userId: Long,
+        imageId: Long,
+    ): ImageFileDTO {
         val imageFileDTO = imageService.fetchSelfImageFile(userId, imageId)
         return imageFileDTO
     }
 
-    suspend fun handleSelfThumbnailFileFetch(userId: Long, imageId: Long): ImageFileDTO {
+    suspend fun handleSelfThumbnailFileFetch(
+        userId: Long,
+        imageId: Long,
+    ): ImageFileDTO {
         val imageFileDTO = imageService.fetchSelfImageThumbnailFile(userId, imageId)
         return imageFileDTO
     }
 
-    suspend fun handleSelfPage(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
+    suspend fun handleSelfPage(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<ImagePageVO> {
         val pageResult = imageService.pageSelfImage(userId, pageRequest)
         return pageResult
     }
@@ -565,7 +606,10 @@ class ImageController(
         imageService.deleteImage(imageId)
     }
 
-    suspend fun handleManageUpdate(imageId: Long, imagePatchRequest: ImageManagePatchRequest) {
+    suspend fun handleManageUpdate(
+        imageId: Long,
+        imagePatchRequest: ImageManagePatchRequest,
+    ) {
         imageService.patchImage(imageId, imagePatchRequest)
     }
 

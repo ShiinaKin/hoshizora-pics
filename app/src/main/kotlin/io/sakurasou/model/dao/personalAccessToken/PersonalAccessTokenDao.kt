@@ -14,9 +14,17 @@ import io.sakurasou.model.entity.PersonalAccessToken
  */
 interface PersonalAccessTokenDao : PaginationDao {
     fun savePAT(insertDTO: PersonalAccessTokenInsertDTO): Long
+
     fun deletePATById(patId: Long): Int
+
     fun updatePATById(updateDTO: PersonalAccessTokenUpdateDTO): Int
+
     fun findPATById(patId: Long): PersonalAccessToken?
+
     fun findPATByUserId(userId: Long): List<PersonalAccessToken>
-    fun pagination(userId: Long, pageRequest: PageRequest): PageResult<PersonalAccessTokenPageVO>
+
+    fun pagination(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<PersonalAccessTokenPageVO>
 }

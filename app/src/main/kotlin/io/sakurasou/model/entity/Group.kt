@@ -16,5 +16,5 @@ data class Group(
     val strategyId: Long,
     val config: GroupConfig,
     val isSystemReserved: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

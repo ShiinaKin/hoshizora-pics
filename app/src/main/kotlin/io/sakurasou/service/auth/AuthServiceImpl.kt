@@ -15,10 +15,10 @@ import io.sakurasou.util.JwtUtils
  */
 class AuthServiceImpl(
     private val userDao: UserDao,
-    private val relationDao: RelationDao
+    private val relationDao: RelationDao,
 ) : AuthService {
-    override suspend fun login(loginRequest: UserLoginRequest): String {
-        return dbQuery {
+    override suspend fun login(loginRequest: UserLoginRequest): String =
+        dbQuery {
             val user = userDao.findUserByName(loginRequest.username) ?: throw LoginFailedException()
 
             if (user.isBanned) throw UserBannedException()
@@ -30,5 +30,4 @@ class AuthServiceImpl(
 
             JwtUtils.generateJwtToken(user, roles)
         }
-    }
 }

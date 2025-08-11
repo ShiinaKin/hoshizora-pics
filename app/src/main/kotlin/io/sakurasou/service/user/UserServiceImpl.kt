@@ -34,7 +34,7 @@ class UserServiceImpl(
     private val groupDao: GroupDao,
     private val albumDao: AlbumDao,
     private val imageDao: ImageDao,
-    private val settingService: SettingService
+    private val settingService: SettingService,
 ) : UserService {
     override suspend fun saveUser(userInsertRequest: UserInsertRequest) {
         val systemSetting = settingService.getSystemSetting()
@@ -44,17 +44,18 @@ class UserServiceImpl(
         val encodePassword = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray())
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val userInsertDTO = UserInsertDTO(
-            groupId = systemSetting.defaultGroupId,
-            username = userInsertRequest.username,
-            password = encodePassword,
-            email = userInsertRequest.email,
-            isDefaultImagePrivate = true,
-            defaultAlbumId = null,
-            isBanned = false,
-            updateTime = now,
-            createTime = now
-        )
+        val userInsertDTO =
+            UserInsertDTO(
+                groupId = systemSetting.defaultGroupId,
+                username = userInsertRequest.username,
+                password = encodePassword,
+                email = userInsertRequest.email,
+                isDefaultImagePrivate = true,
+                defaultAlbumId = null,
+                isBanned = false,
+                updateTime = now,
+                createTime = now,
+            )
         dbQuery {
             val userId = userDao.saveUser(userInsertDTO)
             val defaultAlbumId = albumDao.initAlbumForUser(userId)
@@ -68,17 +69,18 @@ class UserServiceImpl(
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
-        val userInsertDTO = UserInsertDTO(
-            groupId = userManageInsertRequest.groupId,
-            username = userManageInsertRequest.username,
-            password = encodePassword,
-            email = userManageInsertRequest.email,
-            isDefaultImagePrivate = userManageInsertRequest.isDefaultImagePrivate,
-            defaultAlbumId = null,
-            isBanned = false,
-            updateTime = now,
-            createTime = now
-        )
+        val userInsertDTO =
+            UserInsertDTO(
+                groupId = userManageInsertRequest.groupId,
+                username = userManageInsertRequest.username,
+                password = encodePassword,
+                email = userManageInsertRequest.email,
+                isDefaultImagePrivate = userManageInsertRequest.isDefaultImagePrivate,
+                defaultAlbumId = null,
+                isBanned = false,
+                updateTime = now,
+                createTime = now,
+            )
         runCatching {
             dbQuery {
                 val userId = userDao.saveUser(userInsertDTO)
@@ -99,28 +101,36 @@ class UserServiceImpl(
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }
         }.onFailure {
-            if (it is UserNotFoundException) throw UserDeleteFailedException(it)
-            else throw it
+            if (it is UserNotFoundException) {
+                throw UserDeleteFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun patchSelf(id: Long, patchRequest: UserSelfPatchRequest) {
+    override suspend fun patchSelf(
+        id: Long,
+        patchRequest: UserSelfPatchRequest,
+    ) {
         dbQuery {
             val oldUserInfo = userDao.findUserById(id) ?: throw UserNotFoundException()
 
-            val encodePassword = patchRequest.password?.let {
-                BCrypt.withDefaults().hashToString(12, it.toCharArray())
-            } ?: oldUserInfo.password
+            val encodePassword =
+                patchRequest.password?.let {
+                    BCrypt.withDefaults().hashToString(12, it.toCharArray())
+                } ?: oldUserInfo.password
             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
-            val selfUpdateDTO = UserSelfUpdateDTO(
-                id = id,
-                password = encodePassword,
-                email = patchRequest.email ?: oldUserInfo.email,
-                isDefaultImagePrivate = patchRequest.isDefaultImagePrivate ?: oldUserInfo.isDefaultImagePrivate,
-                defaultAlbumId = patchRequest.defaultAlbumId ?: oldUserInfo.defaultAlbumId,
-                updateTime = now
-            )
+            val selfUpdateDTO =
+                UserSelfUpdateDTO(
+                    id = id,
+                    password = encodePassword,
+                    email = patchRequest.email ?: oldUserInfo.email,
+                    isDefaultImagePrivate = patchRequest.isDefaultImagePrivate ?: oldUserInfo.isDefaultImagePrivate,
+                    defaultAlbumId = patchRequest.defaultAlbumId ?: oldUserInfo.defaultAlbumId,
+                    updateTime = now,
+                )
 
             val isModifyDefaultAlbum = patchRequest.defaultAlbumId != null
 
@@ -132,30 +142,38 @@ class UserServiceImpl(
                 val influenceRowCnt = userDao.updateSelfById(selfUpdateDTO)
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }.onFailure {
-                if (it is UserNotFoundException) throw UserUpdateFailedException(it)
-                else throw it
+                if (it is UserNotFoundException) {
+                    throw UserUpdateFailedException(it)
+                } else {
+                    throw it
+                }
             }
         }
     }
 
-    override suspend fun patchUser(id: Long, patchRequest: UserManagePatchRequest) {
+    override suspend fun patchUser(
+        id: Long,
+        patchRequest: UserManagePatchRequest,
+    ) {
         dbQuery {
             val oldUserInfo = userDao.findUserById(id) ?: throw UserNotFoundException()
 
-            val encodePassword = patchRequest.password?.let {
-                BCrypt.withDefaults().hashToString(12, it.toCharArray())
-            } ?: oldUserInfo.password
+            val encodePassword =
+                patchRequest.password?.let {
+                    BCrypt.withDefaults().hashToString(12, it.toCharArray())
+                } ?: oldUserInfo.password
             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
-            val userUpdateDTO = UserManageUpdateDTO(
-                id = id,
-                groupId = patchRequest.groupId ?: oldUserInfo.groupId,
-                password = encodePassword,
-                email = patchRequest.email ?: oldUserInfo.email,
-                isDefaultImagePrivate = patchRequest.isDefaultImagePrivate ?: oldUserInfo.isDefaultImagePrivate,
-                defaultAlbumId = patchRequest.defaultAlbumId ?: oldUserInfo.defaultAlbumId,
-                updateTime = now
-            )
+            val userUpdateDTO =
+                UserManageUpdateDTO(
+                    id = id,
+                    groupId = patchRequest.groupId ?: oldUserInfo.groupId,
+                    password = encodePassword,
+                    email = patchRequest.email ?: oldUserInfo.email,
+                    isDefaultImagePrivate = patchRequest.isDefaultImagePrivate ?: oldUserInfo.isDefaultImagePrivate,
+                    defaultAlbumId = patchRequest.defaultAlbumId ?: oldUserInfo.defaultAlbumId,
+                    updateTime = now,
+                )
 
             val isModifyGroup = patchRequest.groupId != null
             val isModifyDefaultAlbum = patchRequest.defaultAlbumId != null
@@ -169,8 +187,11 @@ class UserServiceImpl(
                 if (influenceRowCnt < 1) throw UserNotFoundException()
                 if (isModifyGroup) imageDao.updateImageGroupIdByUserId(id, userUpdateDTO.groupId)
             }.onFailure {
-                if (it is UserNotFoundException) throw UserUpdateFailedException(it)
-                else throw it
+                if (it is UserNotFoundException) {
+                    throw UserUpdateFailedException(it)
+                } else {
+                    throw it
+                }
             }
         }
     }
@@ -182,8 +203,11 @@ class UserServiceImpl(
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }
         }.onFailure {
-            if (it is UserNotFoundException) throw UserUpdateFailedException(it)
-            else throw it
+            if (it is UserNotFoundException) {
+                throw UserUpdateFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
@@ -194,13 +218,16 @@ class UserServiceImpl(
                 if (influenceRowCnt < 1) throw UserNotFoundException()
             }
         }.onFailure {
-            if (it is UserNotFoundException) throw UserUpdateFailedException(it)
-            else throw it
+            if (it is UserNotFoundException) {
+                throw UserUpdateFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun fetchUser(id: Long): UserVO {
-        return dbQuery {
+    override suspend fun fetchUser(id: Long): UserVO =
+        dbQuery {
             val user = userDao.findUserById(id) ?: throw UserNotFoundException()
             val group = groupDao.findGroupById(user.groupId)!!
             val albumCount = albumDao.countAlbumByUserId(id)
@@ -220,9 +247,6 @@ class UserServiceImpl(
                 allSize = group.config.groupStrategyConfig.maxSize / 1024 / 1024.0,
             )
         }
-    }
 
-    override suspend fun pageUsers(pageRequest: PageRequest): PageResult<UserPageVO> {
-        return dbQuery { userDao.pagination(pageRequest) }
-    }
+    override suspend fun pageUsers(pageRequest: PageRequest): PageResult<UserPageVO> = dbQuery { userDao.pagination(pageRequest) }
 }

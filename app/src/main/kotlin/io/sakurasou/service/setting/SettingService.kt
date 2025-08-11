@@ -12,10 +12,16 @@ import io.sakurasou.model.setting.SystemStatus
  */
 interface SettingService {
     suspend fun updateSystemSetting(systemSetting: SystemSettingPatchRequest)
+
     suspend fun updateSiteSetting(siteSetting: SiteSetting)
+
     suspend fun updateSiteSetting(siteSettingPatch: SiteSettingPatchRequest)
+
     suspend fun updateSystemStatus(systemStatus: SystemStatus)
+
     suspend fun getSystemSetting(): SystemSetting
+
     suspend fun getSiteSetting(): SiteSetting
+
     suspend fun getSystemStatus(): SystemStatus
 }

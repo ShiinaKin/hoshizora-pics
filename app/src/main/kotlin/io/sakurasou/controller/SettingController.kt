@@ -64,11 +64,12 @@ private fun Route.fetchSetting(controller: SettingController) {
         }) {
             val settingType =
                 call.parameters["setting_type"] ?: throw WrongParameterException("setting type is required")
-            val settingVO = when (settingType) {
-                SETTING_SITE -> controller.handleFetchSiteSetting()
-                SETTING_SYSTEM -> controller.handleFetchSystemSetting()
-                else -> throw WrongParameterException("setting type is invalid")
-            }
+            val settingVO =
+                when (settingType) {
+                    SETTING_SITE -> controller.handleFetchSiteSetting()
+                    SETTING_SYSTEM -> controller.handleFetchSystemSetting()
+                    else -> throw WrongParameterException("setting type is invalid")
+                }
             call.success(settingVO)
         }
     }
@@ -81,17 +82,21 @@ private fun Route.handlePatchSiteSetting(controller: SettingController) {
         }
         install(RequestValidation) {
             validate<SiteSettingPatchRequest> { patchRequest ->
-                if (patchRequest.siteTitle == null
-                    && patchRequest.siteSubtitle == null
-                    && patchRequest.siteDescription == null
-                    && patchRequest.siteExternalUrl == null
-                ) ValidationResult.Invalid("at least one field is required")
-                else if (patchRequest.siteTitle != null && patchRequest.siteTitle.isBlank())
+                if (patchRequest.siteTitle == null &&
+                    patchRequest.siteSubtitle == null &&
+                    patchRequest.siteDescription == null &&
+                    patchRequest.siteExternalUrl == null
+                ) {
+                    ValidationResult.Invalid("at least one field is required")
+                } else if (patchRequest.siteTitle != null && patchRequest.siteTitle.isBlank()) {
                     ValidationResult.Invalid("siteTitle is invalid")
-                else if (patchRequest.siteExternalUrl != null
-                    && !patchRequest.siteExternalUrl.matches(Regex(REGEX_URL)))
+                } else if (patchRequest.siteExternalUrl != null &&
+                    !patchRequest.siteExternalUrl.matches(Regex(REGEX_URL))
+                ) {
                     ValidationResult.Invalid("siteExternalUrl is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch("site", {
@@ -116,11 +121,14 @@ private fun Route.handlePatchSystemSetting(controller: SettingController) {
         }
         install(RequestValidation) {
             validate<SystemSettingPatchRequest> { patchRequest ->
-                if (patchRequest.defaultGroupId == null
-                    && patchRequest.allowSignup == null
-                    && patchRequest.allowRandomFetch == null
-                ) ValidationResult.Invalid("at least one field is required")
-                else ValidationResult.Valid
+                if (patchRequest.defaultGroupId == null &&
+                    patchRequest.allowSignup == null &&
+                    patchRequest.allowRandomFetch == null
+                ) {
+                    ValidationResult.Invalid("at least one field is required")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch("system", {
@@ -139,7 +147,7 @@ private fun Route.handlePatchSystemSetting(controller: SettingController) {
 }
 
 class SettingController(
-    private val settingService: SettingService
+    private val settingService: SettingService,
 ) {
     suspend fun handleFetchSiteSetting(): SettingVO {
         val siteSetting = settingService.getSiteSetting()

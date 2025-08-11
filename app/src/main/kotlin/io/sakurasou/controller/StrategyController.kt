@@ -66,114 +66,194 @@ private fun Route.insertStrategy(controller: StrategyController) {
         }
         install(RequestValidation) {
             validate<StrategyInsertRequest> { insertRequest ->
-                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
-                else if (insertRequest.config is S3Strategy && !insertRequest.config.endpoint.matches(Regex(REGEX_URL)))
+                if (insertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("name is invalid")
+                } else if (insertRequest.config is S3Strategy && !insertRequest.config.endpoint.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("endpoint is invalid")
-                else if (insertRequest.config is S3Strategy && insertRequest.config.bucketName.isBlank())
+                } else if (insertRequest.config is S3Strategy && insertRequest.config.bucketName.isBlank()) {
                     ValidationResult.Invalid("bucketName is invalid")
-                else if (insertRequest.config is S3Strategy && insertRequest.config.region.isBlank())
+                } else if (insertRequest.config is S3Strategy && insertRequest.config.region.isBlank()) {
                     ValidationResult.Invalid("region is invalid")
-                else if (insertRequest.config is S3Strategy && !insertRequest.config.publicUrl.matches(Regex(REGEX_URL)))
+                } else if (insertRequest.config is S3Strategy && !insertRequest.config.publicUrl.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("publicUrl is invalid")
-                else if (insertRequest.config is WebDavStrategy && !insertRequest.config.serverUrl.matches(Regex(REGEX_URL)))
+                } else if (insertRequest.config is WebDavStrategy &&
+                    !insertRequest.config.serverUrl.matches(
+                        Regex(
+                            REGEX_URL,
+                        ),
+                    )
+                ) {
                     ValidationResult.Invalid("serverUrl is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
             protected = true
             request {
-                body(Schema<StrategyInsertRequest>().apply {
-                    title = "StrategyInsertRequest"
-                    addProperty("config", Schema<StrategyConfig>().apply {
-                        description = "io/sakurasou/model/strategy/StrategyConfig.kt"
-                        oneOf(
-                            listOf(
-                                Schema<LocalStrategy>().apply {
-                                    title = "StrategyRequestLocalStrategyConfig"
-                                    description = "Local strategy configuration"
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                },
-                                Schema<S3Strategy>().apply {
-                                    title = "StrategyRequestS3StrategyConfig"
-                                    description = "S3 strategy configuration"
-                                    addProperty("endpoint", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("bucketName", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("region", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("accessKey", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("secretKey", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("publicUrl", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                },
-                                Schema<WebDavStrategy>().apply {
-                                    title = "StrategyRequestWebDavStrategyConfig"
-                                    description = "WebDav strategy configuration"
-                                    addProperty("serverUrl", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("username", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("password", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                }
-                            )
+                body(
+                    Schema<StrategyInsertRequest>().apply {
+                        title = "StrategyInsertRequest"
+                        addProperty(
+                            "config",
+                            Schema<StrategyConfig>().apply {
+                                description = "io/sakurasou/model/strategy/StrategyConfig.kt"
+                                oneOf(
+                                    listOf(
+                                        Schema<LocalStrategy>().apply {
+                                            title = "StrategyRequestLocalStrategyConfig"
+                                            description = "Local strategy configuration"
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                        Schema<S3Strategy>().apply {
+                                            title = "StrategyRequestS3StrategyConfig"
+                                            description = "S3 strategy configuration"
+                                            addProperty(
+                                                "endpoint",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "bucketName",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "region",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "accessKey",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "secretKey",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "publicUrl",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                        Schema<WebDavStrategy>().apply {
+                                            title = "StrategyRequestWebDavStrategyConfig"
+                                            description = "WebDav strategy configuration"
+                                            addProperty(
+                                                "serverUrl",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "username",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "password",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                    ),
+                                )
+                            },
                         )
-                    })
-                    addProperty("name", Schema<Any>().apply {
-                        type = "string"
-                    })
-                }) {
+                        addProperty(
+                            "name",
+                            Schema<Any>().apply {
+                                type = "string"
+                            },
+                        )
+                    },
+                ) {
                     description = "`config` need a extra field `type`, same to strategyType"
                     required = true
                 }
@@ -219,118 +299,191 @@ private fun Route.patchStrategy(controller: StrategyController) {
         }
         install(RequestValidation) {
             validate<StrategyPatchRequest> { patchRequest ->
-                if (patchRequest.name == null && patchRequest.config == null)
+                if (patchRequest.name == null && patchRequest.config == null) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                } else if (patchRequest.name != null && patchRequest.name.isBlank()) {
                     ValidationResult.Invalid("name is invalid")
-                else if (patchRequest.config is S3Strategy && !patchRequest.config.endpoint.matches(Regex(REGEX_URL)))
+                } else if (patchRequest.config is S3Strategy && !patchRequest.config.endpoint.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("endpoint is invalid")
-                else if (patchRequest.config is S3Strategy && patchRequest.config.bucketName.isBlank())
+                } else if (patchRequest.config is S3Strategy && patchRequest.config.bucketName.isBlank()) {
                     ValidationResult.Invalid("bucketName is invalid")
-                else if (patchRequest.config is S3Strategy && patchRequest.config.region.isBlank())
+                } else if (patchRequest.config is S3Strategy && patchRequest.config.region.isBlank()) {
                     ValidationResult.Invalid("region is invalid")
-                else if (patchRequest.config is S3Strategy && !patchRequest.config.publicUrl.matches(Regex(REGEX_URL)))
+                } else if (patchRequest.config is S3Strategy && !patchRequest.config.publicUrl.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("publicUrl is invalid")
-                else if (patchRequest.config is WebDavStrategy && !patchRequest.config.serverUrl.matches(Regex(REGEX_URL)))
+                } else if (patchRequest.config is WebDavStrategy && !patchRequest.config.serverUrl.matches(Regex(REGEX_URL))) {
                     ValidationResult.Invalid("serverUrl is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
             request {
-                body(Schema<StrategyPatchRequest>().apply {
-                    title = "StrategyPatchRequest"
-                    addProperty("config", Schema<StrategyConfig>().apply {
-                        description = "io/sakurasou/model/strategy/StrategyConfig.kt"
-                        anyOf(
-                            listOf(
-                                Schema<LocalStrategy>().apply {
-                                    title = "StrategyRequestLocalStrategyConfig"
-                                    description = "Local strategy configuration"
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                },
-                                Schema<S3Strategy>().apply {
-                                    title = "StrategyRequestS3StrategyConfig"
-                                    description = "S3 strategy configuration"
-                                    addProperty("endpoint", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("bucketName", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("region", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("accessKey", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("secretKey", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("publicUrl", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                },
-                                Schema<WebDavStrategy>().apply {
-                                    title = "StrategyRequestWebDavStrategyConfig"
-                                    description = "WebDav strategy configuration"
-                                    addProperty("serverUrl", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("username", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("password", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("uploadFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("thumbnailFolder", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("strategyType", Schema<Any>().apply {
-                                        type = "string"
-                                    })
-                                    addProperty("type", Schema<Any>().apply {
-                                        type = "string"
-                                        description = "same to strategyType"
-                                    })
-                                }
-                            )
+                body(
+                    Schema<StrategyPatchRequest>().apply {
+                        title = "StrategyPatchRequest"
+                        addProperty(
+                            "config",
+                            Schema<StrategyConfig>().apply {
+                                description = "io/sakurasou/model/strategy/StrategyConfig.kt"
+                                anyOf(
+                                    listOf(
+                                        Schema<LocalStrategy>().apply {
+                                            title = "StrategyRequestLocalStrategyConfig"
+                                            description = "Local strategy configuration"
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                        Schema<S3Strategy>().apply {
+                                            title = "StrategyRequestS3StrategyConfig"
+                                            description = "S3 strategy configuration"
+                                            addProperty(
+                                                "endpoint",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "bucketName",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "region",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "accessKey",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "secretKey",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "publicUrl",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                        Schema<WebDavStrategy>().apply {
+                                            title = "StrategyRequestWebDavStrategyConfig"
+                                            description = "WebDav strategy configuration"
+                                            addProperty(
+                                                "serverUrl",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "username",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "password",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "uploadFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "thumbnailFolder",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "strategyType",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                },
+                                            )
+                                            addProperty(
+                                                "type",
+                                                Schema<Any>().apply {
+                                                    type = "string"
+                                                    description = "same to strategyType"
+                                                },
+                                            )
+                                        },
+                                    ),
+                                )
+                                required = listOf("false")
+                            },
                         )
-                        required = listOf("false")
-                    })
-                    addProperty("name", Schema<Any>().apply {
-                        type = "string"
-                        required = listOf("false")
-                    })
-                }) {
+                        addProperty(
+                            "name",
+                            Schema<Any>().apply {
+                                type = "string"
+                                required = listOf("false")
+                            },
+                        )
+                    },
+                ) {
                     description = "`config` need a extra field `type`, same to strategyType"
                     required = true
                 }
@@ -397,7 +550,7 @@ private fun Route.pageStrategies(controller: StrategyController) {
 }
 
 class StrategyController(
-    private val strategyService: StrategyService
+    private val strategyService: StrategyService,
 ) {
     suspend fun handleInsertStrategy(request: StrategyInsertRequest) {
         strategyService.saveStrategy(request)
@@ -407,7 +560,10 @@ class StrategyController(
         strategyService.deleteStrategy(id)
     }
 
-    suspend fun handlePatchStrategy(id: Long, request: StrategyPatchRequest) {
+    suspend fun handlePatchStrategy(
+        id: Long,
+        request: StrategyPatchRequest,
+    ) {
         strategyService.updateStrategy(id, request)
     }
 

@@ -12,12 +12,12 @@ data class StrategyInsertDTO(
     val isSystemReserved: Boolean,
     val config: StrategyConfig,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )
 
 data class StrategyUpdateDTO(
     val id: Long,
     val name: String,
     val config: StrategyConfig,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )

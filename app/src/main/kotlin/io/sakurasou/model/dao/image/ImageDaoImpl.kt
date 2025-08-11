@@ -18,124 +18,126 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
  */
 class ImageDaoImpl : ImageDao {
     override fun saveImage(insertDTO: ImageInsertDTO): Long {
-        val entityID = Images.insertAndGetId {
-            it[userId] = insertDTO.userId
-            it[groupId] = insertDTO.groupId
-            it[albumId] = insertDTO.albumId
-            it[uniqueName] = insertDTO.uniqueName
-            it[displayName] = insertDTO.displayName
-            it[description] = insertDTO.description
-            it[path] = insertDTO.path
-            it[strategyId] = insertDTO.strategyId
-            it[originName] = insertDTO.originName
-            it[mimeType] = insertDTO.mimeType
-            it[extension] = insertDTO.extension
-            it[size] = insertDTO.size
-            it[width] = insertDTO.width
-            it[height] = insertDTO.height
-            it[md5] = insertDTO.md5
-            it[sha256] = insertDTO.sha256
-            it[isPrivate] = insertDTO.isPrivate
-            it[isAllowedRandomFetch] = insertDTO.isAllowedRandomFetch
-            it[createTime] = insertDTO.createTime
-        }
+        val entityID =
+            Images.insertAndGetId {
+                it[userId] = insertDTO.userId
+                it[groupId] = insertDTO.groupId
+                it[albumId] = insertDTO.albumId
+                it[uniqueName] = insertDTO.uniqueName
+                it[displayName] = insertDTO.displayName
+                it[description] = insertDTO.description
+                it[path] = insertDTO.path
+                it[strategyId] = insertDTO.strategyId
+                it[originName] = insertDTO.originName
+                it[mimeType] = insertDTO.mimeType
+                it[extension] = insertDTO.extension
+                it[size] = insertDTO.size
+                it[width] = insertDTO.width
+                it[height] = insertDTO.height
+                it[md5] = insertDTO.md5
+                it[sha256] = insertDTO.sha256
+                it[isPrivate] = insertDTO.isPrivate
+                it[isAllowedRandomFetch] = insertDTO.isAllowedRandomFetch
+                it[createTime] = insertDTO.createTime
+            }
         return entityID.value
     }
 
-    override fun deleteImageById(imageId: Long): Int {
-        return Images.deleteWhere { Images.id eq imageId }
-    }
+    override fun deleteImageById(imageId: Long): Int = Images.deleteWhere { Images.id eq imageId }
 
-    override fun deleteImageByUserId(userId: Long): Int {
-        return Images.deleteWhere { Images.userId eq userId }
-    }
+    override fun deleteImageByUserId(userId: Long): Int = Images.deleteWhere { Images.userId eq userId }
 
-    override fun updateImageById(imageUpdateDTO: ImageUpdateDTO): Int {
-        return Images.update({ Images.id eq imageUpdateDTO.id }) {
+    override fun updateImageById(imageUpdateDTO: ImageUpdateDTO): Int =
+        Images.update({ Images.id eq imageUpdateDTO.id }) {
             it[albumId] = imageUpdateDTO.albumId
             it[displayName] = imageUpdateDTO.displayName
             it[description] = imageUpdateDTO.description
             it[isPrivate] = imageUpdateDTO.isPrivate
             it[isAllowedRandomFetch] = imageUpdateDTO.isAllowedRandomFetch
         }
-    }
 
-    override fun updateImageGroupIdByUserId(userId: Long, groupId: Long): Int {
-        return Images.update({ Images.userId eq userId }) {
+    override fun updateImageGroupIdByUserId(
+        userId: Long,
+        groupId: Long,
+    ): Int =
+        Images.update({ Images.userId eq userId }) {
             it[Images.groupId] = groupId
         }
-    }
 
-    override fun updateAlbumIdByAlbumId(oldAlbumId: Long, newAlbumId: Long): Int {
-        return Images.update({ Images.albumId eq oldAlbumId }) {
+    override fun updateAlbumIdByAlbumId(
+        oldAlbumId: Long,
+        newAlbumId: Long,
+    ): Int =
+        Images.update({ Images.albumId eq oldAlbumId }) {
             it[albumId] = newAlbumId
         }
-    }
 
-    override fun getImageCountAndTotalSize(): ImageCountAndTotalSizeDTO {
-        return Images
+    override fun getImageCountAndTotalSize(): ImageCountAndTotalSizeDTO =
+        Images
             .select(Images.id.count(), Images.size.sum())
             .first()
             .let {
                 ImageCountAndTotalSizeDTO(
                     count = it[Images.id.count()],
-                    totalSize = it[Images.size.sum()] ?: 0
+                    totalSize = it[Images.size.sum()] ?: 0,
                 )
             }
-    }
 
-    override fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO {
-        return Images
+    override fun getImageCountAndTotalSizeOfUser(userId: Long): ImageCountAndTotalSizeDTO =
+        Images
             .select(Images.id.count(), Images.size.sum())
             .where { Images.userId eq userId }
             .first()
             .let {
                 ImageCountAndTotalSizeDTO(
                     count = it[Images.id.count()],
-                    totalSize = it[Images.size.sum()] ?: 0
+                    totalSize = it[Images.size.sum()] ?: 0,
                 )
             }
-    }
 
-    override fun findImageById(imageId: Long): Image? {
-        return Images.selectAll()
+    override fun findImageById(imageId: Long): Image? =
+        Images
+            .selectAll()
             .where { Images.id eq imageId }
             .map { toImage(it) }
             .firstOrNull()
-    }
 
-    override fun findImageByUniqueName(imageUniqueName: String): Image? {
-        return Images.selectAll()
+    override fun findImageByUniqueName(imageUniqueName: String): Image? =
+        Images
+            .selectAll()
             .where { Images.uniqueName eq imageUniqueName }
             .map { toImage(it) }
             .firstOrNull()
-    }
 
-    override fun findRandomImage(): Image? {
-        return Images.selectAll()
+    override fun findRandomImage(): Image? =
+        Images
+            .selectAll()
             .where { Images.isPrivate eq false }
             .andWhere { Images.isAllowedRandomFetch eq true }
             .orderBy(Random())
             .limit(1)
             .map { toImage(it) }
             .firstOrNull()
-    }
 
-    override fun countImageByAlbumId(albumId: Long): Long {
-        return Images.select(Images.id)
+    override fun countImageByAlbumId(albumId: Long): Long =
+        Images
+            .select(Images.id)
             .where { Images.albumId eq albumId }
             .count()
-    }
 
-    override fun listImageByAlbumId(albumId: Long): List<Image> {
-        return Images.selectAll()
+    override fun listImageByAlbumId(albumId: Long): List<Image> =
+        Images
+            .selectAll()
             .where { Images.albumId eq albumId }
             .map { toImage(it) }
-    }
 
-    override fun pagination(userId: Long, pageRequest: PageRequest): PageResult<ImagePageVO> {
+    override fun pagination(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<ImagePageVO> {
         val query = { query: Query ->
-            query.adjustWhere { Images.userId eq userId }
+            query
+                .adjustWhere { Images.userId eq userId }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
                         map["albumId"]?.let { albumId ->
@@ -157,14 +159,15 @@ class ImageDaoImpl : ImageDao {
                 it[Images.displayName],
                 isPrivate,
                 if (isPrivate) "" else it[Images.uniqueName],
-                it[Images.createTime]
+                it[Images.createTime],
             )
         }
     }
 
     override fun paginationForManage(pageRequest: PageRequest): PageResult<ImageManagePageVO> {
         val query = { query: Query ->
-            query.adjustColumnSet { join(Users, JoinType.INNER) { Users.id eq Images.userId } }
+            query
+                .adjustColumnSet { join(Users, JoinType.INNER) { Users.id eq Images.userId } }
                 .adjustSelect { select(Images.fields + Users.name + Users.email) }
                 .also {
                     pageRequest.additionalCondition?.let { map ->
@@ -193,31 +196,32 @@ class ImageDaoImpl : ImageDao {
                 it[Users.email],
                 isPrivate,
                 if (isPrivate) "" else it[Images.uniqueName],
-                it[Images.createTime]
+                it[Images.createTime],
             )
         }
     }
 
-    private fun toImage(it: ResultRow) = Image(
-        it[Images.id].value,
-        it[Images.userId],
-        it[Images.groupId],
-        it[Images.albumId],
-        it[Images.uniqueName],
-        it[Images.displayName],
-        it[Images.description],
-        it[Images.path],
-        it[Images.strategyId],
-        it[Images.originName],
-        it[Images.mimeType],
-        it[Images.extension],
-        it[Images.size],
-        it[Images.width],
-        it[Images.height],
-        it[Images.md5],
-        it[Images.sha256],
-        it[Images.isPrivate],
-        it[Images.isAllowedRandomFetch],
-        it[Images.createTime]
-    )
+    private fun toImage(it: ResultRow) =
+        Image(
+            it[Images.id].value,
+            it[Images.userId],
+            it[Images.groupId],
+            it[Images.albumId],
+            it[Images.uniqueName],
+            it[Images.displayName],
+            it[Images.description],
+            it[Images.path],
+            it[Images.strategyId],
+            it[Images.originName],
+            it[Images.mimeType],
+            it[Images.extension],
+            it[Images.size],
+            it[Images.width],
+            it[Images.height],
+            it[Images.md5],
+            it[Images.sha256],
+            it[Images.isPrivate],
+            it[Images.isAllowedRandomFetch],
+            it[Images.createTime],
+        )
 }

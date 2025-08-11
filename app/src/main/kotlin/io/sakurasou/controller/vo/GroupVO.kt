@@ -21,7 +21,7 @@ data class GroupVO(
     val strategyName: String,
     val roles: List<String>,
     val isSystemReserved: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -35,11 +35,11 @@ data class GroupPageVO(
     val imageCount: Long,
     val imageSize: Double,
     val isSystemReserved: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
 @Name("GroupAllowedImageType")
 data class GroupAllowedImageType(
-    val allowedImageTypes: List<ImageType>
+    val allowedImageTypes: List<ImageType>,
 )

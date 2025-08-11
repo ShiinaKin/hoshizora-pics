@@ -13,7 +13,7 @@ data class RoleVO(
     val name: String,
     val displayName: String,
     val description: String? = null,
-    val permissions: List<PermissionVO>
+    val permissions: List<PermissionVO>,
 )
 
 @Serializable
@@ -21,5 +21,5 @@ data class RoleVO(
 data class RolePageVO(
     val name: String,
     val displayName: String,
-    val description: String? = null
+    val description: String? = null,
 )

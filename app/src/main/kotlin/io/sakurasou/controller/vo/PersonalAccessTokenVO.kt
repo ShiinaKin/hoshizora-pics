@@ -17,5 +17,5 @@ data class PersonalAccessTokenPageVO(
     val description: String?,
     val createTime: LocalDateTime,
     val expireTime: LocalDateTime,
-    val isExpired: Boolean
+    val isExpired: Boolean,
 )

@@ -27,10 +27,12 @@ private const val THUMBNAIL_QUALITY = 0.9
 sealed class ImageTask(
     val opImageId: Long,
     val taskType: KClass<out ImageTask>,
-    private val cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit
+    private val cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
 ) {
     protected val logger = KotlinLogging.logger {}
+
     abstract fun execute()
+
     fun submit() {
         execute()
         cleanUp(opImageId, taskType)
@@ -43,7 +45,7 @@ class PersistImageThumbnailTask(
     private val strategy: Strategy,
     private val subFolder: String,
     private val fileName: String,
-    private val image: BufferedImage
+    private val image: BufferedImage,
 ) : ImageTask(opImageId, taskType = PersistImageThumbnailTask::class, cleanUp) {
     override fun execute() {
         val relativePath = "$subFolder/$fileName"
@@ -58,7 +60,7 @@ class RePersistImageThumbnailTask(
     opImageId: Long,
     cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
-    private val relativePath: String
+    private val relativePath: String,
 ) : ImageTask(opImageId, taskType = RePersistImageThumbnailTask::class, cleanUp) {
     override fun execute() {
         val fileName = relativePath.substringAfterLast('/')
@@ -96,7 +98,7 @@ class DeleteImageTask(
     opImageId: Long,
     cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
-    private val relativePath: String
+    private val relativePath: String,
 ) : ImageTask(opImageId, taskType = DeleteImageTask::class, cleanUp) {
     override fun execute() {
         when (val strategyConfig = strategy.config) {
@@ -129,7 +131,7 @@ class DeleteThumbnailTask(
     opImageId: Long,
     cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
-    private val relativePath: String
+    private val relativePath: String,
 ) : ImageTask(opImageId, taskType = DeleteThumbnailTask::class, cleanUp) {
     override fun execute() {
         when (val strategyConfig = strategy.config) {

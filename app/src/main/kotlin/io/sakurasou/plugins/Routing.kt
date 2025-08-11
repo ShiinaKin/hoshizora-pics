@@ -23,11 +23,14 @@ fun Application.configureRouting() {
     install(Resources)
     install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, _ ->
-            if (call.request.uri.startsWith("/api")
-                || call.request.uri.startsWith("/s")
-                || call.request.uri.startsWith("/random")
-            ) call.respond(HttpStatusCode.NotFound)
-            else call.respondSource(call.resolveResource("index.html", "static")!!.readFrom().readRemaining())
+            if (call.request.uri.startsWith("/api") ||
+                call.request.uri.startsWith("/s") ||
+                call.request.uri.startsWith("/random")
+            ) {
+                call.respond(HttpStatusCode.NotFound)
+            } else {
+                call.respondSource(call.resolveResource("index.html", "static")!!.readFrom().readRemaining())
+            }
         }
         exceptionHandler()
     }

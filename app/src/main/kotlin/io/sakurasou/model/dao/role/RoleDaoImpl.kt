@@ -24,39 +24,39 @@ class RoleDaoImpl : RoleDao {
         }
     }
 
-    override fun patchRole(roleName: String, updateDTO: RoleUpdateDTO): Int {
-        return Roles.update({ Roles.name eq roleName }) {
+    override fun patchRole(
+        roleName: String,
+        updateDTO: RoleUpdateDTO,
+    ): Int =
+        Roles.update({ Roles.name eq roleName }) {
             it[displayName] = updateDTO.displayName
             it[description] = updateDTO.description
         }
-    }
 
-    override fun deleteRole(roleName: String): Int {
-        return Roles.deleteWhere { name eq roleName }
-    }
+    override fun deleteRole(roleName: String): Int = Roles.deleteWhere { name eq roleName }
 
-    override fun findRoleByName(roleName: String): Role? {
-        return Roles.selectAll()
+    override fun findRoleByName(roleName: String): Role? =
+        Roles
+            .selectAll()
             .where { Roles.name eq roleName }
             .map(::toRole)
             .firstOrNull()
-    }
 
-    override fun pagination(pageRequest: PageRequest): PageResult<RolePageVO> {
-        return fetchPage(Roles, pageRequest) {
+    override fun pagination(pageRequest: PageRequest): PageResult<RolePageVO> =
+        fetchPage(Roles, pageRequest) {
             RolePageVO(
                 it[Roles.name],
                 it[Roles.displayName],
-                it[Roles.description]
+                it[Roles.description],
             )
         }
-    }
 
-    private fun toRole(rows: ResultRow) = Role(
-        name = rows[Roles.name],
-        displayName = rows[Roles.displayName],
-        isSystemReserved = rows[Roles.isSystemReserved],
-        description = rows[Roles.description],
-        createTime = rows[Roles.createTime]
-    )
+    private fun toRole(rows: ResultRow) =
+        Role(
+            name = rows[Roles.name],
+            displayName = rows[Roles.displayName],
+            isSystemReserved = rows[Roles.isSystemReserved],
+            description = rows[Roles.description],
+            createTime = rows[Roles.createTime],
+        )
 }

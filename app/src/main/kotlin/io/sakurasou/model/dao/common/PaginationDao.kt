@@ -20,7 +20,7 @@ interface PaginationDao {
         table: Table,
         pageRequest: PageRequest,
         customWhereCond: (Query) -> Query = { it -> it },
-        transform: (ResultRow) -> T
+        transform: (ResultRow) -> T,
     ): PageResult<T> {
         val page = pageRequest.page
         val pageSize = pageRequest.pageSize
@@ -41,18 +41,22 @@ interface PaginationDao {
 
         val data = finalQuery.map { transform(it) }.toList()
 
-        val pageResult = PageResult(
-            page = page,
-            pageSize = pageSize,
-            total = totalRecords,
-            totalPage = totalPage,
-            data = data
-        )
+        val pageResult =
+            PageResult(
+                page = page,
+                pageSize = pageSize,
+                total = totalRecords,
+                totalPage = totalPage,
+                data = data,
+            )
         return pageResult
     }
 
-    fun getColumnByName(table: Table, columnName: String): ExpressionWithColumnType<*> {
-        return when (table) {
+    fun getColumnByName(
+        table: Table,
+        columnName: String,
+    ): ExpressionWithColumnType<*> =
+        when (table) {
             Images -> Images.columnMap[columnName]
             Albums -> Albums.columnMap[columnName]
             Users -> Users.columnMap[columnName]
@@ -61,5 +65,4 @@ interface PaginationDao {
             Roles -> Roles.columnMap[columnName]
             else -> null
         } ?: throw PagingParameterWrongException("Column $columnName not found in table ${table.tableName}")
-    }
 }

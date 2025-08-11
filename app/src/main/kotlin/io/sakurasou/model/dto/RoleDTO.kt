@@ -11,10 +11,10 @@ data class RoleInsertDTO(
     val displayName: String,
     val isSystemReserved: Boolean,
     val description: String?,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 data class RoleUpdateDTO(
     val displayName: String,
-    val description: String?
+    val description: String?,
 )

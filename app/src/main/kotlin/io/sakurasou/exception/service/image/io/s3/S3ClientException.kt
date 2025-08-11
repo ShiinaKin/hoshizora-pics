@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception
  * 2024/12/19 12:39
  */
 class S3ClientException(
-    s3Exception: S3Exception
+    s3Exception: S3Exception,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 5000

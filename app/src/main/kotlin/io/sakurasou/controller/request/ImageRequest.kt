@@ -11,7 +11,7 @@ data class ImageRawFile(
     val name: String,
     val mimeType: String,
     val size: Long,
-    val bytes: ByteArray
+    val bytes: ByteArray,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -43,7 +43,7 @@ data class ImagePatchRequest(
     val displayName: String? = null,
     val description: String? = null,
     val isPrivate: Boolean? = null,
-    val isAllowedRandomFetch: Boolean? = null
+    val isAllowedRandomFetch: Boolean? = null,
 )
 
 @Serializable
@@ -54,5 +54,5 @@ data class ImageManagePatchRequest(
     val displayName: String? = null,
     val description: String? = null,
     val isPrivate: Boolean? = null,
-    val isAllowedRandomFetch: Boolean? = null
+    val isAllowedRandomFetch: Boolean? = null,
 )

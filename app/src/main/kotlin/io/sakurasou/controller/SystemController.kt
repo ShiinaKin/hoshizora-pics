@@ -66,7 +66,7 @@ private fun Route.systemOverview(controller: SystemController) {
 }
 
 class SystemController(
-    private val systemService: SystemService
+    private val systemService: SystemService,
 ) {
     suspend fun handleSystemStatistics(): SystemStatisticsVO {
         val systemStatisticsVO = systemService.fetchSystemStatistics()

@@ -21,16 +21,22 @@ import java.net.URI
 object S3Utils {
     private val s3ClientMap by lazy { mutableMapOf<Long, S3Client>() }
 
-    fun uploadImage(uploadPath: String, imageBytes: ByteArray, strategy: Strategy) {
+    fun uploadImage(
+        uploadPath: String,
+        imageBytes: ByteArray,
+        strategy: Strategy,
+    ) {
         runCatching {
             val strategyConfig = strategy.config as S3Strategy
             val s3Client = getOrCreateS3Client(strategy, strategyConfig)
             val sha256 = DigestUtils.sha256(imageBytes).encodeBase64()
-            val putObject = PutObjectRequest.builder()
-                .bucket(strategyConfig.bucketName)
-                .key(uploadPath)
-                .checksumSHA256(sha256)
-                .build()
+            val putObject =
+                PutObjectRequest
+                    .builder()
+                    .bucket(strategyConfig.bucketName)
+                    .key(uploadPath)
+                    .checksumSHA256(sha256)
+                    .build()
             s3Client.putObject(putObject, RequestBody.fromBytes(imageBytes))
         }.onFailure {
             when (it) {
@@ -40,14 +46,19 @@ object S3Utils {
         }
     }
 
-    fun deleteImage(relativePath: String, strategy: Strategy) {
+    fun deleteImage(
+        relativePath: String,
+        strategy: Strategy,
+    ) {
         runCatching {
             val strategyConfig = strategy.config as S3Strategy
             val s3Client = getOrCreateS3Client(strategy, strategyConfig)
-            val deleteObjectRequest = DeleteObjectRequest.builder()
-                .bucket(strategyConfig.bucketName)
-                .key(relativePath)
-                .build()
+            val deleteObjectRequest =
+                DeleteObjectRequest
+                    .builder()
+                    .bucket(strategyConfig.bucketName)
+                    .key(relativePath)
+                    .build()
             s3Client.deleteObject(deleteObjectRequest)
         }.onFailure {
             when (it) {
@@ -57,14 +68,19 @@ object S3Utils {
         }
     }
 
-    fun isImageExist(relativePath: String, strategy: Strategy): Boolean {
+    fun isImageExist(
+        relativePath: String,
+        strategy: Strategy,
+    ): Boolean {
         return runCatching {
             val strategyConfig = strategy.config as S3Strategy
             val s3Client = getOrCreateS3Client(strategy, strategyConfig)
-            val headObjectRequest = HeadObjectRequest.builder()
-                .bucket(strategyConfig.bucketName)
-                .key(relativePath)
-                .build()
+            val headObjectRequest =
+                HeadObjectRequest
+                    .builder()
+                    .bucket(strategyConfig.bucketName)
+                    .key(relativePath)
+                    .build()
             s3Client.headObject(headObjectRequest)
             true
         }.onFailure {
@@ -79,14 +95,19 @@ object S3Utils {
         }.getOrThrow()
     }
 
-    fun fetchImage(relativePath: String, strategy: Strategy): InputStream {
-        return runCatching {
+    fun fetchImage(
+        relativePath: String,
+        strategy: Strategy,
+    ): InputStream =
+        runCatching {
             val strategyConfig = strategy.config as S3Strategy
             val s3Client = getOrCreateS3Client(strategy, strategyConfig)
-            val getObjectRequest = GetObjectRequest.builder()
-                .bucket(strategyConfig.bucketName)
-                .key(relativePath)
-                .build()
+            val getObjectRequest =
+                GetObjectRequest
+                    .builder()
+                    .bucket(strategyConfig.bucketName)
+                    .key(relativePath)
+                    .build()
             s3Client.getObject(getObjectRequest)
         }.onFailure {
             when (it) {
@@ -94,23 +115,23 @@ object S3Utils {
                 else -> throw it
             }
         }.getOrThrow()
-    }
 
     private fun getOrCreateS3Client(
         strategy: Strategy,
-        strategyConfig: S3Strategy
-    ): S3Client = s3ClientMap[strategy.id] ?: S3Client.builder()
-        .region(Region.of(strategyConfig.region))
-        .endpointOverride(URI(strategyConfig.endpoint))
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(
-                    strategyConfig.accessKey,
-                    strategyConfig.secretKey
-                )
-            )
-        )
-        .forcePathStyle(true)
-        .build()
-        .also { s3ClientMap[strategy.id] = it }
+        strategyConfig: S3Strategy,
+    ): S3Client =
+        s3ClientMap[strategy.id] ?: S3Client
+            .builder()
+            .region(Region.of(strategyConfig.region))
+            .endpointOverride(URI(strategyConfig.endpoint))
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        strategyConfig.accessKey,
+                        strategyConfig.secretKey,
+                    ),
+                ),
+            ).forcePathStyle(true)
+            .build()
+            .also { s3ClientMap[strategy.id] = it }
 }

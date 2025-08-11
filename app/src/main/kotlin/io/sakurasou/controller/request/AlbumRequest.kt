@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Name("AlbumSelfInsertRequest")
 data class AlbumSelfInsertRequest(
     val name: String,
-    val description: String? = null
+    val description: String? = null,
 )
 
 @Serializable
@@ -19,7 +19,7 @@ data class AlbumSelfInsertRequest(
 data class AlbumManageInsertRequest(
     val userId: Long,
     val name: String,
-    val description: String? = null
+    val description: String? = null,
 )
 
 @Serializable
@@ -27,7 +27,7 @@ data class AlbumManageInsertRequest(
 data class AlbumSelfPatchRequest(
     val name: String? = null,
     val description: String? = null,
-    val isDefault: Boolean? = null
+    val isDefault: Boolean? = null,
 )
 
 @Serializable
@@ -36,5 +36,5 @@ data class AlbumManagePatchRequest(
     val userId: Long? = null,
     val name: String? = null,
     val description: String? = null,
-    val isDefault: Boolean? = null
+    val isDefault: Boolean? = null,
 )

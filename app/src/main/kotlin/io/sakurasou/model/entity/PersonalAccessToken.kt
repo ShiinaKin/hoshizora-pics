@@ -14,5 +14,5 @@ data class PersonalAccessToken(
     val name: String,
     val description: String?,
     val createTime: LocalDateTime,
-    val expireTime: LocalDateTime
+    val expireTime: LocalDateTime,
 )

@@ -19,5 +19,5 @@ data class S3Strategy(
     val secretKey: String,
     val uploadFolder: String,
     val thumbnailFolder: String,
-    val publicUrl: String
+    val publicUrl: String,
 ) : StrategyConfig(StrategyType.S3)

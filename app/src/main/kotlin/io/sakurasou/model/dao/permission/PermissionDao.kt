@@ -9,6 +9,8 @@ import io.sakurasou.model.entity.Permission
  */
 interface PermissionDao {
     fun batchSavePermission(permissions: List<PermissionInsertDTO>)
+
     fun findPermissionByName(name: String): Permission?
+
     fun findAllPermissions(): List<Permission>
 }

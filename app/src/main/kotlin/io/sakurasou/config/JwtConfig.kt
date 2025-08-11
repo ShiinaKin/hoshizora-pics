@@ -21,7 +21,12 @@ object JwtConfig {
     lateinit var audience: String
     lateinit var realm: String
 
-    fun init(jwtSecret: String, jwtIssuer: String, jwtAudience: String, jwtRealm: String) {
+    fun init(
+        jwtSecret: String,
+        jwtIssuer: String,
+        jwtAudience: String,
+        jwtRealm: String,
+    ) {
         this.secret = jwtSecret
         this.issuer = jwtIssuer
         this.audience = jwtAudience

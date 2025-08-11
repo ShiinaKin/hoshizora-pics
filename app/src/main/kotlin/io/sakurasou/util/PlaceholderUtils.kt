@@ -25,7 +25,9 @@ object PlaceholderUtils {
      * {fileName}	    文件原始名称
      * {user-id}	    用户 ID
      */
-    private enum class Placeholder(val placeholder: String) {
+    private enum class Placeholder(
+        val placeholder: String,
+    ) {
         YEAR("{yyyy}"),
         MONTH("{MM}"),
         DAY("{dd}"),
@@ -35,12 +37,16 @@ object PlaceholderUtils {
         STR_RANDOM_16("{str-random-16}"),
         STR_RANDOM_10("{str-random-10}"),
         FILENAME("{filename}"),
-        USER_ID("{user-id}")
+        USER_ID("{user-id}"),
     }
 
     @OptIn(ExperimentalUuidApi::class)
     @Synchronized
-    fun parsePlaceholder(namingRule: String, fileName: String, userId: Long): String {
+    fun parsePlaceholder(
+        namingRule: String,
+        fileName: String,
+        userId: Long,
+    ): String {
         val instant = Clock.System.now()
         val localDateTime = instant.toLocalDateTime(TimeZone.UTC)
 

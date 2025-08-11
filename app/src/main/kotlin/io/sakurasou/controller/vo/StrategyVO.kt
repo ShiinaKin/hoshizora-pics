@@ -17,7 +17,7 @@ data class StrategyVO(
     val name: String,
     val config: StrategyConfig,
     val type: StrategyType,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 @Serializable
@@ -27,5 +27,5 @@ data class StrategyPageVO(
     val name: String,
     val isSystemReserved: Boolean,
     val type: StrategyType,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

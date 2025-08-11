@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
  * @author ShiinaKin
  * 2024/11/14 22:09
  */
-object PersonalAccessTokens: LongIdTable("personal_access_tokens") {
+object PersonalAccessTokens : LongIdTable("personal_access_tokens") {
     val userId = long("user_id")
     val name = varchar("name", 255)
     val description = varchar("description", 255).nullable()
@@ -19,8 +19,9 @@ object PersonalAccessTokens: LongIdTable("personal_access_tokens") {
         foreignKey(userId to Users.id)
     }
 
-    val columnMap = mapOf(
-        "createTime" to createTime,
-        "expireTime" to expireTime
-    )
+    val columnMap =
+        mapOf(
+            "createTime" to createTime,
+            "expireTime" to expireTime,
+        )
 }

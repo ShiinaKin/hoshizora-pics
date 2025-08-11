@@ -7,7 +7,7 @@ import io.sakurasou.exception.ServiceThrowable
  * 2024/9/25 12:44
  */
 class UserUpdateFailedException(
-    cause: ServiceThrowable? = null
+    cause: ServiceThrowable? = null,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 4000

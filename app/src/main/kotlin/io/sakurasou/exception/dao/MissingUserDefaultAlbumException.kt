@@ -7,7 +7,7 @@ import io.sakurasou.exception.ServiceThrowable
  * 2024/10/9 13:45
  */
 class MissingUserDefaultAlbumException(
-    private val userId: Long
+    private val userId: Long,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 5002

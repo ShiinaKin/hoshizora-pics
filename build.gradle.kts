@@ -12,9 +12,10 @@ tasks.register("updateComposeImageTag") {
     val composeFile = file("compose.yml")
     val contents = composeFile.readText()
     val regex = Regex("(shiinakin/hoshizora-pics:)(.*)")
-    val newContents = contents.replace(regex) { matchResult ->
-        "${matchResult.groupValues[1]}$version"
-    }
+    val newContents =
+        contents.replace(regex) { matchResult ->
+            "${matchResult.groupValues[1]}$version"
+        }
     composeFile.writeText(newContents)
 }
 

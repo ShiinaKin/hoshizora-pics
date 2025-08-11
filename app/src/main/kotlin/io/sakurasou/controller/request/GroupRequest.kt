@@ -16,7 +16,7 @@ data class GroupInsertRequest(
     val description: String? = null,
     val config: GroupConfig,
     val strategyId: Long,
-    val roles: List<String>
+    val roles: List<String>,
 )
 
 @Serializable
@@ -26,7 +26,7 @@ data class GroupPatchRequest(
     val description: String? = null,
     val strategyId: Long? = null,
     val config: GroupConfigUpdatePatch? = null,
-    val roles: List<String>? = null
+    val roles: List<String>? = null,
 )
 
 @Serializable
@@ -36,11 +36,11 @@ data class GroupPutRequest(
     val description: String? = null,
     val strategyId: Long,
     val config: GroupConfig,
-    val roles: List<String>
+    val roles: List<String>,
 )
 
 @Serializable
 @Name("GroupConfigUpdatePatch")
 data class GroupConfigUpdatePatch(
-    val groupStrategyConfig: GroupStrategyConfig? = null
+    val groupStrategyConfig: GroupStrategyConfig? = null,
 )

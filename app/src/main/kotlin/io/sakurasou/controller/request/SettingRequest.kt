@@ -13,7 +13,7 @@ data class SiteSettingPatchRequest(
     val siteExternalUrl: String? = null,
     val siteTitle: String? = null,
     val siteSubtitle: String? = null,
-    val siteDescription: String? = null
+    val siteDescription: String? = null,
 )
 
 @Serializable
@@ -21,5 +21,5 @@ data class SiteSettingPatchRequest(
 data class SystemSettingPatchRequest(
     val defaultGroupId: Long? = null,
     val allowSignup: Boolean? = null,
-    val allowRandomFetch: Boolean? = null
+    val allowRandomFetch: Boolean? = null,
 )

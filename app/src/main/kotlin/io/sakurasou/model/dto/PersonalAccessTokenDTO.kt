@@ -12,11 +12,11 @@ data class PersonalAccessTokenInsertDTO(
     val name: String,
     val description: String?,
     val createTime: LocalDateTime,
-    val expireTime: LocalDateTime
+    val expireTime: LocalDateTime,
 )
 
 data class PersonalAccessTokenUpdateDTO(
     val id: Long,
     val name: String,
-    val description: String?
+    val description: String?,
 )

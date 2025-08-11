@@ -59,9 +59,13 @@ private fun Route.insertRole(controller: RoleController) {
         }
         install(RequestValidation) {
             validate<RoleInsertRequest> { insertRequest ->
-                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
-                else if (insertRequest.displayName.isBlank()) ValidationResult.Invalid("displayName is invalid")
-                else ValidationResult.Valid
+                if (insertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("name is invalid")
+                } else if (insertRequest.displayName.isBlank()) {
+                    ValidationResult.Invalid("displayName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -94,10 +98,13 @@ private fun Route.patchRole(controller: RoleController) {
         }
         install(RequestValidation) {
             validate<RolePatchRequest> { patchRequest ->
-                if (patchRequest.displayName == null && patchRequest.description == null)
+                if (patchRequest.displayName == null && patchRequest.description == null) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (patchRequest.displayName != null) ValidationResult.Invalid("displayName is invalid")
-                else ValidationResult.Valid
+                } else if (patchRequest.displayName != null) {
+                    ValidationResult.Invalid("displayName is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -214,13 +221,16 @@ private fun Route.pageRoles(controller: RoleController) {
 }
 
 class RoleController(
-    private val roleService: RoleService
+    private val roleService: RoleService,
 ) {
     suspend fun handleInsertRole(insertRequest: RoleInsertRequest) {
         roleService.saveRole(insertRequest)
     }
 
-    suspend fun handlePatchRole(name: String, patchRequest: RolePatchRequest) {
+    suspend fun handlePatchRole(
+        name: String,
+        patchRequest: RolePatchRequest,
+    ) {
         roleService.patchRole(name, patchRequest)
     }
 
@@ -228,15 +238,9 @@ class RoleController(
         roleService.deleteRole(name)
     }
 
-    suspend fun handleFetchRole(name: String): RoleVO {
-        return roleService.fetchRole(name)
-    }
+    suspend fun handleFetchRole(name: String): RoleVO = roleService.fetchRole(name)
 
-    suspend fun handleListAllRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> {
-        return roleService.listRolesWithPermissionsOfUser(groupId)
-    }
+    suspend fun handleListAllRolesWithPermissionsOfUser(groupId: Long): List<RoleVO> = roleService.listRolesWithPermissionsOfUser(groupId)
 
-    suspend fun handlePageRoles(pageRequest: PageRequest): PageResult<RolePageVO> {
-        return roleService.pageRoles(pageRequest)
-    }
+    suspend fun handlePageRoles(pageRequest: PageRequest): PageResult<RolePageVO> = roleService.pageRoles(pageRequest)
 }

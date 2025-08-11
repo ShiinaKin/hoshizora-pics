@@ -9,5 +9,6 @@ import io.sakurasou.controller.vo.SystemStatisticsVO
  */
 interface SystemService {
     suspend fun fetchSystemStatistics(): SystemStatisticsVO
+
     suspend fun fetchSystemOverview(): SystemOverviewVO
 }

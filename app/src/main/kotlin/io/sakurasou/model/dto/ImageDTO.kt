@@ -25,12 +25,12 @@ data class ImageInsertDTO(
     val sha256: String,
     val isPrivate: Boolean,
     val isAllowedRandomFetch: Boolean,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
 
 data class ImageCountAndTotalSizeDTO(
     val count: Long,
-    val totalSize: Long
+    val totalSize: Long,
 )
 
 data class ImageUpdateDTO(
@@ -39,12 +39,12 @@ data class ImageUpdateDTO(
     val displayName: String,
     val description: String? = null,
     val isPrivate: Boolean,
-    val isAllowedRandomFetch: Boolean
+    val isAllowedRandomFetch: Boolean,
 )
 
 data class ImageFileDTO(
     val bytes: ByteArray? = null,
-    val url: String? = null
+    val url: String? = null,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -55,7 +55,9 @@ data class ImageFileDTO(
         if (bytes != null) {
             if (other.bytes == null) return false
             if (!bytes.contentEquals(other.bytes)) return false
-        } else if (other.bytes != null) return false
+        } else if (other.bytes != null) {
+            return false
+        }
         if (url != other.url) return false
 
         return true

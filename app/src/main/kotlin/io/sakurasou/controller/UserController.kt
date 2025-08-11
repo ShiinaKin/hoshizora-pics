@@ -57,17 +57,19 @@ private fun Route.patchSelf(controller: UserController) {
         }
         install(RequestValidation) {
             validate<UserSelfPatchRequest> { selfPatchRequest ->
-                if (selfPatchRequest.password.isNullOrBlank()
-                    && selfPatchRequest.email.isNullOrBlank()
-                    && selfPatchRequest.defaultAlbumId == null
-                    && selfPatchRequest.isDefaultImagePrivate == null
-                )
+                if (selfPatchRequest.password.isNullOrBlank() &&
+                    selfPatchRequest.email.isNullOrBlank() &&
+                    selfPatchRequest.defaultAlbumId == null &&
+                    selfPatchRequest.isDefaultImagePrivate == null
+                ) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (selfPatchRequest.password != null && !selfPatchRequest.password.matches(Regex(REGEX_PASSWORD)))
+                } else if (selfPatchRequest.password != null && !selfPatchRequest.password.matches(Regex(REGEX_PASSWORD))) {
                     ValidationResult.Invalid("password is invalid")
-                else if (selfPatchRequest.email != null && !selfPatchRequest.email.matches(Regex(REGEX_EMAIL)))
+                } else if (selfPatchRequest.email != null && !selfPatchRequest.email.matches(Regex(REGEX_EMAIL))) {
                     ValidationResult.Invalid("email is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -146,13 +148,15 @@ private fun Route.insertUser(controller: UserController) {
         }
         install(RequestValidation) {
             validate<UserManageInsertRequest> { manageInsertRequest ->
-                if (!manageInsertRequest.username.matches(Regex(REGEX_USERNAME)))
+                if (!manageInsertRequest.username.matches(Regex(REGEX_USERNAME))) {
                     ValidationResult.Invalid("username is invalid")
-                else if (!manageInsertRequest.password.matches(Regex(REGEX_PASSWORD)))
+                } else if (!manageInsertRequest.password.matches(Regex(REGEX_PASSWORD))) {
                     ValidationResult.Invalid("password is invalid")
-                else if (!manageInsertRequest.email.matches(Regex(REGEX_EMAIL)))
+                } else if (!manageInsertRequest.email.matches(Regex(REGEX_EMAIL))) {
                     ValidationResult.Invalid("email is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -206,18 +210,26 @@ private fun Route.patchUser(controller: UserController) {
         }
         install(RequestValidation) {
             validate<UserManagePatchRequest> { managePatchRequest ->
-                if (managePatchRequest.password.isNullOrBlank()
-                    && managePatchRequest.email.isNullOrBlank()
-                    && managePatchRequest.defaultAlbumId == null
-                    && managePatchRequest.isDefaultImagePrivate == null
-                    && managePatchRequest.groupId == null
-                )
+                if (managePatchRequest.password.isNullOrBlank() &&
+                    managePatchRequest.email.isNullOrBlank() &&
+                    managePatchRequest.defaultAlbumId == null &&
+                    managePatchRequest.isDefaultImagePrivate == null &&
+                    managePatchRequest.groupId == null
+                ) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (managePatchRequest.password != null && !managePatchRequest.password.matches(Regex(REGEX_PASSWORD)))
+                } else if (managePatchRequest.password != null &&
+                    !managePatchRequest.password.matches(
+                        Regex(
+                            REGEX_PASSWORD,
+                        ),
+                    )
+                ) {
                     ValidationResult.Invalid("password is invalid")
-                else if (managePatchRequest.email != null && !managePatchRequest.email.matches(Regex(REGEX_EMAIL)))
+                } else if (managePatchRequest.email != null && !managePatchRequest.email.matches(Regex(REGEX_EMAIL))) {
                     ValidationResult.Invalid("email is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -294,10 +306,11 @@ private fun Route.pageUser(controller: UserController) {
             val pageRequest = call.pageRequest()
             val isPrivatePair = call.parameters["isBanned"]?.toBoolean()?.let { "isBanned" to it.toString() }
             val usernameSearchPair = call.parameters["username"]?.let { "username" to it }
-            pageRequest.additionalCondition = mutableMapOf<String, String>().apply {
-                isPrivatePair?.let { put(it.first, it.second) }
-                usernameSearchPair?.let { put(it.first, it.second) }
-            }
+            pageRequest.additionalCondition =
+                mutableMapOf<String, String>().apply {
+                    isPrivatePair?.let { put(it.first, it.second) }
+                    usernameSearchPair?.let { put(it.first, it.second) }
+                }
 
             val voPageResult = controller.handleManagePage(pageRequest)
             call.success(voPageResult)
@@ -356,9 +369,12 @@ private fun Route.banAndUnban(controller: UserController) {
 }
 
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
 ) {
-    suspend fun handleSelfPatch(id: Long, patchRequest: UserSelfPatchRequest) {
+    suspend fun handleSelfPatch(
+        id: Long,
+        patchRequest: UserSelfPatchRequest,
+    ) {
         userService.patchSelf(id, patchRequest)
     }
 
@@ -375,7 +391,10 @@ class UserController(
         userService.deleteUser(id)
     }
 
-    suspend fun handleManagePatch(id: Long, patchRequest: UserManagePatchRequest) {
+    suspend fun handleManagePatch(
+        id: Long,
+        patchRequest: UserManagePatchRequest,
+    ) {
         userService.patchUser(id, patchRequest)
     }
 

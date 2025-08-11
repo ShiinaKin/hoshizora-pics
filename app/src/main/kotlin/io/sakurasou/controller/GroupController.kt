@@ -60,9 +60,13 @@ private fun Route.groupInsert(controller: GroupController) {
         }
         install(RequestValidation) {
             validate<GroupInsertRequest> { insertRequest ->
-                if (insertRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
-                else if (insertRequest.roles.isEmpty()) ValidationResult.Invalid("roles is invalid")
-                else ValidationResult.Valid
+                if (insertRequest.name.isBlank()) {
+                    ValidationResult.Invalid("name is invalid")
+                } else if (insertRequest.roles.isEmpty()) {
+                    ValidationResult.Invalid("roles is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         post({
@@ -116,18 +120,20 @@ private fun Route.groupPatch(controller: GroupController) {
         }
         install(RequestValidation) {
             validate<GroupPatchRequest> { patchRequest ->
-                if (patchRequest.name == null
-                    && patchRequest.description == null
-                    && patchRequest.strategyId == null
-                    && patchRequest.config == null
-                    && patchRequest.roles == null
-                )
+                if (patchRequest.name == null &&
+                    patchRequest.description == null &&
+                    patchRequest.strategyId == null &&
+                    patchRequest.config == null &&
+                    patchRequest.roles == null
+                ) {
                     ValidationResult.Invalid("at least one field is required")
-                else if (patchRequest.name != null && patchRequest.name.isBlank())
+                } else if (patchRequest.name != null && patchRequest.name.isBlank()) {
                     ValidationResult.Invalid("name is invalid")
-                else if (patchRequest.roles != null && patchRequest.roles.isEmpty())
+                } else if (patchRequest.roles != null && patchRequest.roles.isEmpty()) {
                     ValidationResult.Invalid("roles is invalid")
-                else ValidationResult.Valid
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         patch({
@@ -158,9 +164,13 @@ private fun Route.groupUpdate(controller: GroupController) {
         }
         install(RequestValidation) {
             validate<GroupPutRequest> { putRequest ->
-                if (putRequest.name.isBlank()) ValidationResult.Invalid("name is invalid")
-                else if (putRequest.roles.isEmpty()) ValidationResult.Invalid("roles is invalid")
-                else ValidationResult.Valid
+                if (putRequest.name.isBlank()) {
+                    ValidationResult.Invalid("name is invalid")
+                } else if (putRequest.roles.isEmpty()) {
+                    ValidationResult.Invalid("roles is invalid")
+                } else {
+                    ValidationResult.Valid
+                }
             }
         }
         put({
@@ -251,7 +261,7 @@ private fun Route.groupFetchGroupAllowedImageType(controller: GroupController) {
 }
 
 class GroupController(
-    private val groupService: GroupService
+    private val groupService: GroupService,
 ) {
     suspend fun handleInsertGroup(insertRequest: GroupInsertRequest) {
         groupService.saveGroup(insertRequest)
@@ -261,26 +271,30 @@ class GroupController(
         groupService.deleteGroup(id)
     }
 
-    suspend fun handleUpdateGroup(id: Long, putRequest: GroupPutRequest) {
+    suspend fun handleUpdateGroup(
+        id: Long,
+        putRequest: GroupPutRequest,
+    ) {
         groupService.updateGroup(id, putRequest)
     }
 
-    suspend fun handlePatchGroup(id: Long, patchRequest: GroupPatchRequest) {
+    suspend fun handlePatchGroup(
+        id: Long,
+        patchRequest: GroupPatchRequest,
+    ) {
         groupService.patchGroup(id, patchRequest)
     }
 
-    suspend fun handleFetchGroup(id: Long): GroupVO {
-        return groupService.fetchGroup(id)
-    }
+    suspend fun handleFetchGroup(id: Long): GroupVO = groupService.fetchGroup(id)
 
     suspend fun handleFetchGroupAllowedImageType(id: Long): GroupAllowedImageType {
         val groupVO = groupService.fetchGroup(id)
         return GroupAllowedImageType(
-            allowedImageTypes = groupVO.groupConfig.groupStrategyConfig.allowedImageTypes.toList()
+            allowedImageTypes =
+                groupVO.groupConfig.groupStrategyConfig.allowedImageTypes
+                    .toList(),
         )
     }
 
-    suspend fun handlePageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> {
-        return groupService.pageGroups(pageRequest)
-    }
+    suspend fun handlePageGroups(pageRequest: PageRequest): PageResult<GroupPageVO> = groupService.pageGroups(pageRequest)
 }

@@ -13,5 +13,5 @@ data class Setting(
     val name: String,
     val config: SettingConfig,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )

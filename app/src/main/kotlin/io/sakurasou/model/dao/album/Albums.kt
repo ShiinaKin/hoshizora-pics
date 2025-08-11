@@ -22,9 +22,10 @@ object Albums : LongIdTable("albums") {
         foreignKey(userId to Users.id)
     }
 
-    val columnMap = mapOf(
-        "name" to name,
-        "createTime" to createTime,
-        "imageCount" to Images.id.count()
-    )
+    val columnMap =
+        mapOf(
+            "name" to name,
+            "createTime" to createTime,
+            "imageCount" to Images.id.count(),
+        )
 }

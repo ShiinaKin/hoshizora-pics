@@ -46,7 +46,7 @@ private fun Route.fetchAllPermissions(controller: PermissionController) {
 }
 
 class PermissionController(
-    private val permissionService: PermissionService
+    private val permissionService: PermissionService,
 ) {
     suspend fun handleFetchAllPermissions(): List<PermissionVO> {
         val allPermissions = permissionService.fetchAllPermissions()

@@ -13,6 +13,6 @@ fun Application.configureDatabase() {
         driverClassName = environment.config.property("ktor.application.database.driver").getString(),
         username = environment.config.property("ktor.application.database.username").getString(),
         password = environment.config.property("ktor.application.database.password").getString(),
-        version = environment.config.property("version").getString()
+        version = environment.config.property("version").getString(),
     )
 }

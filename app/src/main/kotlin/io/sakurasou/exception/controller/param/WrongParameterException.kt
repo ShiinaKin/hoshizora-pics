@@ -7,7 +7,7 @@ import io.sakurasou.exception.ServiceThrowable
  * 2024/9/9 10:38
  */
 class WrongParameterException(
-    msg: String? = null
+    msg: String? = null,
 ) : ServiceThrowable() {
     override val code: Int
         get() = 4000

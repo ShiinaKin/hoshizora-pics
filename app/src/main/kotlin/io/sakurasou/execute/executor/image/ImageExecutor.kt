@@ -17,9 +17,10 @@ object ImageExecutor {
     private val logger = KotlinLogging.logger {}
     private val taskMap = ConcurrentHashMap<Pair<Long, KClass<out ImageTask>>, Unit>()
 
-    private val imageExecuteScope = CoroutineScope(
-        Dispatchers.IO + SupervisorJob() + CoroutineName("ImageExecutor")
-    )
+    private val imageExecuteScope =
+        CoroutineScope(
+            Dispatchers.IO + SupervisorJob() + CoroutineName("ImageExecutor"),
+        )
 
     private val taskChannel = Channel<ImageTask>(Channel.UNLIMITED)
 
@@ -43,20 +44,32 @@ object ImageExecutor {
         strategy: Strategy,
         subFolder: String,
         fileName: String,
-        image: BufferedImage
+        image: BufferedImage,
     ) {
         submitTask(PersistImageThumbnailTask(opImageId, cleanUp, strategy, subFolder, fileName, image))
     }
 
-    suspend fun rePersistThumbnail(opImageId: Long, strategy: Strategy, relativePath: String) {
+    suspend fun rePersistThumbnail(
+        opImageId: Long,
+        strategy: Strategy,
+        relativePath: String,
+    ) {
         submitTask(RePersistImageThumbnailTask(opImageId, cleanUp, strategy, relativePath))
     }
 
-    suspend fun deleteImage(opImageId: Long, strategy: Strategy, relativePath: String) {
+    suspend fun deleteImage(
+        opImageId: Long,
+        strategy: Strategy,
+        relativePath: String,
+    ) {
         submitTask(DeleteImageTask(opImageId, cleanUp, strategy, relativePath))
     }
 
-    suspend fun deleteThumbnail(opImageId: Long, strategy: Strategy, relativePath: String) {
+    suspend fun deleteThumbnail(
+        opImageId: Long,
+        strategy: Strategy,
+        relativePath: String,
+    ) {
         submitTask(DeleteThumbnailTask(opImageId, cleanUp, strategy, relativePath))
     }
 

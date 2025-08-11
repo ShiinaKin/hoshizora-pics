@@ -12,5 +12,5 @@ import kotlinx.serialization.Serializable
 @Name("SettingVO")
 data class SettingVO(
     val name: String,
-    val config: SettingConfig
+    val config: SettingConfig,
 )

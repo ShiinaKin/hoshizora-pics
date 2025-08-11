@@ -19,13 +19,25 @@ interface UserDao : PaginationDao {
     fun deleteUserById(id: Long): Int
 
     fun updateSelfById(selfUpdateDTO: UserSelfUpdateDTO): Int
+
     fun updateUserById(manageUpdateDTO: UserManageUpdateDTO): Int
-    fun updateUserBanStatusById(id: Long, isBan: Boolean): Int
-    fun updateUserDefaultAlbumId(userId: Long, defaultAlbumId: Long): Int
+
+    fun updateUserBanStatusById(
+        id: Long,
+        isBan: Boolean,
+    ): Int
+
+    fun updateUserDefaultAlbumId(
+        userId: Long,
+        defaultAlbumId: Long,
+    ): Int
 
     fun findUserById(id: Long): User?
+
     fun findUserByName(name: String): User?
+
     fun countUser(): Long
+
     fun doesUsersBelongToUserGroup(groupId: Long): Boolean
 
     fun pagination(pageRequest: PageRequest): PageResult<UserPageVO>

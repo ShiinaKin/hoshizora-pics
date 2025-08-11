@@ -88,13 +88,18 @@ object InstanceCenter {
     lateinit var systemService: SystemService
     lateinit var systemStatus: SystemStatus
 
-    fun initClient(timeout: Long = 30000, proxyAddress: String) {
-        client = HttpClient(CIO) {
-            install(HttpTimeout) { requestTimeoutMillis = timeout }
-            install(Logging)
-            if (proxyAddress != "disabled")
-                engine { proxy = ProxyBuilder.http(proxyAddress) }
-        }
+    fun initClient(
+        timeout: Long = 30000,
+        proxyAddress: String,
+    ) {
+        client =
+            HttpClient(CIO) {
+                install(HttpTimeout) { requestTimeoutMillis = timeout }
+                install(Logging)
+                if (proxyAddress != "disabled") {
+                    engine { proxy = ProxyBuilder.http(proxyAddress) }
+                }
+            }
     }
 
     fun initDao() {
@@ -122,7 +127,8 @@ object InstanceCenter {
         systemService = SystemServiceImpl(imageDao, albumDao, userDao)
 
         groupService = GroupServiceImpl(groupDao, userDao, strategyDao, relationDao)
-        personalAccessTokenService = PersonalAccessTokenServiceImpl(personalAccessTokenDao, userDao, groupDao, relationDao)
+        personalAccessTokenService =
+            PersonalAccessTokenServiceImpl(personalAccessTokenDao, userDao, groupDao, relationDao)
 
         userService = UserServiceImpl(userDao, groupDao, albumDao, imageDao, settingService)
         commonService = CommonServiceImpl(userDao, albumDao, strategyDao, imageDao, settingService)

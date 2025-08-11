@@ -10,8 +10,9 @@ import io.sakurasou.extension.isSiteNotInitialized
  * 2024/10/27 17:58
  */
 
-val SiteInitCheckPlugin = createRouteScopedPlugin("SiteInitCheckPlugin") {
-    on(CallSetup) {
-        if (isSiteNotInitialized()) throw SiteNotInitializationException()
+val SiteInitCheckPlugin =
+    createRouteScopedPlugin("SiteInitCheckPlugin") {
+        on(CallSetup) {
+            if (isSiteNotInitialized()) throw SiteNotInitializationException()
+        }
     }
-}

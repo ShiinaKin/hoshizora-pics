@@ -25,19 +25,23 @@ import kotlinx.datetime.toLocalDateTime
 class AlbumServiceImpl(
     private val userDao: UserDao,
     private val albumDao: AlbumDao,
-    private val imageDao: ImageDao
+    private val imageDao: ImageDao,
 ) : AlbumService {
-    override suspend fun saveSelf(userId: Long, selfInsertRequest: AlbumSelfInsertRequest) {
+    override suspend fun saveSelf(
+        userId: Long,
+        selfInsertRequest: AlbumSelfInsertRequest,
+    ) {
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
-        val albumInsertDTO = AlbumInsertDTO(
-            userId = userId,
-            name = selfInsertRequest.name,
-            description = selfInsertRequest.description,
-            imageCount = 0,
-            isUncategorized = false,
-            createTime = now
-        )
+        val albumInsertDTO =
+            AlbumInsertDTO(
+                userId = userId,
+                name = selfInsertRequest.name,
+                description = selfInsertRequest.description,
+                imageCount = 0,
+                isUncategorized = false,
+                createTime = now,
+            )
 
         runCatching { dbQuery { albumDao.saveAlbum(albumInsertDTO) } }
             .onFailure { throw AlbumInsertFailedException(null, "Possibly due to duplicate AlbumName") }
@@ -46,20 +50,24 @@ class AlbumServiceImpl(
     override suspend fun saveAlbum(manageInsertRequest: AlbumManageInsertRequest) {
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
-        val albumInsertDTO = AlbumInsertDTO(
-            userId = manageInsertRequest.userId,
-            name = manageInsertRequest.name,
-            description = manageInsertRequest.description,
-            imageCount = 0,
-            isUncategorized = false,
-            createTime = now
-        )
+        val albumInsertDTO =
+            AlbumInsertDTO(
+                userId = manageInsertRequest.userId,
+                name = manageInsertRequest.name,
+                description = manageInsertRequest.description,
+                imageCount = 0,
+                isUncategorized = false,
+                createTime = now,
+            )
 
         runCatching { dbQuery { albumDao.saveAlbum(albumInsertDTO) } }
             .onFailure { throw AlbumInsertFailedException(null, "Possibly due to duplicate AlbumName") }
     }
 
-    override suspend fun deleteSelf(userId: Long, albumId: Long) {
+    override suspend fun deleteSelf(
+        userId: Long,
+        albumId: Long,
+    ) {
         runCatching {
             dbQuery {
                 val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
@@ -73,8 +81,11 @@ class AlbumServiceImpl(
                 if (influenceRowCnt < 1) throw AlbumDeleteFailedException()
             }
         }.onFailure {
-            if (it is AlbumNotFoundException) throw AlbumDeleteFailedException(it)
-            else throw it
+            if (it is AlbumNotFoundException) {
+                throw AlbumDeleteFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
@@ -91,23 +102,31 @@ class AlbumServiceImpl(
                 if (influenceRowCnt < 1) throw AlbumDeleteFailedException()
             }
         }.onFailure {
-            if (it is AlbumNotFoundException) throw AlbumDeleteFailedException(it)
-            else throw it
+            if (it is AlbumNotFoundException) {
+                throw AlbumDeleteFailedException(it)
+            } else {
+                throw it
+            }
         }
     }
 
-    override suspend fun patchSelf(userId: Long, albumId: Long, selfPatchRequest: AlbumSelfPatchRequest) {
+    override suspend fun patchSelf(
+        userId: Long,
+        albumId: Long,
+        selfPatchRequest: AlbumSelfPatchRequest,
+    ) {
         runCatching {
             dbQuery {
                 val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
                 if (album.userId != userId) throw AlbumAccessDeniedException()
 
-                val albumUpdateDTO = AlbumUpdateDTO(
-                    id = albumId,
-                    userId = userId,
-                    name = selfPatchRequest.name ?: album.name,
-                    description = selfPatchRequest.description ?: album.description,
-                )
+                val albumUpdateDTO =
+                    AlbumUpdateDTO(
+                        id = albumId,
+                        userId = userId,
+                        name = selfPatchRequest.name ?: album.name,
+                        description = selfPatchRequest.description ?: album.description,
+                    )
 
                 albumDao.updateAlbumById(albumUpdateDTO)
 
@@ -125,17 +144,21 @@ class AlbumServiceImpl(
         }
     }
 
-    override suspend fun patchAlbum(albumId: Long, managePatchRequest: AlbumManagePatchRequest) {
+    override suspend fun patchAlbum(
+        albumId: Long,
+        managePatchRequest: AlbumManagePatchRequest,
+    ) {
         runCatching {
             dbQuery {
                 val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
 
-                val albumUpdateDTO = AlbumUpdateDTO(
-                    id = albumId,
-                    userId = managePatchRequest.userId ?: album.userId,
-                    name = managePatchRequest.name ?: album.name,
-                    description = managePatchRequest.description ?: album.description,
-                )
+                val albumUpdateDTO =
+                    AlbumUpdateDTO(
+                        id = albumId,
+                        userId = managePatchRequest.userId ?: album.userId,
+                        name = managePatchRequest.name ?: album.name,
+                        description = managePatchRequest.description ?: album.description,
+                    )
 
                 albumDao.updateAlbumById(albumUpdateDTO)
 
@@ -151,8 +174,11 @@ class AlbumServiceImpl(
         }
     }
 
-    override suspend fun fetchSelf(userId: Long, albumId: Long): AlbumVO {
-        return dbQuery {
+    override suspend fun fetchSelf(
+        userId: Long,
+        albumId: Long,
+    ): AlbumVO =
+        dbQuery {
             val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
             val user = userDao.findUserById(userId) ?: throw UserNotFoundException()
             if (album.userId != userId) throw AlbumAccessDeniedException()
@@ -166,13 +192,12 @@ class AlbumServiceImpl(
                 imageCount = imageCount,
                 isUncategorized = album.isUncategorized,
                 isDefault = user.defaultAlbumId == album.id,
-                createTime = album.createTime
+                createTime = album.createTime,
             )
         }
-    }
 
-    override suspend fun fetchAlbum(albumId: Long): AlbumManageVO {
-        return dbQuery {
+    override suspend fun fetchAlbum(albumId: Long): AlbumManageVO =
+        dbQuery {
             val album = albumDao.findAlbumById(albumId) ?: throw AlbumNotFoundException()
             val user = userDao.findUserById(album.userId) ?: throw UserNotFoundException()
             val imageCount = imageDao.countImageByAlbumId(albumId)
@@ -185,16 +210,20 @@ class AlbumServiceImpl(
                 imageCount = imageCount,
                 isUncategorized = album.isUncategorized,
                 isDefault = album.id == user.defaultAlbumId,
-                createTime = album.createTime
+                createTime = album.createTime,
             )
         }
-    }
 
-    override suspend fun pageSelf(userId: Long, pageRequest: PageRequest): PageResult<AlbumPageVO> {
-        return dbQuery { albumDao.pagination(userId, pageRequest) }
-    }
+    override suspend fun pageSelf(
+        userId: Long,
+        pageRequest: PageRequest,
+    ): PageResult<AlbumPageVO> =
+        dbQuery {
+            albumDao.pagination(userId, pageRequest)
+        }
 
-    override suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumManagePageVO> {
-        return dbQuery { albumDao.paginationForManage(pageRequest) }
-    }
+    override suspend fun pageAlbum(pageRequest: PageRequest): PageResult<AlbumManagePageVO> =
+        dbQuery {
+            albumDao.paginationForManage(pageRequest)
+        }
 }

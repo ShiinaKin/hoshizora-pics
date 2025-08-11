@@ -15,12 +15,12 @@ data class PersonalAccessTokenInsertRequest(
     val name: String,
     val description: String? = null,
     val expireTime: LocalDateTime,
-    val permissions: List<String>
+    val permissions: List<String>,
 )
 
 @Serializable
 @Name("PersonalAccessTokenPatchRequest")
 data class PersonalAccessTokenPatchRequest(
     val name: String? = null,
-    val description: String? = null
+    val description: String? = null,
 )

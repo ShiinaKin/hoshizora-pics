@@ -30,10 +30,11 @@ object Users : LongIdTable("users") {
         foreignKey(defaultAlbumId to Albums.id)
     }
 
-    val columnMap = mapOf(
-        "createTime" to Users.createTime,
-        "imageCount" to Images.id.count(),
-        "albumCount" to Albums.id.count(),
-        "totalImageSize" to Coalesce(Images.size.sum(), longLiteral(0))
-    )
+    val columnMap =
+        mapOf(
+            "createTime" to Users.createTime,
+            "imageCount" to Images.id.count(),
+            "albumCount" to Albums.id.count(),
+            "totalImageSize" to Coalesce(Images.size.sum(), longLiteral(0)),
+        )
 }

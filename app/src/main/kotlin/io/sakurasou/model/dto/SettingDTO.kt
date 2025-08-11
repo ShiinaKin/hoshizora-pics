@@ -11,11 +11,11 @@ data class SettingInsertDTO(
     val name: String,
     val config: SettingConfig,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )
 
 data class SettingUpdateDTO(
     val name: String,
     val config: SettingConfig,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
 )

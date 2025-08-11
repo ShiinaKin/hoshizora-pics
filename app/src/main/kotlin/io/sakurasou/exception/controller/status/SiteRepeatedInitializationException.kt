@@ -6,7 +6,7 @@ import io.sakurasou.exception.ServiceThrowable
  * @author Shiina Kin
  * 2024/9/13 16:13
  */
-class SiteRepeatedInitializationException: ServiceThrowable() {
+class SiteRepeatedInitializationException : ServiceThrowable() {
     override val code: Int
         get() = 5000
     override val message: String

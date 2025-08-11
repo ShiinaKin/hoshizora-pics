@@ -27,11 +27,12 @@ object Groups : LongIdTable("groups") {
         foreignKey(strategyId to Strategies.id)
     }
 
-    val columnMap = mapOf(
-        "groupName" to name,
-        "userCount" to Users.id.count(),
-        "imageCount" to Images.id.count(),
-        "imageSize" to Images.size.sum(),
-        "createTime" to createTime
-    )
+    val columnMap =
+        mapOf(
+            "groupName" to name,
+            "userCount" to Users.id.count(),
+            "imageCount" to Images.id.count(),
+            "imageSize" to Images.size.sum(),
+            "createTime" to createTime,
+        )
 }

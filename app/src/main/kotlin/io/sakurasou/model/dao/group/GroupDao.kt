@@ -14,9 +14,14 @@ import io.sakurasou.model.entity.Group
  */
 interface GroupDao : PaginationDao {
     fun saveGroup(groupInsertDTO: GroupInsertDTO): Long
+
     fun deleteGroupById(id: Long): Int
+
     fun updateGroupById(groupUpdateDTO: GroupUpdateDTO): Int
+
     fun findGroupById(id: Long): Group?
+
     fun doesGroupUsingStrategy(strategyId: Long): Boolean
+
     fun pagination(pageRequest: PageRequest): PageResult<GroupPageVO>
 }

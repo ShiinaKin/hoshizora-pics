@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 @Name("PermissionVO")
 data class PermissionVO(
     val name: String,
-    val description: String?
+    val description: String?,
 )

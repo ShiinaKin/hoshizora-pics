@@ -13,5 +13,5 @@ data class Role(
     val displayName: String,
     val isSystemReserved: Boolean,
     val description: String?,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )

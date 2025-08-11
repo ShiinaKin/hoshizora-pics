@@ -14,12 +14,12 @@ data class RoleInsertRequest(
     val name: String,
     val displayName: String,
     val description: String? = null,
-    val permissions: List<String>
+    val permissions: List<String>,
 )
 
 @Serializable
 @Name("RolePatchRequest")
 data class RolePatchRequest(
     val displayName: String? = null,
-    val description: String? = null
+    val description: String? = null,
 )

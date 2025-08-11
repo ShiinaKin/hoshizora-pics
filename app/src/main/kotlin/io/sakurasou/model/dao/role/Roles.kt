@@ -16,7 +16,8 @@ object Roles : Table("roles") {
 
     override val primaryKey = PrimaryKey(name)
 
-    val columnMap = mapOf(
-        "createTime" to createTime
-    )
+    val columnMap =
+        mapOf(
+            "createTime" to createTime,
+        )
 }

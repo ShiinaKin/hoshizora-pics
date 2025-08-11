@@ -18,5 +18,5 @@ data class User(
     val defaultAlbumId: Long,
     val isBanned: Boolean,
     val updateTime: LocalDateTime,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
 )
