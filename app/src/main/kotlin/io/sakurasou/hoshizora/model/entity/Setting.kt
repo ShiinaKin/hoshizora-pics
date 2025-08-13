@@ -1,0 +1,17 @@
+package io.sakurasou.hoshizora.model.entity
+
+import io.sakurasou.hoshizora.model.setting.SettingConfig
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
+
+/**
+ * @author ShiinaKin
+ * 2024/9/7 13:34
+ */
+@Serializable
+data class Setting(
+    val name: String,
+    val config: SettingConfig,
+    val createTime: LocalDateTime,
+    val updateTime: LocalDateTime,
+)

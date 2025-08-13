@@ -36,7 +36,7 @@ plugins {
 }
 
 application {
-    mainClass = "io.sakurasou.ApplicationKt"
+    mainClass = "io.sakurasou.hoshizora.ApplicationKt"
 }
 
 ktor {

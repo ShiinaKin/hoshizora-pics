@@ -2,7 +2,7 @@ plugins {
     id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
-group = "io.sakurasou"
+group = "io.sakurasou.hoshizora"
 
 tasks.register("updateVersion") {
     dependsOn(":app:updateVersion", "updateComposeImageTag")

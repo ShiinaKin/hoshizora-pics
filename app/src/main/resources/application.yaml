@@ -2,7 +2,7 @@ version: 0.5.1
 ktor:
   application:
     modules:
-      - io.sakurasou.ApplicationKt.mainModule
+      - io.sakurasou.hoshizora.ApplicationKt.mainModule
     base-url: "$BASE_URL:/"
     database:
       driver: $DATABASE_DRIVER

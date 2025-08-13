@@ -4,13 +4,15 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import io.sakurasou.constant.SETTING_SITE
-import io.sakurasou.constant.SETTING_SYSTEM
-import io.sakurasou.model.DatabaseSingleton
-import io.sakurasou.model.dao.setting.SettingDao
-import io.sakurasou.model.entity.Setting
-import io.sakurasou.model.setting.SiteSetting
-import io.sakurasou.model.setting.SystemSetting
+import io.sakurasou.hoshizora.constant.SETTING_SITE
+import io.sakurasou.hoshizora.constant.SETTING_SYSTEM
+import io.sakurasou.hoshizora.model.DatabaseSingleton
+import io.sakurasou.hoshizora.model.dao.setting.SettingDao
+import io.sakurasou.hoshizora.model.entity.Setting
+import io.sakurasou.hoshizora.model.setting.SiteSetting
+import io.sakurasou.hoshizora.model.setting.SystemSetting
+import io.sakurasou.hoshizora.service.setting.SettingService
+import io.sakurasou.hoshizora.service.setting.SettingServiceImpl
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -40,56 +42,61 @@ class SettingServiceTest {
     }
 
     @Test
-    fun `getting system setting, should return correct setting`() = runBlocking {
-        val expectedSetting = SystemSetting(
-            defaultGroupId = 1,
-            allowSignup = false,
-            allowRandomFetch = false
-        )
+    fun `getting system setting, should return correct setting`() =
+        runBlocking {
+            val expectedSetting =
+                SystemSetting(
+                    defaultGroupId = 1,
+                    allowSignup = false,
+                    allowRandomFetch = false,
+                )
 
-        coEvery { DatabaseSingleton.dbQuery<SystemSetting>(any()) } coAnswers {
-            this.arg<suspend () -> SystemSetting>(0).invoke()
-        }
-        every { settingDao.getSettingByName(SETTING_SYSTEM) } returns
+            coEvery { DatabaseSingleton.dbQuery<SystemSetting>(any()) } coAnswers {
+                this.arg<suspend () -> SystemSetting>(0).invoke()
+            }
+            every { settingDao.getSettingByName(SETTING_SYSTEM) } returns
                 Setting(
                     name = SETTING_SYSTEM,
                     config = SystemSetting(defaultGroupId = 1, allowSignup = false, allowRandomFetch = false),
                     createTime = instant.toLocalDateTime(TimeZone.UTC),
-                    updateTime = instant.toLocalDateTime(TimeZone.UTC)
+                    updateTime = instant.toLocalDateTime(TimeZone.UTC),
                 )
 
-        val systemSetting = settingService.getSystemSetting()
+            val systemSetting = settingService.getSystemSetting()
 
-        assertEquals(expectedSetting, systemSetting)
-    }
+            assertEquals(expectedSetting, systemSetting)
+        }
 
     @Test
-    fun `getting site setting, should return correct setting`() = runBlocking {
-        val expectedSetting = SiteSetting(
-            siteExternalUrl = "http://localhost:8080",
-            siteTitle = "Title",
-            siteSubtitle = "Subtitle",
-            siteDescription = "Description"
-        )
-
-        coEvery { DatabaseSingleton.dbQuery<SiteSetting>(any()) } coAnswers {
-            this.arg<suspend () -> SiteSetting>(0).invoke()
-        }
-        every { settingDao.getSettingByName(SETTING_SITE) } returns
-                Setting(
-                    name = SETTING_SITE,
-                    config = SiteSetting(
-                        siteExternalUrl = "http://localhost:8080",
-                        siteTitle = "Title",
-                        siteSubtitle = "Subtitle",
-                        siteDescription = "Description"
-                    ),
-                    createTime = instant.toLocalDateTime(TimeZone.UTC),
-                    updateTime = instant.toLocalDateTime(TimeZone.UTC)
+    fun `getting site setting, should return correct setting`() =
+        runBlocking {
+            val expectedSetting =
+                SiteSetting(
+                    siteExternalUrl = "http://localhost:8080",
+                    siteTitle = "Title",
+                    siteSubtitle = "Subtitle",
+                    siteDescription = "Description",
                 )
 
-        val siteSetting = settingService.getSiteSetting()
+            coEvery { DatabaseSingleton.dbQuery<SiteSetting>(any()) } coAnswers {
+                this.arg<suspend () -> SiteSetting>(0).invoke()
+            }
+            every { settingDao.getSettingByName(SETTING_SITE) } returns
+                Setting(
+                    name = SETTING_SITE,
+                    config =
+                        SiteSetting(
+                            siteExternalUrl = "http://localhost:8080",
+                            siteTitle = "Title",
+                            siteSubtitle = "Subtitle",
+                            siteDescription = "Description",
+                        ),
+                    createTime = instant.toLocalDateTime(TimeZone.UTC),
+                    updateTime = instant.toLocalDateTime(TimeZone.UTC),
+                )
 
-        assertEquals(expectedSetting, siteSetting)
-    }
+            val siteSetting = settingService.getSiteSetting()
+
+            assertEquals(expectedSetting, siteSetting)
+        }
 }
