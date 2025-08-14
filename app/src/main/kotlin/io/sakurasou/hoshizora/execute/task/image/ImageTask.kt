@@ -1,18 +1,10 @@
 package io.sakurasou.hoshizora.execute.task.image
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.sakurasou.hoshizora.exception.service.image.io.ImageFileDeleteFailedException
-import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundException
 import io.sakurasou.hoshizora.model.entity.Strategy
 import io.sakurasou.hoshizora.model.group.ImageType
-import io.sakurasou.hoshizora.model.strategy.LocalStrategy
-import io.sakurasou.hoshizora.model.strategy.S3Strategy
-import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
 import io.sakurasou.hoshizora.util.ImageUtils
-import io.sakurasou.hoshizora.util.S3Utils
-import io.sakurasou.hoshizora.util.WebDavUtils
 import java.awt.image.BufferedImage
-import java.io.File
 import javax.imageio.ImageIO
 import kotlin.reflect.KClass
 
@@ -31,9 +23,9 @@ sealed class ImageTask(
 ) {
     protected val logger = KotlinLogging.logger {}
 
-    abstract fun execute()
+    abstract suspend fun execute()
 
-    fun submit() {
+    suspend fun submit() {
         execute()
         cleanUp(opImageId, taskType)
     }
@@ -47,11 +39,11 @@ class PersistImageThumbnailTask(
     private val fileName: String,
     private val image: BufferedImage,
 ) : ImageTask(opImageId, taskType = PersistImageThumbnailTask::class, cleanUp) {
-    override fun execute() {
+    override suspend fun execute() {
         val relativePath = "$subFolder/$fileName"
         val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
         val thumbnailBytes = ImageUtils.transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
-        ImageUtils.saveThumbnail(strategy, subFolder, fileName, thumbnailBytes, relativePath)
+        ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
         logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
     }
 }
@@ -62,34 +54,19 @@ class RePersistImageThumbnailTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(opImageId, taskType = RePersistImageThumbnailTask::class, cleanUp) {
-    override fun execute() {
+    override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
-        when (val strategyConfig = strategy.config) {
-            is LocalStrategy -> {
-                val uploadFolderStr = strategyConfig.uploadFolder
-                val uploadFile = File(uploadFolderStr, relativePath)
-                if (!uploadFile.exists()) throw ImageFileNotFoundException()
-                uploadFile.inputStream()
+        strategy.config
+            .fetch(relativePath)
+            .inputStream()
+            .use { rawImageInputStream ->
+                val rawImage = ImageIO.read(rawImageInputStream)
+                val subFolder = relativePath.substringBeforeLast('/')
+                val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
+                val thumbnailBytes =
+                    ImageUtils.transformImageByHeight(rawImage, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
+                ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
             }
-
-            is S3Strategy -> {
-                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                S3Utils.fetchImage(filePath, strategy)
-            }
-
-            is WebDavStrategy -> {
-                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                val bytes = WebDavUtils.fetchImage(filePath, strategyConfig)
-                bytes?.inputStream() ?: throw ImageFileNotFoundException()
-            }
-        }.use { rawImageInputStream ->
-            val rawImage = ImageIO.read(rawImageInputStream)
-            val subFolder = relativePath.substringBeforeLast('/')
-            val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
-            val thumbnailBytes =
-                ImageUtils.transformImageByHeight(rawImage, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
-            ImageUtils.saveThumbnail(strategy, subFolder, fileName, thumbnailBytes, relativePath)
-        }
         logger.debug { "re-persist thumbnail $fileName in strategy(id ${strategy.id})" }
     }
 }
@@ -100,28 +77,9 @@ class DeleteImageTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(opImageId, taskType = DeleteImageTask::class, cleanUp) {
-    override fun execute() {
-        when (val strategyConfig = strategy.config) {
-            is LocalStrategy -> {
-                val uploadFolderStr = strategyConfig.uploadFolder
-                val uploadFile = File(uploadFolderStr, relativePath)
-
-                if (uploadFile.exists() && !uploadFile.delete()) {
-                    logger.error { "Failed to delete image at $uploadFolderStr/$relativePath" }
-                    throw ImageFileDeleteFailedException()
-                }
-            }
-
-            is S3Strategy -> {
-                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                S3Utils.deleteImage(filePath, strategy)
-            }
-
-            is WebDavStrategy -> {
-                val filePath = "${strategyConfig.uploadFolder}/$relativePath"
-                WebDavUtils.deleteImage(filePath, strategyConfig)
-            }
-        }
+    override suspend fun execute() {
+        val filePath = "${strategy.config.uploadFolder}/$relativePath"
+        strategy.config.delete(filePath)
         val fileName = relativePath.substringAfterLast('/')
         logger.debug { "delete image $fileName from strategy(id ${strategy.id})" }
     }
@@ -133,28 +91,9 @@ class DeleteThumbnailTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(opImageId, taskType = DeleteThumbnailTask::class, cleanUp) {
-    override fun execute() {
-        when (val strategyConfig = strategy.config) {
-            is LocalStrategy -> {
-                val thumbnailFolder = strategyConfig.thumbnailFolder
-                val thumbnailFile = File(thumbnailFolder, relativePath)
-
-                if (thumbnailFile.exists() && !thumbnailFile.delete()) {
-                    logger.error { "Failed to delete thumbnail at $thumbnailFolder/$relativePath" }
-                }
-            }
-
-            is S3Strategy -> {
-                val filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
-                S3Utils.deleteImage(filePath, strategy)
-            }
-
-            is WebDavStrategy -> {
-                var filePath = "${strategyConfig.thumbnailFolder}/$relativePath"
-                filePath = WebDavUtils.addThumbnailIdentifierToFileName(filePath)
-                WebDavUtils.deleteImage(filePath, strategyConfig)
-            }
-        }
+    override suspend fun execute() {
+        val filePath = "${strategy.config.uploadFolder}/$relativePath"
+        strategy.config.delete(filePath)
         val fileName = relativePath.substringAfterLast('/')
         logger.debug { "delete thumbnail $fileName from strategy(id ${strategy.id})" }
     }

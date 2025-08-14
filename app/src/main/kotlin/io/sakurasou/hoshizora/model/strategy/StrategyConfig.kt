@@ -13,7 +13,19 @@ import kotlinx.serialization.Serializable
 @Name("StrategyConfigSealed")
 sealed class StrategyConfig(
     val strategyType: StrategyType,
-)
+) {
+    abstract val uploadFolder: String
+    abstract val thumbnailFolder: String
+
+    abstract suspend fun upload(
+        imageBytes: ByteArray,
+        uploadPath: String,
+    )
+
+    abstract suspend fun delete(relativePath: String)
+
+    abstract suspend fun fetch(relativePath: String): ByteArray
+}
 
 @Serializable
 @Name("StrategyTypeEnum")
