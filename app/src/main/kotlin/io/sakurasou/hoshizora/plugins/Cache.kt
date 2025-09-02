@@ -244,16 +244,19 @@ class RedisCacheProvider(
         val bytes = split[0].decodeBase64Bytes()
         val contentType = split[1]
         val status = split[2].toIntOrNull()
-        val parsedContentType = if (contentType.isNotBlank()) {
-            try {
-                ContentType.parse(contentType)
-            } catch (e: Exception) {
-                logger.warn(e) { "Invalid contentType string in cache: '$contentType'. Using default ContentType.Application.OctetStream." }
+        val parsedContentType =
+            if (contentType.isNotBlank()) {
+                try {
+                    ContentType.parse(contentType)
+                } catch (e: Exception) {
+                    logger.warn(
+                        e,
+                    ) { "Invalid contentType string in cache: '$contentType'. Using default ContentType.Application.OctetStream." }
+                    ContentType.Application.OctetStream
+                }
+            } else {
                 ContentType.Application.OctetStream
             }
-        } else {
-            ContentType.Application.OctetStream
-        }
         return ByteArrayContent(
             bytes,
             contentType = parsedContentType,
@@ -276,7 +279,7 @@ class MemoryCacheProvider(
         value: ByteArrayContent,
         expireTime: Duration,
     ) {
-        cache.put(key, value as Any)
+        cache.put(key, value)
     }
 
     override suspend fun getCache(key: String): Any? = cache.getIfPresent(key)
