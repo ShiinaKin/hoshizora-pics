@@ -216,7 +216,7 @@ class RedisCacheProvider(
         )
     }
 
-    private val redisConnection = redisClient.connect()
+    private val redisConnection by lazy { redisClient.connect() }
 
     override suspend fun setCache(
         key: String,
