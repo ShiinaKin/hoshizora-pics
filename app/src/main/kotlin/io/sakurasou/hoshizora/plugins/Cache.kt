@@ -2,13 +2,10 @@ package io.sakurasou.hoshizora.plugins
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializer
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.ByteArrayContent
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.createApplicationPlugin
@@ -30,6 +27,11 @@ import io.lettuce.core.RedisURI
 import io.lettuce.core.api.coroutines
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -110,24 +112,20 @@ val CacheRoutePlugin =
             logger.debug { "Cache hit: $key" }
         }
         onCallRespond { call, body ->
-            if ((
-                    call.response.status()?.value
-                        ?: HttpStatusCode.OK.value
-                ) >= HttpStatusCode.BadRequest.value
-            ) {
+            if ((call.response.status()?.value ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value) {
                 return@onCallRespond
             }
             if (call.request.queryParameters.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCallRespond
             if (call.attributes.getOrNull(isCache) == true) return@onCallRespond
             val key = buildKey(call)
             if (expireTime == null) {
-                provider.saveCache(key, body)
+                provider.saveCache(key, body as ByteArrayContent)
             } else {
-                provider.saveCache(key, body, expireTime)
+                provider.saveCache(key, body as ByteArrayContent, expireTime)
             }
             logger.debug { "Cache saved: $key" }
         }
-        on(CallFailed) { call, e ->
+        on(CallFailed) { _, e ->
             throw e
         }
     }
@@ -159,25 +157,12 @@ fun Route.cache(
 
 abstract class CacheProvider(
     val expireTime: Duration = 15.minutes,
-    val jsonMapper: Gson =
-        GsonBuilder()
-            .registerTypeAdapter(
-                ByteArray::class.java,
-                JsonSerializer<ByteArray> { src, _, _ ->
-                    JsonPrimitive(src.encodeBase64())
-                },
-            ).registerTypeAdapter(
-                ByteArray::class.java,
-                JsonDeserializer { json, _, _ ->
-                    json.asString.decodeBase64Bytes()
-                },
-            ).create(),
 ) {
     private val mutex = Mutex()
 
     suspend fun saveCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration = this.expireTime,
     ) {
         if (mutex.tryLock()) {
@@ -193,17 +178,17 @@ abstract class CacheProvider(
         var cache = getCache(key)
         if (cache != null) return cache
 
-        for (i in 1..2) {
+        repeat(2) {
             delay(50.milliseconds)
             cache = getCache(key)
-            if (cache != null) break
+            if (cache != null) return cache
         }
-        return cache
+        return null
     }
 
     internal abstract suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration = this.expireTime,
     )
 
@@ -219,7 +204,7 @@ class RedisCacheProvider(
     ssl: Boolean = false,
     expireTime: Duration,
 ) : CacheProvider(expireTime) {
-    private val redisClient: RedisClient =
+    private val redisClient: RedisClient by lazy {
         RedisClient.create(
             RedisURI.Builder
                 .redis(host)
@@ -229,11 +214,13 @@ class RedisCacheProvider(
                 .also { if (password != null) it.withPassword(password.toCharArray()) }
                 .build(),
         )
+    }
+
     private val redisConnection = redisClient.connect()
 
     override suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration,
     ) {
         val commands = redisConnection.coroutines()
@@ -245,13 +232,41 @@ class RedisCacheProvider(
         return coroutinesCommands.get(key)?.toObject()
     }
 
-    private fun Any.toRedisStoreValue() = this.javaClass.name + "^^^" + jsonMapper.toJson(this)
+    private fun ByteArrayContent.extractBytes(): ByteArray =
+        try {
+            val prop = this::class.declaredMemberProperties.firstOrNull { it.name == "bytes" }
+            prop?.let {
+                @Suppress("UNCHECKED_CAST")
+                val byteProp = it as KProperty1<ByteArrayContent, *>
+                byteProp.isAccessible = true
+                byteProp.get(this) as? ByteArray
+            } ?: run {
+                val field = this.javaClass.getDeclaredField("bytes")
+                field.isAccessible = true
+                field.get(this) as ByteArray
+            }
+        } catch (e: Exception) {
+            logger.error(e) { "Failed to extract bytes from ByteArrayContent" }
+            throw e
+        }
 
-    private fun String.toObject(): Any {
+    private fun ByteArrayContent.toRedisStoreValue(): String {
+        val bytesBase64 = this.extractBytes().encodeBase64()
+        val contentType = this.contentType?.toString() ?: ""
+        val status = this.status?.value?.toString() ?: ""
+        return "$bytesBase64^^^$contentType^^^$status"
+    }
+
+    private fun String.toObject(): ByteArrayContent {
         val split = this.split("^^^")
-        val className = split[0]
-        val json = split[1]
-        return jsonMapper.fromJson(json, Class.forName(className))
+        val bytes = split[0].decodeBase64Bytes()
+        val contentType = split[1]
+        val status = split[2].toIntOrNull()
+        return ByteArrayContent(
+            bytes,
+            contentType = contentType.let { ContentType.parse(it) },
+            status = status?.let { HttpStatusCode.fromValue(it) },
+        )
     }
 }
 
@@ -266,10 +281,10 @@ class MemoryCacheProvider(
 
     override suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration,
     ) {
-        cache.put(key, value)
+        cache.put(key, value as Any)
     }
 
     override suspend fun getCache(key: String): Any? = cache.getIfPresent(key)

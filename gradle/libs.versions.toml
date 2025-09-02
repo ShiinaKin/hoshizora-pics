@@ -4,7 +4,6 @@ kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.1"
 mockk = "1.14.5"
 ktor = "3.2.3"
-gson = "2.13.1"
 exposed = "0.61.0"
 postgresql = "42.7.7"
 mysql = "9.4.0"
@@ -54,7 +53,6 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
