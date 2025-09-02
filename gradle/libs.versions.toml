@@ -1,0 +1,92 @@
+[versions]
+kotlin = "2.2.10"
+kotlinx-serialization = "1.9.0"
+kotlinx-coroutines = "1.10.1"
+mockk = "1.14.5"
+ktor = "3.2.3"
+gson = "2.13.1"
+exposed = "0.61.0"
+postgresql = "42.7.7"
+mysql = "9.4.0"
+sqlite = "3.50.3.0"
+hikari = "7.0.2"
+lettuce = "6.8.0.RELEASE"
+caffeine = "3.2.2"
+kotlin-logging = "7.0.13"
+logback = "1.5.18"
+img4java = "1.4.0"
+common-io = "2.20.0"
+common-codec = "1.19.0"
+bcrypt = "0.10.2"
+amazon-s3 = "2.33.0"
+semver4j = "6.0.0"
+
+[libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktor-server-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
+ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
+ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktor-server-auto-head-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
+ktor-server-caching-headers = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
+ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
+ktor-server-conditional-headers = { module = "io.ktor:ktor-server-conditional-headers", version.ref = "ktor" }
+ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
+ktor-server-forwarded-header = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "ktor" }
+ktor-server-rate-limit = { module = "io.ktor:ktor-server-rate-limit", version.ref = "ktor" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kotlinx-coroutines" }
+
+exposed-core = { module="org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
+exposed-jdbc = { module="org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
+exposed-dao = { module="org.jetbrains.exposed:exposed-dao", version.ref = "exposed"}
+exposed-json = { module="org.jetbrains.exposed:exposed-json", version.ref = "exposed"}
+exposed-kotlin-datetime = { module="org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed"}
+
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+mysql = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
+sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+
+lettuce = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+
+kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+img4j = { module = "org.im4java:im4java", version.ref = "img4java" }
+
+common-io = { module = "commons-io:commons-io", version.ref = "common-io" }
+common-codec = { module = "commons-codec:commons-codec", version.ref = "common-codec" }
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
+
+amazon-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-s3" }
+
+semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
+
+[plugins]
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }

@@ -30,9 +30,9 @@ val commonsCodecVersion: String by project
 val mockkVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "2.1.20"
-    id("io.ktor.plugin") version "3.1.2"
+    kotlin("jvm") version "2.2.10"
+    alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.ktor)
 }
 
 application {
@@ -50,28 +50,38 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm")
-    implementation("io.ktor:ktor-server-sessions")
-    implementation("io.ktor:ktor-server-resources-jvm")
-    implementation("io.ktor:ktor-server-host-common-jvm")
-    implementation("io.ktor:ktor-server-status-pages-jvm")
-    implementation("io.ktor:ktor-server-auto-head-response-jvm")
-    implementation("io.ktor:ktor-server-caching-headers-jvm")
-    implementation("io.ktor:ktor-server-compression-jvm")
-    implementation("io.ktor:ktor-server-conditional-headers-jvm")
-    implementation("io.ktor:ktor-server-default-headers-jvm")
-    implementation("io.ktor:ktor-server-forwarded-header-jvm")
-    implementation("io.ktor:ktor-server-cors")
-    implementation("io.ktor:ktor-server-request-validation")
-    implementation("io.ktor:ktor-server-rate-limit")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("io.ktor:ktor-server-config-yaml")
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.sessions)
+    implementation(libs.ktor.server.resources)
+    implementation(libs.ktor.server.host.common)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.auto.head.response)
+    implementation(libs.ktor.server.caching.headers)
+    implementation(libs.ktor.server.compression)
+    implementation(libs.ktor.server.conditional.headers)
+    implementation(libs.ktor.server.default.headers)
+    implementation(libs.ktor.server.forwarded.header)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.request.validation)
+    implementation(libs.ktor.server.rate.limit)
+    implementation(libs.ktor.server.config.yaml)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.content.negotiation)
 
-    implementation("io.ktor:ktor-client-core")
-    implementation("io.ktor:ktor-client-cio")
-    implementation("io.ktor:ktor-client-logging")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.logging)
+
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.gson)
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactive)
 
     implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
     implementation("io.github.smiley4:schema-kenerator-core:$schemaKeneratorVersion")
@@ -79,45 +89,37 @@ dependencies {
     implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
-    implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation(libs.lettuce)
+    implementation(libs.caffeine)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$kotlinCoroutineVersion")
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.json)
+    implementation(libs.exposed.kotlin.datetime)
 
-    implementation("io.lettuce:lettuce-core:$lettuceVersion")
-    implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
+    implementation(libs.postgresql)
+    implementation(libs.mysql)
+    implementation(libs.sqlite)
+    implementation(libs.hikari)
 
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-json:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
-    implementation("org.postgresql:postgresql:$postgresVersion")
-    implementation("com.mysql:mysql-connector-j:$mySQLVersion")
-    implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation(libs.common.io)
+    implementation(libs.common.codec)
+    implementation(libs.bcrypt)
 
-    implementation("commons-io:commons-io:$commonsIOVersion")
-    implementation("commons-codec:commons-codec:$commonsCodecVersion")
-    implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation(libs.img4j)
 
-    implementation("org.sejda.imageio:webp-imageio:0.1.6")
-    implementation("org.im4java:im4java:1.4.0")
+    implementation(libs.amazon.s3)
 
-    implementation("software.amazon.awssdk:s3:$awsS3Version")
+    implementation(libs.semver4j)
 
-    implementation("org.semver4j:semver4j:$semver4jVersion")
+    implementation(libs.kotlin.logging)
+    implementation(libs.logback.classic)
 
-    implementation("io.ktor:ktor-server-call-logging-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("io.ktor:ktor-server-test-host-jvm")
-    testImplementation("io.ktor:ktor-client-content-negotiation")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation(libs.mockk)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.kotlin.test)
 }
 
 tasks.jar {
