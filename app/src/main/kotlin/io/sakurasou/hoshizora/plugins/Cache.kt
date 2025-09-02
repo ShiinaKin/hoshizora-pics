@@ -2,13 +2,10 @@ package io.sakurasou.hoshizora.plugins
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializer
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.ByteArrayContent
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.createApplicationPlugin
@@ -110,24 +107,20 @@ val CacheRoutePlugin =
             logger.debug { "Cache hit: $key" }
         }
         onCallRespond { call, body ->
-            if ((
-                    call.response.status()?.value
-                        ?: HttpStatusCode.OK.value
-                ) >= HttpStatusCode.BadRequest.value
-            ) {
+            if ((call.response.status()?.value ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value) {
                 return@onCallRespond
             }
             if (call.request.queryParameters.isEmpty() && !pluginConfig.cachedNoQueryParamRequest) return@onCallRespond
             if (call.attributes.getOrNull(isCache) == true) return@onCallRespond
             val key = buildKey(call)
             if (expireTime == null) {
-                provider.saveCache(key, body)
+                provider.saveCache(key, body as ByteArrayContent)
             } else {
-                provider.saveCache(key, body, expireTime)
+                provider.saveCache(key, body as ByteArrayContent, expireTime)
             }
             logger.debug { "Cache saved: $key" }
         }
-        on(CallFailed) { call, e ->
+        on(CallFailed) { _, e ->
             throw e
         }
     }
@@ -159,25 +152,12 @@ fun Route.cache(
 
 abstract class CacheProvider(
     val expireTime: Duration = 15.minutes,
-    val jsonMapper: Gson =
-        GsonBuilder()
-            .registerTypeAdapter(
-                ByteArray::class.java,
-                JsonSerializer<ByteArray> { src, _, _ ->
-                    JsonPrimitive(src.encodeBase64())
-                },
-            ).registerTypeAdapter(
-                ByteArray::class.java,
-                JsonDeserializer { json, _, _ ->
-                    json.asString.decodeBase64Bytes()
-                },
-            ).create(),
 ) {
     private val mutex = Mutex()
 
     suspend fun saveCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration = this.expireTime,
     ) {
         if (mutex.tryLock()) {
@@ -193,17 +173,17 @@ abstract class CacheProvider(
         var cache = getCache(key)
         if (cache != null) return cache
 
-        for (i in 1..2) {
+        repeat(2) {
             delay(50.milliseconds)
             cache = getCache(key)
-            if (cache != null) break
+            if (cache != null) return cache
         }
-        return cache
+        return null
     }
 
     internal abstract suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration = this.expireTime,
     )
 
@@ -219,7 +199,7 @@ class RedisCacheProvider(
     ssl: Boolean = false,
     expireTime: Duration,
 ) : CacheProvider(expireTime) {
-    private val redisClient: RedisClient =
+    private val redisClient: RedisClient by lazy {
         RedisClient.create(
             RedisURI.Builder
                 .redis(host)
@@ -229,11 +209,13 @@ class RedisCacheProvider(
                 .also { if (password != null) it.withPassword(password.toCharArray()) }
                 .build(),
         )
-    private val redisConnection = redisClient.connect()
+    }
+
+    private val redisConnection by lazy { redisClient.connect() }
 
     override suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration,
     ) {
         val commands = redisConnection.coroutines()
@@ -245,13 +227,42 @@ class RedisCacheProvider(
         return coroutinesCommands.get(key)?.toObject()
     }
 
-    private fun Any.toRedisStoreValue() = this.javaClass.name + "^^^" + jsonMapper.toJson(this)
+    private fun ByteArrayContent.toRedisStoreValue(): String {
+        val bytesBase64 = this.bytes().encodeBase64()
+        val contentType = this.contentType?.toString() ?: ""
+        val status = this.status?.value?.toString() ?: ""
+        return "$bytesBase64^^^$contentType^^^$status"
+    }
 
-    private fun String.toObject(): Any {
+    private fun String.toObject(): ByteArrayContent {
         val split = this.split("^^^")
-        val className = split[0]
-        val json = split[1]
-        return jsonMapper.fromJson(json, Class.forName(className))
+        val bytes = split.getOrNull(0)?.decodeBase64Bytes() ?: run {
+            logger.warn { "Malformed cache entry: missing bytes. Using empty byte array." }
+            ByteArray(0)
+        }
+        val contentType = split.getOrNull(1) ?: run {
+            logger.warn { "Malformed cache entry: missing contentType. Using default ContentType.Application.OctetStream." }
+            ""
+        }
+        val status = split.getOrNull(2)?.toIntOrNull()
+        val parsedContentType =
+            if (contentType.isNotBlank()) {
+                try {
+                    ContentType.parse(contentType)
+                } catch (e: Exception) {
+                    logger.warn(
+                        e,
+                    ) { "Invalid contentType string in cache: '$contentType'. Using default ContentType.Application.OctetStream." }
+                    ContentType.Application.OctetStream
+                }
+            } else {
+                ContentType.Application.OctetStream
+            }
+        return ByteArrayContent(
+            bytes,
+            contentType = parsedContentType,
+            status = status?.let { HttpStatusCode.fromValue(it) },
+        )
     }
 }
 
@@ -266,7 +277,7 @@ class MemoryCacheProvider(
 
     override suspend fun setCache(
         key: String,
-        value: Any,
+        value: ByteArrayContent,
         expireTime: Duration,
     ) {
         cache.put(key, value)
