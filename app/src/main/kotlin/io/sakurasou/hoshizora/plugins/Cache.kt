@@ -236,9 +236,15 @@ class RedisCacheProvider(
 
     private fun String.toObject(): ByteArrayContent {
         val split = this.split("^^^")
-        val bytes = split[0].decodeBase64Bytes()
-        val contentType = split[1]
-        val status = split[2].toIntOrNull()
+        val bytes = split.getOrNull(0)?.decodeBase64Bytes() ?: run {
+            logger.warn { "Malformed cache entry: missing bytes. Using empty byte array." }
+            ByteArray(0)
+        }
+        val contentType = split.getOrNull(1) ?: run {
+            logger.warn { "Malformed cache entry: missing contentType. Using default ContentType.Application.OctetStream." }
+            ""
+        }
+        val status = split.getOrNull(2)?.toIntOrNull()
         val parsedContentType =
             if (contentType.isNotBlank()) {
                 try {
