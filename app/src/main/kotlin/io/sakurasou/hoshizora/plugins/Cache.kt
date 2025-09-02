@@ -232,26 +232,8 @@ class RedisCacheProvider(
         return coroutinesCommands.get(key)?.toObject()
     }
 
-    private fun ByteArrayContent.extractBytes(): ByteArray =
-        try {
-            val prop = this::class.declaredMemberProperties.firstOrNull { it.name == "bytes" }
-            prop?.let {
-                @Suppress("UNCHECKED_CAST")
-                val byteProp = it as KProperty1<ByteArrayContent, *>
-                byteProp.isAccessible = true
-                byteProp.get(this) as? ByteArray
-            } ?: run {
-                val field = this.javaClass.getDeclaredField("bytes")
-                field.isAccessible = true
-                field.get(this) as ByteArray
-            }
-        } catch (e: Exception) {
-            logger.error(e) { "Failed to extract bytes from ByteArrayContent" }
-            throw e
-        }
-
     private fun ByteArrayContent.toRedisStoreValue(): String {
-        val bytesBase64 = this.extractBytes().encodeBase64()
+        val bytesBase64 = this.bytes().encodeBase64()
         val contentType = this.contentType?.toString() ?: ""
         val status = this.status?.value?.toString() ?: ""
         return "$bytesBase64^^^$contentType^^^$status"
