@@ -3,12 +3,12 @@ package io.sakurasou.hoshizora.model.dao.user
 import io.sakurasou.hoshizora.model.dao.album.Albums
 import io.sakurasou.hoshizora.model.dao.group.Groups
 import io.sakurasou.hoshizora.model.dao.image.Images
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.Coalesce
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
-import org.jetbrains.exposed.sql.longLiteral
-import org.jetbrains.exposed.sql.sum
+import org.jetbrains.exposed.v1.core.Coalesce
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.longLiteral
+import org.jetbrains.exposed.v1.core.sum
+import org.jetbrains.exposed.v1.datetime.datetime
 
 /**
  * @author ShiinaKin

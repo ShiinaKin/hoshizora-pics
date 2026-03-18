@@ -2,7 +2,7 @@ package io.sakurasou.hoshizora.model.dao.relation
 
 import io.sakurasou.hoshizora.model.dao.permission.Permissions
 import io.sakurasou.hoshizora.model.dao.role.Roles
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * @author ShiinaKin

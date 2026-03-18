@@ -2,8 +2,9 @@ package io.sakurasou.hoshizora.model.dao.permission
 
 import io.sakurasou.hoshizora.model.dto.PermissionInsertDTO
 import io.sakurasou.hoshizora.model.entity.Permission
-import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.batchInsert
+import org.jetbrains.exposed.v1.jdbc.selectAll
 
 /**
  * @author ShiinaKin

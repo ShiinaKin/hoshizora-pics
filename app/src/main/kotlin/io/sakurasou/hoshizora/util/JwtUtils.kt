@@ -7,12 +7,12 @@ import io.sakurasou.hoshizora.config.JwtConfig.audience
 import io.sakurasou.hoshizora.config.JwtConfig.issuer
 import io.sakurasou.hoshizora.config.JwtConfig.secret
 import io.sakurasou.hoshizora.model.entity.User
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.toJavaInstant
 
 /**
  * @author ShiinaKin

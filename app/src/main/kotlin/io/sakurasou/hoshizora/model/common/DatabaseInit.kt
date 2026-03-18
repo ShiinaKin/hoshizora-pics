@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package io.sakurasou.hoshizora.model.common
 
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -30,12 +32,12 @@ import io.sakurasou.hoshizora.model.setting.SystemSetting
 import io.sakurasou.hoshizora.model.setting.SystemStatus
 import io.sakurasou.hoshizora.model.strategy.LocalStrategy
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.semver4j.Semver
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin
@@ -48,18 +50,20 @@ object DatabaseInit {
         runBlocking {
             dbQuery {
                 if (!isFirstRunning()) {
-                    SchemaUtils.create(Images)
-                    SchemaUtils.create(Albums)
-                    SchemaUtils.create(Strategies)
-                    SchemaUtils.create(Settings)
-                    SchemaUtils.create(Users)
-                    SchemaUtils.create(Groups)
-                    SchemaUtils.create(Roles)
-                    SchemaUtils.create(Permissions)
-                    SchemaUtils.create(GroupRoles)
-                    SchemaUtils.create(RolePermissions)
-                    SchemaUtils.create(PersonalAccessTokens)
-                    SchemaUtils.create(PersonalAccessTokenPermissions)
+                    SchemaUtils.create(
+                        Images,
+                        Albums,
+                        Strategies,
+                        Settings,
+                        Users,
+                        Groups,
+                        Roles,
+                        Permissions,
+                        GroupRoles,
+                        RolePermissions,
+                        PersonalAccessTokens,
+                        PersonalAccessTokenPermissions,
+                    )
                     initStrategy()
                     initSetting(version)
                     initPermission()

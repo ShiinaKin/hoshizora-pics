@@ -24,9 +24,9 @@ import io.sakurasou.hoshizora.model.dao.user.UserDao
 import io.sakurasou.hoshizora.model.dto.UserInsertDTO
 import io.sakurasou.hoshizora.model.dto.UserManageUpdateDTO
 import io.sakurasou.hoshizora.model.dto.UserSelfUpdateDTO
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author ShiinaKin

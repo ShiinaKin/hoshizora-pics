@@ -5,11 +5,11 @@ import io.sakurasou.hoshizora.model.dao.strategy.Strategies
 import io.sakurasou.hoshizora.model.dao.user.Users
 import io.sakurasou.hoshizora.model.group.GroupConfig
 import io.sakurasou.hoshizora.plugins.jsonFormat
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.json.json
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
-import org.jetbrains.exposed.sql.sum
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.sum
+import org.jetbrains.exposed.v1.datetime.datetime
+import org.jetbrains.exposed.v1.json.json
 
 /**
  * @author ShiinaKin

@@ -17,9 +17,9 @@ import io.sakurasou.hoshizora.model.dao.relation.RelationDao
 import io.sakurasou.hoshizora.model.dao.role.RoleDao
 import io.sakurasou.hoshizora.model.dto.RoleInsertDTO
 import io.sakurasou.hoshizora.model.dto.RoleUpdateDTO
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author ShiinaKin

@@ -9,7 +9,7 @@ import io.sakurasou.hoshizora.model.dao.album.AlbumDao
 import io.sakurasou.hoshizora.model.dao.image.ImageDao
 import io.sakurasou.hoshizora.model.dao.user.UserDao
 import kotlinx.datetime.TimeZone
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import java.util.Locale
 import java.util.Properties
 

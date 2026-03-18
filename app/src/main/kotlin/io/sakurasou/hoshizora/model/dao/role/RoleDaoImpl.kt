@@ -6,12 +6,12 @@ import io.sakurasou.hoshizora.controller.vo.RolePageVO
 import io.sakurasou.hoshizora.model.dto.RoleInsertDTO
 import io.sakurasou.hoshizora.model.dto.RoleUpdateDTO
 import io.sakurasou.hoshizora.model.entity.Role
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
 
 /**
  * @author ShiinaKin

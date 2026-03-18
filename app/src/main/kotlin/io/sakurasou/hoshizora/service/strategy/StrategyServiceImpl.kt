@@ -15,9 +15,9 @@ import io.sakurasou.hoshizora.model.dao.group.GroupDao
 import io.sakurasou.hoshizora.model.dao.strategy.StrategyDao
 import io.sakurasou.hoshizora.model.dto.StrategyInsertDTO
 import io.sakurasou.hoshizora.model.dto.StrategyUpdateDTO
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

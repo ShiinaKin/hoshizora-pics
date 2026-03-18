@@ -2,9 +2,9 @@ package io.sakurasou.hoshizora.model.dao.strategy
 
 import io.sakurasou.hoshizora.model.strategy.StrategyConfig
 import io.sakurasou.hoshizora.plugins.jsonFormat
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.json.json
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.datetime.datetime
+import org.jetbrains.exposed.v1.json.json
 
 /**
  * @author ShiinaKin

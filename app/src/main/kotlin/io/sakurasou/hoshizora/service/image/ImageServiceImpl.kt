@@ -43,12 +43,12 @@ import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
 import io.sakurasou.hoshizora.util.ImageUtils
 import io.sakurasou.hoshizora.util.PlaceholderUtils
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
+import kotlin.time.Clock
 
 /**
  * @author ShiinaKin

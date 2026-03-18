@@ -15,20 +15,22 @@ import io.sakurasou.hoshizora.model.dto.UserInsertDTO
 import io.sakurasou.hoshizora.model.dto.UserManageUpdateDTO
 import io.sakurasou.hoshizora.model.dto.UserSelfUpdateDTO
 import io.sakurasou.hoshizora.model.entity.User
-import org.jetbrains.exposed.sql.Coalesce
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.innerJoin
-import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.leftJoin
-import org.jetbrains.exposed.sql.longLiteral
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.sum
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.Coalesce
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.innerJoin
+import org.jetbrains.exposed.v1.core.leftJoin
+import org.jetbrains.exposed.v1.core.like
+import org.jetbrains.exposed.v1.core.longLiteral
+import org.jetbrains.exposed.v1.core.sum
+import org.jetbrains.exposed.v1.jdbc.Query
+import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
 
 /**
  * @author ShiinaKin

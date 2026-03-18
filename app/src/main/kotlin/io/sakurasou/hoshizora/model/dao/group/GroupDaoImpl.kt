@@ -9,18 +9,19 @@ import io.sakurasou.hoshizora.model.dao.user.Users
 import io.sakurasou.hoshizora.model.dto.GroupInsertDTO
 import io.sakurasou.hoshizora.model.dto.GroupUpdateDTO
 import io.sakurasou.hoshizora.model.entity.Group
-import org.jetbrains.exposed.sql.Coalesce
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.innerJoin
-import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.leftJoin
-import org.jetbrains.exposed.sql.longLiteral
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.sum
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.Coalesce
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.innerJoin
+import org.jetbrains.exposed.v1.core.leftJoin
+import org.jetbrains.exposed.v1.core.longLiteral
+import org.jetbrains.exposed.v1.core.sum
+import org.jetbrains.exposed.v1.jdbc.Query
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
 
 /**
  * @author ShiinaKin

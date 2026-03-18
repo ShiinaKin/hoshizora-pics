@@ -1,10 +1,11 @@
 package io.sakurasou.hoshizora.util
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import org.apache.commons.codec.digest.DigestUtils
 import kotlin.random.Random
+import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -53,17 +54,51 @@ object PlaceholderUtils {
         // namingRule like : {yyyy}/{MM}/{dd}
         return namingRule.replace(Regex("\\{[^}]+}")) { matchResult ->
             when (matchResult.value) {
-                Placeholder.YEAR.placeholder -> localDateTime.year.toString()
-                Placeholder.MONTH.placeholder -> localDateTime.monthNumber.toString().padStart(2, '0')
-                Placeholder.DAY.placeholder -> localDateTime.dayOfMonth.toString().padStart(2, '0')
-                Placeholder.TIMESTAMP.placeholder -> instant.epochSeconds.toString()
-                Placeholder.UNIQ.placeholder -> Uuid.random().toHexString()
-                Placeholder.MD5.placeholder -> DigestUtils.md5Hex(generateRandomString(32))
-                Placeholder.STR_RANDOM_16.placeholder -> generateRandomString(16)
-                Placeholder.STR_RANDOM_10.placeholder -> generateRandomString(10)
-                Placeholder.FILENAME.placeholder -> fileName
-                Placeholder.USER_ID.placeholder -> userId.toString()
-                else -> matchResult.value
+                Placeholder.YEAR.placeholder -> {
+                    localDateTime.year.toString()
+                }
+
+                Placeholder.MONTH.placeholder -> {
+                    localDateTime.month.number
+                        .toString()
+                        .padStart(2, '0')
+                }
+
+                Placeholder.DAY.placeholder -> {
+                    localDateTime.day.toString().padStart(2, '0')
+                }
+
+                Placeholder.TIMESTAMP.placeholder -> {
+                    instant.epochSeconds.toString()
+                }
+
+                Placeholder.UNIQ.placeholder -> {
+                    Uuid.random().toHexString()
+                }
+
+                Placeholder.MD5.placeholder -> {
+                    DigestUtils.md5Hex(generateRandomString(32))
+                }
+
+                Placeholder.STR_RANDOM_16.placeholder -> {
+                    generateRandomString(16)
+                }
+
+                Placeholder.STR_RANDOM_10.placeholder -> {
+                    generateRandomString(10)
+                }
+
+                Placeholder.FILENAME.placeholder -> {
+                    fileName
+                }
+
+                Placeholder.USER_ID.placeholder -> {
+                    userId.toString()
+                }
+
+                else -> {
+                    matchResult.value
+                }
             }
         }
     }

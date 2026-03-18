@@ -14,9 +14,9 @@ import io.sakurasou.hoshizora.model.dto.SettingUpdateDTO
 import io.sakurasou.hoshizora.model.setting.SiteSetting
 import io.sakurasou.hoshizora.model.setting.SystemSetting
 import io.sakurasou.hoshizora.model.setting.SystemStatus
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

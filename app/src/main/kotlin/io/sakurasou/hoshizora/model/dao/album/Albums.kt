@@ -2,9 +2,9 @@ package io.sakurasou.hoshizora.model.dao.album
 
 import io.sakurasou.hoshizora.model.dao.image.Images
 import io.sakurasou.hoshizora.model.dao.user.Users
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.datetime.datetime
 
 /**
  * @author ShiinaKin

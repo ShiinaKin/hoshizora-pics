@@ -1,6 +1,6 @@
 package io.sakurasou.hoshizora.model.dao.permission
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * @author ShiinaKin

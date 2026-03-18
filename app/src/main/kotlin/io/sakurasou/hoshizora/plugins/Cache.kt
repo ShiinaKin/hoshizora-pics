@@ -19,14 +19,13 @@ import io.ktor.server.routing.RouteSelector
 import io.ktor.server.routing.RouteSelectorEvaluation
 import io.ktor.server.routing.RoutingResolveContext
 import io.ktor.util.AttributeKey
-import io.ktor.util.decodeBase64Bytes
-import io.ktor.util.encodeBase64
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.RedisClient
 import io.lettuce.core.RedisURI
 import io.lettuce.core.api.coroutines
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
+import kotlin.io.encoding.Base64
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -228,7 +227,7 @@ class RedisCacheProvider(
     }
 
     private fun ByteArrayContent.toRedisStoreValue(): String {
-        val bytesBase64 = this.bytes().encodeBase64()
+        val bytesBase64 = Base64.encode(bytes())
         val contentType = this.contentType?.toString() ?: ""
         val status = this.status?.value?.toString() ?: ""
         return "$bytesBase64^^^$contentType^^^$status"
@@ -236,14 +235,16 @@ class RedisCacheProvider(
 
     private fun String.toObject(): ByteArrayContent {
         val split = this.split("^^^")
-        val bytes = split.getOrNull(0)?.decodeBase64Bytes() ?: run {
-            logger.warn { "Malformed cache entry: missing bytes. Using empty byte array." }
-            ByteArray(0)
-        }
-        val contentType = split.getOrNull(1) ?: run {
-            logger.warn { "Malformed cache entry: missing contentType. Using default ContentType.Application.OctetStream." }
-            ""
-        }
+        val bytes =
+            split.getOrNull(0)?.let { Base64.decode(it) } ?: run {
+                logger.warn { "Malformed cache entry: missing bytes. Using empty byte array." }
+                ByteArray(0)
+            }
+        val contentType =
+            split.getOrNull(1) ?: run {
+                logger.warn { "Malformed cache entry: missing contentType. Using default ContentType.Application.OctetStream." }
+                ""
+            }
         val status = split.getOrNull(2)?.toIntOrNull()
         val parsedContentType =
             if (contentType.isNotBlank()) {

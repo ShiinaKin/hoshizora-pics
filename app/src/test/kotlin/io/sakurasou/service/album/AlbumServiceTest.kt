@@ -18,8 +18,6 @@ import io.sakurasou.hoshizora.model.entity.Album
 import io.sakurasou.hoshizora.model.entity.User
 import io.sakurasou.hoshizora.service.album.AlbumServiceImpl
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -27,6 +25,8 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * @author Shiina Kin
@@ -36,7 +36,7 @@ class AlbumServiceTest {
     private lateinit var userDao: UserDao
     private lateinit var albumDao: AlbumDao
     private lateinit var imageDao: ImageDao
-    private lateinit var albumService: io.sakurasou.hoshizora.service.album.AlbumServiceImpl
+    private lateinit var albumService: AlbumServiceImpl
     private lateinit var instant: Instant
     private lateinit var now: LocalDateTime
 

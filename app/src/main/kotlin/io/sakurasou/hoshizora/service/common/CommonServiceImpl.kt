@@ -22,9 +22,9 @@ import io.sakurasou.hoshizora.model.strategy.LocalStrategy
 import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
 import io.sakurasou.hoshizora.util.ImageUtils
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

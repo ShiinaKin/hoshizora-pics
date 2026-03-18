@@ -18,9 +18,9 @@ import io.sakurasou.hoshizora.model.dao.user.UserDao
 import io.sakurasou.hoshizora.model.dto.PersonalAccessTokenInsertDTO
 import io.sakurasou.hoshizora.model.dto.PersonalAccessTokenUpdateDTO
 import io.sakurasou.hoshizora.util.JwtUtils
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author ShiinaKin
@@ -46,7 +46,7 @@ class PersonalAccessTokenServiceImpl(
 
             val group = groupDao.findGroupById(user.groupId) ?: throw GroupNotFoundException()
             val roleOfGroup = relationDao.listRoleByGroupId(group.id)
-            val permissionsOfUser = roleOfGroup.map { relationDao.listPermissionByRole(it) }.flatten().toSet()
+            val permissionsOfUser = roleOfGroup.flatMap { relationDao.listPermissionByRole(it) }.toSet()
 
             if (insertRequest.permissions.any { !permissionsOfUser.contains(it) }) {
                 throw PersonalAccessTokenInsertFailedException(reason = "Invalid permissions")

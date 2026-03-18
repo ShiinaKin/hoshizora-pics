@@ -5,8 +5,8 @@ import com.zaxxer.hikari.HikariDataSource
 import io.sakurasou.hoshizora.di.InstanceCenter
 import io.sakurasou.hoshizora.model.common.DatabaseInit
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 
 /**
  * @author ShiinaKin

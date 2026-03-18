@@ -22,9 +22,9 @@ import io.sakurasou.hoshizora.model.dao.image.ImageDao
 import io.sakurasou.hoshizora.model.dao.user.UserDao
 import io.sakurasou.hoshizora.model.dto.AlbumInsertDTO
 import io.sakurasou.hoshizora.model.dto.AlbumUpdateDTO
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

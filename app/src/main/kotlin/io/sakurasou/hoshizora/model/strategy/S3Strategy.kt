@@ -1,7 +1,6 @@
 package io.sakurasou.hoshizora.model.strategy
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
-import io.ktor.util.encodeBase64
 import io.sakurasou.hoshizora.exception.service.image.io.s3.S3ClientException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,6 +18,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.S3Exception
 import java.net.URI
+import kotlin.io.encoding.Base64
 
 /**
  * @author Shiina Kin
@@ -70,7 +70,7 @@ data class S3Strategy(
         withContext(Dispatchers.IO) {
             runCatching {
                 val s3Client = getOrCreateS3Client(this@S3Strategy)
-                val sha256 = DigestUtils.sha256(imageBytes).encodeBase64()
+                val sha256 = Base64.encode(DigestUtils.sha256(imageBytes))
                 val putObject =
                     PutObjectRequest
                         .builder()
@@ -147,7 +147,9 @@ data class S3Strategy(
                         throw S3ClientException(it)
                     }
 
-                    else -> throw it
+                    else -> {
+                        throw it
+                    }
                 }
             }.getOrThrow()
         }

@@ -51,7 +51,7 @@ import io.sakurasou.hoshizora.service.system.SystemService
 import io.sakurasou.hoshizora.service.system.SystemServiceImpl
 import io.sakurasou.hoshizora.service.user.UserService
 import io.sakurasou.hoshizora.service.user.UserServiceImpl
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 
 /**
  * @author Shiina Kin

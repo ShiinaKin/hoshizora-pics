@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:25-jdk AS build
 
 WORKDIR /hoshizora-pics
 
@@ -11,7 +11,7 @@ COPY ui ui
 RUN chmod +x ./gradlew
 RUN ./gradlew clean build
 
-FROM eclipse-temurin:21-jre-noble
+FROM eclipse-temurin:25-jre-noble
 LABEL maintainer="ShiinaKin <shiina@sakurasou.io>"
 WORKDIR /hoshizora-pics
 

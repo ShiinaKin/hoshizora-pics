@@ -4,8 +4,9 @@ import io.sakurasou.hoshizora.model.dao.album.Albums
 import io.sakurasou.hoshizora.model.dao.group.Groups
 import io.sakurasou.hoshizora.model.dao.strategy.Strategies
 import io.sakurasou.hoshizora.model.dao.user.Users
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.datetime.datetime
 
 /**
  * @author ShiinaKin

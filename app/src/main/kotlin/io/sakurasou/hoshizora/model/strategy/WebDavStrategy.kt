@@ -11,11 +11,11 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.headers
-import io.ktor.util.encodeBase64
 import io.sakurasou.hoshizora.di.InstanceCenter.client
 import io.sakurasou.hoshizora.exception.service.image.io.webdav.WebDavException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.io.encoding.Base64
 
 /**
  * @author Shiina Kin
@@ -39,7 +39,7 @@ data class WebDavStrategy(
             headers {
                 append(
                     HttpHeaders.Authorization,
-                    "Basic ${"${webDavStrategy.username}:${webDavStrategy.password}".encodeBase64()}",
+                    "Basic ${Base64.encode("${webDavStrategy.username}:${webDavStrategy.password}".encodeToByteArray())}",
                 )
             }
         }

@@ -9,12 +9,12 @@ import io.sakurasou.hoshizora.model.dao.image.Images
 import io.sakurasou.hoshizora.model.dao.role.Roles
 import io.sakurasou.hoshizora.model.dao.strategy.Strategies
 import io.sakurasou.hoshizora.model.dao.user.Users
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.ExpressionWithColumnType
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.Query
+import org.jetbrains.exposed.v1.jdbc.selectAll
 
 /**
  * @author Shiina Kin
