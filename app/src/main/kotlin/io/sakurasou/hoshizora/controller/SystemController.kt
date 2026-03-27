@@ -1,14 +1,18 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.http.HttpStatusCode
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.SETTING_READ
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.SystemOverviewVO
 import io.sakurasou.hoshizora.controller.vo.SystemStatisticsVO
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -18,48 +22,39 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 fun Route.systemRoute(systemService: io.sakurasou.hoshizora.service.system.SystemService) {
     val controller = SystemController(systemService)
-    route("system", {
-        tags("system")
-        protected = true
-    }) {
+    route("system") {
         install(AuthorizationPlugin) {
             permission = SETTING_READ
         }
         systemStatistics(controller)
         systemOverview(controller)
+    }.describe {
+        tag("system")
     }
 }
 
 private fun Route.systemStatistics(controller: SystemController) {
-    route {
-        get("statistics", {
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<SystemStatisticsVO>> {
-                        description = "system statistics"
-                    }
-                }
-            }
-        }) {
+    transparentRoute {
+        get("statistics") {
             val systemStatisticsVO = controller.handleSystemStatistics()
             call.success(systemStatisticsVO)
+        }.describe {
+            responses {
+                successResponse<SystemStatisticsVO>("system statistics")
+            }
         }
     }
 }
 
 private fun Route.systemOverview(controller: SystemController) {
-    route {
-        get("overview", {
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<SystemOverviewVO>> {
-                        description = "system overview"
-                    }
-                }
-            }
-        }) {
+    transparentRoute {
+        get("overview") {
             val systemOverviewVO = controller.handleSystemOverview()
             call.success(systemOverviewVO)
+        }.describe {
+            responses {
+                successResponse<SystemOverviewVO>("system overview")
+            }
         }
     }
 }

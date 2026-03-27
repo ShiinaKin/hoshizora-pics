@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.vo
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -9,7 +8,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 13:48
  */
 @Serializable
-@Name("UserVO")
 data class UserVO(
     val id: Long,
     val username: String,
@@ -26,7 +24,6 @@ data class UserVO(
 )
 
 @Serializable
-@Name("UserPageVO")
 data class UserPageVO(
     val id: Long,
     val username: String,

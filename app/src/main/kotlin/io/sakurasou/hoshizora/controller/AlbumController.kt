@@ -1,16 +1,21 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.ALBUM_DELETE_ALL
 import io.sakurasou.hoshizora.constant.ALBUM_DELETE_SELF
 import io.sakurasou.hoshizora.constant.ALBUM_READ_ALL_ALL
@@ -28,13 +33,15 @@ import io.sakurasou.hoshizora.controller.vo.AlbumManagePageVO
 import io.sakurasou.hoshizora.controller.vo.AlbumManageVO
 import io.sakurasou.hoshizora.controller.vo.AlbumPageVO
 import io.sakurasou.hoshizora.controller.vo.AlbumVO
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
+import io.sakurasou.hoshizora.extension.commonResponse
 import io.sakurasou.hoshizora.extension.getPrincipal
 import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -42,39 +49,35 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
  * 2024/9/9 08:58
  */
 fun Route.albumRoute(albumService: io.sakurasou.hoshizora.service.album.AlbumService) {
-    val controller =
-        AlbumController(albumService)
-    route("album", {
-        tags("Album")
-    }) {
+    val controller = AlbumController(albumService)
+    route("album") {
         albumSelfRoute(controller)
         albumManageRoute(controller)
+    }.describe {
+        tag("Album")
     }
 }
 
 private fun Route.albumSelfRoute(controller: AlbumController) {
-    route({
-        protected = true
-    }) {
-        albumSelfInsert(controller)
-        route("{albumId}", {
-            request {
-                pathParameter<Long>("albumId") {
-                    description = "album id"
-                    required = true
-                }
+    albumSelfInsert(controller)
+    route("{albumId}") {
+        albumSelfDelete(controller)
+        albumSelfPatch(controller)
+        albumSelfFetch(controller)
+    }.describe {
+        parameters {
+            path("albumId") {
+                description = "album id"
+                required = true
+                schema = jsonSchema<Long>()
             }
-        }) {
-            albumSelfDelete(controller)
-            albumSelfPatch(controller)
-            albumSelfFetch(controller)
         }
-        albumSelfPage(controller)
     }
+    albumSelfPage(controller)
 }
 
 private fun Route.albumSelfInsert(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
         }
@@ -87,50 +90,43 @@ private fun Route.albumSelfInsert(controller: AlbumController) {
                 }
             }
         }
-        post({
-            request {
-                body<AlbumSelfInsertRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post {
             val userId = call.getPrincipal().id
             val selfInsertRequest = call.receive<AlbumSelfInsertRequest>()
             controller.handleSelfInsert(userId, selfInsertRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<AlbumSelfInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumSelfDelete(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_DELETE_SELF
         }
-        delete({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        delete {
             val userId = call.getPrincipal().id
             val albumId = call.albumId()
             controller.handleSelfDelete(userId, albumId)
             call.success()
+        }.describe {
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumSelfPatch(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_SELF
         }
@@ -148,74 +144,48 @@ private fun Route.albumSelfPatch(controller: AlbumController) {
                 }
             }
         }
-        patch({
-            request {
-                body<AlbumSelfPatchRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch {
             val userId = call.getPrincipal().id
             val albumId = call.albumId()
             val selfPatchRequest = call.receive<AlbumSelfPatchRequest>()
             controller.handleSelfPatch(userId, albumId, selfPatchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<AlbumSelfPatchRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumSelfFetch(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_SELF_SINGLE
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<AlbumVO>> { }
-                }
-            }
-        }) {
+        get {
             val userId = call.getPrincipal().id
             val albumId = call.albumId()
             val albumVO = controller.handleSelfFetch(userId, albumId)
             call.success(albumVO)
+        }.describe {
+            responses {
+                successResponse<AlbumVO>()
+            }
         }
     }
 }
 
 private fun Route.albumSelfPage(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_SELF_ALL
         }
-        get("page", {
-            pageRequestSpec()
-            request {
-                queryParameter<String>("albumName") {
-                    description = "search albumName"
-                    required = false
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<PageResult<AlbumPageVO>>> {
-                        description = "page result"
-                    }
-                }
-                HttpStatusCode.BadRequest to {
-                    description = "page or pageSize wrong"
-                }
-            }
-        }) {
+        get("page") {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
             val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
@@ -226,40 +196,50 @@ private fun Route.albumSelfPage(controller: AlbumController) {
 
             val pageResult = controller.handleSelfPage(userId, pageRequest)
             call.success(pageResult)
+        }.describe {
+            pageRequestSpec()
+            parameters {
+                query("albumName") {
+                    description = "search albumName"
+                    required = false
+                    schema = jsonSchema<String>()
+                }
+            }
+            responses {
+                successResponse<PageResult<AlbumPageVO>>("page result")
+                HttpStatusCode.BadRequest {
+                    description = "page or pageSize wrong"
+                }
+            }
         }
     }
 }
 
 private fun Route.albumManageRoute(controller: AlbumController) {
-    route("manage", {
-        protected = true
-        response {
-            HttpStatusCode.NotFound to {
-                description = "album not found"
-                body<CommonResponse<Unit>> { }
-            }
-        }
-    }) {
+    route("manage") {
         albumManageInsert(controller)
-        route("{albumId}", {
-            protected = true
-            request {
-                pathParameter<Long>("albumId") {
-                    description = "album id"
-                    required = true
-                }
-            }
-        }) {
+        route("{albumId}") {
             albumManageDelete(controller)
             albumManagePatch(controller)
             albumManageFetch(controller)
+        }.describe {
+            parameters {
+                path("albumId") {
+                    description = "album id"
+                    required = true
+                    schema = jsonSchema<Long>()
+                }
+            }
+            responses {
+                commonResponse(HttpStatusCode.NotFound, "album not found")
+            }
         }
         albumManagePage(controller)
     }
 }
 
 private fun Route.albumManageInsert(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
         }
@@ -272,48 +252,41 @@ private fun Route.albumManageInsert(controller: AlbumController) {
                 }
             }
         }
-        post({
-            request {
-                body<AlbumManageInsertRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post {
             val manageInsertRequest = call.receive<AlbumManageInsertRequest>()
             controller.handleManageInsert(manageInsertRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<AlbumManageInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumManageDelete(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_DELETE_ALL
         }
-        delete({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        delete {
             val albumId = call.albumId()
             controller.handleManageDelete(albumId)
             call.success()
+        }.describe {
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumManagePatch(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_WRITE_ALL
         }
@@ -332,76 +305,46 @@ private fun Route.albumManagePatch(controller: AlbumController) {
                 }
             }
         }
-        patch({
-            request {
-                body<AlbumManagePatchRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch {
             val albumId = call.albumId()
             val managePatchRequest = call.receive<AlbumManagePatchRequest>()
             controller.handleManagePatch(albumId, managePatchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<AlbumManagePatchRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.albumManageFetch(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_ALL_SINGLE
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<AlbumManageVO>> { }
-                }
-            }
-        }) {
+        get {
             val albumId = call.albumId()
             val albumVO = controller.handleManageFetch(albumId)
             call.success(albumVO)
+        }.describe {
+            responses {
+                successResponse<AlbumManageVO>()
+            }
         }
     }
 }
 
 private fun Route.albumManagePage(controller: AlbumController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ALBUM_READ_ALL_ALL
         }
-        get("page", {
-            pageRequestSpec()
-            request {
-                queryParameter<Long>("userId") {
-                    description = "userId"
-                    required = false
-                }
-                queryParameter<String>("albumName") {
-                    description = "search albumName"
-                    required = false
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<PageResult<AlbumManagePageVO>>> {
-                        description = "page result"
-                    }
-                }
-                HttpStatusCode.BadRequest to {
-                    description = "page or pageSize wrong"
-                }
-            }
-        }) {
+        get("page") {
             val pageRequest = call.pageRequest()
             val userIdPair = call.parameters["userId"]?.toLongOrNull()?.let { "userId" to it.toString() }
             val albumNamePair = call.parameters["albumName"]?.let { "albumName" to it }
@@ -413,6 +356,26 @@ private fun Route.albumManagePage(controller: AlbumController) {
 
             val pageResult = controller.handleManagePage(pageRequest)
             call.success(pageResult)
+        }.describe {
+            pageRequestSpec()
+            parameters {
+                query("userId") {
+                    description = "userId"
+                    required = false
+                    schema = jsonSchema<Long>()
+                }
+                query("albumName") {
+                    description = "search albumName"
+                    required = false
+                    schema = jsonSchema<String>()
+                }
+            }
+            responses {
+                successResponse<PageResult<AlbumManagePageVO>>("page result")
+                HttpStatusCode.BadRequest {
+                    description = "page or pageSize wrong"
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.strategy
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.hoshizora.exception.service.image.io.s3.S3ClientException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +25,6 @@ import kotlin.io.encoding.Base64
  */
 @Serializable
 @SerialName("S3")
-@Name("S3Strategy")
 data class S3Strategy(
     val endpoint: String,
     val bucketName: String,

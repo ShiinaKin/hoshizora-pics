@@ -1,22 +1,25 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.ROLE_READ_ALL
 import io.sakurasou.hoshizora.constant.ROLE_READ_SELF
 import io.sakurasou.hoshizora.constant.ROLE_WRITE_ALL
 import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.request.RoleInsertRequest
 import io.sakurasou.hoshizora.controller.request.RolePatchRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.controller.vo.RolePageVO
 import io.sakurasou.hoshizora.controller.vo.RoleVO
@@ -25,6 +28,8 @@ import io.sakurasou.hoshizora.extension.getPrincipal
 import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -34,30 +39,30 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 fun Route.roleRoute(roleService: io.sakurasou.hoshizora.service.role.RoleService) {
     val controller = RoleController(roleService)
-    route("role", {
-        protected = true
-        tags("Role")
-    }) {
-        route("{role_name}", {
-            request {
-                pathParameter<String>("role_name") {
-                    required = true
-                    description = "role name"
-                }
-            }
-        }) {
+    route("role") {
+        route("{role_name}") {
             patchRole(controller)
             deleteRole(controller)
             fetchRole(controller)
+        }.describe {
+            parameters {
+                path("role_name") {
+                    required = true
+                    description = "role name"
+                    schema = jsonSchema<String>()
+                }
+            }
         }
         insertRole(controller)
         fetchAllRolesAndPermissionsOfUser(controller)
         pageRoles(controller)
+    }.describe {
+        tag("Role")
     }
 }
 
 private fun Route.insertRole(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_WRITE_ALL
         }
@@ -72,31 +77,25 @@ private fun Route.insertRole(controller: RoleController) {
                 }
             }
         }
-        post({
-            request {
-                body<RoleInsertRequest> {
-                    required = true
-                    description = "role insert request"
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> {
-                        description = "insert role"
-                    }
-                }
-            }
-        }) {
+        post {
             val insertRequest = call.receive<RoleInsertRequest>()
             controller.handleInsertRole(insertRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                description = "role insert request"
+                schema = jsonSchema<RoleInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>("insert role")
+            }
         }
     }
 }
 
 private fun Route.patchRole(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_WRITE_ALL
         }
@@ -111,115 +110,89 @@ private fun Route.patchRole(controller: RoleController) {
                 }
             }
         }
-        patch({
-            request {
-                body<RolePatchRequest> {
-                    required = true
-                    description = "role patch request"
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> {
-                        description = "patch role"
-                    }
-                }
-            }
-        }) {
+        patch {
             val name = call.parameters["role_name"] ?: throw WrongParameterException("role name")
             val patchRequest = call.receive<RolePatchRequest>()
             controller.handlePatchRole(name, patchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                description = "role patch request"
+                schema = jsonSchema<RolePatchRequest>()
+            }
+            responses {
+                successResponse<Unit>("patch role")
+            }
         }
     }
 }
 
 private fun Route.deleteRole(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_WRITE_ALL
         }
-        delete({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> {
-                        description = "delete role"
-                    }
-                }
-            }
-        }) {
+        delete {
             val name = call.parameters["role_name"] ?: throw WrongParameterException("role name")
             controller.handleDeleteRole(name)
             call.success()
+        }.describe {
+            responses {
+                successResponse<Unit>("delete role")
+            }
         }
     }
 }
 
 private fun Route.fetchAllRolesAndPermissionsOfUser(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_READ_SELF
         }
-        get("self", {
-            protected = true
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<List<RoleVO>>> {
-                        description = "all roles with permissions of user"
-                    }
-                }
-            }
-        }) {
+        get("self") {
             val principal = call.getPrincipal()
             val rolesWithPermissions = controller.handleListAllRolesWithPermissionsOfUser(principal.groupId)
             call.success(rolesWithPermissions)
+        }.describe {
+            responses {
+                successResponse<List<RoleVO>>("all roles with permissions of user")
+            }
         }
     }
 }
 
 private fun Route.fetchRole(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_READ_ALL
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<RoleVO>> {
-                        description = "role with permissions"
-                    }
-                }
-            }
-        }) {
+        get {
             val name = call.parameters["role_name"] ?: throw WrongParameterException("role name")
             val role = controller.handleFetchRole(name)
             call.success(role)
+        }.describe {
+            responses {
+                successResponse<RoleVO>("role with permissions")
+            }
         }
     }
 }
 
 private fun Route.pageRoles(controller: RoleController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = ROLE_READ_ALL
         }
-        get("page", {
-            pageRequestSpec()
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<PageResult<RolePageVO>>> {
-                        description = "Success"
-                    }
-                }
-            }
-        }) {
+        get("page") {
             val pageRequest = call.pageRequest()
             val pageResult = controller.handlePageRoles(pageRequest)
             call.success(pageResult)
+        }.describe {
+            pageRequestSpec()
+            responses {
+                successResponse<PageResult<RolePageVO>>("Success")
+            }
         }
     }
 }

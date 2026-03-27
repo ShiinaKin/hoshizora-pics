@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -14,10 +15,6 @@ val postgresVersion: String by project
 val mySQLVersion: String by project
 val sqliteVersion: String by project
 
-val swaggerParserVersion: String by project
-val schemaKeneratorVersion: String by project
-val swaggerUIVersion: String by project
-
 val awsS3Version: String by project
 
 val gsonVersion: String by project
@@ -30,7 +27,7 @@ val commonsCodecVersion: String by project
 val mockkVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.2.20"
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ktor)
 }
@@ -39,9 +36,26 @@ application {
     mainClass = "io.sakurasou.hoshizora.ApplicationKt"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        optIn.add("kotlin.time.ExperimentalTime")
+    }
+}
+
 ktor {
     fatJar {
         archiveFileName = "hoshizora-pics-$version.jar"
+    }
+    openApi {
+        enabled = true
+        codeInferenceEnabled = true
+        onlyCommented = false
     }
 }
 
@@ -70,6 +84,8 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.routing.openapi)
+    implementation(libs.ktor.server.swagger)
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
@@ -81,12 +97,6 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactive)
-
-    implementation("io.swagger.parser.v3:swagger-parser:$swaggerParserVersion")
-    implementation("io.github.smiley4:schema-kenerator-core:$schemaKeneratorVersion")
-    implementation("io.github.smiley4:schema-kenerator-reflection:$schemaKeneratorVersion")
-    implementation("io.github.smiley4:schema-kenerator-swagger:$schemaKeneratorVersion")
-    implementation("io.github.smiley4:ktor-swagger-ui:$swaggerUIVersion")
 
     implementation(libs.lettuce)
     implementation(libs.caffeine)

@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.request
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,7 +7,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 10:31
  */
 @Serializable
-@Name("PageRequest")
 data class PageRequest(
     val page: Long,
     val pageSize: Int,
@@ -18,7 +16,6 @@ data class PageRequest(
 )
 
 @Serializable
-@Name("SiteInitRequest")
 data class SiteInitRequest(
     val username: String,
     val password: String,

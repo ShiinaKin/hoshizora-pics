@@ -1,15 +1,20 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.REGEX_EMAIL
 import io.sakurasou.hoshizora.constant.REGEX_PASSWORD
 import io.sakurasou.hoshizora.constant.REGEX_USERNAME
@@ -24,12 +29,18 @@ import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.request.UserManageInsertRequest
 import io.sakurasou.hoshizora.controller.request.UserManagePatchRequest
 import io.sakurasou.hoshizora.controller.request.UserSelfPatchRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.controller.vo.UserPageVO
 import io.sakurasou.hoshizora.controller.vo.UserVO
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
-import io.sakurasou.hoshizora.extension.*
+import io.sakurasou.hoshizora.extension.commonResponse
+import io.sakurasou.hoshizora.extension.getPrincipal
+import io.sakurasou.hoshizora.extension.id
+import io.sakurasou.hoshizora.extension.pageRequest
+import io.sakurasou.hoshizora.extension.pageRequestSpec
+import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -39,32 +50,28 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 fun Route.userRoute(userService: io.sakurasou.hoshizora.service.user.UserService) {
     val controller = UserController(userService)
-    route("user", {
-        protected = true
-        tags("User")
-    }) {
+    route("user") {
         userSelfRoute(controller)
         userManageRoute(controller)
         banAndUnban(controller)
+    }.describe {
+        tag("User")
     }
 }
 
 private fun Route.userSelfRoute(controller: UserController) {
-    route("self", {
-        response {
-            HttpStatusCode.NotFound to {
-                description = "user not found"
-                body<CommonResponse<Unit>> { }
-            }
-        }
-    }) {
+    route("self") {
         patchSelf(controller)
         fetchSelf(controller)
+    }.describe {
+        responses {
+            commonResponse(HttpStatusCode.NotFound, "user not found")
+        }
     }
 }
 
 private fun Route.patchSelf(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_SELF
         }
@@ -85,77 +92,66 @@ private fun Route.patchSelf(controller: UserController) {
                 }
             }
         }
-        patch({
-            description = "modify self"
-            request {
-                body<UserSelfPatchRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch {
             val id = call.getPrincipal().id
             val patchRequest = call.receive<UserSelfPatchRequest>()
             controller.handleSelfPatch(id, patchRequest)
             call.success()
+        }.describe {
+            description = "modify self"
+            requestBody {
+                required = true
+                schema = jsonSchema<UserSelfPatchRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.fetchSelf(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_READ_SELF
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<UserVO>> { }
-                }
-            }
-        }) {
+        get {
             val id = call.getPrincipal().id
             val userVO = controller.handleSelfFetch(id)
             call.success(userVO)
+        }.describe {
+            responses {
+                successResponse<UserVO>()
+            }
         }
     }
 }
 
 private fun Route.userManageRoute(controller: UserController) {
-    route("manage", {
-        protected = true
-    }) {
+    route("manage") {
         insertUser(controller)
-        route("{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.NotFound to {
-                    description = "user not found"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        route("{id}") {
             deleteUser(controller)
             patchUser(controller)
             fetchUser(controller)
+        }.describe {
+            parameters {
+                path("id") {
+                    description = "user id"
+                    required = true
+                    schema = jsonSchema<Long>()
+                }
+            }
+            responses {
+                commonResponse(HttpStatusCode.NotFound, "user not found")
+            }
         }
         pageUser(controller)
     }
 }
 
 private fun Route.insertUser(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
         }
@@ -172,52 +168,45 @@ private fun Route.insertUser(controller: UserController) {
                 }
             }
         }
-        post({
-            description = "admin manual add user"
-            request {
-                body<UserManageInsertRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post {
             val insertRequest = call.receive<UserManageInsertRequest>()
             controller.handleManageInsert(insertRequest)
             call.success()
+        }.describe {
+            description = "admin manual add user"
+            requestBody {
+                required = true
+                schema = jsonSchema<UserManageInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.deleteUser(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_DELETE
         }
-        delete({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        delete {
             val currentUserId = call.getPrincipal().id
             val inputId = call.id()
             if (currentUserId == inputId) throw WrongParameterException()
 
             controller.handleManageDelete(inputId)
             call.success()
+        }.describe {
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.patchUser(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_WRITE_ALL
         }
@@ -245,77 +234,47 @@ private fun Route.patchUser(controller: UserController) {
                 }
             }
         }
-        patch({
-            description = "modify any user"
-            request {
-                body<UserManagePatchRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch {
             val id = call.id()
             val patchRequest = call.receive<UserManagePatchRequest>()
             controller.handleManagePatch(id, patchRequest)
             call.success()
+        }.describe {
+            description = "modify any user"
+            requestBody {
+                required = true
+                schema = jsonSchema<UserManagePatchRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.fetchUser(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_READ_ALL_SINGLE
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<UserVO>> { }
-                }
-            }
-        }) {
+        get {
             val id = call.id()
             val userVO = controller.handleManageFetch(id)
             call.success(userVO)
+        }.describe {
+            responses {
+                successResponse<UserVO>()
+            }
         }
     }
 }
 
 private fun Route.pageUser(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_READ_ALL_ALL
         }
-        get("page", {
-            pageRequestSpec()
-            request {
-                queryParameter<Boolean>("isBanned") {
-                    description = "is banned"
-                    required = false
-                }
-                queryParameter<String>("username") {
-                    description = "search username"
-                    required = false
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<PageResult<UserPageVO>>> {
-                        description = "page result"
-                    }
-                }
-                HttpStatusCode.BadRequest to {
-                    description = "page or pageSize wrong"
-                }
-            }
-        }) {
+        get("page") {
             val pageRequest = call.pageRequest()
             val isPrivatePair = call.parameters["isBanned"]?.toBoolean()?.let { "isBanned" to it.toString() }
             val usernameSearchPair = call.parameters["username"]?.let { "username" to it }
@@ -327,56 +286,72 @@ private fun Route.pageUser(controller: UserController) {
 
             val voPageResult = controller.handleManagePage(pageRequest)
             call.success(voPageResult)
+        }.describe {
+            pageRequestSpec()
+            parameters {
+                query("isBanned") {
+                    description = "is banned"
+                    required = false
+                    schema = jsonSchema<Boolean>()
+                }
+                query("username") {
+                    description = "search username"
+                    required = false
+                    schema = jsonSchema<String>()
+                }
+            }
+            responses {
+                successResponse<PageResult<UserPageVO>>("page result")
+                HttpStatusCode.BadRequest {
+                    description = "page or pageSize wrong"
+                }
+            }
         }
     }
 }
 
 private fun Route.banAndUnban(controller: UserController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = USER_BAN
         }
-        patch("ban/{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "user id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch("ban/{id}") {
             val currentUserId = call.getPrincipal().id
             val inputId = call.id()
             if (currentUserId == inputId) throw WrongParameterException()
 
             controller.handleManageBan(inputId)
             call.success()
-        }
-        patch("unban/{id}", {
-            request {
-                pathParameter<Long>("id") {
+        }.describe {
+            parameters {
+                path("id") {
                     description = "user id"
                     required = true
+                    schema = jsonSchema<Long>()
                 }
             }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
+            responses {
+                successResponse<Unit>()
             }
-        }) {
+        }
+        patch("unban/{id}") {
             val currentUserId = call.getPrincipal().id
             val inputId = call.id()
             if (currentUserId == inputId) throw WrongParameterException()
 
             controller.handleManageUnban(inputId)
             call.success()
+        }.describe {
+            parameters {
+                path("id") {
+                    description = "user id"
+                    required = true
+                    schema = jsonSchema<Long>()
+                }
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }

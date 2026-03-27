@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.strategy
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("StrategyConfig")
-@Name("StrategyConfigSealed")
 sealed class StrategyConfig(
     val strategyType: StrategyType,
 ) {
@@ -28,7 +26,6 @@ sealed class StrategyConfig(
 }
 
 @Serializable
-@Name("StrategyTypeEnum")
 enum class StrategyType {
     LOCAL,
     S3,

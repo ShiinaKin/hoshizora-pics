@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.vo
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,7 +7,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 09:20
  */
 @Serializable
-@Name("PageResult")
 data class PageResult<T>(
     val page: Long,
     val pageSize: Int,
@@ -18,7 +16,6 @@ data class PageResult<T>(
 )
 
 @Serializable
-@Name("CommonResponse")
 data class CommonResponse<T>(
     val code: Int,
     val message: String,
@@ -38,7 +35,6 @@ data class CommonResponse<T>(
 }
 
 @Serializable
-@Name("CommonSiteSetting")
 data class CommonSiteSetting(
     val isSiteInit: Boolean,
     val siteTitle: String,

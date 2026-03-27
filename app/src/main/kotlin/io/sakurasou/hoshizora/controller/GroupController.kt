@@ -1,16 +1,21 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.delete
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.put
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.GROUP_DELETE
 import io.sakurasou.hoshizora.constant.GROUP_READ_ALL
 import io.sakurasou.hoshizora.constant.GROUP_READ_SINGLE
@@ -19,12 +24,18 @@ import io.sakurasou.hoshizora.controller.request.GroupInsertRequest
 import io.sakurasou.hoshizora.controller.request.GroupPatchRequest
 import io.sakurasou.hoshizora.controller.request.GroupPutRequest
 import io.sakurasou.hoshizora.controller.request.PageRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.GroupAllowedImageType
 import io.sakurasou.hoshizora.controller.vo.GroupPageVO
 import io.sakurasou.hoshizora.controller.vo.GroupVO
 import io.sakurasou.hoshizora.controller.vo.PageResult
-import io.sakurasou.hoshizora.extension.*
+import io.sakurasou.hoshizora.extension.commonResponse
+import io.sakurasou.hoshizora.extension.getPrincipal
+import io.sakurasou.hoshizora.extension.id
+import io.sakurasou.hoshizora.extension.pageRequest
+import io.sakurasou.hoshizora.extension.pageRequestSpec
+import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -33,37 +44,34 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
  */
 fun Route.groupRoute(groupService: io.sakurasou.hoshizora.service.group.GroupService) {
     val controller = GroupController(groupService)
-    route("group", {
-        protected = true
-        tags("Group")
-    }) {
+    route("group") {
         groupInsert(controller)
-        route("{id}", {
-            request {
-                pathParameter<Long>("id") {
-                    description = "group id"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.NotFound to {
-                    description = "group not found"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        route("{id}") {
             groupDelete(controller)
             groupUpdate(controller)
             groupPatch(controller)
             groupFetch(controller)
+        }.describe {
+            parameters {
+                path("id") {
+                    description = "group id"
+                    required = true
+                    schema = jsonSchema<Long>()
+                }
+            }
+            responses {
+                commonResponse(HttpStatusCode.NotFound, "group not found")
+            }
         }
         groupPage(controller)
         groupFetchGroupAllowedImageType(controller)
+    }.describe {
+        tag("Group")
     }
 }
 
 private fun Route.groupInsert(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
         }
@@ -78,52 +86,42 @@ private fun Route.groupInsert(controller: GroupController) {
                 }
             }
         }
-        post({
-            request {
-                body<GroupInsertRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-                HttpStatusCode.Conflict to {
-                    description = "group name conflict"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post {
             val insertRequest = call.receive<GroupInsertRequest>()
             controller.handleInsertGroup(insertRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<GroupInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+                commonResponse(HttpStatusCode.Conflict, "group name conflict")
+            }
         }
     }
 }
 
 private fun Route.groupDelete(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_DELETE
         }
-        delete({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        delete {
             val id = call.id()
             controller.handleDeleteGroup(id)
             call.success()
+        }.describe {
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.groupPatch(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
         }
@@ -145,29 +143,25 @@ private fun Route.groupPatch(controller: GroupController) {
                 }
             }
         }
-        patch({
-            request {
-                body<GroupPatchRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        patch {
             val id = call.id()
             val patchRequest = call.receive<GroupPatchRequest>()
             controller.handlePatchGroup(id, patchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<GroupPatchRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.groupUpdate(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_WRITE
         }
@@ -182,89 +176,74 @@ private fun Route.groupUpdate(controller: GroupController) {
                 }
             }
         }
-        put({
-            request {
-                body<GroupPutRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        put {
             val id = call.id()
             val patchRequest = call.receive<GroupPutRequest>()
             controller.handleUpdateGroup(id, patchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<GroupPutRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 private fun Route.groupFetch(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_READ_SINGLE
         }
-        get({
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<GroupVO>> { }
-                }
-            }
-        }) {
+        get {
             val id = call.id()
             val groupVO = controller.handleFetchGroup(id)
             call.success(groupVO)
+        }.describe {
+            responses {
+                successResponse<GroupVO>()
+            }
         }
     }
 }
 
 private fun Route.groupPage(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_READ_ALL
         }
-        get("page", {
-            pageRequestSpec()
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<PageResult<GroupPageVO>>> {
-                        description = "page result"
-                    }
-                }
-                HttpStatusCode.BadRequest to {
-                    description = "page or pageSize wrong"
-                }
-            }
-        }) {
+        get("page") {
             val pageRequest = call.pageRequest()
             val pageResult = controller.handlePageGroups(pageRequest)
             call.success(pageResult)
+        }.describe {
+            pageRequestSpec()
+            responses {
+                successResponse<PageResult<GroupPageVO>>("page result")
+                HttpStatusCode.BadRequest {
+                    description = "page or pageSize wrong"
+                }
+            }
         }
     }
 }
 
 private fun Route.groupFetchGroupAllowedImageType(controller: GroupController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = GROUP_READ_SINGLE
         }
-        get("type", {
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<GroupAllowedImageType>> { }
-                }
-            }
-        }) {
+        get("type") {
             val groupId = call.getPrincipal().groupId
             val groupVO = controller.handleFetchGroupAllowedImageType(groupId)
             call.success(groupVO)
+        }.describe {
+            responses {
+                successResponse<GroupAllowedImageType>()
+            }
         }
     }
 }

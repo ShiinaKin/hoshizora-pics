@@ -1,20 +1,24 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.REGEX_EMAIL
 import io.sakurasou.hoshizora.constant.REGEX_PASSWORD
 import io.sakurasou.hoshizora.constant.REGEX_USERNAME
 import io.sakurasou.hoshizora.controller.request.UserInsertRequest
 import io.sakurasou.hoshizora.controller.request.UserLoginRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.extension.success
-import io.swagger.v3.oas.models.media.Schema
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 
 /**
  * @author Shiina Kin
@@ -25,17 +29,16 @@ fun Route.authRoute(
     userService: io.sakurasou.hoshizora.service.user.UserService,
 ) {
     val authController = AuthController(authService, userService)
-    route("user", {
-        protected = false
-        tags("Auth")
-    }) {
+    route("user") {
         login(authController)
         signup(authController)
+    }.describe {
+        tag("Auth")
     }
 }
 
 private fun Route.login(authController: AuthController) {
-    route {
+    transparentRoute {
         install(RequestValidation) {
             validate<UserLoginRequest> { loginRequest ->
                 if (loginRequest.username.isBlank()) {
@@ -47,45 +50,24 @@ private fun Route.login(authController: AuthController) {
                 }
             }
         }
-        post("login", {
-            request {
-                body<UserLoginRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body(
-                        Schema<CommonResponse<Map<String, String>>>().apply {
-                            title = "CommonResponseLoginResponse"
-                            type = "object"
-                            addProperty("code", Schema<Int>().apply { type = "integer" })
-                            addProperty("message", Schema<String>().apply { type = "string" })
-                            addProperty(
-                                "data",
-                                Schema<Map<String, String>>().apply {
-                                    type = "object"
-                                    additionalProperties =
-                                        Schema<String>().apply {
-                                            type = "string"
-                                        }
-                                },
-                            )
-                            addProperty("isSuccessful", Schema<Boolean>().apply { type = "boolean" })
-                        },
-                    )
-                }
-            }
-        }) {
+        post("login") {
             val loginRequest = call.receive<UserLoginRequest>()
             val token = authController.handleLogin(loginRequest)
             call.success(mapOf("token" to token))
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<UserLoginRequest>()
+            }
+            responses {
+                successResponse<Map<String, String>>()
+            }
         }
     }
 }
 
 private fun Route.signup(authController: AuthController) {
-    route {
+    transparentRoute {
         install(RequestValidation) {
             validate<UserInsertRequest> { userInsertRequest ->
                 if (!userInsertRequest.username.matches(Regex(REGEX_USERNAME))) {
@@ -99,22 +81,18 @@ private fun Route.signup(authController: AuthController) {
                 }
             }
         }
-        post("signup", {
-            protected = false
-            request {
-                body<UserInsertRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post("signup") {
             val userInsertRequest = call.receive<UserInsertRequest>()
             authController.handleSignup(userInsertRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<UserInsertRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }

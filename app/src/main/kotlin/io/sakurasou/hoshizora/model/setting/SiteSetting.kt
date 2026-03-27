@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.setting
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,7 +7,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 09:29
  */
 @Serializable
-@Name("SiteSetting")
 data class SiteSetting(
     val siteExternalUrl: String,
     val siteTitle: String,

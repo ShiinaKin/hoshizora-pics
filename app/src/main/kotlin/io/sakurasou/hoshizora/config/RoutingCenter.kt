@@ -1,8 +1,12 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.config
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.route
 import io.sakurasou.hoshizora.controller.albumRoute
 import io.sakurasou.hoshizora.controller.authRoute
 import io.sakurasou.hoshizora.controller.commonSiteSettingRoute
@@ -27,6 +31,7 @@ import io.sakurasou.hoshizora.di.InstanceCenter.settingService
 import io.sakurasou.hoshizora.di.InstanceCenter.strategyService
 import io.sakurasou.hoshizora.di.InstanceCenter.systemService
 import io.sakurasou.hoshizora.di.InstanceCenter.userService
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.SiteInitCheckPlugin
 
 /**
@@ -36,11 +41,13 @@ import io.sakurasou.hoshizora.plugins.SiteInitCheckPlugin
 
 fun Route.apiRoute() {
     route("api") {
-        route({ tags("common") }) {
+        transparentRoute {
             siteInitRoute()
             commonSiteSettingRoute()
+        }.describe {
+            tag("common")
         }
-        route {
+        transparentRoute {
             install(SiteInitCheckPlugin)
             authRoute(authService, userService)
             authenticate("auth-jwt") {

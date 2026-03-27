@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.vo
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -9,7 +8,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 13:03
  */
 @Serializable
-@Name("ImageVO")
 data class ImageVO(
     val id: Long,
     val ownerId: Long,
@@ -31,7 +29,6 @@ data class ImageVO(
 )
 
 @Serializable
-@Name("ImageManageVO")
 data class ImageManageVO(
     val id: Long,
     val ownerId: Long,
@@ -58,7 +55,6 @@ data class ImageManageVO(
 )
 
 @Serializable
-@Name("ImagePageVO")
 data class ImagePageVO(
     val id: Long,
     val displayName: String,
@@ -68,7 +64,6 @@ data class ImagePageVO(
 )
 
 @Serializable
-@Name("ImageManagePageVO")
 data class ImageManagePageVO(
     val id: Long,
     val displayName: String,

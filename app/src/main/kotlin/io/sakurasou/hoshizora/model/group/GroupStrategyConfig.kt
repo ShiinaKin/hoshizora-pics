@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.group
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,7 +7,6 @@ import kotlinx.serialization.Serializable
  * 2024/10/12 13:53
  */
 @Serializable
-@Name("GroupStrategyConfig")
 data class GroupStrategyConfig(
     val singleFileMaxSize: Long = 12 * 1024 * 1024L,
     val maxSize: Long = 16 * 1024 * 1024 * 1024L,

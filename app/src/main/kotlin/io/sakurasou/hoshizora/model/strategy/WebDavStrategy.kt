@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.strategy
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.put
@@ -23,7 +22,6 @@ import kotlin.io.encoding.Base64
  */
 @Serializable
 @SerialName("WEBDAV")
-@Name("WebDavStrategy")
 data class WebDavStrategy(
     val serverUrl: String,
     val username: String,

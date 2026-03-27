@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.vo
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.serialization.Serializable
 
 /**
@@ -9,7 +8,6 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-@Name("SystemStatisticsVO")
 data class SystemStatisticsVO(
     val totalImageCount: Long,
     val totalAlbumCount: Long,
@@ -18,14 +16,12 @@ data class SystemStatisticsVO(
 )
 
 @Serializable
-@Name("SystemOverviewVO")
 data class SystemOverviewVO(
     val hoshizoraStatus: HoshizoraStatusVO,
     val systemStatus: SystemStatusVO,
 )
 
 @Serializable
-@Name("HoshizoraStatusVO")
 data class HoshizoraStatusVO(
     val version: String,
     val buildTime: String,
@@ -33,7 +29,6 @@ data class HoshizoraStatusVO(
 )
 
 @Serializable
-@Name("SystemStatusVO")
 data class SystemStatusVO(
     val javaVersion: String,
     val databaseVersion: String,

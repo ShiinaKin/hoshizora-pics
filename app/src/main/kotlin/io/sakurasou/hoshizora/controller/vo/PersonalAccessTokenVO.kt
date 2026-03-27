@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.vo
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -10,7 +9,6 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-@Name("PersonalAccessTokenPageVO")
 data class PersonalAccessTokenPageVO(
     val id: Long,
     val name: String,

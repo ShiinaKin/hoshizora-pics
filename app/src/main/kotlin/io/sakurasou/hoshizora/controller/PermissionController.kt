@@ -1,13 +1,16 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.http.HttpStatusCode
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.PERMISSION_READ
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PermissionVO
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 /**
@@ -17,29 +20,24 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 
 fun Route.permissionRoutes(permissionService: io.sakurasou.hoshizora.service.permission.PermissionService) {
     val controller = PermissionController(permissionService)
-    route("permission", {
-        protected = true
-        tags("Permission")
-    }) {
+    route("permission") {
         fetchAllPermissions(controller)
+    }.describe {
+        tag("Permission")
     }
 }
 
 private fun Route.fetchAllPermissions(controller: PermissionController) {
-    route {
-        install(AuthorizationPlugin) {
-            permission = PERMISSION_READ
-        }
-        get("all", {
-            response {
-                HttpStatusCode.OK to {
-                    description = "success"
-                    body<CommonResponse<List<PermissionVO>>>()
-                }
-            }
-        }) {
-            val allPermissions = controller.handleFetchAllPermissions()
-            call.success(allPermissions)
+    install(AuthorizationPlugin) {
+        permission = PERMISSION_READ
+    }
+    get("all") {
+        val allPermissions = controller.handleFetchAllPermissions()
+        call.success(allPermissions)
+    }.describe {
+        description = "Fetch all permissions."
+        responses {
+            successResponse<List<PermissionVO>>()
         }
     }
 }

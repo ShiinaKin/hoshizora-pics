@@ -1,29 +1,35 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.patch
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.PERSONAL_ACCESS_TOKEN_READ_SELF
 import io.sakurasou.hoshizora.constant.PERSONAL_ACCESS_TOKEN_WRITE_SELF
 import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.request.PersonalAccessTokenInsertRequest
 import io.sakurasou.hoshizora.controller.request.PersonalAccessTokenPatchRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.controller.vo.PersonalAccessTokenPageVO
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
+import io.sakurasou.hoshizora.extension.commonResponse
 import io.sakurasou.hoshizora.extension.getPrincipal
 import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -38,35 +44,31 @@ fun Route.personalAccessTokenRoute(
     personalAccessTokenService: io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService,
 ) {
     val controller = PersonalAccessTokenController(personalAccessTokenService)
-    route("personal-access-token", {
-        protected = true
-        tags("PersonalAccessToken")
-    }) {
+    route("personal-access-token") {
         patInsert(controller)
-        route("{patId}", {
-            request {
-                pathParameter<Long>("patId") {
-                    description = "Personal Access Token ID"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<Unit>> {
-                        description = "Success"
-                    }
-                }
-            }
-        }) {
+        route("{patId}") {
             patDelete(controller)
             patPatch(controller)
+        }.describe {
+            parameters {
+                path("patId") {
+                    description = "Personal Access Token ID"
+                    required = true
+                    schema = jsonSchema<Long>()
+                }
+            }
+            responses {
+                commonResponse(io.ktor.http.HttpStatusCode.OK, "Success")
+            }
         }
         patPage(controller)
+    }.describe {
+        tag("PersonalAccessToken")
     }
 }
 
 private fun Route.patInsert(controller: PersonalAccessTokenController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_WRITE_SELF
         }
@@ -81,31 +83,26 @@ private fun Route.patInsert(controller: PersonalAccessTokenController) {
                 }
             }
         }
-        post({
-            request {
-                body<PersonalAccessTokenInsertRequest> {
-                    description = "Personal Access Token Insert Request"
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<String>> {
-                        description = "return personal access token"
-                    }
-                }
-            }
-        }) {
+        post {
             val userId = call.getPrincipal().id
             val insertRequest = call.receive<PersonalAccessTokenInsertRequest>()
             val token = controller.handleInsert(userId, insertRequest)
             call.success(token)
+        }.describe {
+            requestBody {
+                description = "Personal Access Token Insert Request"
+                required = true
+                schema = jsonSchema<PersonalAccessTokenInsertRequest>()
+            }
+            responses {
+                successResponse<String>("return personal access token")
+            }
         }
     }
 }
 
 private fun Route.patDelete(controller: PersonalAccessTokenController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_WRITE_SELF
         }
@@ -119,7 +116,7 @@ private fun Route.patDelete(controller: PersonalAccessTokenController) {
 }
 
 private fun Route.patPatch(controller: PersonalAccessTokenController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_WRITE_SELF
         }
@@ -134,44 +131,28 @@ private fun Route.patPatch(controller: PersonalAccessTokenController) {
                 }
             }
         }
-        patch({
-            request {
-                body<PersonalAccessTokenPatchRequest> {
-                    description = "Personal Access Token Patch Request"
-                    required = true
-                }
-            }
-        }) {
+        patch {
             val userId = call.getPrincipal().id
             val patId = call.patId()
             val patchRequest = call.receive<PersonalAccessTokenPatchRequest>()
             controller.handlePatch(userId, patId, patchRequest)
             call.success()
+        }.describe {
+            requestBody {
+                description = "Personal Access Token Patch Request"
+                required = true
+                schema = jsonSchema<PersonalAccessTokenPatchRequest>()
+            }
         }
     }
 }
 
 private fun Route.patPage(controller: PersonalAccessTokenController) {
-    route {
+    transparentRoute {
         install(AuthorizationPlugin) {
             permission = PERSONAL_ACCESS_TOKEN_READ_SELF
         }
-        get("page", {
-            pageRequestSpec()
-            request {
-                queryParameter<Boolean>("isExpired") {
-                    description = "Whether the token is expired"
-                    required = false
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<PageResult<PersonalAccessTokenPageVO>>> {
-                        description = "Success"
-                    }
-                }
-            }
-        }) {
+        get("page") {
             val userId = call.getPrincipal().id
             val pageRequest = call.pageRequest()
 
@@ -187,6 +168,18 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
 
             val pageResult = controller.handlePage(userId, pageRequest)
             call.success(pageResult)
+        }.describe {
+            pageRequestSpec()
+            parameters {
+                query("isExpired") {
+                    description = "Whether the token is expired"
+                    required = false
+                    schema = jsonSchema<Boolean>()
+                }
+            }
+            responses {
+                successResponse<PageResult<PersonalAccessTokenPageVO>>("Success")
+            }
         }
     }
 }

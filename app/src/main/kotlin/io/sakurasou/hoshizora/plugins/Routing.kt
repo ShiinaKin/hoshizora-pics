@@ -1,6 +1,7 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.plugins
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -14,12 +15,16 @@ import io.ktor.server.request.uri
 import io.ktor.server.resources.Resources
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondSource
+import io.ktor.server.routing.openapi.hide
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.ktor.utils.io.readRemaining
 import io.sakurasou.hoshizora.config.apiRoute
 import io.sakurasou.hoshizora.config.exceptionHandler
 import io.sakurasou.hoshizora.controller.commonRoute
 import io.sakurasou.hoshizora.di.InstanceCenter.commonService
+import io.sakurasou.hoshizora.extension.transparentRoute
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -44,10 +49,10 @@ fun Application.configureRouting() {
     }
     routing {
         apiRoute()
-        route {
+        transparentRoute {
             install(SiteInitCheckPlugin)
             commonRoute(commonService)
         }
-        route({ hidden = true }) { staticResources("", "static") }
+        staticResources("", "static").hide()
     }
 }

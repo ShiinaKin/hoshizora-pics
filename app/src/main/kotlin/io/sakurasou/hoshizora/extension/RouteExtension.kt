@@ -1,8 +1,15 @@
 package io.sakurasou.hoshizora.extension
 
-import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
+import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.Operation
+import io.ktor.openapi.Responses
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.RouteSelector
+import io.ktor.server.routing.RouteSelectorEvaluation
+import io.ktor.server.routing.RoutingResolveContext
 import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.di.InstanceCenter
@@ -27,24 +34,56 @@ fun ApplicationCall.pageRequest(): PageRequest {
 
 fun ApplicationCall.id(): Long = parameters["id"]?.toLong() ?: throw WrongParameterException()
 
-fun OpenApiRoute.pageRequestSpec() {
-    request {
-        queryParameter<Int>("page") {
+private class TransparentRouteSelector : RouteSelector() {
+    override suspend fun evaluate(
+        context: RoutingResolveContext,
+        segmentIndex: Int,
+    ): RouteSelectorEvaluation = RouteSelectorEvaluation.Transparent
+
+    override fun toString(): String = "(transparent)"
+}
+
+fun Route.transparentRoute(build: Route.() -> Unit): Route = createChild(TransparentRouteSelector()).apply(build)
+
+fun Operation.Builder.pageRequestSpec() {
+    parameters {
+        query("page") {
             description = "page"
             required = true
+            schema = jsonSchema<Long>()
         }
-        queryParameter<Int>("pageSize") {
+        query("pageSize") {
             description = "pageSize"
             required = true
+            schema = jsonSchema<Int>()
         }
-        queryParameter<String>("order") {
+        query("order") {
             description = "order"
             required = false
+            schema = jsonSchema<String>()
         }
-        queryParameter<String>("orderBy") {
+        query("orderBy") {
             description = "orderBy"
             required = false
+            schema = jsonSchema<String>()
         }
+    }
+}
+
+inline fun <reified T> Responses.Builder.successResponse(description: String = "success") {
+    HttpStatusCode.OK {
+        this.description = description
+        schema = jsonSchema<CommonResponse<T>>()
+    }
+}
+
+fun Responses.Builder.commonResponse(
+    statusCode: HttpStatusCode,
+    description: String,
+) {
+    statusCode {
+        this.description = description
+        schema = jsonSchema<CommonResponse<Unit>>()
     }
 }
 

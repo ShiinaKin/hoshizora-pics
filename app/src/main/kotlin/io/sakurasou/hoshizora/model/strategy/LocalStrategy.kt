@@ -2,7 +2,6 @@ package io.sakurasou.hoshizora.model.strategy
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileCreateFailedException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileDeleteFailedException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundException
@@ -17,7 +16,6 @@ import java.io.File
  */
 @Serializable
 @SerialName("LOCAL")
-@Name("LocalStrategy")
 data class LocalStrategy(
     override val uploadFolder: String,
     override val thumbnailFolder: String,

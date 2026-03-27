@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.controller.request
 
-import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.hoshizora.model.group.GroupConfig
 import io.sakurasou.hoshizora.model.group.GroupStrategyConfig
 import kotlinx.serialization.Serializable
@@ -10,7 +9,6 @@ import kotlinx.serialization.Serializable
  * 2024/9/9 11:25
  */
 @Serializable
-@Name("GroupInsertRequest")
 data class GroupInsertRequest(
     val name: String,
     val description: String? = null,
@@ -20,7 +18,6 @@ data class GroupInsertRequest(
 )
 
 @Serializable
-@Name("GroupPatchRequest")
 data class GroupPatchRequest(
     val name: String? = null,
     val description: String? = null,
@@ -30,7 +27,6 @@ data class GroupPatchRequest(
 )
 
 @Serializable
-@Name("GroupPutRequest")
 data class GroupPutRequest(
     val name: String,
     val description: String? = null,
@@ -40,7 +36,6 @@ data class GroupPutRequest(
 )
 
 @Serializable
-@Name("GroupConfigUpdatePatch")
 data class GroupConfigUpdatePatch(
     val groupStrategyConfig: GroupStrategyConfig? = null,
 )

@@ -1,12 +1,11 @@
+@file:OptIn(ExperimentalKtorApi::class)
+
 package io.sakurasou.hoshizora.controller
 
-import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
-import io.github.smiley4.ktorswaggerui.dsl.routing.route
-import io.ktor.client.request.get
+import io.ktor.client.request.get as clientGet
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.ratelimit.RateLimitName
 import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.plugins.requestvalidation.RequestValidation
@@ -14,17 +13,24 @@ import io.ktor.server.plugins.requestvalidation.ValidationResult
 import io.ktor.server.request.receive
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.utils.io.ExperimentalKtorApi
 import io.sakurasou.hoshizora.constant.REGEX_EMAIL
 import io.sakurasou.hoshizora.constant.REGEX_PASSWORD
 import io.sakurasou.hoshizora.constant.REGEX_URL
 import io.sakurasou.hoshizora.constant.REGEX_USERNAME
 import io.sakurasou.hoshizora.controller.request.SiteInitRequest
-import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.CommonSiteSetting
 import io.sakurasou.hoshizora.di.InstanceCenter.client
 import io.sakurasou.hoshizora.di.InstanceCenter.commonService
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
+import io.sakurasou.hoshizora.extension.commonResponse
 import io.sakurasou.hoshizora.extension.success
+import io.sakurasou.hoshizora.extension.successResponse
+import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.cache
 
 /**
@@ -33,17 +39,31 @@ import io.sakurasou.hoshizora.plugins.cache
  */
 fun Route.commonRoute(commonService: io.sakurasou.hoshizora.service.common.CommonService) {
     val commonController = CommonController(commonService)
-    route({ tags("common") }) {
+    transparentRoute {
         cache(cachedNoQueryParamRequest = false) {
-            rateLimit(RateLimitName("randomFetchLimit")) { route("random") { randomFetchImage(commonController) } }
+            rateLimit(RateLimitName("randomFetchLimit")) {
+                route("random") {
+                    randomFetchImage(commonController)
+                }
+            }
         }
-        cache { rateLimit(RateLimitName("anonymousGetLimit")) { route("s") { anonymousGetImage(commonController) } } }
+        cache {
+            rateLimit(RateLimitName("anonymousGetLimit")) {
+                route("s") {
+                    anonymousGetImage(commonController)
+                }.describe {
+                    tag("common")
+                }
+            }
+        }
+    }.describe {
+        tag("common")
     }
 }
 
 fun Route.siteInitRoute() {
     val commonController = CommonController(commonService)
-    route {
+    transparentRoute {
         install(RequestValidation) {
             validate<SiteInitRequest> { siteInitRequest ->
                 if (siteInitRequest.siteTitle.isBlank()) {
@@ -61,80 +81,65 @@ fun Route.siteInitRoute() {
                 }
             }
         }
-        post("site/init", {
-            request {
-                body<SiteInitRequest> {
-                    required = true
-                }
-            }
-            response {
-                HttpStatusCode.OK to {
-                    body<CommonResponse<Unit>> { }
-                }
-            }
-        }) {
+        post("site/init") {
             val siteInitRequest = call.receive<SiteInitRequest>()
             commonController.handleInit(siteInitRequest)
             call.success()
+        }.describe {
+            requestBody {
+                required = true
+                schema = jsonSchema<SiteInitRequest>()
+            }
+            responses {
+                successResponse<Unit>()
+            }
         }
     }
 }
 
 fun Route.commonSiteSettingRoute() {
     val commonController = CommonController(commonService)
-    get("site/setting", {
-        description = "fetch common site setting"
-        response {
-            HttpStatusCode.OK to {
-                description = "CommonSiteSetting"
-                body<CommonResponse<CommonSiteSetting>> { }
-            }
-        }
-    }) {
+    get("site/setting") {
         val siteSetting: CommonSiteSetting = commonController.fetchCommonSiteSetting()
         call.success(siteSetting)
+    }.describe {
+        description = "fetch common site setting"
+        responses {
+            successResponse<CommonSiteSetting>("CommonSiteSetting")
+        }
     }
 }
 
 private fun Route.randomFetchImage(commonController: CommonController) {
-    get({
-        description = "return random image if setting allow"
-        request {
-            queryParameter<String>("id") {
-                description = "identify resources"
-                required = false
-            }
-        }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<ByteArray> { }
-            }
-        }
-    }) {
+    get {
         val fileDTO = commonController.handleRandomFetchImage()
         if (fileDTO.bytes != null) {
             call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
         } else {
-            call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            call.respondBytes(client.clientGet(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        }
+    }.describe {
+        description = "return random image if setting allow"
+        parameters {
+            query("id") {
+                description = "identify resources"
+                required = false
+                schema = jsonSchema<String>()
+            }
+        }
+        responses {
+            io.ktor.http.HttpStatusCode.OK {
+                description = "success"
+                ContentType.Image.Any {
+                    schema = jsonSchema<ByteArray>()
+                }
+            }
         }
     }
 }
 
 private fun Route.anonymousGetImage(commonController: CommonController) {
-    get("{imageUniqueId}", {
-        request {
-            pathParameter<String>("imageUniqueId") {
-                required = true
-            }
-        }
-        response {
-            HttpStatusCode.OK to {
-                description = "success"
-                body<ByteArray> { }
-            }
-        }
-    }) {
+    get("{imageUniqueId}") {
         val imageUniqueName = call.parameters["imageUniqueId"]
         if (imageUniqueName == null || imageUniqueName.length != 32) throw WrongParameterException()
 
@@ -142,7 +147,22 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
         if (fileDTO.bytes != null) {
             call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
         } else {
-            call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+            call.respondBytes(client.clientGet(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
+        }
+    }.describe {
+        parameters {
+            path("imageUniqueId") {
+                required = true
+                schema = jsonSchema<String>()
+            }
+        }
+        responses {
+            io.ktor.http.HttpStatusCode.OK {
+                description = "success"
+                ContentType.Image.Any {
+                    schema = jsonSchema<ByteArray>()
+                }
+            }
         }
     }
 }
