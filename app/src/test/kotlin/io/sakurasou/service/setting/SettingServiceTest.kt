@@ -14,13 +14,13 @@ import io.sakurasou.hoshizora.model.setting.SystemSetting
 import io.sakurasou.hoshizora.service.setting.SettingService
 import io.sakurasou.hoshizora.service.setting.SettingServiceImpl
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * @author Shiina Kin

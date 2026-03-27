@@ -9,9 +9,9 @@ import io.sakurasou.hoshizora.model.dao.relation.RelationDao
 import io.sakurasou.hoshizora.model.dao.role.RoleDao
 import io.sakurasou.hoshizora.service.role.RoleService
 import io.sakurasou.hoshizora.service.role.RoleServiceImpl
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * @author ShiinaKin

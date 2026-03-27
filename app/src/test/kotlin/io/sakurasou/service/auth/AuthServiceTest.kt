@@ -17,13 +17,13 @@ import io.sakurasou.hoshizora.service.auth.AuthService
 import io.sakurasou.hoshizora.service.auth.AuthServiceImpl
 import io.sakurasou.hoshizora.util.JwtUtils
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

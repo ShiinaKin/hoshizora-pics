@@ -23,12 +23,12 @@ import io.sakurasou.hoshizora.model.setting.SystemStatus
 import io.sakurasou.hoshizora.service.common.CommonServiceImpl
 import io.sakurasou.hoshizora.service.setting.SettingService
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.time.Clock
 
 /**
  * @author Shiina Kin

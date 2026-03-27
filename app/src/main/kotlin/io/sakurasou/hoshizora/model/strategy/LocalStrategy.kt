@@ -1,5 +1,6 @@
 package io.sakurasou.hoshizora.model.strategy
 
+import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.smiley4.schemakenerator.core.annotations.Name
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileCreateFailedException
@@ -21,7 +22,8 @@ data class LocalStrategy(
     override val uploadFolder: String,
     override val thumbnailFolder: String,
 ) : StrategyConfig(StrategyType.LOCAL) {
-    private val logger = KotlinLogging.logger {}
+    private val logger: KLogger
+        get() = KotlinLogging.logger {}
 
     override suspend fun upload(
         imageBytes: ByteArray,
