@@ -26,7 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
-    "dayjs": "^1.11.19",
+    "dayjs": "^1.11.20",
     "lodash-es": "^4.17.23",
     "lucide-react": "^0.438.0",
     "pinia": "^2.3.1",
@@ -36,7 +36,7 @@
     "v-viewer": "^3.0.23",
     "vee-validate": "^4.15.1",
     "viewerjs": "^1.11.7",
-    "vue": "^3.5.29",
+    "vue": "^3.5.31",
     "vue-i18n": "^10.0.8",
     "vue-router": "^4.6.4",
     "yup": "^1.7.1"
@@ -57,7 +57,7 @@
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.27",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "esbuild": "0.25.0",
     "eslint": "^9.39.4",
     "eslint-plugin-vue": "^9.33.0",
@@ -68,14 +68,19 @@
     "prettier": "^3.8.1",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.7.3",
-    "typescript-eslint": "^8.56.1",
+    "typescript-eslint": "^8.57.2",
     "vite": "^5.4.21",
     "vite-plugin-vue-devtools": "^7.7.9",
     "vue-tsc": "^2.2.12"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@openapitools/openapi-generator-cli",
+      "esbuild",
       "vue-demi"
+    ],
+    "ignoredBuiltDependencies": [
+      "@nestjs/core"
     ]
   }
 }
