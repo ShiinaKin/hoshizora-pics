@@ -25,7 +25,7 @@ import io.sakurasou.hoshizora.exception.service.image.ImageUpdateFailedException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageThumbnailNotFoundException
 import io.sakurasou.hoshizora.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.hoshizora.exception.service.user.UserNotFoundException
-import io.sakurasou.hoshizora.execute.executor.image.ImageExecutor
+import io.sakurasou.hoshizora.executor.ImageExecutor
 import io.sakurasou.hoshizora.model.DatabaseSingleton.dbQuery
 import io.sakurasou.hoshizora.model.dao.album.AlbumDao
 import io.sakurasou.hoshizora.model.dao.group.GroupDao

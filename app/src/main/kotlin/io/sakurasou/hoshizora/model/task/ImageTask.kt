@@ -1,12 +1,21 @@
-package io.sakurasou.hoshizora.execute.task.image
+package io.sakurasou.hoshizora.model.task
 
+import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.hoshizora.model.entity.Strategy
+import io.sakurasou.hoshizora.model.entity.TaskType
 import io.sakurasou.hoshizora.model.group.ImageType
+import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_IMAGE
+import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
+import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
+import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.util.ImageUtils
+import kotlinx.serialization.Serializable
+import org.checkerframework.checker.units.qual.g
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
 
 /**
  * @author Shiina Kin
@@ -17,28 +26,34 @@ private const val THUMBNAIL_HEIGHT = 256
 private const val THUMBNAIL_QUALITY = 0.9
 
 sealed class ImageTask(
-    val opImageId: Long,
-    val taskType: KClass<out ImageTask>,
-    private val cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
-) {
-    protected val logger = KotlinLogging.logger {}
+    opImageID: Long,
+    operation: Operation,
+) : Task(TaskType.IMAGE, opImageID.toString(), operation.toString()) {
+    protected val logger: KLogger
+        get() = KotlinLogging.logger {}
+
+    enum class Operation {
+        PERSIST_THUMBNAIL,
+        REPERSIST_THUMBNAIL,
+        DELETE_IMAGE,
+        DELETE_THUMBNAIL,
+    }
 
     abstract suspend fun execute()
 
-    suspend fun submit() {
+    suspend fun start(done: suspend () -> Unit) {
         execute()
-        cleanUp(opImageId, taskType)
+        done()
     }
 }
 
 class PersistImageThumbnailTask(
-    opImageId: Long,
-    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
+    opImageID: Long,
     private val strategy: Strategy,
     private val subFolder: String,
     private val fileName: String,
     private val image: BufferedImage,
-) : ImageTask(opImageId, taskType = PersistImageThumbnailTask::class, cleanUp) {
+) : ImageTask(opImageID, PERSIST_THUMBNAIL) {
     override suspend fun execute() {
         val relativePath = "$subFolder/$fileName"
         val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
@@ -49,11 +64,10 @@ class PersistImageThumbnailTask(
 }
 
 class RePersistImageThumbnailTask(
-    opImageId: Long,
-    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
+    opImageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageId, taskType = RePersistImageThumbnailTask::class, cleanUp) {
+) : ImageTask(opImageID, REPERSIST_THUMBNAIL) {
     override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
         strategy.config
@@ -72,11 +86,10 @@ class RePersistImageThumbnailTask(
 }
 
 class DeleteImageTask(
-    opImageId: Long,
-    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
+    opImageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageId, taskType = DeleteImageTask::class, cleanUp) {
+) : ImageTask(opImageID, DELETE_IMAGE) {
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)
@@ -86,11 +99,10 @@ class DeleteImageTask(
 }
 
 class DeleteThumbnailTask(
-    opImageId: Long,
-    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
+    opImageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageId, taskType = DeleteThumbnailTask::class, cleanUp) {
+) : ImageTask(opImageID, DELETE_THUMBNAIL) {
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)

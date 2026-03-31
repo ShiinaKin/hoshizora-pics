@@ -1,0 +1,45 @@
+package io.sakurasou.hoshizora.model.entity
+
+import io.sakurasou.hoshizora.model.task.Task
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
+
+/**
+ * @author Shiina Kin
+ * 2026/3/31 19:49
+ */
+@Serializable
+data class Task(
+    val id: Long,
+    val type: TaskType,
+    val status: TaskStatus,
+    val targetID: String,
+    val operation: String,
+    val target: Task,
+    val message: String?,
+    val createTime: LocalDateTime,
+    val updateTime: LocalDateTime,
+) {
+    constructor(
+        id: Long,
+        status: TaskStatus,
+        target: Task,
+        message: String?,
+        createTime: LocalDateTime,
+        updateTime: LocalDateTime,
+    ) : this(id, target.type, status, target.opTargetID, target.operation, target, message, createTime, updateTime)
+}
+
+@Serializable
+enum class TaskType {
+    IMAGE,
+}
+
+@Serializable
+enum class TaskStatus {
+    PENDING,
+    PROCESSING,
+    DONE,
+    FAILED,
+    CANCELLED,
+}

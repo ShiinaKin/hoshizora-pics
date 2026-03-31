@@ -17,6 +17,7 @@ import io.sakurasou.hoshizora.model.dao.relation.RolePermissions
 import io.sakurasou.hoshizora.model.dao.role.Roles
 import io.sakurasou.hoshizora.model.dao.setting.Settings
 import io.sakurasou.hoshizora.model.dao.strategy.Strategies
+import io.sakurasou.hoshizora.model.dao.task.Tasks
 import io.sakurasou.hoshizora.model.dao.user.Users
 import io.sakurasou.hoshizora.model.dto.GroupInsertDTO
 import io.sakurasou.hoshizora.model.dto.PermissionInsertDTO
@@ -63,6 +64,7 @@ object DatabaseInit {
                         RolePermissions,
                         PersonalAccessTokens,
                         PersonalAccessTokenPermissions,
+                        Tasks,
                     )
                     initStrategy()
                     initSetting(version)
@@ -77,7 +79,7 @@ object DatabaseInit {
         }
     }
 
-    private fun isFirstRunning(): Boolean = SchemaUtils.listTables().size == 12
+    private fun isFirstRunning(): Boolean = SchemaUtils.listTables().size == 13
 
     private fun initPermission() {
         val allPermissions =
