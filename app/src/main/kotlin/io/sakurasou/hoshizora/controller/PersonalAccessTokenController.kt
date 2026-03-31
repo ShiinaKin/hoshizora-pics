@@ -2,6 +2,7 @@
 
 package io.sakurasou.hoshizora.controller
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.openapi.jsonSchema
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.requestvalidation.RequestValidation
@@ -20,6 +21,7 @@ import io.sakurasou.hoshizora.constant.PERSONAL_ACCESS_TOKEN_WRITE_SELF
 import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.request.PersonalAccessTokenInsertRequest
 import io.sakurasou.hoshizora.controller.request.PersonalAccessTokenPatchRequest
+import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.controller.vo.PersonalAccessTokenPageVO
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
@@ -31,6 +33,7 @@ import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -40,9 +43,7 @@ import kotlin.time.Clock
  * 2024/11/16 05:38
  */
 
-fun Route.personalAccessTokenRoute(
-    personalAccessTokenService: io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService,
-) {
+fun Route.personalAccessTokenRoute(personalAccessTokenService: PersonalAccessTokenService) {
     val controller = PersonalAccessTokenController(personalAccessTokenService)
     route("personal-access-token") {
         patInsert(controller)
@@ -58,7 +59,7 @@ fun Route.personalAccessTokenRoute(
                 }
             }
             responses {
-                commonResponse(io.ktor.http.HttpStatusCode.OK, "Success")
+                commonResponse(HttpStatusCode.OK, "Success")
             }
         }
         patPage(controller)
@@ -187,7 +188,7 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
 private fun ApplicationCall.patId() = parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
 
 class PersonalAccessTokenController(
-    private val personalAccessTokenService: io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService,
+    private val personalAccessTokenService: PersonalAccessTokenService,
 ) {
     suspend fun handleInsert(
         userId: Long,

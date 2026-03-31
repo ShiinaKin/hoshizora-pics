@@ -19,14 +19,16 @@ import io.sakurasou.hoshizora.controller.request.UserLoginRequest
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
+import io.sakurasou.hoshizora.service.auth.AuthService
+import io.sakurasou.hoshizora.service.user.UserService
 
 /**
  * @author Shiina Kin
  * 2024/9/12 10:14
  */
 fun Route.authRoute(
-    authService: io.sakurasou.hoshizora.service.auth.AuthService,
-    userService: io.sakurasou.hoshizora.service.user.UserService,
+    authService: AuthService,
+    userService: UserService,
 ) {
     val authController = AuthController(authService, userService)
     route("user") {
@@ -98,8 +100,8 @@ private fun Route.signup(authController: AuthController) {
 }
 
 class AuthController(
-    private val authService: io.sakurasou.hoshizora.service.auth.AuthService,
-    private val userService: io.sakurasou.hoshizora.service.user.UserService,
+    private val authService: AuthService,
+    private val userService: UserService,
 ) {
     suspend fun handleLogin(loginRequest: UserLoginRequest): String = authService.login(loginRequest)
 

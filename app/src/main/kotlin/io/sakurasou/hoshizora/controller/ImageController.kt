@@ -2,7 +2,6 @@
 
 package io.sakurasou.hoshizora.controller
 
-import io.ktor.client.request.get as clientGet
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -53,13 +52,15 @@ import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 import io.sakurasou.hoshizora.plugins.cache
+import io.sakurasou.hoshizora.service.image.ImageService
 import kotlinx.io.readByteArray
+import io.ktor.client.request.get as clientGet
 
 /**
  * @author ShiinaKin
  * 2024/9/5 15:17
  */
-fun Route.imageRoute(imageService: io.sakurasou.hoshizora.service.image.ImageService) {
+fun Route.imageRoute(imageService: ImageService) {
     val controller = ImageController(imageService)
     route("image") {
         imageSelfRoute(controller)
@@ -534,7 +535,7 @@ private fun Route.imageManagePage(controller: ImageController) {
 private fun ApplicationCall.imageId() = parameters["imageId"]?.toLongOrNull() ?: throw IllegalArgumentException("imageId")
 
 class ImageController(
-    private val imageService: io.sakurasou.hoshizora.service.image.ImageService,
+    private val imageService: ImageService,
 ) {
     suspend fun handleSelfUpload(
         userId: Long,

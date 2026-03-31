@@ -2,7 +2,6 @@
 
 package io.sakurasou.hoshizora.controller
 
-import io.ktor.client.request.get as clientGet
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
 import io.ktor.openapi.jsonSchema
@@ -27,17 +26,18 @@ import io.sakurasou.hoshizora.controller.vo.CommonSiteSetting
 import io.sakurasou.hoshizora.di.InstanceCenter.client
 import io.sakurasou.hoshizora.di.InstanceCenter.commonService
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
-import io.sakurasou.hoshizora.extension.commonResponse
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.cache
+import io.sakurasou.hoshizora.service.common.CommonService
+import io.ktor.client.request.get as clientGet
 
 /**
  * @author Shiina Kin
  * 2024/9/9 09:03
  */
-fun Route.commonRoute(commonService: io.sakurasou.hoshizora.service.common.CommonService) {
+fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     transparentRoute {
         cache(cachedNoQueryParamRequest = false) {
@@ -168,7 +168,7 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
 }
 
 class CommonController(
-    private val commonService: io.sakurasou.hoshizora.service.common.CommonService,
+    private val commonService: CommonService,
 ) {
     suspend fun handleInit(siteInitRequest: SiteInitRequest) {
         commonService.initSite(siteInitRequest)

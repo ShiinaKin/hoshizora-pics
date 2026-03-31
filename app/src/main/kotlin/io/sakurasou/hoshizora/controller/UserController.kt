@@ -42,13 +42,14 @@ import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.user.UserService
 
 /**
  * @author ShiinaKin
  * 2024/9/5 15:35
  */
 
-fun Route.userRoute(userService: io.sakurasou.hoshizora.service.user.UserService) {
+fun Route.userRoute(userService: UserService) {
     val controller = UserController(userService)
     route("user") {
         userSelfRoute(controller)
@@ -357,7 +358,7 @@ private fun Route.banAndUnban(controller: UserController) {
 }
 
 class UserController(
-    private val userService: io.sakurasou.hoshizora.service.user.UserService,
+    private val userService: UserService,
 ) {
     suspend fun handleSelfPatch(
         id: Long,

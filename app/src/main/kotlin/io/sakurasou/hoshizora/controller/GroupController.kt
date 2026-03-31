@@ -37,12 +37,13 @@ import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.extension.successResponse
 import io.sakurasou.hoshizora.extension.transparentRoute
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.group.GroupService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:58
  */
-fun Route.groupRoute(groupService: io.sakurasou.hoshizora.service.group.GroupService) {
+fun Route.groupRoute(groupService: GroupService) {
     val controller = GroupController(groupService)
     route("group") {
         groupInsert(controller)
@@ -249,7 +250,7 @@ private fun Route.groupFetchGroupAllowedImageType(controller: GroupController) {
 }
 
 class GroupController(
-    private val groupService: io.sakurasou.hoshizora.service.group.GroupService,
+    private val groupService: GroupService,
 ) {
     suspend fun handleInsertGroup(insertRequest: GroupInsertRequest) {
         groupService.saveGroup(insertRequest)
