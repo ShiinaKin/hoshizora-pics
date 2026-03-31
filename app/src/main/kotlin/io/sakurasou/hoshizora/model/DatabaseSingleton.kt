@@ -5,8 +5,9 @@ import com.zaxxer.hikari.HikariDataSource
 import io.sakurasou.hoshizora.di.InstanceCenter
 import io.sakurasou.hoshizora.model.common.DatabaseInit
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 
 /**
  * @author ShiinaKin
@@ -37,5 +38,10 @@ object DatabaseSingleton {
         DatabaseInit.init(version)
     }
 
-    suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO, InstanceCenter.database) { block() }
+    suspend fun <T> dbQuery(block: suspend () -> T): T =
+        suspendTransaction(InstanceCenter.database) {
+            withContext(Dispatchers.IO) {
+                block()
+            }
+        }
 }
