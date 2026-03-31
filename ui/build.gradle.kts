@@ -7,7 +7,7 @@ plugins {
 val baseUrl = env.fetchOrNull("BASE_URL") ?: "/"
 
 node {
-    version = "20.18.2"
+    version = "24.14.0"
     workDir = file("$projectDir/.cache/node")
     download = true
     pnpmVersion = "10.8.1"
@@ -20,9 +20,10 @@ tasks.register("replaceBaseURL") {
         val baseTS = file("$projectDir/packages/api-client/src/base.ts")
         val contents = baseTS.readText()
         val regex = Regex("""BASE_PATH = "(.*?)"""")
-        val newContents = contents.replace(regex) {
-            """BASE_PATH = "$baseUrl""""
-        }
+        val newContents =
+            contents.replace(regex) {
+                """BASE_PATH = "$baseUrl""""
+            }
         baseTS.writeText(newContents)
     }
 }
