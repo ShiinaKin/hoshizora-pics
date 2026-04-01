@@ -21,8 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.awt.image.BufferedImage
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.KClass
 import kotlin.time.Clock
 
 /**
@@ -31,19 +29,18 @@ import kotlin.time.Clock
  */
 object ImageExecutor : Executor() {
     private val logger = KotlinLogging.logger {}
-    private val taskMap = ConcurrentHashMap<Pair<Long, KClass<out ImageTask>>, Unit>()
 
     override val executeScope =
         CoroutineScope(
             Dispatchers.IO + SupervisorJob() + CoroutineName("ImageExecutor"),
         )
 
-    override val taskChannel = Channel<Task>(Channel.UNLIMITED)
+    override val taskChannel = Channel<Task>(MAX_WATING_QUEUE_SIZE)
 
     init {
-        executeScope.launch {
-            for (task in taskChannel) {
-                launch {
+        repeat(MAX_WORKER_SIZE) {
+            executeScope.launch {
+                for (task in taskChannel) {
                     handle(task)
                 }
             }

@@ -9,10 +9,13 @@ import io.sakurasou.hoshizora.model.task.TaskType
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.alias
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.intLiteral
 import org.jetbrains.exposed.v1.core.less
+import org.jetbrains.exposed.v1.core.notExists
 import org.jetbrains.exposed.v1.core.vendors.ForUpdateOption
 import org.jetbrains.exposed.v1.jdbc.Query
 import org.jetbrains.exposed.v1.jdbc.andWhere
@@ -181,8 +184,17 @@ class TaskDaoImpl : TaskDao {
     private fun getTask(): Task? =
         Tasks
             .selectAll()
-            .where { Tasks.status eq TaskStatus.PENDING }
-            .orderBy(Tasks.createTime to SortOrder.ASC)
+            .where {
+                val processingTasks = Tasks.alias("processing_tasks")
+                (Tasks.status eq TaskStatus.PENDING) and
+                    notExists(
+                        processingTasks
+                            .select(intLiteral(1))
+                            .where { processingTasks[Tasks.type] eq Tasks.type }
+                            .andWhere { processingTasks[Tasks.targetID] eq Tasks.targetID }
+                            .andWhere { processingTasks[Tasks.status] eq TaskStatus.PROCESSING },
+                    )
+            }.orderBy(Tasks.createTime to SortOrder.ASC)
             .limit(1)
             .forUpdate(ForUpdateOption.ForUpdate)
             .toEntityList()

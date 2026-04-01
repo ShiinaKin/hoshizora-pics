@@ -13,6 +13,11 @@ import kotlinx.coroutines.channels.Channel
 abstract class Executor {
     protected val taskDao = InstanceCenter.taskDao
 
+    companion object {
+        const val MAX_WORKER_SIZE = 32
+        const val MAX_WATING_QUEUE_SIZE = 128
+    }
+
     internal abstract val executeScope: CoroutineScope
     internal abstract val taskChannel: Channel<Task>
 
