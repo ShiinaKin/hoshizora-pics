@@ -1,4 +1,4 @@
-package io.sakurasou.service.album
+package io.sakurasou.hoshizora.service.album
 
 import io.mockk.*
 import io.sakurasou.hoshizora.controller.request.AlbumSelfInsertRequest

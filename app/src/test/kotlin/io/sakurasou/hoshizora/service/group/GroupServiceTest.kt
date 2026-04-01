@@ -1,4 +1,4 @@
-package io.sakurasou.service.group
+package io.sakurasou.hoshizora.service.group
 
 import io.mockk.*
 import io.sakurasou.hoshizora.controller.request.GroupConfigUpdatePatch

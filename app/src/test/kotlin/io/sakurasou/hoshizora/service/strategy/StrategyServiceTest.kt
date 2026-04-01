@@ -1,4 +1,4 @@
-package io.sakurasou.service.strategy
+package io.sakurasou.hoshizora.service.strategy
 
 import io.mockk.coEvery
 import io.mockk.every
