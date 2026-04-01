@@ -10,7 +10,6 @@ import io.sakurasou.hoshizora.model.task.DeleteImageTask
 import io.sakurasou.hoshizora.model.task.DeleteThumbnailTask
 import io.sakurasou.hoshizora.model.task.ImageTask
 import io.sakurasou.hoshizora.model.task.PersistImageThumbnailTask
-import io.sakurasou.hoshizora.model.task.RePersistImageThumbnailTask
 import io.sakurasou.hoshizora.model.task.TaskStatus
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -85,19 +84,9 @@ object ImageExecutor : Executor() {
     suspend fun persistThumbnail(
         opImageID: Long,
         strategy: Strategy,
-        subFolder: String,
-        fileName: String,
-        image: BufferedImage,
-    ) {
-        submitTask(opImageID, PersistImageThumbnailTask(opImageID, strategy, subFolder, fileName, image))
-    }
-
-    suspend fun rePersistThumbnail(
-        opImageID: Long,
-        strategy: Strategy,
         relativePath: String,
     ) {
-        submitTask(opImageID, RePersistImageThumbnailTask(opImageID, strategy, relativePath))
+        submitTask(opImageID, PersistImageThumbnailTask(opImageID, strategy, relativePath))
     }
 
     suspend fun deleteImage(

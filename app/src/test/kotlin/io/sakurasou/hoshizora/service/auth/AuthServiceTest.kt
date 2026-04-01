@@ -1,4 +1,4 @@
-package io.sakurasou.service.auth
+package io.sakurasou.hoshizora.service.auth
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import io.mockk.coEvery

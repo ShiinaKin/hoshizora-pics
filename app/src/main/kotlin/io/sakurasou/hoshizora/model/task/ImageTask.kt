@@ -9,7 +9,6 @@ import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.util.ImageUtils
-import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
 /**
@@ -45,38 +44,22 @@ sealed class ImageTask(
 class PersistImageThumbnailTask(
     opImageID: Long,
     private val strategy: Strategy,
-    private val subFolder: String,
-    private val fileName: String,
-    private val image: BufferedImage,
+    private val relativePath: String,
 ) : ImageTask(opImageID, PERSIST_THUMBNAIL) {
     override suspend fun execute() {
-        val relativePath = "$subFolder/$fileName"
-        val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
-        val thumbnailBytes = ImageUtils.transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
-        ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
-        logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
-    }
-}
-
-class RePersistImageThumbnailTask(
-    opImageID: Long,
-    private val strategy: Strategy,
-    private val relativePath: String,
-) : ImageTask(opImageID, REPERSIST_THUMBNAIL) {
-    override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
+        val rawImagePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config
-            .fetch(relativePath)
+            .fetch(rawImagePath)
             .inputStream()
             .use { rawImageInputStream ->
                 val rawImage = ImageIO.read(rawImageInputStream)
-                val subFolder = relativePath.substringBeforeLast('/')
                 val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
                 val thumbnailBytes =
                     ImageUtils.transformImageByHeight(rawImage, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
                 ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
             }
-        logger.debug { "re-persist thumbnail $fileName in strategy(id ${strategy.id})" }
+        logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
     }
 }
 

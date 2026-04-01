@@ -1,4 +1,4 @@
-package io.sakurasou.service.setting
+package io.sakurasou.hoshizora.service.setting
 
 import io.mockk.coEvery
 import io.mockk.every

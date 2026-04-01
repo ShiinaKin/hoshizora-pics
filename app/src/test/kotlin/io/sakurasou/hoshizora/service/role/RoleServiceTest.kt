@@ -1,4 +1,4 @@
-package io.sakurasou.service.role
+package io.sakurasou.hoshizora.service.role
 
 import io.mockk.every
 import io.mockk.mockk
