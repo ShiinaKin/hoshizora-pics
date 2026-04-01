@@ -2,9 +2,8 @@ package io.sakurasou.hoshizora.model.dao.task
 
 import io.sakurasou.hoshizora.model.dto.TaskInsertDTO
 import io.sakurasou.hoshizora.model.dto.TaskTransitionStatusDTO
-import io.sakurasou.hoshizora.model.dto.TaskUpdateDTO
 import io.sakurasou.hoshizora.model.entity.Task
-import io.sakurasou.hoshizora.model.entity.TaskStatus
+import io.sakurasou.hoshizora.model.task.TaskStatus
 import kotlin.time.Duration
 
 /**
@@ -12,7 +11,7 @@ import kotlin.time.Duration
  * 2024/9/7 14:07
  */
 interface TaskDao {
-    fun saveTask(taskInsertDTO: TaskInsertDTO): Long
+    fun saveTask(taskInsertDTO: TaskInsertDTO): Long?
 
     fun failTimeoutTask(timeout: Duration)
 

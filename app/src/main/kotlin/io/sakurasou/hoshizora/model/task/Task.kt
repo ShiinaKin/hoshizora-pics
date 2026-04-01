@@ -1,6 +1,5 @@
 package io.sakurasou.hoshizora.model.task
 
-import io.sakurasou.hoshizora.model.entity.TaskType
 import kotlinx.serialization.Serializable
 
 /**
@@ -14,3 +13,17 @@ sealed class Task(
     val opTargetID: String,
     val operation: String,
 )
+
+@Serializable
+enum class TaskType {
+    IMAGE,
+}
+
+@Serializable
+enum class TaskStatus {
+    PENDING,
+    PROCESSING,
+    DONE,
+    FAILED,
+    CANCELLED,
+}

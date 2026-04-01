@@ -3,19 +3,14 @@ package io.sakurasou.hoshizora.model.task
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.hoshizora.model.entity.Strategy
-import io.sakurasou.hoshizora.model.entity.TaskType
 import io.sakurasou.hoshizora.model.group.ImageType
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_IMAGE
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.util.ImageUtils
-import kotlinx.serialization.Serializable
-import org.checkerframework.checker.units.qual.g
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import kotlin.reflect.KClass
-import kotlin.reflect.jvm.jvmName
 
 /**
  * @author Shiina Kin

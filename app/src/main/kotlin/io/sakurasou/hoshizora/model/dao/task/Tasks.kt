@@ -1,10 +1,12 @@
 package io.sakurasou.hoshizora.model.dao.task
 
-import io.sakurasou.hoshizora.model.entity.TaskStatus
-import io.sakurasou.hoshizora.model.entity.TaskType
 import io.sakurasou.hoshizora.model.task.Task
+import io.sakurasou.hoshizora.model.task.TaskStatus
+import io.sakurasou.hoshizora.model.task.TaskType
 import io.sakurasou.hoshizora.plugins.jsonFormat
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.datetime.datetime
 import org.jetbrains.exposed.v1.json.json
 
@@ -21,6 +23,12 @@ object Tasks : LongIdTable("tasks") {
     val message = text("message").nullable()
     val createTime = datetime("create_time")
     val updateTime = datetime("update_time")
+
+    init {
+        uniqueIndex(type, status, targetID, operation) {
+            (status eq TaskStatus.PENDING) or (status eq TaskStatus.PROCESSING)
+        }
+    }
 
     val columnMap =
         mapOf(

@@ -6,12 +6,12 @@ import io.sakurasou.hoshizora.model.dto.TaskInsertDTO
 import io.sakurasou.hoshizora.model.dto.TaskTransitionStatusDTO
 import io.sakurasou.hoshizora.model.entity.Strategy
 import io.sakurasou.hoshizora.model.entity.Task
-import io.sakurasou.hoshizora.model.entity.TaskStatus
 import io.sakurasou.hoshizora.model.task.DeleteImageTask
 import io.sakurasou.hoshizora.model.task.DeleteThumbnailTask
 import io.sakurasou.hoshizora.model.task.ImageTask
 import io.sakurasou.hoshizora.model.task.PersistImageThumbnailTask
 import io.sakurasou.hoshizora.model.task.RePersistImageThumbnailTask
+import io.sakurasou.hoshizora.model.task.TaskStatus
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -133,9 +133,9 @@ object ImageExecutor : Executor() {
                     updateTime = now,
                 )
 
-            val taskID = taskDao.saveTask(taskInsertDTO)
-
-            logger.debug { "submit task of imageId: $opImageID, taskID: $taskID" }
+            taskDao.saveTask(taskInsertDTO)?.let {
+                logger.debug { "submit task of imageId: $opImageID, taskID: $it" }
+            } ?: logger.debug { "skip task of imageId: $opImageID due to task conflict policy" }
         }
     }
 }

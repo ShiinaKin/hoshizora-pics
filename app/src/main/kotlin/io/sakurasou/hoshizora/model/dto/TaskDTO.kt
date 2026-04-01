@@ -1,8 +1,8 @@
 package io.sakurasou.hoshizora.model.dto
 
-import io.sakurasou.hoshizora.model.entity.TaskStatus
-import io.sakurasou.hoshizora.model.entity.TaskType
 import io.sakurasou.hoshizora.model.task.Task
+import io.sakurasou.hoshizora.model.task.TaskStatus
+import io.sakurasou.hoshizora.model.task.TaskType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
