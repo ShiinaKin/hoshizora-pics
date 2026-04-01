@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -44,6 +45,10 @@ object TaskListener {
                     }
                 } while (task != null)
                 delay(15.seconds)
+                dbQuery {
+                    val timeout = 5.minutes
+                    taskDao.failTimeoutTask(timeout)
+                }
             }
         }
     }

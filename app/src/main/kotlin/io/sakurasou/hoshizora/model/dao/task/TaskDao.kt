@@ -5,6 +5,7 @@ import io.sakurasou.hoshizora.model.dto.TaskTransitionStatusDTO
 import io.sakurasou.hoshizora.model.dto.TaskUpdateDTO
 import io.sakurasou.hoshizora.model.entity.Task
 import io.sakurasou.hoshizora.model.entity.TaskStatus
+import kotlin.time.Duration
 
 /**
  * @author ShiinaKin
@@ -12,6 +13,8 @@ import io.sakurasou.hoshizora.model.entity.TaskStatus
  */
 interface TaskDao {
     fun saveTask(taskInsertDTO: TaskInsertDTO): Long
+
+    fun failTimeoutTask(timeout: Duration)
 
     fun transitionTaskStatus(taskTransitionStatusDTO: TaskTransitionStatusDTO): Boolean
 
