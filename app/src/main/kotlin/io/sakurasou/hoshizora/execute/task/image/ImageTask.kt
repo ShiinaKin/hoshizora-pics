@@ -4,7 +4,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.hoshizora.model.entity.Strategy
 import io.sakurasou.hoshizora.model.group.ImageType
 import io.sakurasou.hoshizora.util.ImageUtils
-import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.reflect.KClass
 
@@ -35,39 +34,22 @@ class PersistImageThumbnailTask(
     opImageId: Long,
     cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
     private val strategy: Strategy,
-    private val subFolder: String,
-    private val fileName: String,
-    private val image: BufferedImage,
+    private val relativePath: String,
 ) : ImageTask(opImageId, taskType = PersistImageThumbnailTask::class, cleanUp) {
     override suspend fun execute() {
-        val relativePath = "$subFolder/$fileName"
-        val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
-        val thumbnailBytes = ImageUtils.transformImageByHeight(image, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
-        ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
-        logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
-    }
-}
-
-class RePersistImageThumbnailTask(
-    opImageId: Long,
-    cleanUp: (opImageId: Long, taskType: KClass<out ImageTask>) -> Unit,
-    private val strategy: Strategy,
-    private val relativePath: String,
-) : ImageTask(opImageId, taskType = RePersistImageThumbnailTask::class, cleanUp) {
-    override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
+        val rawImagePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config
-            .fetch(relativePath)
+            .fetch(rawImagePath)
             .inputStream()
             .use { rawImageInputStream ->
                 val rawImage = ImageIO.read(rawImageInputStream)
-                val subFolder = relativePath.substringBeforeLast('/')
                 val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
                 val thumbnailBytes =
                     ImageUtils.transformImageByHeight(rawImage, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
                 ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
             }
-        logger.debug { "re-persist thumbnail $fileName in strategy(id ${strategy.id})" }
+        logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
     }
 }
 

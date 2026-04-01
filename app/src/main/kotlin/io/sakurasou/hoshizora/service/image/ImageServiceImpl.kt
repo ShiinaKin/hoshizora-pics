@@ -22,6 +22,7 @@ import io.sakurasou.hoshizora.exception.service.image.ImageDeleteFailedException
 import io.sakurasou.hoshizora.exception.service.image.ImageInsertFailedException
 import io.sakurasou.hoshizora.exception.service.image.ImageNotFoundException
 import io.sakurasou.hoshizora.exception.service.image.ImageUpdateFailedException
+import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageThumbnailNotFoundException
 import io.sakurasou.hoshizora.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.hoshizora.exception.service.user.UserNotFoundException
@@ -41,6 +42,7 @@ import io.sakurasou.hoshizora.model.group.ImageType
 import io.sakurasou.hoshizora.model.strategy.LocalStrategy
 import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
+import io.sakurasou.hoshizora.service.setting.SettingService
 import io.sakurasou.hoshizora.util.ImageUtils
 import io.sakurasou.hoshizora.util.PlaceholderUtils
 import kotlinx.datetime.TimeZone
@@ -60,7 +62,7 @@ class ImageServiceImpl(
     private val userDao: UserDao,
     private val groupDao: GroupDao,
     private val strategyDao: StrategyDao,
-    private val settingService: io.sakurasou.hoshizora.service.setting.SettingService,
+    private val settingService: SettingService,
 ) : ImageService {
     private val logger = KotlinLogging.logger {}
 
@@ -163,14 +165,22 @@ class ImageServiceImpl(
 
                 val imageId = imageDao.saveImage(imageInsertDTO)
 
-                ImageExecutor.persistThumbnail(imageId, strategy, subFolder, storageFileName, image)
+                val outlinkURI =
+                    if (user.isDefaultImagePrivate) {
+                        ""
+                    } else {
+                        "${siteSetting.siteExternalUrl}/s/$uniqueName"
+                    }
 
-                if (user.isDefaultImagePrivate) {
-                    ""
-                } else {
-                    "${siteSetting.siteExternalUrl}/s/$uniqueName"
-                }
+                SaveImageResultDTO(
+                    outlinkURI = outlinkURI,
+                    imageID = imageId,
+                    strategy = strategy,
+                    path = relativePath,
+                )
             }
+        }.onSuccess {
+            ImageExecutor.persistThumbnail(opImageId = it.imageID, strategy = it.strategy, relativePath = it.path)
         }.onFailure {
             if (it is ServiceThrowable) {
                 throw ImageInsertFailedException(it)
@@ -178,7 +188,15 @@ class ImageServiceImpl(
                 throw it
             }
         }.getOrThrow()
+            .outlinkURI
     }
+
+    private data class SaveImageResultDTO(
+        val outlinkURI: String,
+        val imageID: Long,
+        val strategy: Strategy,
+        val path: String,
+    )
 
     override suspend fun deleteSelfImage(
         userId: Long,
@@ -456,15 +474,29 @@ class ImageServiceImpl(
     private suspend fun fetchThumbnailFile(
         strategy: Strategy,
         image: Image,
-    ) = when (strategy.config) {
-        is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
-        is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
-        is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path, true))
-    }.also {
-        if (it.bytes == null && it.url.isNullOrBlank()) {
-            logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }
-            ImageExecutor.rePersistThumbnail(image.id, strategy, image.path)
-            throw ImageThumbnailNotFoundException()
+    ) = try {
+        when (strategy.config) {
+            is LocalStrategy -> ImageFileDTO(bytes = ImageUtils.fetchLocalImage(strategy, image.path, true))
+            is S3Strategy -> ImageFileDTO(url = ImageUtils.fetchS3Image(strategy, image.path, true))
+            is WebDavStrategy -> ImageFileDTO(bytes = ImageUtils.fetchWebDavImage(strategy, image.path, true))
+        }.also {
+            if (it.bytes == null && it.url.isNullOrBlank()) {
+                throw ImageThumbnailNotFoundException()
+            }
+        }
+    } catch (e: ServiceThrowable) {
+        when (e) {
+            is ImageFileNotFoundException,
+            is ImageThumbnailNotFoundException,
+            -> {
+                logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }
+                ImageExecutor.persistThumbnail(opImageId = image.id, strategy = strategy, relativePath = image.path)
+                throw ImageThumbnailNotFoundException()
+            }
+
+            else -> {
+                throw e
+            }
         }
     }
 }
