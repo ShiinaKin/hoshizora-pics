@@ -156,7 +156,7 @@ class TaskDaoImpl : TaskDao {
 
     override fun listTaskByStatus(status: TaskStatus): List<Task> =
         Tasks
-            .select(Tasks.id, Tasks.status, Tasks.target, Tasks.createTime, Tasks.updateTime)
+            .select(Tasks.id, Tasks.status, Tasks.target, Tasks.message, Tasks.createTime, Tasks.updateTime)
             .where { Tasks.status eq status }
             .forUpdate(ForUpdateOption.ForUpdate)
             .toEntityList()
