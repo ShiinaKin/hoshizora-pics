@@ -15,7 +15,7 @@ abstract class Executor {
 
     companion object {
         const val MAX_WORKER_SIZE = 32
-        const val MAX_WATING_QUEUE_SIZE = 128
+        const val MAX_WAITING_QUEUE_SIZE = 128
     }
 
     internal abstract val executeScope: CoroutineScope
