@@ -33,7 +33,7 @@ object ImageExecutor : Executor() {
             Dispatchers.IO + SupervisorJob() + CoroutineName("ImageExecutor"),
         )
 
-    override val taskChannel = Channel<Task>(MAX_WATING_QUEUE_SIZE)
+    override val taskChannel = Channel<Task>(MAX_WAITING_QUEUE_SIZE)
 
     init {
         repeat(MAX_WORKER_SIZE) {
