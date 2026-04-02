@@ -16,18 +16,21 @@ import io.sakurasou.hoshizora.controller.siteInitRoute
 import io.sakurasou.hoshizora.controller.strategyRoute
 import io.sakurasou.hoshizora.controller.systemRoute
 import io.sakurasou.hoshizora.controller.userRoute
-import io.sakurasou.hoshizora.di.InstanceCenter.albumService
-import io.sakurasou.hoshizora.di.InstanceCenter.authService
-import io.sakurasou.hoshizora.di.InstanceCenter.groupService
-import io.sakurasou.hoshizora.di.InstanceCenter.imageService
-import io.sakurasou.hoshizora.di.InstanceCenter.permissionService
-import io.sakurasou.hoshizora.di.InstanceCenter.personalAccessTokenService
-import io.sakurasou.hoshizora.di.InstanceCenter.roleService
-import io.sakurasou.hoshizora.di.InstanceCenter.settingService
-import io.sakurasou.hoshizora.di.InstanceCenter.strategyService
-import io.sakurasou.hoshizora.di.InstanceCenter.systemService
-import io.sakurasou.hoshizora.di.InstanceCenter.userService
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.plugins.SiteInitCheckPlugin
+import io.sakurasou.hoshizora.service.album.AlbumService
+import io.sakurasou.hoshizora.service.auth.AuthService
+import io.sakurasou.hoshizora.service.common.CommonService
+import io.sakurasou.hoshizora.service.group.GroupService
+import io.sakurasou.hoshizora.service.image.ImageService
+import io.sakurasou.hoshizora.service.permission.PermissionService
+import io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService
+import io.sakurasou.hoshizora.service.role.RoleService
+import io.sakurasou.hoshizora.service.setting.SettingService
+import io.sakurasou.hoshizora.service.strategy.StrategyService
+import io.sakurasou.hoshizora.service.system.SystemService
+import io.sakurasou.hoshizora.service.user.UserService
+import kotlin.getValue
 
 /**
  * @author ShiinaKin
@@ -35,10 +38,23 @@ import io.sakurasou.hoshizora.plugins.SiteInitCheckPlugin
  */
 
 fun Route.apiRoute() {
+    val authService: AuthService by inject()
+    val userService: UserService by inject()
+    val imageService: ImageService by inject()
+    val albumService: AlbumService by inject()
+    val strategyService: StrategyService by inject()
+    val settingService: SettingService by inject()
+    val groupService: GroupService by inject()
+    val roleService: RoleService by inject()
+    val permissionService: PermissionService by inject()
+    val personalAccessTokenService: PersonalAccessTokenService by inject()
+    val commonService by inject<CommonService>()
+    val systemService: SystemService by inject()
+
     route("api") {
         route({ tags("common") }) {
-            siteInitRoute()
-            commonSiteSettingRoute()
+            siteInitRoute(commonService)
+            commonSiteSettingRoute(commonService)
         }
         route {
             install(SiteInitCheckPlugin)

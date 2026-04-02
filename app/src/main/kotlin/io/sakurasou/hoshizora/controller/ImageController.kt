@@ -5,6 +5,7 @@ import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.patch
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
@@ -37,7 +38,7 @@ import io.sakurasou.hoshizora.controller.vo.ImageManageVO
 import io.sakurasou.hoshizora.controller.vo.ImagePageVO
 import io.sakurasou.hoshizora.controller.vo.ImageVO
 import io.sakurasou.hoshizora.controller.vo.PageResult
-import io.sakurasou.hoshizora.di.InstanceCenter.client
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.exception.controller.param.UnsupportedFileTypeException
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
 import io.sakurasou.hoshizora.extension.getPrincipal
@@ -48,6 +49,7 @@ import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
 import io.sakurasou.hoshizora.plugins.cache
 import io.swagger.v3.oas.models.media.Schema
 import kotlinx.io.readByteArray
+import kotlin.getValue
 
 /**
  * @author ShiinaKin
@@ -257,6 +259,7 @@ private fun Route.imageSelfFileFetch(controller: ImageController) {
             if (imageFileDTO.bytes != null) {
                 call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
             } else {
+                val client by inject<HttpClient>()
                 call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
             }
         }
@@ -284,6 +287,7 @@ private fun Route.imageSelfThumbnailFileFetch(controller: ImageController) {
             if (imageFileDTO.bytes != null) {
                 call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
             } else {
+                val client by inject<HttpClient>()
                 call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
             }
         }
@@ -472,6 +476,7 @@ private fun Route.imageManageFileFetch(controller: ImageController) {
             if (imageFileDTO.bytes != null) {
                 call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
             } else {
+                val client by inject<HttpClient>()
                 call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
             }
         }
@@ -498,6 +503,7 @@ private fun Route.imageManageThumbnailFileFetch(controller: ImageController) {
             if (imageFileDTO.bytes != null) {
                 call.respondBytes(imageFileDTO.bytes, ContentType.Image.Any)
             } else {
+                val client by inject<HttpClient>()
                 call.respondBytes(client.get(imageFileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
             }
         }

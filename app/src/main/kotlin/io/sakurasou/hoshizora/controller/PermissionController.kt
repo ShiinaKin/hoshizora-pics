@@ -9,13 +9,14 @@ import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.PermissionVO
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.permission.PermissionService
 
 /**
  * @author Shiina Kin
  * 2024/12/2 17:54
  */
 
-fun Route.permissionRoutes(permissionService: io.sakurasou.hoshizora.service.permission.PermissionService) {
+fun Route.permissionRoutes(permissionService: PermissionService) {
     val controller = PermissionController(permissionService)
     route("permission", {
         protected = true
@@ -45,7 +46,7 @@ private fun Route.fetchAllPermissions(controller: PermissionController) {
 }
 
 class PermissionController(
-    private val permissionService: io.sakurasou.hoshizora.service.permission.PermissionService,
+    private val permissionService: PermissionService,
 ) {
     suspend fun handleFetchAllPermissions(): List<PermissionVO> {
         val allPermissions = permissionService.fetchAllPermissions()

@@ -53,128 +53,61 @@ import io.sakurasou.hoshizora.service.system.SystemService
 import io.sakurasou.hoshizora.service.system.SystemServiceImpl
 import io.sakurasou.hoshizora.service.user.UserService
 import io.sakurasou.hoshizora.service.user.UserServiceImpl
-import org.jetbrains.exposed.v1.jdbc.Database
 
 /**
  * @author Shiina Kin
  * 2024/9/12 11:48
  */
 object InstanceCenter {
-    lateinit var client: HttpClient
-
-    lateinit var database: Database
-
-    lateinit var userDao: UserDao
-    lateinit var imageDao: ImageDao
-    lateinit var albumDao: AlbumDao
-    lateinit var strategyDao: StrategyDao
-    lateinit var settingDao: SettingDao
-    lateinit var groupDao: GroupDao
-    lateinit var personalAccessTokenDao: PersonalAccessTokenDao
-    lateinit var roleDao: RoleDao
-    lateinit var permissionDao: PermissionDao
-    lateinit var relationDao: RelationDao
-    lateinit var taskDao: TaskDao
-
-    lateinit var authService: AuthService
-    lateinit var userService: UserService
-    lateinit var groupService: GroupService
-    lateinit var imageService: ImageService
-    lateinit var albumService: AlbumService
-
-    lateinit var strategyService: StrategyService
-    lateinit var settingService: SettingService
-    lateinit var commonService: CommonService
-    lateinit var roleService: RoleService
-    lateinit var permissionService: PermissionService
-    lateinit var personalAccessTokenService: PersonalAccessTokenService
-
-    lateinit var systemService: SystemService
     lateinit var systemStatus: SystemStatus
+
+    fun init() {
+        diOperation {
+            register<UserDao> { UserDaoImpl() }
+            register<ImageDao> { ImageDaoImpl() }
+            register<AlbumDao> { AlbumDaoImpl() }
+            register<StrategyDao> { StrategyDaoImpl() }
+            register<SettingDao> { SettingDaoImpl() }
+            register<GroupDao> { GroupDaoImpl() }
+            register<PersonalAccessTokenDao> { PersonalAccessTokenDaoImpl() }
+            register<RoleDao> { RoleDaoImpl() }
+            register<PermissionDao> { PermissionDaoImpl() }
+            register<RelationDao> { RelationDaoImpl() }
+            register<TaskDao> { TaskDaoImpl() }
+            register<AuthService> { AuthServiceImpl(get(), get()) }
+            register<UserService> { UserServiceImpl(get(), get(), get(), get(), get()) }
+            register<GroupService> { GroupServiceImpl(get(), get(), get(), get()) }
+            register<ImageService> { ImageServiceImpl(get(), get(), get(), get(), get(), get()) }
+            register<AlbumService> { AlbumServiceImpl(get(), get(), get()) }
+            register<StrategyService> { StrategyServiceImpl(get(), get()) }
+            register<SettingService> { SettingServiceImpl(get()) }
+            register<CommonService> { CommonServiceImpl(get(), get(), get(), get(), get()) }
+            register<RoleService> { RoleServiceImpl(get(), get(), get()) }
+            register<PermissionService> { PermissionServiceImpl(get()) }
+            register<PersonalAccessTokenService> { PersonalAccessTokenServiceImpl(get(), get(), get(), get()) }
+            register<SystemService> { SystemServiceImpl(get(), get(), get()) }
+        }
+    }
 
     fun initClient(
         timeout: Long = 30000,
         proxyAddress: String,
     ) {
-        client =
-            HttpClient(CIO) {
-                install(HttpTimeout) { requestTimeoutMillis = timeout }
-                install(Logging)
-                if (proxyAddress != "disabled") {
-                    engine { proxy = ProxyBuilder.http(proxyAddress) }
+        diOperation {
+            register {
+                HttpClient(CIO) {
+                    install(HttpTimeout) { requestTimeoutMillis = timeout }
+                    install(Logging)
+                    if (proxyAddress != "disabled") {
+                        engine { proxy = ProxyBuilder.http(proxyAddress) }
+                    }
                 }
             }
-    }
-
-    fun initDao() {
-        userDao = UserDaoImpl()
-        imageDao = ImageDaoImpl()
-        albumDao = AlbumDaoImpl()
-        strategyDao = StrategyDaoImpl()
-        settingDao = SettingDaoImpl()
-        groupDao = GroupDaoImpl()
-        personalAccessTokenDao = PersonalAccessTokenDaoImpl()
-        roleDao = RoleDaoImpl()
-        permissionDao = PermissionDaoImpl()
-        relationDao = RelationDaoImpl()
-        taskDao = TaskDaoImpl()
-    }
-
-    fun initService() {
-        settingService = SettingServiceImpl(settingDao)
-        permissionService = PermissionServiceImpl(permissionDao)
-
-        authService = AuthServiceImpl(userDao, relationDao)
-        strategyService = StrategyServiceImpl(strategyDao, groupDao)
-
-        albumService = AlbumServiceImpl(userDao, albumDao, imageDao)
-        roleService = RoleServiceImpl(roleDao, permissionDao, relationDao)
-        systemService = SystemServiceImpl(imageDao, albumDao, userDao)
-
-        groupService =
-            GroupServiceImpl(
-                groupDao,
-                userDao,
-                strategyDao,
-                relationDao,
-            )
-        personalAccessTokenService =
-            PersonalAccessTokenServiceImpl(
-                personalAccessTokenDao,
-                userDao,
-                groupDao,
-                relationDao,
-            )
-
-        userService =
-            UserServiceImpl(
-                userDao,
-                groupDao,
-                albumDao,
-                imageDao,
-                settingService,
-            )
-        commonService =
-            CommonServiceImpl(
-                userDao,
-                albumDao,
-                strategyDao,
-                imageDao,
-                settingService,
-            )
-
-        imageService =
-            ImageServiceImpl(
-                imageDao,
-                albumDao,
-                userDao,
-                groupDao,
-                strategyDao,
-                settingService,
-            )
+        }
     }
 
     suspend fun initSystemStatus() {
+        val settingService: SettingService by inject()
         systemStatus = settingService.getSystemStatus()
     }
 }

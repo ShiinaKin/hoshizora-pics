@@ -25,6 +25,7 @@ import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -34,9 +35,7 @@ import kotlin.time.Clock
  * 2024/11/16 05:38
  */
 
-fun Route.personalAccessTokenRoute(
-    personalAccessTokenService: io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService,
-) {
+fun Route.personalAccessTokenRoute(personalAccessTokenService: PersonalAccessTokenService) {
     val controller = PersonalAccessTokenController(personalAccessTokenService)
     route("personal-access-token", {
         protected = true
@@ -194,7 +193,7 @@ private fun Route.patPage(controller: PersonalAccessTokenController) {
 private fun ApplicationCall.patId() = parameters["patId"]?.toLongOrNull() ?: throw WrongParameterException("Invalid patId")
 
 class PersonalAccessTokenController(
-    private val personalAccessTokenService: io.sakurasou.hoshizora.service.personalAccessToken.PersonalAccessTokenService,
+    private val personalAccessTokenService: PersonalAccessTokenService,
 ) {
     suspend fun handleInsert(
         userId: Long,

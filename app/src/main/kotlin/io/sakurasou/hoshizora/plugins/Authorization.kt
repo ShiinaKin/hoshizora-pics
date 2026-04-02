@@ -6,11 +6,14 @@ import io.ktor.server.auth.AuthenticationChecked
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
 import io.ktor.util.AttributeKey
-import io.sakurasou.hoshizora.di.InstanceCenter
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.exception.controller.access.PrincipalNotFoundException
 import io.sakurasou.hoshizora.exception.controller.status.UnauthorizedAccessException
 import io.sakurasou.hoshizora.extension.Principal
 import io.sakurasou.hoshizora.model.DatabaseSingleton.dbQuery
+import io.sakurasou.hoshizora.model.dao.personalAccessToken.PersonalAccessTokenDao
+import io.sakurasou.hoshizora.model.dao.relation.RelationDao
+import kotlin.getValue
 
 /**
  * @author Shiina Kin
@@ -40,13 +43,15 @@ val AuthorizationPlugin =
 
             if (patId != null) {
                 dbQuery {
-                    InstanceCenter.personalAccessTokenDao.findPATById(patId) ?: throw UnauthorizedAccessException()
+                    val personalAccessTokenDao by inject<PersonalAccessTokenDao>()
+                    personalAccessTokenDao.findPATById(patId) ?: throw UnauthorizedAccessException()
                 }
                 if (!permissions!!.contains(permission)) throw UnauthorizedAccessException()
             } else {
                 roles!!.forEach {
                     runCatching {
-                        val rolePermissions = dbQuery { InstanceCenter.relationDao.listPermissionByRole(it) }
+                        val relationDao by inject<RelationDao>()
+                        val rolePermissions = dbQuery { relationDao.listPermissionByRole(it) }
                         if (permission !in rolePermissions) throw UnauthorizedAccessException()
                     }.onFailure { exception ->
                         if (exception !is UnauthorizedAccessException) logger.trace { exception }

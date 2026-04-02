@@ -29,15 +29,20 @@ import io.sakurasou.hoshizora.controller.vo.PageResult
 import io.sakurasou.hoshizora.controller.vo.UserPageVO
 import io.sakurasou.hoshizora.controller.vo.UserVO
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
-import io.sakurasou.hoshizora.extension.*
+import io.sakurasou.hoshizora.extension.getPrincipal
+import io.sakurasou.hoshizora.extension.id
+import io.sakurasou.hoshizora.extension.pageRequest
+import io.sakurasou.hoshizora.extension.pageRequestSpec
+import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.user.UserService
 
 /**
  * @author ShiinaKin
  * 2024/9/5 15:35
  */
 
-fun Route.userRoute(userService: io.sakurasou.hoshizora.service.user.UserService) {
+fun Route.userRoute(userService: UserService) {
     val controller = UserController(userService)
     route("user", {
         protected = true
@@ -382,7 +387,7 @@ private fun Route.banAndUnban(controller: UserController) {
 }
 
 class UserController(
-    private val userService: io.sakurasou.hoshizora.service.user.UserService,
+    private val userService: UserService,
 ) {
     suspend fun handleSelfPatch(
         id: Long,

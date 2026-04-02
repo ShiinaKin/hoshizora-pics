@@ -40,10 +40,9 @@ fun Application.mainModule() {
             .toLong()
     val clientProxyAddress = environment.config.property("client.proxy.address").getString()
 
+    InstanceCenter.init()
     InstanceCenter.initClient(clientTimeout, clientProxyAddress)
 
-    InstanceCenter.initDao()
-    InstanceCenter.initService()
     configureDatabase()
     configureCache(redisHost, redisPort)
     configureJwt()

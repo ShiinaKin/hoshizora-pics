@@ -7,7 +7,6 @@ import io.sakurasou.hoshizora.model.strategy.LocalStrategy
 import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.im4java.core.ConvertCmd
 import org.im4java.core.IMOperation
@@ -52,9 +51,13 @@ object ImageUtils {
     ): ByteArray =
         withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
-                is S3Strategy -> throw RuntimeException("Not supported")
+                is S3Strategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
-                is WebDavStrategy -> throw RuntimeException("Not supported")
+                is WebDavStrategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
                 is LocalStrategy -> {
                     val parentFolderStr =
@@ -72,9 +75,13 @@ object ImageUtils {
     ): String {
         return withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
-                is LocalStrategy -> throw RuntimeException("Not supported")
+                is LocalStrategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
-                is WebDavStrategy -> throw RuntimeException("Not supported")
+                is WebDavStrategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
                 is S3Strategy -> {
                     val folder = if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
@@ -96,9 +103,13 @@ object ImageUtils {
     ): ByteArray =
         withContext(Dispatchers.IO) {
             when (val strategyConfig = strategy.config) {
-                is LocalStrategy -> throw RuntimeException("Not supported")
+                is LocalStrategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
-                is S3Strategy -> throw RuntimeException("Not supported")
+                is S3Strategy -> {
+                    throw RuntimeException("Not supported")
+                }
 
                 is WebDavStrategy -> {
                     val folder = if (isThumbnail) strategyConfig.thumbnailFolder else strategyConfig.uploadFolder
@@ -170,7 +181,7 @@ object ImageUtils {
     /**
      * will block cur thread
      */
-    fun transformImageByWidth(
+    suspend fun transformImageByWidth(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newWidth: Int,
@@ -179,13 +190,13 @@ object ImageUtils {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
         val newHeight = (originalHeight * newWidth) / originalWidth
-        return runBlocking { transformImage(rawImage, targetImageType, newWidth, newHeight, quality) }
+        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
     }
 
     /**
      * will block cur thread
      */
-    fun transformImageByHeight(
+    suspend fun transformImageByHeight(
         rawImage: BufferedImage,
         targetImageType: ImageType,
         newHeight: Int,
@@ -194,7 +205,7 @@ object ImageUtils {
         val originalWidth = rawImage.width
         val originalHeight = rawImage.height
         val newWidth = (originalWidth * newHeight) / originalHeight
-        return runBlocking { transformImage(rawImage, targetImageType, newWidth, newHeight, quality) }
+        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
     }
 
     class CustomOutputConsumer : OutputConsumer {

@@ -2,7 +2,10 @@ package io.sakurasou.hoshizora.model
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.sakurasou.hoshizora.di.InstanceCenter
+import io.sakurasou.hoshizora.di.DIManager
+import io.sakurasou.hoshizora.di.diOperation
+import io.sakurasou.hoshizora.di.get
+import io.sakurasou.hoshizora.di.register
 import io.sakurasou.hoshizora.model.common.DatabaseInit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,13 +36,15 @@ object DatabaseSingleton {
             }
         val dataSource = HikariDataSource(hikariConfig)
 
-        InstanceCenter.database = Database.connect(dataSource)
+        diOperation {
+            register { Database.connect(dataSource) }
+        }
 
         DatabaseInit.init(version)
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
-        suspendTransaction(InstanceCenter.database) {
+        suspendTransaction(DIManager.getDIInstance().get()) {
             withContext(Dispatchers.IO) {
                 block()
             }
