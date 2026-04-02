@@ -1,6 +1,6 @@
 package io.sakurasou.hoshizora.exception.service.image.io.s3
 
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 import software.amazon.awssdk.services.s3.model.S3Exception
 
 /**
@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception
  */
 class S3ClientException(
     s3Exception: S3Exception,
-) : ServiceThrowable() {
+) : ServiceException() {
     override val code: Int
         get() = 5000
     override var message: String = "S3 client error, please check the configuration"

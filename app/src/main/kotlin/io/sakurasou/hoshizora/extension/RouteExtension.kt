@@ -6,7 +6,7 @@ import io.ktor.server.response.respond
 import io.sakurasou.hoshizora.controller.request.PageRequest
 import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.di.InstanceCenter
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
 
 /**
@@ -56,7 +56,7 @@ suspend inline fun <reified T> ApplicationCall.success(data: T) {
     respond(CommonResponse.success(data))
 }
 
-suspend fun ApplicationCall.failure(exception: ServiceThrowable) {
+suspend fun ApplicationCall.failure(exception: ServiceException) {
     respond(CommonResponse.error<Unit>(exception.code, exception.message))
 }
 

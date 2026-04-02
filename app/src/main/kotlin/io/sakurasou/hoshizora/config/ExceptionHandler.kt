@@ -7,7 +7,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.requestvalidation.RequestValidationException
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.response.respondText
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
 import io.sakurasou.hoshizora.extension.failure
 
@@ -28,7 +28,7 @@ fun StatusPagesConfig.exceptionHandler() {
         logger.error(cause) { "Handle a unexpected exception" }
         call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
     }
-    exception<ServiceThrowable> { call: ApplicationCall, cause ->
+    exception<ServiceException> { call: ApplicationCall, cause ->
         logger.debug(cause) { "Handle a service exception" }
         call.failure(cause)
     }
