@@ -19,5 +19,10 @@ interface TaskDao {
 
     fun takeTask(): Task?
 
+    fun checkTaskStatusByID(
+        taskID: Long,
+        expectStatus: TaskStatus,
+    ): Boolean
+
     fun listTaskByStatus(status: TaskStatus): List<Task>
 }

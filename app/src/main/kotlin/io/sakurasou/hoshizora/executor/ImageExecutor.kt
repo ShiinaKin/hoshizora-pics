@@ -48,6 +48,7 @@ object ImageExecutor : Executor() {
 
     private suspend fun handle(task: Task) {
         try {
+            if (!dbQuery { taskDao.checkTaskStatusByID(task.id, TaskStatus.PROCESSING) }) return
             val opTarget = task.target as ImageTask
             opTarget.start {
                 dbQuery {

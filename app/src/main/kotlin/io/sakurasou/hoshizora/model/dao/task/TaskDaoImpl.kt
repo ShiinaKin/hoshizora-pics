@@ -154,6 +154,15 @@ class TaskDaoImpl : TaskDao {
             }
         }
 
+    override fun checkTaskStatusByID(
+        taskID: Long,
+        expectStatus: TaskStatus,
+    ): Boolean =
+        Tasks
+            .select(intLiteral(1))
+            .where { (Tasks.id eq taskID) and (Tasks.status eq expectStatus) }
+            .count() == 1L
+
     override fun listTaskByStatus(status: TaskStatus): List<Task> =
         Tasks
             .select(Tasks.id, Tasks.status, Tasks.target, Tasks.message, Tasks.createTime, Tasks.updateTime)
