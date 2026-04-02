@@ -9,6 +9,7 @@ import io.ktor.server.plugins.cors.routing.CORS
 import io.sakurasou.hoshizora.config.configureDatabase
 import io.sakurasou.hoshizora.config.configureJwt
 import io.sakurasou.hoshizora.di.InstanceCenter
+import io.sakurasou.hoshizora.listener.TaskListener
 import io.sakurasou.hoshizora.plugins.configureCache
 import io.sakurasou.hoshizora.plugins.configureHTTP
 import io.sakurasou.hoshizora.plugins.configureMonitoring
@@ -51,6 +52,7 @@ fun Application.mainModule() {
     configureMonitoring()
     configureSerialization()
     configureRouting()
+    TaskListener.startListening()
 
     if (developmentMode) {
         install(CORS) {

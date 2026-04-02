@@ -24,6 +24,8 @@ import io.sakurasou.hoshizora.model.dao.setting.SettingDao
 import io.sakurasou.hoshizora.model.dao.setting.SettingDaoImpl
 import io.sakurasou.hoshizora.model.dao.strategy.StrategyDao
 import io.sakurasou.hoshizora.model.dao.strategy.StrategyDaoImpl
+import io.sakurasou.hoshizora.model.dao.task.TaskDao
+import io.sakurasou.hoshizora.model.dao.task.TaskDaoImpl
 import io.sakurasou.hoshizora.model.dao.user.UserDao
 import io.sakurasou.hoshizora.model.dao.user.UserDaoImpl
 import io.sakurasou.hoshizora.model.setting.SystemStatus
@@ -72,6 +74,7 @@ object InstanceCenter {
     lateinit var roleDao: RoleDao
     lateinit var permissionDao: PermissionDao
     lateinit var relationDao: RelationDao
+    lateinit var taskDao: TaskDao
 
     lateinit var authService: AuthService
     lateinit var userService: UserService
@@ -114,6 +117,7 @@ object InstanceCenter {
         roleDao = RoleDaoImpl()
         permissionDao = PermissionDaoImpl()
         relationDao = RelationDaoImpl()
+        taskDao = TaskDaoImpl()
     }
 
     fun initService() {

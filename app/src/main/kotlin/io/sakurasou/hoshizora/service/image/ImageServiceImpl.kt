@@ -26,7 +26,7 @@ import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundExcept
 import io.sakurasou.hoshizora.exception.service.image.io.ImageThumbnailNotFoundException
 import io.sakurasou.hoshizora.exception.service.strategy.StrategyNotFoundException
 import io.sakurasou.hoshizora.exception.service.user.UserNotFoundException
-import io.sakurasou.hoshizora.execute.executor.image.ImageExecutor
+import io.sakurasou.hoshizora.executor.ImageExecutor
 import io.sakurasou.hoshizora.model.DatabaseSingleton.dbQuery
 import io.sakurasou.hoshizora.model.dao.album.AlbumDao
 import io.sakurasou.hoshizora.model.dao.group.GroupDao
@@ -180,7 +180,7 @@ class ImageServiceImpl(
                 )
             }
         }.onSuccess {
-            ImageExecutor.persistThumbnail(opImageId = it.imageID, strategy = it.strategy, relativePath = it.path)
+            ImageExecutor.persistThumbnail(opImageID = it.imageID, strategy = it.strategy, relativePath = it.path)
         }.onFailure {
             if (it is ServiceException) {
                 throw ImageInsertFailedException(it)
@@ -405,7 +405,8 @@ class ImageServiceImpl(
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             if (image.userId != userId) throw ImageAccessDeniedException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
-
+            image to strategy
+        }.let { (image, strategy) ->
             fetchThumbnailFile(strategy, image)
         }
 
@@ -425,7 +426,8 @@ class ImageServiceImpl(
         dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
-
+            image to strategy
+        }.let { (image, strategy) ->
             fetchThumbnailFile(strategy, image)
         }
 
@@ -490,7 +492,7 @@ class ImageServiceImpl(
             is ImageThumbnailNotFoundException,
             -> {
                 logger.debug { "thumbnail of image ${image.id} doesn't exist, will be generate later." }
-                ImageExecutor.persistThumbnail(opImageId = image.id, strategy = strategy, relativePath = image.path)
+                ImageExecutor.persistThumbnail(opImageID = image.id, strategy = strategy, relativePath = image.path)
                 throw ImageThumbnailNotFoundException()
             }
 
