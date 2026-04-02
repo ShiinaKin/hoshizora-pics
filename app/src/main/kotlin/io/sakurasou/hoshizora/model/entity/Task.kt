@@ -26,8 +26,8 @@ data class Task(
         id: Long,
         status: TaskStatus,
         target: Task,
-        message: String?,
+        message: String? = null,
         createTime: LocalDateTime,
         updateTime: LocalDateTime,
-    ) : this(id, target.type, status, target.opTargetID, target.operation, target, message, createTime, updateTime)
+    ) : this(id, target.taskType, status, target.opTargetID, target.operation, target, message, createTime, updateTime)
 }

@@ -3,7 +3,6 @@ package io.sakurasou.hoshizora.model.task
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_IMAGE
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
-import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 
 /**
  * @author Shiina Kin
@@ -13,7 +12,6 @@ import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 private val imageThumbnailWriteOperations =
     setOf(
         PERSIST_THUMBNAIL.name,
-        REPERSIST_THUMBNAIL.name,
     )
 
 private val imageImageDeleteOperations =

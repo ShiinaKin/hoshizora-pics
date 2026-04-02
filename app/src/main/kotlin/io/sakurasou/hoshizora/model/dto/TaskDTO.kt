@@ -27,7 +27,7 @@ data class TaskInsertDTO(
         message: String? = null,
         createTime: LocalDateTime,
         updateTime: LocalDateTime,
-    ) : this(target.type, status, target.opTargetID, target.operation, target, message, createTime, updateTime)
+    ) : this(target.taskType, status, target.opTargetID, target.operation, target, message, createTime, updateTime)
 }
 
 @Serializable

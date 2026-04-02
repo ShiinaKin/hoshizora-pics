@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Task(
-    val type: TaskType,
+    val taskType: TaskType,
     val opTargetID: String,
     val operation: String,
 )

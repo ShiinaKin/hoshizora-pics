@@ -7,8 +7,8 @@ import io.sakurasou.hoshizora.model.group.ImageType
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_IMAGE
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
-import io.sakurasou.hoshizora.model.task.ImageTask.Operation.REPERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.util.ImageUtils
+import kotlinx.serialization.Serializable
 import javax.imageio.ImageIO
 
 /**
@@ -19,16 +19,16 @@ import javax.imageio.ImageIO
 private const val THUMBNAIL_HEIGHT = 256
 private const val THUMBNAIL_QUALITY = 0.9
 
+@Serializable
 sealed class ImageTask(
-    opImageID: Long,
-    operation: Operation,
-) : Task(TaskType.IMAGE, opImageID.toString(), operation.toString()) {
+    private val opImageID: Long,
+    private val operationEnum: Operation,
+) : Task(TaskType.IMAGE, opImageID.toString(), operationEnum.toString()) {
     protected val logger: KLogger
         get() = KotlinLogging.logger {}
 
     enum class Operation {
         PERSIST_THUMBNAIL,
-        REPERSIST_THUMBNAIL,
         DELETE_IMAGE,
         DELETE_THUMBNAIL,
     }
@@ -41,11 +41,12 @@ sealed class ImageTask(
     }
 }
 
+@Serializable
 class PersistImageThumbnailTask(
-    opImageID: Long,
+    private val imageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageID, PERSIST_THUMBNAIL) {
+) : ImageTask(imageID, PERSIST_THUMBNAIL) {
     override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
         val rawImagePath = "${strategy.config.uploadFolder}/$relativePath"
@@ -63,11 +64,12 @@ class PersistImageThumbnailTask(
     }
 }
 
+@Serializable
 class DeleteImageTask(
-    opImageID: Long,
+    private val imageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageID, DELETE_IMAGE) {
+) : ImageTask(imageID, DELETE_IMAGE) {
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)
@@ -76,11 +78,12 @@ class DeleteImageTask(
     }
 }
 
+@Serializable
 class DeleteThumbnailTask(
-    opImageID: Long,
+    private val imageID: Long,
     private val strategy: Strategy,
     private val relativePath: String,
-) : ImageTask(opImageID, DELETE_THUMBNAIL) {
+) : ImageTask(imageID, DELETE_THUMBNAIL) {
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)
