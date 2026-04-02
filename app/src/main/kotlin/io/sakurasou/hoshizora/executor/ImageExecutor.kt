@@ -44,6 +44,7 @@ object ImageExecutor : Executor() {
                         handle(task)
                     } catch (e: Exception) {
                         logger.error(e) { "Error during task $task" }
+                        // TODO push this event to UI by SSE
                     }
                 }
             }
@@ -72,7 +73,6 @@ object ImageExecutor : Executor() {
                 }
             }
         } catch (e: Exception) {
-            logger.error(e) { "Error during task $task" }
             dbQuery {
                 val taskUpdateDTO =
                     TaskTransitionStatusDTO(
@@ -84,6 +84,7 @@ object ImageExecutor : Executor() {
                     )
                 taskDao.transitionTaskStatus(taskUpdateDTO)
             }
+            throw e
         }
     }
 
