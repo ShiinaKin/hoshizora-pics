@@ -53,7 +53,7 @@ object TaskListener {
         }
 
         taskListenerScope.launch {
-            logger.debug { "Task Cleanner Listener Started" }
+            logger.debug { "Task Cleaner Listener Started" }
             while (true) {
                 try {
                     dbQuery {
