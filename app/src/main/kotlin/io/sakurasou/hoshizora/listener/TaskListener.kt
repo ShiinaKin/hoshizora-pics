@@ -33,22 +33,20 @@ object TaskListener {
         taskListenerScope.launch {
             logger.debug { "Task Listener Started" }
             while (true) {
-                while (true) {
-                    val task =
-                        try {
-                            dbQuery { taskDao.takeTask() }
-                        } catch (e: Exception) {
-                            logger.error(e) { "failed to take task" }
-                            break
-                        }
+                try {
+                    while (true) {
+                        val task = dbQuery { taskDao.takeTask() }
 
-                    if (task == null) break
+                        if (task == null) break
 
-                    when (task.target) {
-                        is ImageTask -> {
-                            ImageExecutor.taskChannel.send(task)
+                        when (task.target) {
+                            is ImageTask -> {
+                                ImageExecutor.taskChannel.send(task)
+                            }
                         }
                     }
+                } catch (e: Exception) {
+                    logger.error(e) { "failed to take task" }
                 }
                 delay(15.seconds)
             }
@@ -57,9 +55,13 @@ object TaskListener {
         taskListenerScope.launch {
             logger.debug { "Task Cleanner Listener Started" }
             while (true) {
-                dbQuery {
-                    val timeout = 5.minutes
-                    taskDao.failTimeoutTask(timeout)
+                try {
+                    dbQuery {
+                        val timeout = 5.minutes
+                        taskDao.failTimeoutTask(timeout)
+                    }
+                } catch (e: Exception) {
+                    logger.error(e) { "failed to clean task" }
                 }
                 delay(30.seconds)
             }

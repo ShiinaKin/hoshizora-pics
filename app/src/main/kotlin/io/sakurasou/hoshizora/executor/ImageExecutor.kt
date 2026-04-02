@@ -40,7 +40,11 @@ object ImageExecutor : Executor() {
         repeat(MAX_WORKER_SIZE) {
             executeScope.launch {
                 for (task in taskChannel) {
-                    handle(task)
+                    try {
+                        handle(task)
+                    } catch (e: Exception) {
+                        logger.error(e) { "Error during task $task" }
+                    }
                 }
             }
         }
