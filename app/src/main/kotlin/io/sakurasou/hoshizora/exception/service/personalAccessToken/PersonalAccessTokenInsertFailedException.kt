@@ -1,15 +1,15 @@
 package io.sakurasou.hoshizora.exception.service.personalAccessToken
 
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 
 /**
  * @author ShiinaKin
  * 2024/11/16 04:42
  */
 class PersonalAccessTokenInsertFailedException(
-    cause: ServiceThrowable? = null,
+    cause: ServiceException? = null,
     reason: String? = null,
-) : ServiceThrowable() {
+) : ServiceException() {
     override val code: Int
         get() = 4000
     override var message: String = "PersonalAccessToken Insert Failed"

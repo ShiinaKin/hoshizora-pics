@@ -1,12 +1,12 @@
 package io.sakurasou.hoshizora.exception.dao
 
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 
 /**
  * @author Shiina Kin
  * 2024/9/13 15:15
  */
-class MissingNecessaryColumnException : ServiceThrowable() {
+class MissingNecessaryColumnException : ServiceException() {
     override val code: Int
         get() = 5002
     override val message: String

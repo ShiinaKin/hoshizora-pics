@@ -10,7 +10,7 @@ import io.sakurasou.hoshizora.controller.vo.ImageManageVO
 import io.sakurasou.hoshizora.controller.vo.ImagePageVO
 import io.sakurasou.hoshizora.controller.vo.ImageVO
 import io.sakurasou.hoshizora.controller.vo.PageResult
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 import io.sakurasou.hoshizora.exception.common.FileExtensionNotAllowedException
 import io.sakurasou.hoshizora.exception.common.FileSizeException
 import io.sakurasou.hoshizora.exception.common.UserBannedException
@@ -182,7 +182,7 @@ class ImageServiceImpl(
         }.onSuccess {
             ImageExecutor.persistThumbnail(opImageID = it.imageID, strategy = it.strategy, relativePath = it.path)
         }.onFailure {
-            if (it is ServiceThrowable) {
+            if (it is ServiceException) {
                 throw ImageInsertFailedException(it)
             } else {
                 throw it
@@ -215,7 +215,7 @@ class ImageServiceImpl(
                 ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
-            if (it is ServiceThrowable) {
+            if (it is ServiceException) {
                 throw ImageDeleteFailedException(it)
             } else {
                 throw it
@@ -234,7 +234,7 @@ class ImageServiceImpl(
                 ImageExecutor.deleteThumbnail(imageId, strategy, image.path)
             }
         }.onFailure {
-            if (it is ServiceThrowable) {
+            if (it is ServiceException) {
                 throw ImageDeleteFailedException(it)
             } else {
                 throw it
@@ -270,7 +270,7 @@ class ImageServiceImpl(
                 imageDao.updateImageById(imageUpdateDTO)
             }
         }.onFailure {
-            if (it is ServiceThrowable) {
+            if (it is ServiceException) {
                 throw ImageUpdateFailedException(it)
             } else {
                 throw it
@@ -304,7 +304,7 @@ class ImageServiceImpl(
                 imageDao.updateImageById(imageUpdateDTO)
             }
         }.onFailure {
-            if (it is ServiceThrowable) {
+            if (it is ServiceException) {
                 throw ImageUpdateFailedException(it)
             } else {
                 throw it
@@ -486,7 +486,7 @@ class ImageServiceImpl(
                 throw ImageThumbnailNotFoundException()
             }
         }
-    } catch (e: ServiceThrowable) {
+    } catch (e: ServiceException) {
         when (e) {
             is ImageFileNotFoundException,
             is ImageThumbnailNotFoundException,

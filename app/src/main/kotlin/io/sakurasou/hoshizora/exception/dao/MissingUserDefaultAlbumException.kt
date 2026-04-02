@@ -1,6 +1,6 @@
 package io.sakurasou.hoshizora.exception.dao
 
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 
 /**
  * @author Shiina Kin
@@ -8,7 +8,7 @@ import io.sakurasou.hoshizora.exception.ServiceThrowable
  */
 class MissingUserDefaultAlbumException(
     private val userId: Long,
-) : ServiceThrowable() {
+) : ServiceException() {
     override val code: Int
         get() = 5002
     override val message: String

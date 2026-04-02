@@ -1,6 +1,6 @@
 package io.sakurasou.hoshizora.exception.controller.param
 
-import io.sakurasou.hoshizora.exception.ServiceThrowable
+import io.sakurasou.hoshizora.exception.ServiceException
 
 /**
  * @author Shiina Kin
@@ -8,7 +8,7 @@ import io.sakurasou.hoshizora.exception.ServiceThrowable
  */
 class PagingParameterWrongException(
     override val message: String = "Paging Parameter Wrong",
-) : ServiceThrowable() {
+) : ServiceException() {
     override val code: Int
         get() = 4000
 }
