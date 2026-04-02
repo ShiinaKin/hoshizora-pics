@@ -405,7 +405,8 @@ class ImageServiceImpl(
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             if (image.userId != userId) throw ImageAccessDeniedException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
-
+            image to strategy
+        }.let { (image, strategy) ->
             fetchThumbnailFile(strategy, image)
         }
 
@@ -425,7 +426,8 @@ class ImageServiceImpl(
         dbQuery {
             val image = imageDao.findImageById(imageId) ?: throw ImageNotFoundException()
             val strategy = strategyDao.findStrategyById(image.strategyId) ?: throw StrategyNotFoundException()
-
+            image to strategy
+        }.let { (image, strategy) ->
             fetchThumbnailFile(strategy, image)
         }
 

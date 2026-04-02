@@ -72,6 +72,7 @@ object ImageExecutor : Executor() {
                 }
             }
         } catch (e: Exception) {
+            logger.error(e) { "Error during task $task" }
             dbQuery {
                 val taskUpdateDTO =
                     TaskTransitionStatusDTO(
@@ -124,9 +125,9 @@ object ImageExecutor : Executor() {
                     updateTime = now,
                 )
 
-            taskDao.saveTask(taskInsertDTO)?.let {
-                logger.debug { "submit task of imageId: $opImageID, taskID: $it" }
-            } ?: logger.debug { "skip task of imageId: $opImageID due to task conflict policy" }
-        }
+            taskDao.saveTask(taskInsertDTO)
+        }?.let {
+            logger.debug { "submit task of imageId: $opImageID, taskID: $it" }
+        } ?: logger.debug { "skip task of imageId: $opImageID due to task conflict policy" }
     }
 }
