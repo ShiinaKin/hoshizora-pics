@@ -5,18 +5,25 @@ package io.sakurasou.hoshizora.model.common
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.sakurasou.hoshizora.constant.*
 import io.sakurasou.hoshizora.di.InstanceCenter
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.model.DatabaseSingleton.dbQuery
 import io.sakurasou.hoshizora.model.dao.album.Albums
+import io.sakurasou.hoshizora.model.dao.group.GroupDao
 import io.sakurasou.hoshizora.model.dao.group.Groups
 import io.sakurasou.hoshizora.model.dao.image.Images
+import io.sakurasou.hoshizora.model.dao.permission.PermissionDao
 import io.sakurasou.hoshizora.model.dao.permission.Permissions
 import io.sakurasou.hoshizora.model.dao.personalAccessToken.PersonalAccessTokens
 import io.sakurasou.hoshizora.model.dao.relation.GroupRoles
 import io.sakurasou.hoshizora.model.dao.relation.PersonalAccessTokenPermissions
+import io.sakurasou.hoshizora.model.dao.relation.RelationDao
 import io.sakurasou.hoshizora.model.dao.relation.RolePermissions
+import io.sakurasou.hoshizora.model.dao.role.RoleDao
 import io.sakurasou.hoshizora.model.dao.role.Roles
+import io.sakurasou.hoshizora.model.dao.setting.SettingDao
 import io.sakurasou.hoshizora.model.dao.setting.Settings
 import io.sakurasou.hoshizora.model.dao.strategy.Strategies
+import io.sakurasou.hoshizora.model.dao.strategy.StrategyDao
 import io.sakurasou.hoshizora.model.dao.task.Tasks
 import io.sakurasou.hoshizora.model.dao.user.Users
 import io.sakurasou.hoshizora.model.dto.GroupInsertDTO
@@ -96,7 +103,8 @@ object DatabaseInit {
             ).flatten()
                 .map { PermissionInsertDTO(it, null) }
 
-        InstanceCenter.permissionDao.batchSavePermission(allPermissions)
+        val permissionDao by inject<PermissionDao>()
+        permissionDao.batchSavePermission(allPermissions)
 
         logger.info { "permission init success" }
     }
@@ -118,8 +126,9 @@ object DatabaseInit {
                 description = null,
                 createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
             )
-        InstanceCenter.roleDao.saveRole(adminRoleInsertDTO)
-        InstanceCenter.roleDao.saveRole(userRoleInsertDTO)
+        val roleDao by inject<RoleDao>()
+        roleDao.saveRole(adminRoleInsertDTO)
+        roleDao.saveRole(userRoleInsertDTO)
 
         logger.info { "role init success" }
     }
@@ -135,7 +144,8 @@ object DatabaseInit {
                 createTime = now,
                 updateTime = now,
             )
-        InstanceCenter.strategyDao.saveStrategy(strategyInsertDTO)
+        val strategyDao by inject<StrategyDao>()
+        strategyDao.saveStrategy(strategyInsertDTO)
 
         logger.info { "strategy init success" }
     }
@@ -199,8 +209,10 @@ object DatabaseInit {
                 isSystemReserved = true,
                 createTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
             )
-        InstanceCenter.groupDao.saveGroup(adminGroup)
-        InstanceCenter.groupDao.saveGroup(userGroup)
+
+        val groupDao by inject<GroupDao>()
+        groupDao.saveGroup(adminGroup)
+        groupDao.saveGroup(userGroup)
 
         logger.info { "group init success" }
     }
@@ -235,16 +247,17 @@ object DatabaseInit {
                 PERSONAL_ACCESS_TOKEN_WRITE_SELF,
             )
 
-        InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
-        InstanceCenter.relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
+        val relationDao by inject<RelationDao>()
+        relationDao.batchInsertRoleToPermissions(ROLE_ADMIN, adminPermissions)
+        relationDao.batchInsertRoleToPermissions(ROLE_USER, userPermissions)
 
         logger.info { "role-permission relation init success" }
 
         // group-role
         val adminRoles = listOf(ROLE_ADMIN)
         val userRoles = listOf(ROLE_USER)
-        InstanceCenter.relationDao.batchInsertGroupToRoles(1, adminRoles)
-        InstanceCenter.relationDao.batchInsertGroupToRoles(2, userRoles)
+        relationDao.batchInsertGroupToRoles(1, adminRoles)
+        relationDao.batchInsertGroupToRoles(2, userRoles)
 
         logger.info { "group-role relation init success" }
     }
@@ -275,9 +288,10 @@ object DatabaseInit {
         val systemSettingInsertDTO = SettingInsertDTO(SETTING_SYSTEM, systemSettingConfig, now, now)
         val systemStatusInsertDTO = SettingInsertDTO(SETTING_STATUS, systemStatus, now, now)
 
-        InstanceCenter.settingDao.saveSetting(siteSettingInsertDTO)
-        InstanceCenter.settingDao.saveSetting(systemSettingInsertDTO)
-        InstanceCenter.settingDao.saveSetting(systemStatusInsertDTO)
+        val settingDao by inject<SettingDao>()
+        settingDao.saveSetting(siteSettingInsertDTO)
+        settingDao.saveSetting(systemSettingInsertDTO)
+        settingDao.saveSetting(systemStatusInsertDTO)
 
         logger.info { "setting init success" }
     }
@@ -302,7 +316,9 @@ object DatabaseInit {
                 )
             val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             val updateDTO = SettingUpdateDTO(SETTING_STATUS, systemStatus, now)
-            InstanceCenter.settingDao.updateSettingByName(updateDTO)
+
+            val settingDao by inject<SettingDao>()
+            settingDao.updateSettingByName(updateDTO)
 
             // v0.3.0 breaking update
             if (oldVersion.isLowerThanOrEqualTo("0.3.0")) {

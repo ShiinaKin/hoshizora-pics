@@ -1,9 +1,10 @@
 package io.sakurasou.hoshizora.listener
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.sakurasou.hoshizora.di.InstanceCenter
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.executor.ImageExecutor
 import io.sakurasou.hoshizora.model.DatabaseSingleton.dbQuery
+import io.sakurasou.hoshizora.model.dao.task.TaskDao
 import io.sakurasou.hoshizora.model.task.ImageTask
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.getValue
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
  */
 object TaskListener {
     private val logger = KotlinLogging.logger {}
-    private val taskDao = InstanceCenter.taskDao
+    private val taskDao by inject<TaskDao>()
 
     private val taskListenerScope =
         CoroutineScope(

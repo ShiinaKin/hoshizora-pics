@@ -19,7 +19,9 @@ import io.ktor.utils.io.readRemaining
 import io.sakurasou.hoshizora.config.apiRoute
 import io.sakurasou.hoshizora.config.exceptionHandler
 import io.sakurasou.hoshizora.controller.commonRoute
-import io.sakurasou.hoshizora.di.InstanceCenter.commonService
+import io.sakurasou.hoshizora.di.inject
+import io.sakurasou.hoshizora.service.common.CommonService
+import kotlin.getValue
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -45,6 +47,7 @@ fun Application.configureRouting() {
     routing {
         apiRoute()
         route {
+            val commonService by inject<CommonService>()
             install(SiteInitCheckPlugin)
             commonRoute(commonService)
         }

@@ -36,12 +36,13 @@ import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.album.AlbumService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:58
  */
-fun Route.albumRoute(albumService: io.sakurasou.hoshizora.service.album.AlbumService) {
+fun Route.albumRoute(albumService: AlbumService) {
     val controller =
         AlbumController(albumService)
     route("album", {
@@ -420,7 +421,7 @@ private fun Route.albumManagePage(controller: AlbumController) {
 private fun ApplicationCall.albumId() = parameters["albumId"]?.toLongOrNull() ?: throw WrongParameterException()
 
 class AlbumController(
-    private val albumService: io.sakurasou.hoshizora.service.album.AlbumService,
+    private val albumService: AlbumService,
 ) {
     suspend fun handleSelfInsert(
         userId: Long,

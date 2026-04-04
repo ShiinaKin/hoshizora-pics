@@ -26,13 +26,14 @@ import io.sakurasou.hoshizora.extension.pageRequest
 import io.sakurasou.hoshizora.extension.pageRequestSpec
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.role.RoleService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:53
  */
 
-fun Route.roleRoute(roleService: io.sakurasou.hoshizora.service.role.RoleService) {
+fun Route.roleRoute(roleService: RoleService) {
     val controller = RoleController(roleService)
     route("role", {
         protected = true
@@ -225,7 +226,7 @@ private fun Route.pageRoles(controller: RoleController) {
 }
 
 class RoleController(
-    private val roleService: io.sakurasou.hoshizora.service.role.RoleService,
+    private val roleService: RoleService,
 ) {
     suspend fun handleInsertRole(insertRequest: RoleInsertRequest) {
         roleService.saveRole(insertRequest)

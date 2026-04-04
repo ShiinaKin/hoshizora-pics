@@ -1,6 +1,7 @@
 package io.sakurasou.hoshizora.model.strategy
 
 import io.github.smiley4.schemakenerator.core.annotations.Name
+import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.put
@@ -11,10 +12,11 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.headers
-import io.sakurasou.hoshizora.di.InstanceCenter.client
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.exception.service.image.io.webdav.WebDavException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.getValue
 import kotlin.io.encoding.Base64
 
 /**
@@ -49,6 +51,7 @@ data class WebDavStrategy(
         imageBytes: ByteArray,
         uploadPath: String,
     ) {
+        val client by inject<HttpClient>()
         client
             .put("$serverUrl/$uploadPath") {
                 addAuthHeader(this@WebDavStrategy)
@@ -60,6 +63,7 @@ data class WebDavStrategy(
     }
 
     override suspend fun delete(relativePath: String) {
+        val client by inject<HttpClient>()
         client
             .delete("$serverUrl/$relativePath") { addAuthHeader(this@WebDavStrategy) }
             .let {
@@ -69,8 +73,9 @@ data class WebDavStrategy(
             }
     }
 
-    override suspend fun fetch(relativePath: String): ByteArray =
-        client
+    override suspend fun fetch(relativePath: String): ByteArray {
+        val client by inject<HttpClient>()
+        return client
             .get("$serverUrl/$relativePath") { addAuthHeader(this@WebDavStrategy) }
             .let {
                 if (it.status != HttpStatusCode.OK || it.contentType() != ContentType.Image.Any) {
@@ -78,4 +83,5 @@ data class WebDavStrategy(
                 }
                 it.bodyAsBytes()
             }
+    }
 }

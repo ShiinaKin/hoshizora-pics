@@ -31,13 +31,14 @@ import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.StrategyConfig
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.strategy.StrategyService
 import io.swagger.v3.oas.models.media.Schema
 
 /**
  * @author Shiina Kin
  * 2024/9/9 08:59
  */
-fun Route.strategyRoute(strategyService: io.sakurasou.hoshizora.service.strategy.StrategyService) {
+fun Route.strategyRoute(strategyService: StrategyService) {
     val controller = StrategyController(strategyService)
     route("strategy", {
         protected = true
@@ -564,7 +565,7 @@ private fun Route.pageStrategies(controller: StrategyController) {
 }
 
 class StrategyController(
-    private val strategyService: io.sakurasou.hoshizora.service.strategy.StrategyService,
+    private val strategyService: StrategyService,
 ) {
     suspend fun handleInsertStrategy(request: StrategyInsertRequest) {
         strategyService.saveStrategy(request)

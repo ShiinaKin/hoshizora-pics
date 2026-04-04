@@ -1,3 +1,5 @@
+@file:Suppress("CanBeParameter")
+
 package io.sakurasou.hoshizora.model.task
 
 import io.github.oshai.kotlinlogging.KLogger

@@ -3,6 +3,7 @@ package io.sakurasou.hoshizora.controller
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.github.smiley4.ktorswaggerui.dsl.routing.route
+import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
@@ -21,17 +22,17 @@ import io.sakurasou.hoshizora.constant.REGEX_USERNAME
 import io.sakurasou.hoshizora.controller.request.SiteInitRequest
 import io.sakurasou.hoshizora.controller.vo.CommonResponse
 import io.sakurasou.hoshizora.controller.vo.CommonSiteSetting
-import io.sakurasou.hoshizora.di.InstanceCenter.client
-import io.sakurasou.hoshizora.di.InstanceCenter.commonService
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.exception.controller.param.WrongParameterException
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.cache
+import io.sakurasou.hoshizora.service.common.CommonService
 
 /**
  * @author Shiina Kin
  * 2024/9/9 09:03
  */
-fun Route.commonRoute(commonService: io.sakurasou.hoshizora.service.common.CommonService) {
+fun Route.commonRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route({ tags("common") }) {
         cache(cachedNoQueryParamRequest = false) {
@@ -41,7 +42,7 @@ fun Route.commonRoute(commonService: io.sakurasou.hoshizora.service.common.Commo
     }
 }
 
-fun Route.siteInitRoute() {
+fun Route.siteInitRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     route {
         install(RequestValidation) {
@@ -80,7 +81,7 @@ fun Route.siteInitRoute() {
     }
 }
 
-fun Route.commonSiteSettingRoute() {
+fun Route.commonSiteSettingRoute(commonService: CommonService) {
     val commonController = CommonController(commonService)
     get("site/setting", {
         description = "fetch common site setting"
@@ -116,6 +117,7 @@ private fun Route.randomFetchImage(commonController: CommonController) {
         if (fileDTO.bytes != null) {
             call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
         } else {
+            val client by inject<HttpClient>()
             call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
         }
     }
@@ -142,13 +144,14 @@ private fun Route.anonymousGetImage(commonController: CommonController) {
         if (fileDTO.bytes != null) {
             call.respondBytes(fileDTO.bytes, ContentType.Image.Any)
         } else {
+            val client by inject<HttpClient>()
             call.respondBytes(client.get(fileDTO.url!!).bodyAsBytes(), ContentType.Image.Any)
         }
     }
 }
 
 class CommonController(
-    private val commonService: io.sakurasou.hoshizora.service.common.CommonService,
+    private val commonService: CommonService,
 ) {
     suspend fun handleInit(siteInitRequest: SiteInitRequest) {
         commonService.initSite(siteInitRequest)

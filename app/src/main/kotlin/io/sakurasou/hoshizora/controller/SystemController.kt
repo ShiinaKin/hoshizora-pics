@@ -10,13 +10,14 @@ import io.sakurasou.hoshizora.controller.vo.SystemOverviewVO
 import io.sakurasou.hoshizora.controller.vo.SystemStatisticsVO
 import io.sakurasou.hoshizora.extension.success
 import io.sakurasou.hoshizora.plugins.AuthorizationPlugin
+import io.sakurasou.hoshizora.service.system.SystemService
 
 /**
  * @author Shiina Kin
  * 2024/11/18 20:12
  */
 
-fun Route.systemRoute(systemService: io.sakurasou.hoshizora.service.system.SystemService) {
+fun Route.systemRoute(systemService: SystemService) {
     val controller = SystemController(systemService)
     route("system", {
         tags("system")
@@ -65,7 +66,7 @@ private fun Route.systemOverview(controller: SystemController) {
 }
 
 class SystemController(
-    private val systemService: io.sakurasou.hoshizora.service.system.SystemService,
+    private val systemService: SystemService,
 ) {
     suspend fun handleSystemStatistics(): SystemStatisticsVO {
         val systemStatisticsVO = systemService.fetchSystemStatistics()
