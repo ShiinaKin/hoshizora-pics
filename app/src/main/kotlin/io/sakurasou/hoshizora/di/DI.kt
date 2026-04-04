@@ -1,7 +1,5 @@
 package io.sakurasou.hoshizora.di
 
-import io.ktor.util.collections.ConcurrentMap
-import kotlinx.coroutines.sync.Mutex
 import kotlin.reflect.KClass
 
 /**
