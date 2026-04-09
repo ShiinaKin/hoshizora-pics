@@ -45,6 +45,12 @@ ktor {
     }
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -123,6 +129,10 @@ dependencies {
 
 tasks.jar {
     enabled = false
+}
+
+tasks.withType<Test> {
+    jvmArgs("--enable-native-access=ALL-UNNAMED")
 }
 
 tasks.shadowJar {
