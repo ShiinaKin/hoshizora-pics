@@ -30,7 +30,7 @@ val commonsCodecVersion: String by project
 val mockkVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.4.0-Beta1"
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ktor)
 }
@@ -42,12 +42,6 @@ application {
 ktor {
     fatJar {
         archiveFileName = "hoshizora-pics-$version.jar"
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
 
