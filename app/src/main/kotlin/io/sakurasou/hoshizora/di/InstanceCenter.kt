@@ -1,11 +1,14 @@
 package io.sakurasou.hoshizora.di
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.ProxyBuilder
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.http
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.logging.Logging
+import io.sakurasou.hoshizora.executor.ImageExecutor
+import io.sakurasou.hoshizora.listener.TaskListener
 import io.sakurasou.hoshizora.model.dao.album.AlbumDao
 import io.sakurasou.hoshizora.model.dao.album.AlbumDaoImpl
 import io.sakurasou.hoshizora.model.dao.group.GroupDao
@@ -29,6 +32,7 @@ import io.sakurasou.hoshizora.model.dao.task.TaskDaoImpl
 import io.sakurasou.hoshizora.model.dao.user.UserDao
 import io.sakurasou.hoshizora.model.dao.user.UserDaoImpl
 import io.sakurasou.hoshizora.model.setting.SystemStatus
+import io.sakurasou.hoshizora.native.ImageOperation
 import io.sakurasou.hoshizora.service.album.AlbumService
 import io.sakurasou.hoshizora.service.album.AlbumServiceImpl
 import io.sakurasou.hoshizora.service.auth.AuthService
@@ -53,15 +57,20 @@ import io.sakurasou.hoshizora.service.system.SystemService
 import io.sakurasou.hoshizora.service.system.SystemServiceImpl
 import io.sakurasou.hoshizora.service.user.UserService
 import io.sakurasou.hoshizora.service.user.UserServiceImpl
+import java.lang.foreign.Arena
+import java.lang.foreign.Linker
+import java.lang.foreign.SymbolLookup
 
 /**
  * @author Shiina Kin
  * 2024/9/12 11:48
  */
 object InstanceCenter {
+    private val logger = KotlinLogging.logger { }
+
     lateinit var systemStatus: SystemStatus
 
-    fun init() {
+    fun init(imageMagickLibPath: String) {
         diOperation {
             register<UserDao> { UserDaoImpl() }
             register<ImageDao> { ImageDaoImpl() }
@@ -86,6 +95,8 @@ object InstanceCenter {
             register<PermissionService> { PermissionServiceImpl(get()) }
             register<PersonalAccessTokenService> { PersonalAccessTokenServiceImpl(get(), get(), get(), get()) }
             register<SystemService> { SystemServiceImpl(get(), get(), get()) }
+            register { Linker.nativeLinker() }
+            register { SymbolLookup.libraryLookup(imageMagickLibPath, Arena.global()) }
         }
     }
 
@@ -109,5 +120,13 @@ object InstanceCenter {
     suspend fun initSystemStatus() {
         val settingService: SettingService by inject()
         systemStatus = settingService.getSystemStatus()
+    }
+
+    fun greasfullyShutdown() {
+        context(logger) {
+            TaskListener.stopListening()
+            ImageExecutor.shutdown()
+            ImageOperation.terminus()
+        }
     }
 }

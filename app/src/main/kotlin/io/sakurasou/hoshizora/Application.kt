@@ -18,8 +18,15 @@ import io.sakurasou.hoshizora.plugins.configureSecurity
 import io.sakurasou.hoshizora.plugins.configureSerialization
 import io.sakurasou.hoshizora.plugins.configureSwagger
 import io.sakurasou.hoshizora.plugins.generateOpenApiJson
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 fun main(args: Array<String>) {
+    Runtime.getRuntime().addShutdownHook(
+        Thread {
+            InstanceCenter.greasfullyShutdown()
+        },
+    )
     EngineMain
         .main(args)
 }
@@ -30,6 +37,9 @@ fun Application.swaggerModule() {
 }
 
 fun Application.mainModule() {
+    val imageMagickLibPath = environment.config.property("native.imagemagick").getString()
+    if (!Path(imageMagickLibPath).exists()) throw Error("Image Magick Lib does not exist")
+
     val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()
     val redisPort = environment.config.property("ktor.application.cache.redis.port").getString()
 
@@ -40,7 +50,7 @@ fun Application.mainModule() {
             .toLong()
     val clientProxyAddress = environment.config.property("client.proxy.address").getString()
 
-    InstanceCenter.init()
+    InstanceCenter.init(imageMagickLibPath)
     InstanceCenter.initClient(clientTimeout, clientProxyAddress)
 
     configureDatabase()

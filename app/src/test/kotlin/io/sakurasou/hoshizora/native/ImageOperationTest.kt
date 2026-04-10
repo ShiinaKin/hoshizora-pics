@@ -3,6 +3,10 @@ package io.sakurasou.hoshizora.native
 import io.github.oshai.kotlinlogging.KLogger
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
+import io.sakurasou.hoshizora.di.DI
+import io.sakurasou.hoshizora.di.DIManager
 import io.sakurasou.hoshizora.exception.native.ImageOperationException
 import io.sakurasou.hoshizora.model.group.ImageType
 import java.io.ByteArrayInputStream
@@ -14,6 +18,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
 import kotlin.io.path.exists
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,6 +51,11 @@ class ImageOperationTest {
         every { logger.error(any<() -> Any?>()) } answers {
             errorMessages += firstArg<() -> Any?>().invoke().toString()
         }
+    }
+
+    @AfterTest
+    fun tearDown() {
+        unmockkObject(DIManager)
     }
 
     @Test
@@ -145,8 +155,6 @@ class ImageOperationTest {
         assertTrue(height > 0)
         assertTrue(width <= 320)
         assertTrue(height <= 320)
-        assertTrue(width < 1080)
-        assertTrue(height < 1920)
 
         assertLogged(debugMessages, "Generated thumbnail in wand")
     }
@@ -184,7 +192,7 @@ class ImageOperationTest {
                 }
             }
 
-        assertTrue(exception.message!!.contains("MagickReadImageBlob"))
+        assertTrue(exception.message.contains("MagickReadImageBlob"))
         assertLogged(errorMessages, "MagickReadImageBlob")
     }
 
@@ -203,7 +211,7 @@ class ImageOperationTest {
                 val exceptionType = ImageOperation.getExceptionType(wand)
                 val exceptionMessage = ImageOperation.getException(wand)
 
-                assertTrue(exception.message!!.contains("MagickWriteImage"))
+                assertTrue(exception.message.contains("MagickWriteImage"))
                 assertTrue(exceptionType > 0)
                 assertTrue(exceptionMessage.contains("no images", ignoreCase = true))
             }
@@ -216,16 +224,25 @@ class ImageOperationTest {
         }
     }
 
-    private fun <T> withNativeContext(block: context(KLogger, Linker, SymbolLookup, Arena) () -> T): T =
+    private fun ensureImageOperationInitialized() {
+        val linker = Linker.nativeLinker()
+        val imageMagickLib = SymbolLookup.libraryLookup(resolveImageMagickLibraryPath(), Arena.global())
+        val di = mockk<DI>()
+        every { di.get(Linker::class) } returns linker
+        every { di.get(SymbolLookup::class) } returns imageMagickLib
+        mockkObject(DIManager)
+        every { DIManager.getDIInstance() } returns di
+    }
+
+    private fun <T> withNativeContext(block: context(KLogger, Arena) () -> T): T =
         Arena.ofConfined().use { arena ->
-            val linker = Linker.nativeLinker()
-            val imageMagickLib = SymbolLookup.libraryLookup(resolveImageMagickLibraryPath(), arena)
-            context(logger, linker, imageMagickLib, arena) {
+            ensureImageOperationInitialized()
+            context(logger, arena) {
                 block()
             }
         }
 
-    private fun <T> withManagedWand(block: context(KLogger, Linker, SymbolLookup, Arena) (MemorySegment) -> T): T =
+    private fun <T> withManagedWand(block: context(KLogger, Arena) (MemorySegment) -> T): T =
         withNativeContext {
             ImageOperation.genesis()
             val wand = ImageOperation.newMagickWand()

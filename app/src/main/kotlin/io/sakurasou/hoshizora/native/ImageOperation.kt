@@ -1,6 +1,8 @@
 package io.sakurasou.hoshizora.native
 
 import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.sakurasou.hoshizora.di.inject
 import io.sakurasou.hoshizora.exception.native.ImageOperationException
 import io.sakurasou.hoshizora.model.group.ImageType
 import java.lang.foreign.Arena
@@ -9,6 +11,7 @@ import java.lang.foreign.Linker
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SymbolLookup
 import java.lang.foreign.ValueLayout
+import java.lang.invoke.MethodHandle
 
 /**
  * @author Shiina Kin
@@ -17,38 +20,123 @@ import java.lang.foreign.ValueLayout
 object ImageOperation {
     private const val MAGICK_BOOLEAN_TRUE = 1
     private const val MAX_EXCEPTION_MESSAGE_SIZE = 4096L
+    private val methodHandleDict = mutableMapOf<String, MethodHandle>()
+
+    init {
+        val logger = KotlinLogging.logger {}
+        val linker: Linker by inject()
+        val imageMagickLib: SymbolLookup by inject()
+        context(logger, linker, imageMagickLib) {
+            initMethodHandles()
+            genesis()
+        }
+    }
 
     context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
-    fun genesis() {
-        val magickWandGenesisCall =
+    private fun initMethodHandles() {
+        methodHandleDict["MagickWandGenesis"] =
             linker.downcallHandle(
                 imageMagickLib.findOrThrow("MagickWandGenesis"),
                 FunctionDescriptor.ofVoid(),
             )
+        methodHandleDict["MagickWandTerminus"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickWandTerminus"),
+                FunctionDescriptor.ofVoid(),
+            )
+        methodHandleDict["NewMagickWand"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("NewMagickWand"),
+                FunctionDescriptor.of(ValueLayout.ADDRESS),
+            )
+        methodHandleDict["DestroyMagickWand"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("DestroyMagickWand"),
+                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickRelinquishMemory"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickRelinquishMemory"),
+                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickReadImageBlob"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickReadImageBlob"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG),
+            )
+        methodHandleDict["MagickGetImageBlob"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetImageBlob"),
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickWriteImage"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickWriteImage"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickResizeImage"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickResizeImage"),
+                FunctionDescriptor.of(
+                    ValueLayout.JAVA_INT,
+                    ValueLayout.ADDRESS,
+                    ValueLayout.JAVA_LONG,
+                    ValueLayout.JAVA_LONG,
+                    ValueLayout.JAVA_INT,
+                ),
+            )
+        methodHandleDict["MagickScaleImage"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickScaleImage"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG),
+            )
+        methodHandleDict["MagickThumbnailImage"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickThumbnailImage"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG),
+            )
+        methodHandleDict["MagickSetImageFormat"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickSetImageFormat"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickSetImageCompressionQuality"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickSetImageCompressionQuality"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG),
+            )
+        methodHandleDict["MagickGetExceptionType"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetExceptionType"),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickGetException"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetException"),
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        logger.info { "Initialized ImageMagick method handles" }
+    }
+
+    context(logger: KLogger)
+    fun genesis() {
+        val magickWandGenesisCall = methodHandleDict.getValue("MagickWandGenesis")
         logger.info { "Initializing ImageMagick runtime" }
         magickWandGenesisCall.invoke()
         logger.info { "ImageMagick initialized" }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun terminus() {
-        val magickWandTerminusCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickWandTerminus"),
-                FunctionDescriptor.ofVoid(),
-            )
+        val magickWandTerminusCall = methodHandleDict.getValue("MagickWandTerminus")
         logger.info { "Terminating ImageMagick runtime" }
         magickWandTerminusCall.invoke()
         logger.info { "ImageMagick terminated" }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun newMagickWand(): MemorySegment {
-        val newMagickWandCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("NewMagickWand"),
-                FunctionDescriptor.of(ValueLayout.ADDRESS),
-            )
+        val newMagickWandCall = methodHandleDict.getValue("NewMagickWand")
         val magickWandPtr = newMagickWandCall.invoke() as MemorySegment
         if (magickWandPtr == MemorySegment.NULL) {
             logger.error { "Failed to create MagickWand: native call returned NULL" }
@@ -58,29 +146,21 @@ object ImageOperation {
         return magickWandPtr
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun destroyMagickWand(magickWandPtr: MemorySegment) {
-        val destroyMagickWandCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("DestroyMagickWand"),
-                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS),
-            )
+        val destroyMagickWandCall = methodHandleDict.getValue("DestroyMagickWand")
         destroyMagickWandCall.invoke(magickWandPtr)
         logger.debug { "Destroyed MagickWand pointer=${magickWandPtr.pointerString()}" }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun relinquishMemory(imageBlobPtr: MemorySegment) {
-        val relinquishMemoryCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickRelinquishMemory"),
-                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS),
-            )
+        val relinquishMemoryCall = methodHandleDict.getValue("MagickRelinquishMemory")
         relinquishMemoryCall.invoke(imageBlobPtr)
         logger.debug { "Relinquished native memory pointer=${imageBlobPtr.pointerString()}" }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup, arena: Arena)
+    context(logger: KLogger, arena: Arena)
     fun readImageBlob(
         magickWandPtr: MemorySegment,
         bytes: ByteArray,
@@ -88,11 +168,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickReadImageBlob(MagickWand *wand, const void *blob,const size_t length)
          */
-        val readImageBlobCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickReadImageBlob"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG),
-            )
+        val readImageBlobCall = methodHandleDict.getValue("MagickReadImageBlob")
 
         val imageBytePtr = arena.allocate(bytes.size.toLong())
         MemorySegment.copy(bytes, 0, imageBytePtr, ValueLayout.JAVA_BYTE, 0, bytes.size)
@@ -107,16 +183,12 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup, arena: Arena)
+    context(logger: KLogger, arena: Arena)
     fun getImageBlob(magickWandPtr: MemorySegment): ImageBlob {
         /**
          * unsigned char *MagickGetImageBlob(MagickWand *wand,size_t *length)
          */
-        val magickGetImageBlobCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickGetImageBlob"),
-                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
-            )
+        val magickGetImageBlobCall = methodHandleDict.getValue("MagickGetImageBlob")
 
         val imageSizePtr = arena.allocate(ValueLayout.JAVA_LONG)
         val imageBlobPtr = magickGetImageBlobCall.invoke(magickWandPtr, imageSizePtr) as MemorySegment
@@ -135,7 +207,7 @@ object ImageOperation {
         )
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup, arena: Arena)
+    context(logger: KLogger, arena: Arena)
     fun writeImage(
         magickWandPtr: MemorySegment,
         outputAbsPath: String,
@@ -143,11 +215,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickWriteImage(MagickWand *wand, const char *filename)
          */
-        val magickWriteImageCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickWriteImage"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
-            )
+        val magickWriteImageCall = methodHandleDict.getValue("MagickWriteImage")
         logger.debug {
             "Writing image from wand pointer=${magickWandPtr.pointerString()} to path=$outputAbsPath"
         }
@@ -158,7 +226,7 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun resizeImage(
         magickWandPtr: MemorySegment,
         width: Long,
@@ -168,17 +236,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickResizeImage(MagickWand *wand, const size_t columns,const size_t rows,const FilterType filter)
          */
-        val magickResizeImageCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickResizeImage"),
-                FunctionDescriptor.of(
-                    ValueLayout.JAVA_INT,
-                    ValueLayout.ADDRESS,
-                    ValueLayout.JAVA_LONG,
-                    ValueLayout.JAVA_LONG,
-                    ValueLayout.JAVA_INT,
-                ),
-            )
+        val magickResizeImageCall = methodHandleDict.getValue("MagickResizeImage")
         logger.debug {
             "Resizing image in wand pointer=${magickWandPtr.pointerString()} to ${width}x$height"
         }
@@ -189,7 +247,7 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun scaleImage(
         magickWandPtr: MemorySegment,
         width: Long,
@@ -198,11 +256,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickScaleImage(MagickWand *wand, const size_t columns,const size_t rows)
          */
-        val magickScaleImageCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickScaleImage"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG),
-            )
+        val magickScaleImageCall = methodHandleDict.getValue("MagickScaleImage")
         logger.debug {
             "Scaling image in wand pointer=${magickWandPtr.pointerString()} to ${width}x$height"
         }
@@ -213,7 +267,7 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun thumbnailImage(
         magickWandPtr: MemorySegment,
         width: Long,
@@ -222,11 +276,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickThumbnailImage(MagickWand *wand, const size_t columns,const size_t rows)
          */
-        val magickThumbnailImageCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickThumbnailImage"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG),
-            )
+        val magickThumbnailImageCall = methodHandleDict.getValue("MagickThumbnailImage")
         logger.debug {
             "Generating thumbnail in wand pointer=${magickWandPtr.pointerString()} with bounds ${width}x$height"
         }
@@ -237,7 +287,7 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup, arena: Arena)
+    context(logger: KLogger, arena: Arena)
     fun setImageFormat(
         magickWandPtr: MemorySegment,
         type: ImageType,
@@ -245,11 +295,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickSetImageFormat(MagickWand *wand, const char *format)
          */
-        val magickSetImageFormatCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickSetImageFormat"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
-            )
+        val magickSetImageFormatCall = methodHandleDict.getValue("MagickSetImageFormat")
         logger.debug {
             "Setting image format for wand pointer=${magickWandPtr.pointerString()} to ${type.name}"
         }
@@ -260,7 +306,7 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun setImageQuality(
         magickWandPtr: MemorySegment,
         quality: Double,
@@ -268,11 +314,7 @@ object ImageOperation {
         /**
          * MagickBooleanType MagickSetImageCompressionQuality(MagickWand *wand, const size_t quality)
          */
-        val magickSetImageCompressionQualityCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickSetImageCompressionQuality"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG),
-            )
+        val magickSetImageCompressionQualityCall = methodHandleDict.getValue("MagickSetImageCompressionQuality")
         val normalizedQuality = (quality * 100).toLong().coerceIn(0, 100)
         logger.debug {
             "Setting image quality for wand pointer=${magickWandPtr.pointerString()} to $normalizedQuality"
@@ -284,16 +326,12 @@ object ImageOperation {
         }
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun getExceptionType(magickWandPtr: MemorySegment): Long {
         /**
          * ExceptionType MagickGetExceptionType(const MagickWand *)
          */
-        val magickGetExceptionTypeCall =
-            linker.downcallHandle(
-                imageMagickLib.findOrThrow("MagickGetExceptionType"),
-                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS),
-            )
+        val magickGetExceptionTypeCall = methodHandleDict.getValue("MagickGetExceptionType")
         val exceptionType = magickGetExceptionTypeCall.invoke(magickWandPtr) as Int
         logger.debug {
             "Fetched ImageMagick exception type=$exceptionType from wand pointer=${magickWandPtr.pointerString()}"
@@ -301,7 +339,7 @@ object ImageOperation {
         return exceptionType.toLong()
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     fun getException(magickWandPtr: MemorySegment): String {
         /**
          * char *MagickGetException(const MagickWand *,ExceptionType *)
@@ -314,7 +352,7 @@ object ImageOperation {
         return exceptionInfo.message
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     private fun requireSuccess(
         succeeded: Boolean,
         operation: String,
@@ -323,7 +361,7 @@ object ImageOperation {
         if (!succeeded) failOperation(operation, magickWandPtr)
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     private fun failOperation(
         operation: String,
         magickWandPtr: MemorySegment,
@@ -334,14 +372,10 @@ object ImageOperation {
         throw ImageOperationException(message)
     }
 
-    context(logger: KLogger, linker: Linker, imageMagickLib: SymbolLookup)
+    context(logger: KLogger)
     private fun fetchExceptionInfo(magickWandPtr: MemorySegment): MagickExceptionInfo =
         Arena.ofConfined().use { arena ->
-            val magickGetExceptionCall =
-                linker.downcallHandle(
-                    imageMagickLib.findOrThrow("MagickGetException"),
-                    FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
-                )
+            val magickGetExceptionCall = methodHandleDict.getValue("MagickGetException")
             val exceptionTypePtr = arena.allocate(ValueLayout.JAVA_INT)
             val exceptionMsgPtr = magickGetExceptionCall.invoke(magickWandPtr, exceptionTypePtr) as MemorySegment
             val exceptionType = exceptionTypePtr.get(ValueLayout.JAVA_INT, 0)

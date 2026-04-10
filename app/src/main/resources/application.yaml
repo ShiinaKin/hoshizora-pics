@@ -27,3 +27,5 @@ jwt:
   issuer: $JWT_ISSUER
   audience: $JWT_AUDIENCE
   realm: $JWT_REALM
+native:
+  imagemagick: $MAGICK_PATH
