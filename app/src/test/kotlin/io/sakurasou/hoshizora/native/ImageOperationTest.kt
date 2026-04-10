@@ -95,6 +95,21 @@ class ImageOperationTest {
     }
 
     @Test
+    fun `getImageFormat width and height should return image metadata`() {
+        withManagedWand { wand ->
+            ImageOperation.readImageBlob(wand, sourceImageBytes)
+
+            assertEquals("PNG", ImageOperation.getImageFormat(wand))
+            assertEquals(1080L, ImageOperation.getImageWidth(wand))
+            assertEquals(1920L, ImageOperation.getImageHeight(wand))
+        }
+
+        assertLogged(debugMessages, "Fetched image format=PNG")
+        assertLogged(debugMessages, "Fetched image width=1080")
+        assertLogged(debugMessages, "Fetched image height=1920")
+    }
+
+    @Test
     fun `resizeImage should resize image and write it to disk`() {
         val tempDir = Files.createTempDirectory("image-operation-resize-test")
         try {

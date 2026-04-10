@@ -20,6 +20,7 @@ import java.lang.invoke.MethodHandle
 object ImageOperation {
     private const val MAGICK_BOOLEAN_TRUE = 1
     private const val MAX_EXCEPTION_MESSAGE_SIZE = 4096L
+    private const val MAX_IMAGE_FORMAT_SIZE = 64L
     private val methodHandleDict = mutableMapOf<String, MethodHandle>()
 
     init {
@@ -68,6 +69,21 @@ object ImageOperation {
             linker.downcallHandle(
                 imageMagickLib.findOrThrow("MagickGetImageBlob"),
                 FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickGetImageFormat"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetImageFormat"),
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickGetImageWidth"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetImageWidth"),
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS),
+            )
+        methodHandleDict["MagickGetImageHeight"] =
+            linker.downcallHandle(
+                imageMagickLib.findOrThrow("MagickGetImageHeight"),
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS),
             )
         methodHandleDict["MagickWriteImage"] =
             linker.downcallHandle(
@@ -205,6 +221,45 @@ object ImageOperation {
             blobPtr = imageBlobPtr,
             bytes = imageBytes,
         )
+    }
+
+    context(logger: KLogger)
+    fun getImageFormat(magickWandPtr: MemorySegment): String {
+        val magickGetImageFormatCall = methodHandleDict.getValue("MagickGetImageFormat")
+        val imageFormatPtr = magickGetImageFormatCall.invoke(magickWandPtr) as MemorySegment
+        if (imageFormatPtr == MemorySegment.NULL) {
+            failOperation("MagickGetImageFormat", magickWandPtr)
+        }
+        val imageFormat =
+            try {
+                imageFormatPtr.reinterpret(MAX_IMAGE_FORMAT_SIZE).getString(0)
+            } finally {
+                relinquishMemory(imageFormatPtr)
+            }
+        logger.debug {
+            "Fetched image format=$imageFormat from wand pointer=${magickWandPtr.pointerString()}"
+        }
+        return imageFormat
+    }
+
+    context(logger: KLogger)
+    fun getImageWidth(magickWandPtr: MemorySegment): Long {
+        val magickGetImageWidthCall = methodHandleDict.getValue("MagickGetImageWidth")
+        val width = magickGetImageWidthCall.invoke(magickWandPtr) as Long
+        logger.debug {
+            "Fetched image width=$width from wand pointer=${magickWandPtr.pointerString()}"
+        }
+        return width
+    }
+
+    context(logger: KLogger)
+    fun getImageHeight(magickWandPtr: MemorySegment): Long {
+        val magickGetImageHeightCall = methodHandleDict.getValue("MagickGetImageHeight")
+        val height = magickGetImageHeightCall.invoke(magickWandPtr) as Long
+        logger.debug {
+            "Fetched image height=$height from wand pointer=${magickWandPtr.pointerString()}"
+        }
+        return height
     }
 
     context(logger: KLogger, arena: Arena)

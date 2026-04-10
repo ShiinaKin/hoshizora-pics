@@ -1,19 +1,17 @@
 package io.sakurasou.hoshizora.util
 
+import io.github.oshai.kotlinlogging.KLogger
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundException
 import io.sakurasou.hoshizora.model.entity.Strategy
 import io.sakurasou.hoshizora.model.group.ImageType
 import io.sakurasou.hoshizora.model.strategy.LocalStrategy
 import io.sakurasou.hoshizora.model.strategy.S3Strategy
 import io.sakurasou.hoshizora.model.strategy.WebDavStrategy
+import io.sakurasou.hoshizora.native.ImageBlob
+import io.sakurasou.hoshizora.native.ImageOperation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.im4java.core.ConvertCmd
-import org.im4java.core.IMOperation
-import org.im4java.process.OutputConsumer
-import java.awt.image.BufferedImage
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.lang.foreign.Arena
 
 /**
  * @author Shiina Kin
@@ -121,101 +119,127 @@ object ImageUtils {
             }
         }
 
+    context(logger: KLogger)
     suspend fun transformImage(
-        rawImage: BufferedImage,
+        rawImageBytes: ByteArray,
         targetImageType: ImageType,
     ): ByteArray =
         withContext(Dispatchers.IO) {
-            val imageOp =
-                IMOperation().apply {
-                    addImage()
-                    addImage("${targetImageType.name}:-")
+            Arena.ofConfined().use { arena ->
+                context(arena) {
+                    val wand = ImageOperation.newMagickWand()
+                    var imageBlob: ImageBlob? = null
+                    try {
+                        ImageOperation.readImageBlob(wand, rawImageBytes)
+                        ImageOperation.setImageFormat(wand, targetImageType)
+                        imageBlob = ImageOperation.getImageBlob(wand)
+                    } finally {
+                        imageBlob?.let { ImageOperation.relinquishMemory(it.blobPtr) }
+                        ImageOperation.destroyMagickWand(wand)
+                    }
+                    imageBlob.bytes
                 }
-            execTransform(imageOp, rawImage)
+            }
         }
 
+    context(logger: KLogger)
     suspend fun transformImage(
-        rawImage: BufferedImage,
+        rawImageBytes: ByteArray,
         targetImageType: ImageType,
         quality: Double,
     ): ByteArray =
         withContext(Dispatchers.IO) {
-            val imageOp =
-                IMOperation().apply {
-                    addImage()
-                    quality(quality)
-                    addImage("${targetImageType.name}:-")
+            Arena.ofConfined().use { arena ->
+                context(arena) {
+                    val wand = ImageOperation.newMagickWand()
+                    var imageBlob: ImageBlob? = null
+                    try {
+                        ImageOperation.readImageBlob(wand, rawImageBytes)
+                        ImageOperation.setImageFormat(wand, targetImageType)
+                        ImageOperation.setImageQuality(wand, quality)
+                        imageBlob = ImageOperation.getImageBlob(wand)
+                    } finally {
+                        imageBlob?.let { ImageOperation.relinquishMemory(it.blobPtr) }
+                        ImageOperation.destroyMagickWand(wand)
+                    }
+                    imageBlob.bytes
                 }
-            execTransform(imageOp, rawImage)
+            }
         }
 
+    context(logger: KLogger)
     private suspend fun transformImage(
-        rawImage: BufferedImage,
+        rawImageBytes: ByteArray,
         targetImageType: ImageType,
-        newWidth: Int,
-        newHeight: Int,
+        targetWidth: Long? = null,
+        targetHeight: Long? = null,
         quality: Double,
     ): ByteArray =
         withContext(Dispatchers.IO) {
-            val imageOp =
-                IMOperation().apply {
-                    addImage()
-                    resize(newWidth, newHeight)
-                    quality(quality)
-                    addImage("${targetImageType.name}:-")
+            Arena.ofConfined().use { arena ->
+                context(arena) {
+                    val wand = ImageOperation.newMagickWand()
+                    var imageBlob: ImageBlob? = null
+                    try {
+                        ImageOperation.readImageBlob(wand, rawImageBytes)
+                        val originalWidth = ImageOperation.getImageWidth(wand)
+                        val originalHeight = ImageOperation.getImageHeight(wand)
+                        val (newWidth, newHeight) =
+                            when {
+                                targetWidth != null && targetHeight != null -> {
+                                    targetWidth to targetHeight
+                                }
+
+                                targetWidth != null -> {
+                                    targetWidth to (originalHeight * targetWidth) / originalWidth
+                                }
+
+                                targetHeight != null -> {
+                                    (originalWidth * targetHeight) / originalHeight to targetHeight
+                                }
+
+                                else -> {
+                                    originalWidth to originalHeight
+                                }
+                            }
+                        ImageOperation.setImageFormat(wand, targetImageType)
+                        ImageOperation.setImageQuality(wand, quality)
+                        ImageOperation.resizeImage(wand, newWidth, newHeight)
+                        imageBlob = ImageOperation.getImageBlob(wand)
+                    } finally {
+                        imageBlob?.let { ImageOperation.relinquishMemory(it.blobPtr) }
+                        ImageOperation.destroyMagickWand(wand)
+                    }
+                    imageBlob.bytes
                 }
-            execTransform(imageOp, rawImage)
+            }
         }
 
-    private fun execTransform(
-        imageOp: IMOperation,
-        rawImage: BufferedImage,
-    ): ByteArray =
-        ConvertCmd().let { cmd ->
-            val outputConverter = CustomOutputConsumer()
-            cmd.setOutputConsumer(outputConverter)
-            cmd.run(imageOp, rawImage)
-            outputConverter.getBytes()
-        }
-
-    /**
-     * will block cur thread
-     */
+    context(logger: KLogger)
     suspend fun transformImageByWidth(
-        rawImage: BufferedImage,
+        rawImageBytes: ByteArray,
         targetImageType: ImageType,
-        newWidth: Int,
+        newWidth: Long,
         quality: Double,
-    ): ByteArray {
-        val originalWidth = rawImage.width
-        val originalHeight = rawImage.height
-        val newHeight = (originalHeight * newWidth) / originalWidth
-        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
-    }
+    ): ByteArray =
+        transformImage(
+            rawImageBytes = rawImageBytes,
+            targetImageType = targetImageType,
+            targetWidth = newWidth,
+            quality = quality,
+        )
 
-    /**
-     * will block cur thread
-     */
+    context(logger: KLogger)
     suspend fun transformImageByHeight(
-        rawImage: BufferedImage,
+        rawImageBytes: ByteArray,
         targetImageType: ImageType,
-        newHeight: Int,
+        newHeight: Long,
         quality: Double,
-    ): ByteArray {
-        val originalWidth = rawImage.width
-        val originalHeight = rawImage.height
-        val newWidth = (originalWidth * newHeight) / originalHeight
-        return transformImage(rawImage, targetImageType, newWidth, newHeight, quality)
-    }
-
-    class CustomOutputConsumer : OutputConsumer {
-        private val outputStream = ByteArrayOutputStream()
-
-        override fun consumeOutput(inputStream: InputStream) {
-            inputStream.copyTo(outputStream)
-            inputStream.close()
-        }
-
-        fun getBytes(): ByteArray = outputStream.toByteArray().also { outputStream.close() }
-    }
+    ): ByteArray =
+        transformImage(
+            rawImageBytes = rawImageBytes,
+            targetImageType = targetImageType,
+            targetHeight = newHeight,
+            quality = quality,
+        )
 }

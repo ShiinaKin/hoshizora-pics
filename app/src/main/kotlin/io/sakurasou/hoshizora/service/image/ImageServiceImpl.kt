@@ -110,27 +110,28 @@ class ImageServiceImpl(
                 // transform image if needed
                 var size = imageRawFile.size
                 var imageBytes = imageRawFile.bytes
-                var image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
-                if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
-                    imageBytes =
-                        if (groupConfig.groupStrategyConfig.imageQuality != 100) {
-                            val quality = groupConfig.groupStrategyConfig.imageQuality
-                            if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
-                            val imageQuality = quality / 1.0
-                            ImageUtils.transformImage(
-                                image,
-                                groupConfig.groupStrategyConfig.imageAutoTransformTarget,
-                                imageQuality,
-                            )
-                        } else {
-                            ImageUtils.transformImage(image, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
-                        }
-                    extension =
-                        groupConfig.groupStrategyConfig.imageAutoTransformTarget.name
-                            .lowercase()
+                context(logger) {
+                    if (groupConfig.groupStrategyConfig.imageAutoTransformTarget != null) {
+                        imageBytes =
+                            if (groupConfig.groupStrategyConfig.imageQuality != 100) {
+                                val quality = groupConfig.groupStrategyConfig.imageQuality
+                                if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
+                                val imageQuality = quality / 1.0
+                                ImageUtils.transformImage(
+                                    imageBytes,
+                                    groupConfig.groupStrategyConfig.imageAutoTransformTarget,
+                                    imageQuality,
+                                )
+                            } else {
+                                ImageUtils.transformImage(imageBytes, groupConfig.groupStrategyConfig.imageAutoTransformTarget)
+                            }
+                        extension =
+                            groupConfig.groupStrategyConfig.imageAutoTransformTarget.name
+                                .lowercase()
+                    }
                     size = imageBytes.size.toLong()
-                    image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
                 }
+                val image = ByteArrayInputStream(imageBytes).use { ImageIO.read(it) }
                 val md5 = DigestUtils.md5Hex(imageBytes)
                 val sha256 = DigestUtils.sha256Hex(imageBytes)
 
