@@ -37,7 +37,7 @@ fun Application.swaggerModule() {
 }
 
 fun Application.mainModule() {
-    val imageMagickLibPath = environment.config.property("native.imagemagick").getString()
+    val imageMagickLibPath = environment.config.property("native.imagemagick.magickwand.lib").getString()
     if (!Path(imageMagickLibPath).exists()) throw Error("Image Magick Lib does not exist")
 
     val redisHost = environment.config.property("ktor.application.cache.redis.host").getString()

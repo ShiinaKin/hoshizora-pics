@@ -28,4 +28,6 @@ jwt:
   audience: $JWT_AUDIENCE
   realm: $JWT_REALM
 native:
-  imagemagick: $MAGICK_PATH
+  imagemagick:
+    magickwand:
+      lib: $MAGICK_WAND_LIB_PATH
