@@ -364,13 +364,13 @@ object ImageOperation {
     context(logger: KLogger)
     fun setImageQuality(
         magickWandPtr: MemorySegment,
-        quality: Double,
+        quality: Int,
     ) {
         /**
          * MagickBooleanType MagickSetImageCompressionQuality(MagickWand *wand, const size_t quality)
          */
         val magickSetImageCompressionQualityCall = methodHandleDict.getValue("MagickSetImageCompressionQuality")
-        val normalizedQuality = (quality * 100).toLong().coerceIn(0, 100)
+        val normalizedQuality = quality.toLong().coerceAtMost(100)
         logger.debug {
             "Setting image quality for wand pointer=${magickWandPtr.pointerString()} to $normalizedQuality"
         }

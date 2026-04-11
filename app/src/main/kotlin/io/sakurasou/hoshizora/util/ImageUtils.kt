@@ -146,7 +146,7 @@ object ImageUtils {
     suspend fun transformImage(
         rawImageBytes: ByteArray,
         targetImageType: ImageType,
-        quality: Double,
+        quality: Int,
     ): ByteArray =
         withContext(Dispatchers.IO) {
             Arena.ofConfined().use { arena ->
@@ -173,7 +173,7 @@ object ImageUtils {
         targetImageType: ImageType,
         targetWidth: Long? = null,
         targetHeight: Long? = null,
-        quality: Double,
+        quality: Int,
     ): ByteArray =
         withContext(Dispatchers.IO) {
             Arena.ofConfined().use { arena ->
@@ -220,7 +220,7 @@ object ImageUtils {
         rawImageBytes: ByteArray,
         targetImageType: ImageType,
         newWidth: Long,
-        quality: Double,
+        quality: Int,
     ): ByteArray =
         transformImage(
             rawImageBytes = rawImageBytes,
@@ -234,7 +234,7 @@ object ImageUtils {
         rawImageBytes: ByteArray,
         targetImageType: ImageType,
         newHeight: Long,
-        quality: Double,
+        quality: Int,
     ): ByteArray =
         transformImage(
             rawImageBytes = rawImageBytes,

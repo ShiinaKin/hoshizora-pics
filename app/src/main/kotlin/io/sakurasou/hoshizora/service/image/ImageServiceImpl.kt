@@ -116,11 +116,10 @@ class ImageServiceImpl(
                             if (groupConfig.groupStrategyConfig.imageQuality != 100) {
                                 val quality = groupConfig.groupStrategyConfig.imageQuality
                                 if (quality !in (1..100)) throw IllegalArgumentException("Image quality must be in 1..100")
-                                val imageQuality = quality / 1.0
                                 ImageUtils.transformImage(
                                     imageBytes,
                                     groupConfig.groupStrategyConfig.imageAutoTransformTarget,
-                                    imageQuality,
+                                    quality,
                                 )
                             } else {
                                 ImageUtils.transformImage(imageBytes, groupConfig.groupStrategyConfig.imageAutoTransformTarget)

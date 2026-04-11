@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
  */
 
 private const val THUMBNAIL_HEIGHT = 256L
-private const val THUMBNAIL_QUALITY = 0.9
+private const val THUMBNAIL_QUALITY = 100
 
 @Serializable
 sealed class ImageTask(
