@@ -122,7 +122,7 @@ object InstanceCenter {
         systemStatus = settingService.getSystemStatus()
     }
 
-    fun greasfullyShutdown() {
+    fun gracefullyShutdown() {
         context(logger) {
             TaskListener.stopListening()
             ImageExecutor.shutdown()

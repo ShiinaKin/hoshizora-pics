@@ -24,7 +24,7 @@ import kotlin.io.path.exists
 fun main(args: Array<String>) {
     Runtime.getRuntime().addShutdownHook(
         Thread {
-            InstanceCenter.greasfullyShutdown()
+            InstanceCenter.gracefullyShutdown()
         },
     )
     EngineMain
