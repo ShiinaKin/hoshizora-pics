@@ -5,13 +5,11 @@ WORKDIR /imagemagick
 RUN apt update && \
     apt install --no-install-recommends -y \
         git curl ca-certificates build-essential pkg-config libtool \
-        libtool libltdl-dev \
-        zlib1g-dev libbz2-dev liblzma-dev libzstd-dev \
+        libltdl-dev zlib1g-dev libbz2-dev liblzma-dev libzstd-dev \
         libfontconfig-dev libfreetype-dev libxml2-dev \
         libjpeg-dev libpng-dev libwebp-dev libtiff-dev \
-        libheif-dev libjbig-dev libjxl-dev \
-        liblcms2-dev liblqr-1-0-dev \
-        libopenexr-dev libopenjp2-7-dev libraw-dev \
+        libheif-dev libjbig-dev libjxl-dev liblcms2-dev \
+        liblqr-1-0-dev libopenexr-dev libopenjp2-7-dev libraw-dev \
         libdjvulibre-dev libpango1.0-dev libraqm-dev libwmf-dev libzip-dev
 RUN git clone --depth 1 --branch 7.1.2-18 https://github.com/ImageMagick/ImageMagick.git ImageMagick
 
