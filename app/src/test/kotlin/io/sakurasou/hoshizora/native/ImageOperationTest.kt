@@ -184,7 +184,7 @@ class ImageOperationTest {
             withManagedWand { wand ->
                 ImageOperation.readImageBlob(wand, sourceImageBytes)
                 ImageOperation.setImageFormat(wand, ImageType.JPEG)
-                ImageOperation.setImageQuality(wand, 0.65)
+                ImageOperation.setImageQuality(wand, 65)
                 val blob = ImageOperation.getImageBlob(wand)
                 try {
                     blob.bytes
@@ -301,7 +301,8 @@ class ImageOperationTest {
 
     private fun resolveImageMagickLibraryPath(): Path {
         val configuredPath =
-            System.getenv(MAGICK_WAND_LIB_PATH_ENV)
+            System
+                .getenv(MAGICK_WAND_LIB_PATH_ENV)
                 ?.takeIf { it.isNotBlank() }
                 ?.let(Path::of)
                 ?.takeIf(Files::exists)
