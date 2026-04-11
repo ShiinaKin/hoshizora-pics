@@ -9,6 +9,7 @@ import io.sakurasou.hoshizora.di.DI
 import io.sakurasou.hoshizora.di.DIManager
 import io.sakurasou.hoshizora.exception.native.ImageOperationException
 import io.sakurasou.hoshizora.model.group.ImageType
+import org.junit.Assume.assumeTrue
 import java.io.ByteArrayInputStream
 import java.lang.foreign.Arena
 import java.lang.foreign.Linker
@@ -34,9 +35,12 @@ class ImageOperationTest {
     private lateinit var infoMessages: MutableList<String>
     private lateinit var debugMessages: MutableList<String>
     private lateinit var errorMessages: MutableList<String>
+    private lateinit var imageMagickLibraryPath: Path
 
     @BeforeTest
     fun setUp() {
+        imageMagickLibraryPath = resolveImageMagickLibraryPath()
+
         logger = mockk(relaxed = true)
         infoMessages = mutableListOf()
         debugMessages = mutableListOf()
@@ -241,7 +245,7 @@ class ImageOperationTest {
 
     private fun ensureImageOperationInitialized() {
         val linker = Linker.nativeLinker()
-        val imageMagickLib = SymbolLookup.libraryLookup(resolveImageMagickLibraryPath(), Arena.global())
+        val imageMagickLib = SymbolLookup.libraryLookup(imageMagickLibraryPath, Arena.global())
         val di = mockk<DI>()
         every { di.get(Linker::class) } returns linker
         every { di.get(SymbolLookup::class) } returns imageMagickLib
@@ -296,22 +300,22 @@ class ImageOperationTest {
     }
 
     private fun resolveImageMagickLibraryPath(): Path {
-        val configuredPath = System.getenv("MAGICK_WAND_LIBRARY")?.takeIf { it.isNotBlank() }?.let(Path::of)
-        val candidates =
-            listOfNotNull(
-                configuredPath,
-                Path.of("/opt/homebrew/lib/libMagickWand-7.Q16HDRI.dylib"),
-                Path.of("/usr/local/lib/libMagickWand-7.Q16HDRI.dylib"),
-                Path.of("/usr/lib/libMagickWand-7.Q16HDRI.so"),
-                Path.of("/usr/lib64/libMagickWand-7.Q16HDRI.so"),
-                Path.of("/lib/aarch64-linux-gnu/libMagickWand-7.Q16HDRI.so"),
-            )
-
-        return candidates.firstOrNull(Files::exists)
-            ?: error("Unable to locate libMagickWand. Set MAGICK_WAND_LIBRARY to the installed library path.")
+        val configuredPath =
+            System.getenv(MAGICK_WAND_LIB_PATH_ENV)
+                ?.takeIf { it.isNotBlank() }
+                ?.let(Path::of)
+                ?.takeIf(Files::exists)
+        val skippedMessage = "Unable to locate libMagickWand. Set $MAGICK_WAND_LIB_PATH_ENV to the installed library path."
+        assumeTrue(
+            skippedMessage,
+            configuredPath != null,
+        )
+        return configuredPath ?: error(skippedMessage)
     }
 
     private companion object {
+        private const val MAGICK_WAND_LIB_PATH_ENV = "MAGICK_WAND_LIB_PATH"
+
         private val sourceImageBytes: ByteArray by lazy {
             ImageOperationTest::class.java.classLoader
                 .getResourceAsStream("test-img.png")
