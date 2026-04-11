@@ -24,6 +24,7 @@ services:
       JWT_ISSUER: https://some.issuer
       JWT_AUDIENCE: https://some.audience
       JWT_REALM: hoshizora-pics
+      MAGICK_WAND_LIB_PATH: /opt/imagemagick/lib/libMagickWand-7.Q16HDRI.so
     volumes:
       - hoshizora-pics-data:/hoshizora/images
     networks:
