@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -68,5 +69,9 @@ object TaskListener {
                 delay(30.seconds)
             }
         }
+    }
+
+    fun stopListening() {
+        taskListenerScope.cancel()
     }
 }

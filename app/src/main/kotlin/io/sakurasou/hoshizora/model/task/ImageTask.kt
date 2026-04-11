@@ -11,23 +11,21 @@ import io.sakurasou.hoshizora.model.task.ImageTask.Operation.DELETE_THUMBNAIL
 import io.sakurasou.hoshizora.model.task.ImageTask.Operation.PERSIST_THUMBNAIL
 import io.sakurasou.hoshizora.util.ImageUtils
 import kotlinx.serialization.Serializable
-import javax.imageio.ImageIO
 
 /**
  * @author Shiina Kin
  * 2024/12/18 18:38
  */
 
-private const val THUMBNAIL_HEIGHT = 256
-private const val THUMBNAIL_QUALITY = 0.9
+private const val THUMBNAIL_HEIGHT = 256L
+private const val THUMBNAIL_QUALITY = 100
 
 @Serializable
 sealed class ImageTask(
     private val opImageID: Long,
     private val operationEnum: Operation,
 ) : Task(TaskType.IMAGE, opImageID.toString(), operationEnum.toString()) {
-    protected val logger: KLogger
-        get() = KotlinLogging.logger {}
+    abstract val logger: KLogger
 
     enum class Operation {
         PERSIST_THUMBNAIL,
@@ -49,6 +47,9 @@ class PersistImageThumbnailTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(imageID, PERSIST_THUMBNAIL) {
+    override val logger: KLogger
+        get() = KotlinLogging.logger {}
+
     override suspend fun execute() {
         val fileName = relativePath.substringAfterLast('/')
         val rawImagePath = "${strategy.config.uploadFolder}/$relativePath"
@@ -56,10 +57,18 @@ class PersistImageThumbnailTask(
             .fetch(rawImagePath)
             .inputStream()
             .use { rawImageInputStream ->
-                val rawImage = ImageIO.read(rawImageInputStream)
+                val rawImageBytes = rawImageInputStream.readBytes()
                 val imageType = ImageType.valueOf(fileName.substringAfterLast('.').uppercase())
+
                 val thumbnailBytes =
-                    ImageUtils.transformImageByHeight(rawImage, imageType, THUMBNAIL_HEIGHT, THUMBNAIL_QUALITY)
+                    context(logger) {
+                        ImageUtils.transformImageByHeight(
+                            rawImageBytes = rawImageBytes,
+                            targetImageType = imageType,
+                            newHeight = THUMBNAIL_HEIGHT,
+                            quality = THUMBNAIL_QUALITY,
+                        )
+                    }
                 ImageUtils.saveThumbnail(strategy, thumbnailBytes, relativePath)
             }
         logger.debug { "persist thumbnail $fileName in strategy(id ${strategy.id})" }
@@ -72,6 +81,9 @@ class DeleteImageTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(imageID, DELETE_IMAGE) {
+    override val logger: KLogger
+        get() = KotlinLogging.logger {}
+
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)
@@ -86,6 +98,9 @@ class DeleteThumbnailTask(
     private val strategy: Strategy,
     private val relativePath: String,
 ) : ImageTask(imageID, DELETE_THUMBNAIL) {
+    override val logger: KLogger
+        get() = KotlinLogging.logger {}
+
     override suspend fun execute() {
         val filePath = "${strategy.config.uploadFolder}/$relativePath"
         strategy.config.delete(filePath)
