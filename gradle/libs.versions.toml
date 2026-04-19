@@ -86,5 +86,6 @@ amazon-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-s3" }
 semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 
 [plugins]
+kotlinJVM = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }

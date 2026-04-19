@@ -30,7 +30,7 @@ val commonsCodecVersion: String by project
 val mockkVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.4.0-Beta1"
+    alias(libs.plugins.kotlinJVM)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ktor)
 }
