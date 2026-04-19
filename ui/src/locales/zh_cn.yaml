@@ -208,6 +208,8 @@ myImageView:
     toast:
       successTitle: "修改随机访问权限成功"
       failedTitle: "修改随机访问权限失败"
+      privateImageNotAllowed: "私密图片不能被随机获取，请先将图片设为公开。"
+      privateImagesSkipped: "已跳过 {count} 张私密图片。私密图片不能被随机获取。"
   changeAlbum:
     dialog:
       title: "移动到相册"
@@ -513,6 +515,8 @@ adminImageManageView:
     toast:
       successTitle: "修改随机访问权限成功"
       failedTitle: "修改随机访问权限失败"
+      privateImageNotAllowed: "私密图片不能被随机获取，请先将图片设为公开。"
+      privateImagesSkipped: "已跳过 {count} 张私密图片。私密图片不能被随机获取。"
   delete:
     confirmDialog:
       header: "确认删除"

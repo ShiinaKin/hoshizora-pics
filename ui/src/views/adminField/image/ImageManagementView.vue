@@ -350,14 +350,14 @@ const multiImageContextMenuItems = ref<MenuItem[]>([
     label: t("adminImageManageView.contextMenu.multi.settingAsPublic"),
     icon: "mdi:visibility-outline",
     command: () => {
-      handleMultiChangeVisibility(true);
+      handleMultiChangeVisibility(false);
     }
   },
   {
     label: t("adminImageManageView.contextMenu.multi.settingAsPrivate"),
     icon: "mdi:visibility-off-outline",
     command: () => {
-      handleMultiChangeVisibility(false);
+      handleMultiChangeVisibility(true);
     }
   },
   {
@@ -481,7 +481,8 @@ function handleSingleChangeVisibility(isPrivate: boolean) {
     .apiImageManageImageIdPatch({
       imageId: curRightClickImageId.value,
       imageManagePatchRequest: {
-        isPrivate: isPrivate
+        isPrivate: isPrivate,
+        ...(isPrivate ? { isAllowedRandomFetch: false } : {})
       }
     })
     .then((response) => {
@@ -515,7 +516,8 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
         .apiImageManageImageIdPatch({
           imageId: imageId,
           imageManagePatchRequest: {
-            isPrivate: isPrivate
+            isPrivate: isPrivate,
+            ...(isPrivate ? { isAllowedRandomFetch: false } : {})
           }
         })
         .then((response) => {
@@ -546,7 +548,22 @@ function handleMultiChangeVisibility(isPrivate: boolean) {
   });
 }
 
+function showPrivateRandomFetchWarning(detail: string) {
+  toast.add({
+    severity: "warn",
+    summary: t("adminImageManageView.changeAllowedRandomFetch.toast.failedTitle"),
+    detail,
+    life: 3000
+  });
+}
+
 function handleSingleAllowedRandomFetch(isAllowed: boolean) {
+  const image = imageDisplayList.value[curRightClickImageIdx.value];
+  if (isAllowed && image?.isPrivate) {
+    showPrivateRandomFetchWarning(t("adminImageManageView.changeAllowedRandomFetch.toast.privateImageNotAllowed"));
+    return;
+  }
+
   imageApi
     .apiImageManageImageIdPatch({
       imageId: curRightClickImageId.value,
@@ -579,8 +596,27 @@ function handleSingleAllowedRandomFetch(isAllowed: boolean) {
 }
 
 function handleMultiAllowedRandomFetch(isAllowed: boolean) {
+  const selectedImages = imageDisplayList.value.filter((image) => selectedImageIds.value.includes(image.id));
+  const targetImageIds = isAllowed
+    ? selectedImages.filter((image) => !image.isPrivate).map((image) => image.id)
+    : selectedImageIds.value;
+
+  if (isAllowed && targetImageIds.length === 0) {
+    showPrivateRandomFetchWarning(t("adminImageManageView.changeAllowedRandomFetch.toast.privateImageNotAllowed"));
+    return;
+  }
+
+  const skippedPrivateImageCount = selectedImageIds.value.length - targetImageIds.length;
+  if (isAllowed && skippedPrivateImageCount > 0) {
+    showPrivateRandomFetchWarning(
+      t("adminImageManageView.changeAllowedRandomFetch.toast.privateImagesSkipped", {
+        count: skippedPrivateImageCount
+      })
+    );
+  }
+
   Promise.all(
-    selectedImageIds.value.map(async (imageId) => {
+    targetImageIds.map(async (imageId) => {
       await imageApi
         .apiImageManageImageIdPatch({
           imageId: imageId,

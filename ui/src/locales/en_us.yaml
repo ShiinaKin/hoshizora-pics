@@ -208,6 +208,8 @@ myImageView:
     toast:
       successTitle: "Random Access permission modified successfully"
       failedTitle: "Failed to modify random access permission"
+      privateImageNotAllowed: "Private images cannot be fetched randomly. Set the image as public first."
+      privateImagesSkipped: "{count} private image(s) were skipped. Private images cannot be fetched randomly."
   changeAlbum:
     dialog:
       title: "Move to Album"
@@ -513,6 +515,8 @@ adminImageManageView:
     toast:
       successTitle: "Random Access permission modified successfully"
       failedTitle: "Failed to modify random access permission"
+      privateImageNotAllowed: "Private images cannot be fetched randomly. Set the image as public first."
+      privateImagesSkipped: "{count} private image(s) were skipped. Private images cannot be fetched randomly."
   delete:
     confirmDialog:
       header: "Confirm Deletion"

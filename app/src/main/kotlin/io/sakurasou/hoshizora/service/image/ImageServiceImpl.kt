@@ -21,6 +21,7 @@ import io.sakurasou.hoshizora.exception.service.image.ImageAccessDeniedException
 import io.sakurasou.hoshizora.exception.service.image.ImageDeleteFailedException
 import io.sakurasou.hoshizora.exception.service.image.ImageInsertFailedException
 import io.sakurasou.hoshizora.exception.service.image.ImageNotFoundException
+import io.sakurasou.hoshizora.exception.service.image.ImageRandomFetchNotAllowedException
 import io.sakurasou.hoshizora.exception.service.image.ImageUpdateFailedException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageFileNotFoundException
 import io.sakurasou.hoshizora.exception.service.image.io.ImageThumbnailNotFoundException
@@ -257,14 +258,18 @@ class ImageServiceImpl(
                     if (album.userId != userId) throw AlbumAccessDeniedException()
                 }
 
+                val isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate
+                val isAllowedRandomFetch = selfPatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
+                validateRandomFetchAllowed(isPrivate, isAllowedRandomFetch)
+
                 val imageUpdateDTO =
                     ImageUpdateDTO(
                         id = imageId,
                         albumId = selfPatchRequest.albumId ?: image.albumId,
                         displayName = selfPatchRequest.displayName ?: image.displayName,
                         description = selfPatchRequest.description ?: image.description,
-                        isPrivate = selfPatchRequest.isPrivate ?: image.isPrivate,
-                        isAllowedRandomFetch = selfPatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch,
+                        isPrivate = isPrivate,
+                        isAllowedRandomFetch = isAllowedRandomFetch,
                     )
 
                 imageDao.updateImageById(imageUpdateDTO)
@@ -291,14 +296,18 @@ class ImageServiceImpl(
                     if (album.userId != image.userId) throw AlbumAccessDeniedException()
                 }
 
+                val isPrivate = managePatchRequest.isPrivate ?: image.isPrivate
+                val isAllowedRandomFetch = managePatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch
+                validateRandomFetchAllowed(isPrivate, isAllowedRandomFetch)
+
                 val imageUpdateDTO =
                     ImageUpdateDTO(
                         id = imageId,
                         albumId = managePatchRequest.albumId ?: image.albumId,
                         displayName = managePatchRequest.displayName ?: image.displayName,
                         description = managePatchRequest.description ?: image.description,
-                        isPrivate = managePatchRequest.isPrivate ?: image.isPrivate,
-                        isAllowedRandomFetch = managePatchRequest.isAllowedRandomFetch ?: image.isAllowedRandomFetch,
+                        isPrivate = isPrivate,
+                        isAllowedRandomFetch = isAllowedRandomFetch,
                     )
 
                 imageDao.updateImageById(imageUpdateDTO)
@@ -499,6 +508,15 @@ class ImageServiceImpl(
             else -> {
                 throw e
             }
+        }
+    }
+
+    private fun validateRandomFetchAllowed(
+        isPrivate: Boolean,
+        isAllowedRandomFetch: Boolean,
+    ) {
+        if (isPrivate && isAllowedRandomFetch) {
+            throw ImageRandomFetchNotAllowedException()
         }
     }
 }
