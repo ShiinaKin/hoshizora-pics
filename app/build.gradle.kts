@@ -194,7 +194,9 @@ tasks.register("generateBuildRecord") {
 }
 
 tasks.named("processResources") {
-    dependsOn("copyFrontendBuildResults", "generateBuildRecord")
+    if (!gradle.startParameter.taskNames.contains("test")) {
+        dependsOn("copyFrontendBuildResults", "generateBuildRecord")
+    }
 }
 
 tasks.register<Delete>("cleanStaticResources") {
