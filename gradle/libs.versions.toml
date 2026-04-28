@@ -1,9 +1,9 @@
 [versions]
-kotlin = "2.4.0-Beta1"
+kotlin = "2.4.0-Beta2"
 kotlinx-serialization = "1.11.0"
 kotlinx-coroutines = "1.10.2"
 mockk = "1.14.9"
-ktor = "3.4.1"
+ktor = "3.4.2"
 exposed = "1.1.1"
 postgresql = "42.7.9"
 mysql = "9.6.0"
@@ -13,7 +13,6 @@ lettuce = "7.5.0.RELEASE"
 caffeine = "3.2.3"
 kotlin-logging = "8.0.01"
 logback = "1.5.32"
-img4java = "1.4.0"
 common-io = "2.21.0"
 common-codec = "1.21.0"
 bcrypt = "0.10.2"
@@ -75,8 +74,6 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "c
 
 kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-
-img4j = { module = "org.im4java:im4java", version.ref = "img4java" }
 
 common-io = { module = "commons-io:commons-io", version.ref = "common-io" }
 common-codec = { module = "commons-codec:commons-codec", version.ref = "common-codec" }

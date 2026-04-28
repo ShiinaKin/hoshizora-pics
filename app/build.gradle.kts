@@ -106,8 +106,6 @@ dependencies {
     implementation(libs.common.codec)
     implementation(libs.bcrypt)
 
-    implementation(libs.img4j)
-
     implementation(libs.amazon.s3)
 
     implementation(libs.semver4j)
