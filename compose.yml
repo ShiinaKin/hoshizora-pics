@@ -32,12 +32,12 @@ services:
 
   hoshizora-pics-postgres:
     container_name: hoshizora-pics-postgres
-    image: postgres:16.6-alpine
+    image: postgres:18.3
     environment:
       POSTGRES_PASSWORD: passwd
       POSTGRES_DB: hoshizora
     volumes:
-      - hoshizora-pics-database:/var/lib/postgresql/data
+      - hoshizora-pics-database:/var/lib/postgresql
     networks:
       - hoshizora-pics-net
     healthcheck:
