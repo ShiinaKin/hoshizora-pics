@@ -106,6 +106,7 @@ val CacheRoutePlugin =
             logger.debug { "Cache hit: $key" }
         }
         onCallRespond { call, body ->
+            if (body !is ByteArrayContent) return@onCallRespond
             if ((call.response.status()?.value ?: HttpStatusCode.OK.value) >= HttpStatusCode.BadRequest.value) {
                 return@onCallRespond
             }
@@ -113,9 +114,9 @@ val CacheRoutePlugin =
             if (call.attributes.getOrNull(isCache) == true) return@onCallRespond
             val key = buildKey(call)
             if (expireTime == null) {
-                provider.saveCache(key, body as ByteArrayContent)
+                provider.saveCache(key, body)
             } else {
-                provider.saveCache(key, body as ByteArrayContent, expireTime)
+                provider.saveCache(key, body, expireTime)
             }
             logger.debug { "Cache saved: $key" }
         }
