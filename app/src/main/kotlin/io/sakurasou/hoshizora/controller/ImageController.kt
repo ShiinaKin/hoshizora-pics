@@ -139,7 +139,7 @@ private fun Route.imageSelfUpload(controller: ImageController) {
 
                     else -> {}
                 }
-                part.dispose()
+                part.release()
             }
 
             if (isMoreThanOne < 0 || imageRawFile == null) {

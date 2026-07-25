@@ -1,33 +1,9 @@
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-val logbackVersion: String by project
-val kotlinLoggingVersion: String by project
-
-val lettuceVersion: String by project
-val caffeineVersion: String by project
-val kotlinCoroutineVersion: String by project
-
-val exposedVersion: String by project
-val hikariVersion: String by project
-val postgresVersion: String by project
-val mySQLVersion: String by project
-val sqliteVersion: String by project
-
-val swaggerParserVersion: String by project
-val schemaKeneratorVersion: String by project
-val swaggerUIVersion: String by project
-
-val awsS3Version: String by project
-
-val gsonVersion: String by project
-
-val semver4jVersion: String by project
-
-val commonsIOVersion: String by project
-val commonsCodecVersion: String by project
-
-val mockkVersion: String by project
+val swaggerParserVersion = project.property("swaggerParserVersion")
+val schemaKeneratorVersion = project.property("schemaKeneratorVersion")
+val swaggerUIVersion = project.property("swaggerUIVersion")
 
 plugins {
     alias(libs.plugins.kotlinJVM)
