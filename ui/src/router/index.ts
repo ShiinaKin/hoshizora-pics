@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import axios from "axios";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -135,19 +136,21 @@ const router = createRouter({
 
 export default router;
 
-import axios from "axios";
+function redirectToLogin() {
+  localStorage.removeItem("token");
+  if (router.currentRoute.value.name !== "login") {
+    void router.replace({ name: "login" });
+  }
+}
 
 axios.interceptors.response.use(
   (response) => {
     const resp = response.data;
-    if (resp?.code === "401") router.push({ name: "login" });
+    if (resp?.code === 401 || resp?.code === "401") redirectToLogin();
     return response;
   },
   (error) => {
-    if (error.status === 401) {
-      router.push({ name: "login" });
-    } else {
-      Promise.reject(error);
-    }
+    if (error.response?.status === 401 || error.status === 401) redirectToLogin();
+    return Promise.reject(error);
   }
 );

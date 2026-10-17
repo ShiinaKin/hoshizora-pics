@@ -15,7 +15,6 @@ const commonApi = new CommonApi();
 const i18n = inject<I18n>("i18n")!;
 const toast = useToast();
 
-const token = localStorage.getItem("token");
 const local = localStorage.getItem("locale");
 
 onMounted(() => {
@@ -40,7 +39,7 @@ onMounted(() => {
         const arr = ["login", "register", "siteInit", "home"];
 
         if (!commonSiteSetting.isSiteInit!) router.push({ name: "siteInit" });
-        else if (!token) router.push({ name: "login" });
+        else if (!localStorage.getItem("token")) router.push({ name: "login" });
         else if (arr.includes(route.name as string)) router.push({ name: "userOverview" });
       } else {
         toast.add({ severity: "warn", summary: "Warn", detail: resp.message, life: 3000 });
